@@ -1,1 +1,10 @@
-/* TODO: Coloca tu código aquí */
+body {
+    background-color: #ffffff;
+    color: #000000;
+}
+p, h1, h2, h3 {
+    font-family: sans-serif;
+}
+em{
+    font-weight: bold;
+}
