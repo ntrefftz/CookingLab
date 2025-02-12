@@ -8,3 +8,6 @@ p, h1, h2, h3 {
 em{
     font-weight: bold;
 }
+td {
+    padding: 0 15px;
+  }
