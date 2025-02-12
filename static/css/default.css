@@ -2,9 +2,23 @@ body {
     background-color: #ffffff;
     color: #000000;
 }
-p, h1, h2, h3 {
-    font-family: sans-serif;
+@font-face {
+    font-family: 'alice';
+    font-display: swap;
+    src: url('/static/fonts/Alice-Regular.ttf')format('ttf');
+}
+h1{
+    font-family: 'alice';
+    background-color: #F383A0;
+}
+p, h2, h3 {
+    font-family: 'alice';
 }
 em{
     font-weight: bold;
+}
+
+img{
+    display: block;
+    margin: auto;
 }
