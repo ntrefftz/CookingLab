@@ -5,13 +5,12 @@
             <link id="estilo" href="css/default.css" rel="stylesheet" type="text/css" />
         </head>
         <body>
-        <h1>formulario de contacto </h1>
+        <h1>Formulario de contacto </h1>
         <p>
-            Pulsa en
-            <a href="index.html"> inicio </a>
+            Pulsa en <a href="index.html">inicio</a>
             para volver al principio
         </p>
-        </form> action="mailto:tuemail@dominio.com" method="POST" enctype="text/plain">
+        <form action="mailto:ddallaco@ucm.es?subject=Consulta CookingLab" method="POST" enctype="text/plain">
             
             <!-- Campo de texto para el nombre -->
             <label for="nombre">Nombre:</label>
@@ -22,7 +21,7 @@
             <label for="correo">Correo electrónico:</label>
             <input type="email" id="correo" name="correo" required>
             
-            <br></br>
+            <p></p>
 
             <!-- Campo para el motivo de la consulta -->
             <p>Motivo de la consulta:</p>
@@ -35,19 +34,21 @@
             <input type="radio" id="criticas" name="motivo" value="Críticas">
             <label for="criticas">Críticas</label>
 
+            <p></p>
+
             <!-- Casilla para los términos y condiciones -->
             <input type="checkbox" id="terminos" name="terminos" required>
-            <label for="terminos">Marque esta casilla para verificar que ha leído nuestros términos y condiciones del servicio</label>
+            <label for="terminos">Marque esta casilla para verificar que ha leído nuestros <a href>términos y condiciones del servicio</a></label>
 
-            <br></br>
+            <p></p>
 
             <!-- Campo de área de texto para el mensaje -->
-            <label for="mensaje">Mensaje:</label>
+            <p><label for="mensaje">Mensaje:</label></p>
             <textarea id="mensaje" name="mensaje" rows="4" cols="50" required></textarea>
             
-    
+            <p></p>
             <!-- Campo de botón de envío -->
-            <button type="submit">Enviar</button>
+            <button type="submit">"Enviar"</button>
         </form>
 
 
