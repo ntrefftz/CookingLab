@@ -1,0 +1,46 @@
+body {
+    background-color: #ffffff;
+    color: #000000;
+}
+@font-face {
+    font-family: 'alice';
+    font-display: swap;
+    src: url('/static/fonts/Alice-Regular.ttf')format('ttf');
+}
+h1{
+    font-family: 'alice';
+    background-color: #F383A0;
+}
+p, h2, h3 {
+    font-family: 'alice';
+}
+em{
+    font-weight: bold;
+}
+
+img{
+    display: block;
+    margin: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #000000;
+    padding: 10px;
+    text-align: center;
+}
+.entrega{
+    background-color: #F383A0;
+    font-weight: bold;
+}
+.fecha{
+    background-color: #8e8e8e;
+    column-span: all;
+    text-align: center;
+    border: 0px;
+    font-weight: bold;
+
+}
