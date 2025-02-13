@@ -22,3 +22,7 @@ img{
     display: block;
     margin: auto;
 }
+
+td {
+    padding: 0 15px;
+  }
