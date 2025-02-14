@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
     <title> Planificación </title>
-    <link href="./css/table.css" rel="stylesheet" type="text/css" />
+    <link href="./css/table.css" rel="stylesheet" type="text/css">
+    <meta charset="UTF-8">
 </head>
 
 <body>
     <h1> CookingLab: Planificación </h1>
     <p>Pulsa <a href="index.html">aquí</a> para volver al inicio.</p>
     <p>Buscamos implementar las siguientes funcionalidades: </p>
-    <p><strong>Inicio de sesión:</strong> Se requerira un inicio de sesión que distinga el tipo de usuario y muestre las distintas
+    <p><strong>Inicio de sesión:</strong> Se requerira un inicio de sesión que distinga el tipo de usuario y muestre las
+        distintas
         páginas disponibles</p>
     <ol>
         <li>Inicio de sesión del cliente: Dispondrá de las páginas de recetas, packs de ingredientes y la cesta de
@@ -23,7 +25,8 @@
 
     <p><strong>Recetas:</strong></p>
     <ol>
-        <li>Implementar recetas en la página principal y las valoraciones. Los filtros y la búsqueda por ingredientes</li>
+        <li>Implementar recetas en la página principal y las valoraciones. Los filtros y la búsqueda por ingredientes
+        </li>
         <li>Implementar las páginas de crear, modificar y eliminar recetas</li>
     </ol>
     <p><strong>Packs de productos y proceso de compra:</strong></p>
@@ -35,12 +38,21 @@
         <li>Calendario de recetas</li>
     </ol>
 
+    <p>Representación de personas para tareas</p>
+    <ul>
+        <li>Daniela: D</li>
+        <li>Kai: K</li>
+        <li>Fernando: F</li>
+        <li>Nicolás: N</li>
+    </ul>
+
     <table>
         <thead>
             <tr>
                 <th>Hitos</th>
                 <th>Fecha Entrega</th>
                 <th>Descripción</th>
+                <th>Miembros</th>
             </tr>
         </thead>
         <tbody>
@@ -49,73 +61,88 @@
                 <td class="fecha"></td>
                 <td class="fecha">Febrero 2025</td>
                 <td class="fecha"></td>
+                <td class="fecha"></td>
             </tr>
             <tr class="entrega">
                 <td>Entrega práctica 1</td>
                 <td>14/02/2025</td>
                 <td>Descripción del proyecto en forma de web simple</td>
+                <td></td>
+
             </tr>
             <tr>
                 <td>Diseño web inicial</td>
                 <td>20/02/2025</td>
                 <td>Diseño página web básica de inicio</td>
+                <td>D, K</td>
             </tr>
             <tr>
                 <td>Servidor node básico</td>
                 <td>20/02/2025</td>
                 <td>Servidor básico para el desarrollo</td>
+                <td>F, N</td>
             </tr>
             <tr>
                 <td>Planificación de la base de datos</td>
                 <td>20/02/2025</td>
                 <td>Definir la estructura de la BD</td>
-            </tr>
-
-
-            <tr>
-                <td class="fecha"></td>
-                <td class="fecha">Marzo 2025</td>
-                <td class="fecha"></td>
+                <td>D, K, N, F</td>
             </tr>
             <tr>
                 <td>Implementación de la página de recetas</td>
                 <td>27/02/2025</td>
                 <td>Diseño inicial de la página de recetas</td>
+                <td>D, K, N, F</td>
             </tr>
+            <tr>
+                <td class="fecha"></td>
+                <td class="fecha">Marzo 2025</td>
+                <td class="fecha"></td>
+                <td class="fecha"></td>
+            </tr>
+
             <tr>
                 <td>Implementación del carrito</td>
                 <td>06/03/2025</td>
                 <td>Página para visualizar el carrito</td>
+                <td>D, N</td>
             </tr>
             <tr>
                 <td>Implementación de la página de login</td>
                 <td>06/03/2025</td>
                 <td>Página de inicio de sesión</td>
+                <td>K, F</td>
             </tr>
             <tr class="entrega">
                 <td>Entrega práctica 2</td>
                 <td>08/03/2025</td>
                 <td>Diseño HTML del servidor y cliente</td>
+                <td></td>
             </tr>
             <tr>
                 <td>Implementación de la página de registro</td>
                 <td>13/03/2025</td>
                 <td>Página de registro para clientes</td>
+                <td>D, K, N, F</td>
             </tr>
             <tr>
                 <td>Implementación de la gestión de inventario</td>
                 <td>28/03/2025</td>
                 <td>Página para administrar ingredientes</td>
+                <td> N, K</td>
+
             </tr>
             <tr>
                 <td>Implementación de la gestión de usuarios</td>
                 <td>28/03/2025</td>
                 <td>Página para administrar usuarios y permisos</td>
+                <td>F, D</td>
             </tr>
             <tr class="entrega">
                 <td>Entrega práctica 3</td>
                 <td>28/03/2025</td>
                 <td>Implementación de estilos y mejoras</td>
+                <td></td>
             </tr>
 
 
@@ -123,42 +150,50 @@
                 <td class="fecha"></td>
                 <td class="fecha">Abril 2025</td>
                 <td class="fecha"></td>
+                <td class="fecha"></td>
             </tr>
             <tr>
                 <td>Implementar calendario de recetas</td>
                 <td>04/04/2025</td>
                 <td>Calendario con recetas semanales</td>
+                <td>D, K, N, F</td>
             </tr>
             <tr>
                 <td>Implementar la lógica de compra en el servidor</td>
                 <td>25/04/2025</td>
                 <td>Control de stock y permisos</td>
+                <td>F, K</td>
             </tr>
             <tr>
                 <td>Implementación del foro / comentarios</td>
                 <td>25/04/2025</td>
                 <td>Foro para compartir recetas y comentarios</td>
+                <td>D, N</td>
             </tr>
 
             <tr>
                 <td class="fecha"></td>
                 <td class="fecha">Mayo 2025</td>
                 <td class="fecha"></td>
+                <td class="fecha"></td>
             </tr>
             <tr>
                 <td>Implementación de la página de pago</td>
                 <td>02/05/2025</td>
                 <td>Página de pago del usuario</td>
+                <td>D, K, N, F</td>
             </tr>
             <tr>
                 <td>Test, arreglo de errores y últimos cambios</td>
                 <td>08/05/2025</td>
                 <td>Pruebas finales antes de la entrega</td>
+                <td>D, K, N, F</td>
             </tr>
             <tr class="entrega">
                 <td>Entrega final del proyecto</td>
                 <td>09/05/2025</td>
                 <td>Entrega de la aplicación completa</td>
+                <td></td>
             </tr>
 
         </tbody>

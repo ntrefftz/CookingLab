@@ -1,57 +1,62 @@
 <!DOCTYPE html>
-    <html>
-        <head>
-            <title>Contacto</title>
-            <link id="estilo" href="css/default.css" rel="stylesheet" type="text/css" />
-        </head>
-        <body>
-        <h1>CookingLab: Formulario de contacto</h1>
+<html lang="es">
 
-        <p>
-            Pulsa en <a href="index.html">inicio</a>
-            para volver al principio
-        </p>
-        <form action="mailto:ddallaco@ucm.es?subject=Consulta CookingLab" method="POST" enctype="text/plain">
-            
-            <!-- Campo de texto para el nombre -->
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required>
-            
-    
-            <!-- Campo de texto para el correo electrónico -->
-            <label for="correo">Correo electrónico:</label>
-            <input type="email" id="correo" name="correo" required>
-            
-            <p></p>
+<head>
+    <title>Contacto</title>
+    <link id="estilo" href="css/default.css" rel="stylesheet" type="text/css">
+    <meta charset="UTF-8">
+</head>
 
-            <!-- Campo para el motivo de la consulta -->
-            <p>Motivo de la consulta:</p>
-            <input type="radio" id="evaluacion" name="motivo" value="Evaluación" required>
-            <label for="evaluacion">Evaluación</label>
+<body>
+    <h1>CookingLab: Formulario de contacto</h1>
 
-            <input type="radio" id="sugerencias" name="motivo" value="Sugerencias">
-            <label for="sugerencias">Sugerencias</label>
+    <p>
+        Pulsa en <a href="index.html">inicio</a>
+        para volver al principio
+    </p>
+    <form action="mailto:ddallaco@ucm.es?subject=Consulta_CookingLab" method="POST" enctype="text/plain">
 
-            <input type="radio" id="criticas" name="motivo" value="Críticas">
-            <label for="criticas">Críticas</label>
-
-            <p></p>
-
-            <!-- Casilla para los términos y condiciones -->
-            <input type="checkbox" id="terminos" name="terminos" required>
-            <label for="terminos">Marque esta casilla para verificar que ha leído nuestros <a href = "condiciones.html" >términos y condiciones del servicio</a></label>
-
-            <p></p>
-
-            <!-- Campo de área de texto para el mensaje -->
-            <p><label for="mensaje">Mensaje:</label></p>
-            <textarea id="mensaje" name="mensaje" rows="4" cols="50" required></textarea>
-            
-            <p></p>
-            <!-- Campo de botón de envío -->
-            <button type="submit">"Enviar"</button>
-        </form>
+        <!-- Campo de texto para el nombre -->
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
 
 
-    </body>
-    </html>
+        <!-- Campo de texto para el correo electrónico -->
+        <label for="correo">Correo electrónico:</label>
+        <input type="email" id="correo" name="correo" required>
+
+        <p></p>
+
+        <!-- Campo para el motivo de la consulta -->
+        <p>Motivo de la consulta:</p>
+        <input type="radio" id="evaluacion" name="motivo" value="Evaluación" required>
+        <label for="evaluacion">Evaluación</label>
+
+        <input type="radio" id="sugerencias" name="motivo" value="Sugerencias">
+        <label for="sugerencias">Sugerencias</label>
+
+        <input type="radio" id="criticas" name="motivo" value="Críticas">
+        <label for="criticas">Críticas</label>
+
+        <p></p>
+
+        <!-- Casilla para los términos y condiciones -->
+        <input type="checkbox" id="terminos" name="terminos" required>
+        <label for="terminos">Marque esta casilla para verificar que ha leído nuestros <a
+                href="condiciones.html">términos y condiciones del servicio</a></label>
+
+        <p></p>
+
+        <!-- Campo de área de texto para el mensaje -->
+        <p><label for="mensaje">Mensaje:</label></p>
+        <textarea id="mensaje" name="mensaje" rows="4" cols="50" required></textarea>
+
+        <p></p>
+        <!-- Campo de botón de envío -->
+        <button type="submit">"Enviar"</button>
+    </form>
+
+
+</body>
+
+</html>
