@@ -1,167 +1,204 @@
 <!DOCTYPE html>
-    <html>
-        <head>
-            <title>Bocetos</title>
-            <link id="estilo" href="css/default.css" rel="stylesheet" type="text/css" />
-        </head>
-        <body>
+<html lang="es">
 
-            <h1>CookingLab: Detalles</h1>
-            <p>Pulsa <a href="index.html">aquí</a> para volver al inicio.</p>
-            <p>
-                <h2>Funcionalidades</h2>
-                <p></p>
-                <nav>
-                    <ol>
-                        <li><a href="#sesion"><h3>Inicios de sesión</h3></a></li>
-                        <ul>
-                            <li>Inicios de sesión como usuario, cocinero o administrador.</li>
-                        </ul>
-                        <li><a href="#compra"><h3>Compra y edición de paquetes</h3></a></li>
-                        <ul>
-                            <li>Comprar ingredientes según la receta seleccionada. Tenemos un pack fijado por el cocinero y podemos editarlo a la hora de la compra. También podemos comprar ingredientes por separado.</li>
-                            <li>Búsqueda de recetas por nombre de receta o ingredientes. Las busquedas se pueden ordenar por relevancia, valoraciones, difilcultad o tiempo de preparación.</li>
-                        </ul>
-                        <p><a href="#ingredientes">Compra de Ingredientes</a></p>
-                        <p><a href="#busqueda">Busqueda</a></p>
-                        <li><a href="#calendario"><h3>Planificador(calendario)</h3></a></li>
-                        <ul>
-                            <li>El usuario tiene un calendario personal donde puede elegir una receta por cada dia de la semana.</li>
-                            <li>El cocinero manda una sugerencia de receta del día al administrador para que se muestre en la página principal. Si esta seguro de la receta que quiere proponer tambien puede subirla el directamente</li>
-                            <li>El administrador puede aceptar las recetas sugeridas para que se muestren en la página principal.</li>
-                        </ul>
-                        <p><a href="#calendario_usuario">Calendario de Usuario</a></p>
-                        <p><a href="#calendario_aplicacion">Calendario del mes</a></p>
-                        <li><a href="#recetas"><h3>Recetas</h3></a></li>
-                        <ul>
-                            <li>Los usuarios pueden acceder a las recetas, valorarlas y hacer comentarios.</li>
-                            <li>Los cocineros además de las acciones de los usuarios, pueden añadir sus propias recetas, editarlas y eliminarlas.</li>
-                            <li>El administrador puede administrar el inventario, los comentarios/foro y las recetas subidas. </li>
-                        </ul>
-                        <p><a href="#ingredientes">recetas</a></p>
-                        <p><a href="#cocinero">Añadir receta</a></p>
-                    </ol>
-                </nav>    
-            </p>
-            <section id="sesion">
-                <h2><strong>Inicio de sesión como usuari, cocinero o administrador</strong></h2>
-                <p>El perfil de usuario cocinero o administrador tendrán el mismo comportamiento durante el inicio de sesion</p>
+<head>
+    <title>Bocetos</title>
+    <link id="estilo" href="css/default.css" rel="stylesheet" type="text/css">
+    <meta charset="UTF-8">
+</head>
 
-                <section id="inicio">
-                    <p>
-                        <h3>Pagina principal</h3>
-                        <figure>
-                            <img src = "./image/inicio.png" alt="Pantalla inicial" width="350">
-                            <b>Así se verá la pagina web nada mas entrar</b>
-                        </figure>
-                    </p>
-                    <p>
-                        <h3>Inicio de sesión</h3>
-                        <figure>
-                            <img src = "./image/inicioRegistro.png" alt="Inicio de sesión o Registro" width="350">
-                            <b>Pulsando en el icono de la persona arriba a la derecha la pagina redirigirá al usuario a la pantalla de inicio de sesión donde este podra tambien registrarse si todavia no tiene una cuenta</b>
-                        </figure>
-                    </p>
-                    <p>
-                        <h3>Ajustes del perfil</h3>
-                        <figure>
-                            <img src = "./image/usuario.png" alt="Ajustes y modificaciones" width="350">
-                            <b>En esta pagina el usuario registrado puede añadir una direccion y un contacto para poder ser contactado en caso de que quiera hacer un pedido</b>
-                        </figure>
-                    </p>
-                </section>
-            </section>
-            <section id="compra">
-                <h2><strong>Compra y edición de paquetes</strong></h2>
-                <h3>Compra de ingedientes:</h3>
-                <section id="ingredientes">
-                    <p>
-                        <h3>Compra por packs: Compramos ingredientes según la receta seleccionada</h3>
-                        <figure>
-                            <img src = "./image/cesta.png" alt="Cesta" width="350">
-                            <b>A la hora de añadir una receta al carrito automaticamente se nos abrirá la cesta de la compra donde por defecto estarán ya incorporados todos los ingredientes requeridos para la receta</b>
-                        </figure>
-                    </p>
-                    <p>
-                        <h3>Editar pack: Tenemos pack fijados por el cocinero y podemos editarlos a la hora de la compra</h3>
-                        <figure>
-                            <img src = "./image/edicionPacks.png" alt="Eliminacion de ingredientes" width="350">
-                            <b>Tambien podremos editar el pack en su totalidad permitiendo cambiar el numero de comensales, lo que multiplicará automaticamente el numero de ingredientes</b>
-                        </figure>
-                    </p>
-                    <p>
-                        <h3>Compra libre: También podemos comprar los ingredientes por separado</h3>
-                        <figure>
-                            <img src = "./image/productos.png" alt="Ingredientes genericos" width="350">
-                            <b>También será posible comprar ingredientes libremente sin necesidad de que estén asociados a ninguna receta</b>
-                        </figure>
-                    </p>
-                </section>
-                <h3>Búsqueda de recetas por nombre o ingredientes</h3>
-                <section id="busqueda">
-                    <p>
-                        <h3>se ordenan por relevancia, valoraciones, difilcultad o tiempo de preparación</h3>
-                        <figure>
-                            <img src = "./image/busqueda.png" alt="Busqueda" width="350">
-                            <b>Al buscar en la barra arriba del todo acompañada por la lupa podremos buscar recetas tanto por nombre como por ingrediente, es decir si buscamos pepino nos saldran todas las recetas que contengan pepino</b>
-                        </figure>
-                    </p>
-                </section>
-            </section>
-            <section id="calendario">
-                <h2><strong>Planificacion de recetas</strong></h2>
-                <h3>Calendario del usuario:</h3>
-                <section id="calendario_usuario">
-                    <h3>El usuario puede añadir recesatas a su calendario de dos maneras diferentes</h3>
-                    <p>
-                        <h3>Receta del dia</h3>
-                        <figure>
-                            <img src = "./image/calendario.png" alt="Se añade la receta del dia al dia de hoy" width="350">
-                            <p>En esta pagina el usuario podra visualizar su calendario y podrá añadir a cada dia una receta. Dandole al boton rosa en la parte inferior derecha podrá añadir al carrito todas las recetas de la semana  para comprarlas a la vez</p>
-                        </figure>
-                    </p>
-                    <p>
-                        <h3>Receta generica</h3>
-                        <figure>
-                            <img src = "./image/todasRecetas.png" alt="Se añade una receta elegida al dia de hoy" width="350">
-                            <p>Una vez selecionado añadir receta el usuario podrá añadir la receta del dia o podrá navegar en descubrir mas recetas para añadir una receta pasada</p>
-                        </figure>
-                    </p>
-                </section>
-                <p>Calendario del mes:</p>
-                <section id="calendario_aplicacion">
-                    <h3>recetas publicadas por el cocinero dia a dia</h3>
-                    <p>
-                        <h3>Recetas del mes</h3>
-                        <figure>
-                            <img src = "./image/inicio.png" alt="Receta del dia" width="350">
-                            <p>En la pagina principal aparece bajo el titulo receta del dia un calendario. Al lado del calendario aparecerá la receta correspondiente a ese dia en concreto. Pinchando en otro dia anterior del calendario tambien se abrirá la receta publicada correspondiente </p>
-                        </figure>
-                    </p>
-                </section>
-            </section>
-            <section id="recetas">
-                <h2><strong>Recetas</strong></h2>
-                <p>Los usuarios pueden acceder a las recetas, valorarlas y hacer comentarios</p>
-                <section id="ingredientes">
-                    <p>
-                        <h3>Valorar receta: La puntuación se dará en estrellas de 1 a 5</h3>
-                        <figure>
-                            <img src = "./image/receta.png" alt="receta" width="350">
-                            <p>debajo de la caja de comentarios aperecerán 5 estrellas en blanco. Pinchando en las estrellas se podrá enviar una valoracione</p> 
-                        </figure>
-                    </p>
-                </section>
-                <h3>Los cocineros además de las acciones de los usuarios, pueden añadir sus propias recetas, editarlas y eliminarlas.</h3>
-                <section id="cocinero">
-                    <p>
-                        <h3>Añadir receta: Se pueden añadir modificar y eliminar</h3>
-                        <figure>
-                            <img src = "./image/subirReceta.png" alt="Pack" width="350">
-                            <p>Si el usuario es un cocinero podra acceder a esta pagina donde en la parte de abajo hay 4 botones: Sugerir receta, Guardar receta, eliminar receta y Subir receta</p>
-                        </figure> 
-                    </p>
-                </section>
-            </section> 
-        </body>
-    </html>
+<body>
+
+    <h1>CookingLab: Detalles</h1>
+    <p>Pulsa <a href="index.html">aquí</a> para volver al inicio.</p>
+
+    <h2>Funcionalidades</h2>
+    <p></p>
+    <nav>
+        <ol>
+            <li><a href="#sesion">
+                    <h3>Inicios de sesión</h3>
+                </a>
+                <ul>
+                    <li>Inicios de sesión como usuario, cocinero o administrador.</li>
+                </ul>
+            </li>
+            <li><a href="#compra">
+                    <h3>Compra y edición de paquetes</h3>
+                </a>
+                <ul>
+                    <li>Comprar ingredientes según la receta seleccionada. Tenemos un pack fijado por el cocinero y
+                        podemos editarlo a la hora de la compra. También podemos comprar ingredientes por separado.</li>
+                    <li>Búsqueda de recetas por nombre de receta o ingredientes. Las busquedas se pueden ordenar por
+                        relevancia, valoraciones, difilcultad o tiempo de preparación.</li>
+                </ul>
+
+                <p><a href="#ingredientes">Compra de Ingredientes</a></p>
+                <p><a href="#busqueda">Busqueda</a></p>
+            </li>
+            <li><a href="#calendario">
+                    <h3>Planificador(calendario)</h3>
+                </a>
+                <ul>
+                    <li>El usuario tiene un calendario personal donde puede elegir una receta por cada dia de la semana.
+                    </li>
+                    <li>El cocinero manda una sugerencia de receta del día al administrador para que se muestre en la
+                        página principal. Si esta seguro de la receta que quiere proponer tambien puede subirla el
+                        directamente</li>
+                    <li>El administrador puede aceptar las recetas sugeridas para que se muestren en la página
+                        principal.</li>
+                </ul>
+
+                <p><a href="#calendario_usuario">Calendario de Usuario</a></p>
+                <p><a href="#calendario_aplicacion">Calendario del mes</a></p>
+            </li>
+            <li><a href="#recetas">
+                    <h3>Recetas</h3>
+                </a>
+                <ul>
+                    <li>Los usuarios pueden acceder a las recetas, valorarlas y hacer comentarios.</li>
+                    <li>Los cocineros además de las acciones de los usuarios, pueden añadir sus propias recetas,
+                        editarlas y eliminarlas.</li>
+                    <li>El administrador puede administrar el inventario, los comentarios/foro y las recetas subidas.
+                    </li>
+                </ul>
+
+                <p><a href="#ingredientes">recetas</a></p>
+                <p><a href="#cocinero">Añadir receta</a></p>
+            </li>
+        </ol>
+    </nav>
+    <section id="sesion">
+        <h2><strong>Inicio de sesión como usuari, cocinero o administrador</strong></h2>
+        <p>El perfil de usuario cocinero o administrador tendrán el mismo comportamiento durante el inicio de sesion</p>
+
+        <section id="inicio">
+
+            <h3>Pagina principal</h3>
+            <figure>
+                <img src="./image/inicio.png" alt="Pantalla inicial" width="350">
+                <strong>Así se verá la pagina web nada mas entrar</strong>
+            </figure>
+
+
+            <h3>Inicio de sesión</h3>
+            <figure>
+                <img src="./image/inicioRegistro.png" alt="Inicio de sesión o Registro" width="350">
+                <strong>Pulsando en el icono de la persona arriba a la derecha la pagina redirigirá al usuario a la pantalla
+                    de inicio de sesión donde este podra tambien registrarse si todavia no tiene una cuenta</strong>
+            </figure>
+
+            <h3>Ajustes del perfil</h3>
+            <figure>
+                <img src="./image/usuario.png" alt="Ajustes y modificaciones" width="350">
+                <strong>En esta pagina el usuario registrado puede añadir una direccion y un contacto para poder ser
+                    contactado en caso de que quiera hacer un pedido</strong>
+            </figure>
+
+        </section>
+    </section>
+    <section id="compra">
+        <h2><strong>Compra y edición de paquetes</strong></h2>
+        <h3>Compra de ingedientes:</h3>
+        <section id="ingredientes1">
+
+            <h3>Compra por packs: Compramos ingredientes según la receta seleccionada</h3>
+            <figure>
+                <img src="./image/cesta.png" alt="Cesta" width="350">
+                <strong>A la hora de añadir una receta al carrito automaticamente se nos abrirá la cesta de la compra donde
+                    por defecto estarán ya incorporados todos los ingredientes requeridos para la receta</strong>
+            </figure>
+
+            <h3>Editar pack: Tenemos pack fijados por el cocinero y podemos editarlos a la hora de la compra</h3>
+            <figure>
+                <img src="./image/edicionPacks.png" alt="Eliminacion de ingredientes" width="350">
+                <strong>Tambien podremos editar el pack en su totalidad permitiendo cambiar el numero de comensales, lo que
+                    multiplicará automaticamente el numero de ingredientes</strong>
+            </figure>
+
+            <h3>Compra libre: También podemos comprar los ingredientes por separado</h3>
+            <figure>
+                <img src="./image/productos.png" alt="Ingredientes genericos" width="350">
+                <strong>También será posible comprar ingredientes libremente sin necesidad de que estén asociados a ninguna
+                    receta</strong>
+            </figure>
+
+        </section>
+        <h3>Búsqueda de recetas por nombre o ingredientes</h3>
+        <section id="busqueda">
+
+            <h3>se ordenan por relevancia, valoraciones, difilcultad o tiempo de preparación</h3>
+            <figure>
+                <img src="./image/busqueda.png" alt="Busqueda" width="350">
+                <strong>Al buscar en la barra arriba del todo acompañada por la lupa podremos buscar recetas tanto por nombre
+                    como por ingrediente, es decir si buscamos pepino nos saldran todas las recetas que contengan
+                    pepino</strong>
+            </figure>
+
+        </section>
+    </section>
+    <section id="calendario">
+        <h2><strong>Planificacion de recetas</strong></h2>
+        <h3>Calendario del usuario:</h3>
+        <section id="calendario_usuario">
+            <h3>El usuario puede añadir recesatas a su calendario de dos maneras diferentes</h3>
+
+            <h3>Receta del dia</h3>
+            <figure>
+                <img src="./image/calendario.png" alt="Se añade la receta del dia al dia de hoy" width="350">
+                <p>En esta pagina el usuario podra visualizar su calendario y podrá añadir a cada dia una receta.
+                    Dandole al boton rosa en la parte inferior derecha podrá añadir al carrito todas las recetas de la
+                    semana para comprarlas a la vez</p>
+            </figure>
+
+            <h3>Receta generica</h3>
+            <figure>
+                <img src="./image/todasRecetas.png" alt="Se añade una receta elegida al dia de hoy" width="350">
+                <p>Una vez selecionado añadir receta el usuario podrá añadir la receta del dia o podrá navegar en
+                    descubrir mas recetas para añadir una receta pasada</p>
+            </figure>
+
+        </section>
+        <p>Calendario del mes:</p>
+        <section id="calendario_aplicacion">
+            <h3>recetas publicadas por el cocinero dia a dia</h3>
+
+            <h3>Recetas del mes</h3>
+            <figure>
+                <img src="./image/inicio.png" alt="Receta del dia" width="350">
+                <p>En la pagina principal aparece bajo el titulo receta del dia un calendario. Al lado del calendario
+                    aparecerá la receta correspondiente a ese dia en concreto. Pinchando en otro dia anterior del
+                    calendario tambien se abrirá la receta publicada correspondiente </p>
+            </figure>
+
+        </section>
+    </section>
+    <section id="recetas">
+        <h2><strong>Recetas</strong></h2>
+        <p>Los usuarios pueden acceder a las recetas, valorarlas y hacer comentarios</p>
+        <section id="ingredientes">
+
+            <h3>Valorar receta: La puntuación se dará en estrellas de 1 a 5</h3>
+            <figure>
+                <img src="./image/receta.png" alt="receta" width="350">
+                <p>debajo de la caja de comentarios aperecerán 5 estrellas en blanco. Pinchando en las estrellas se
+                    podrá enviar una valoracione</p>
+            </figure>
+
+        </section>
+        <h3>Los cocineros además de las acciones de los usuarios, pueden añadir sus propias recetas, editarlas y
+            eliminarlas.</h3>
+        <section id="cocinero">
+
+            <h3>Añadir receta: Se pueden añadir modificar y eliminar</h3>
+            <figure>
+                <img src="./image/subirReceta.png" alt="Pack" width="350">
+                <p>Si el usuario es un cocinero podra acceder a esta pagina donde en la parte de abajo hay 4 botones:
+                    Sugerir receta, Guardar receta, eliminar receta y Subir receta</p>
+            </figure>
+
+        </section>
+    </section>
+</body>
+
+</html>
