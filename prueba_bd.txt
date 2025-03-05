@@ -91,7 +91,7 @@ CREATE TABLE Pedidos (
     id INTEGER PRIMARY KEY,
     activo BOOLEAN,
     id_usuario INTEGER,
-    enviado BOOLEAN,
+    enviado BOOLEAN, 
     fecha TIMESTAMP, -- ??? combrobar si esto vale para la fecha
     total REAL CHECK(total >= 0),
     FOREIGN KEY (id_usuario) REFERENCES Usuarios(id)
