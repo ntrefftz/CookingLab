@@ -1,48 +1,47 @@
-<h1>CookingLab: Formulario de contacto</h1>
+<h1>Formulario de contacto</h1>
 
-<p>
-    Pulsa en <a href="index.html">inicio</a>
-    para volver al principio
-</p>
 <form action="mailto:ddallaco@ucm.es?subject=Consulta_CookingLab" method="POST" enctype="text/plain">
 
-    <!-- Campo de texto para el nombre -->
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" required>
+<!-- Campo de texto para el nombre -->
+<label for="nombre">Nombre:</label>
+<input type="text" id="nombre" name="nombre" required>
 
-    <p></p>
-    
-    <!-- Campo de texto para el correo electrónico -->
-    <label for="correo">Correo electrónico:</label>
-    <input type="email" id="correo" name="correo" required>
+<p></p>
 
-    <p></p>
+<!-- Campo de texto para el correo electrónico -->
+<label for="correo">Correo electrónico:</label>
+<input type="email" id="correo" name="correo" required>
 
-    <!-- Campo para el motivo de la consulta -->
-    <p>Motivo de la consulta:</p>
+<p></p>
+<!-- Campo para el motivo de la consulta -->
+<p>Motivo de la consulta:</p>
+
+<label for="evaluacion">Evaluación
     <input type="radio" id="evaluacion" name="motivo" value="Evaluación" required>
-    <label for="evaluacion">Evaluación</label>
+</label>
 
+<label for="sugerencias">Sugerencias
     <input type="radio" id="sugerencias" name="motivo" value="Sugerencias">
-    <label for="sugerencias">Sugerencias</label>
+</label>
 
+<label for="criticas">Críticas
     <input type="radio" id="criticas" name="motivo" value="Críticas">
-    <label for="criticas">Críticas</label>
+</label>
 
-    <p></p>
 
-    <!-- Casilla para los términos y condiciones -->
-    <input type="checkbox" id="terminos" name="terminos" required>
-    <label for="terminos">Marque esta casilla para verificar que ha leído nuestros 
-        <a href="condiciones.html">términos y condiciones del servicio</a></label>
+<p></p>
 
-    <p></p>
+<!-- Casilla para los términos y condiciones -->
+<label for="terminos">Marque esta casilla para verificar que ha leído nuestros 
+    <a href="/contenido/condiciones">términos y condiciones del servicio</a></label>
+<input type="checkbox" id="terminos" name="terminos" required>
+<p></p>
 
-    <!-- Campo de área de texto para el mensaje -->
-    <p><label for="mensaje">Mensaje:</label></p>
-    <textarea id="mensaje" name="mensaje" rows="4" cols="50" required></textarea>
+<!-- Campo de área de texto para el mensaje -->
+<p><label for="mensaje">Mensaje:</label></p>
+<textarea id="mensaje" name="mensaje" rows="4" cols="50" required></textarea>
 
-    <p></p>
-    <!-- Campo de botón de envío -->
-    <button type="submit">"Enviar"</button>
+<p></p>
+<!-- Campo de botón de envío -->
+<button type="submit">"Enviar"</button>
 </form>
