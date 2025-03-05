@@ -110,6 +110,57 @@ label {
 	display: block;
 }
 
+form {
+    width: 90%; /* Hace que el formulario no sea demasiado ancho */
+    max-width: 600px; /* Tamaño máximo */
+    margin: 20px auto; /* Centra el formulario */
+    background-color: #fff; 
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Para alinear bien los elementos del formulario */
+form label {
+    width: auto;  /* Evita que el texto del label sea demasiado estrecho */
+    float: none;  /* Evita el flotado */
+    display: inline-block; 
+    text-align: left;
+    font-weight: bold;
+}
+
+/* Para evitar que los input se rompan */
+form input, form textarea, form select {
+    width: calc(100% - 20px); /* Hace que los campos sean más anchos */
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Para los radio buttons */
+.radio-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Alineación del checkbox */
+.terms {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Botón bien alineado */
 button {
-	margin-left: 100px;
-} 
+    width: auto;
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #F383A0;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}

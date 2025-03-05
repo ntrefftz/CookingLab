@@ -28,3 +28,12 @@ export function viewContacto(req, res) {
         session: req.session
     });
 }
+
+export function viewCondiciones(req, res) {
+    let contenido = 'paginas/condiciones';
+
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
+}
