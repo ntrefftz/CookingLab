@@ -1,4 +1,5 @@
 export class Ingrediente {
+    static #getByIdStmt = null;
     static #getByNombreStmt = null;
     static #insertStmt = null;
     static #deleteStmt = null;
@@ -8,15 +9,22 @@ export class Ingrediente {
     static #existsStmt = null;
 
     static initStatements(db) {
-        if (this.#getByNombreStmt !== null) return;
+        if (this.#getByIdStmt !== null) return;
 
+        this.#getByIdStmt = db.prepare('SELECT * FROM Ingredientes WHERE id = @id');
         this.#getByNombreStmt = db.prepare('SELECT * FROM Ingredientes WHERE nombre = @nombre');
         this.#insertStmt = db.prepare('INSERT INTO Ingredientes(nombre, categoria, precio, stock) VALUES (@nombre, @categoria, @precio, @stock)');
-        this.#deleteStmt = db.prepare('DELETE FROM Ingredientes WHERE nombre = @nombre');
+        this.#deleteStmt = db.prepare('DELETE FROM Ingredientes WHERE id = @id');
         this.#getAllStmt = db.prepare('SELECT * FROM Ingredientes');
         this.#updateStmt = db.prepare('UPDATE Ingredientes SET nombre = @nombre, categoria = @categoria, precio = @precio, stock = @stock WHERE id = @id');
         this.#reduceStockStmt = db.prepare('UPDATE Ingredientes SET stock = stock - @cantidad WHERE id = @id AND stock >= @cantidad');
         this.#existsStmt = db.prepare('SELECT COUNT(*) as count FROM Ingredientes WHERE nombre = @nombre');
+    }
+
+    static getIngredienteById(id) {
+        const ingrediente = this.#getByIdStmt.get({ id });
+        if (!ingrediente) throw new IngredienteNoEncontradoNoEncontrada(id);
+        return ingrediente;
     }
 
     static getIngredienteByNombre(nombre) {
@@ -39,18 +47,18 @@ export class Ingrediente {
         }
     }
 
-    static deleteIngrediente(nombre) {
-        const result = this.#deleteStmt.run({ nombre });
-        if (result.changes === 0) throw new IngredienteNoEncontrado(nombre);
-        return { mensaje: "Ingrediente eliminado correctamente" };
+    static deleteIngrediente(id) {
+        const result = this.#deleteStmt.run({ id });
+        if (result.changes === 0) throw new IngredienteNoEncontrado(id);
+        return { mensaje: "Ingrediente eliminada correctamente" };
     }
 
     static updateIngrediente(id, nombre, categoria, precio, stock) {
         const result = this.#updateStmt.run({ id, nombre, categoria, precio, stock });
-        if (result.changes === 0) throw new IngredienteNoEncontrado(nombre);
+        if (result.changes === 0) throw new IngredienteNoEncontrado(id);
         return { mensaje: "Ingrediente actualizado correctamente" };
     }
-
+    
     static reducirStock(id, cantidad) {
         const result = this.#reduceStockStmt.run({ id, cantidad });
         if (result.changes === 0) throw new StockInsuficiente(id, cantidad);
