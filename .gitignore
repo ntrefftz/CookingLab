@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 #Excluimos la base de datos
-*.db
+#*.db
