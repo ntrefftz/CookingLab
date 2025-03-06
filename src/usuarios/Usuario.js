@@ -3,8 +3,7 @@ import bcrypt from "bcryptjs";
 
 export const RolesEnum = Object.freeze({
     USUARIO: 'U',
-    ADMIN: 'A',
-    COCINERO: 'C'
+    ADMIN: 'A'
 });
 
 export class Usuario {
@@ -14,39 +13,34 @@ export class Usuario {
 
     static initStatements(db) {
         if (this.#getByUsernameStmt !== null) return;
+
         this.#getByUsernameStmt = db.prepare('SELECT * FROM Usuarios WHERE username = @username');
-        this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, apellidos, correo, direccion, rol, activo ) VALUES (@username, @password, @nombre, @apellidos, @correo, @direccion, @rol, @activo )');
-        this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre, apellidos = @apellidos, direccion = @direccion, correo = @correo, activo = @activo WHERE id = @id');
+        this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, rol) VALUES (@username, @password, @nombre, @rol)');
+        this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre WHERE id = @id');
     }
 
     static getUsuarioByUsername(username) {
         const usuario = this.#getByUsernameStmt.get({ username });
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
 
-        const datos = { username, password, nombre, apellidos, correo, direccion, rol, activo } = usuario;
+        const { password, rol, nombre, id } = usuario;
 
-        return new Usuario(id, nombre, apellidos, username, password, rol, direccion, correo, activo);
-
+        return new Usuario(username, password, nombre, rol, id);
     }
 
     static #insert(usuario) {
         let result = null;
-        try { 
-            
-            const nombre = usuario.nombre;
-            const apellidos = usuario.apellidos;
+        try {
             const username = usuario.#username;
             const password = usuario.#password;
-            const direccion = usuario.direccion;
-            const correo = usuario.correo;
-            const activo = usuario.activo
+            const nombre = usuario.nombre;
             const rol = usuario.rol;
+            const datos = {username, password, nombre, rol};
 
-            const datos = { username, password, nombre, apellidos, correo, direccion, rol, activo };
             result = this.#insertStmt.run(datos);
 
             usuario.#id = result.lastInsertRowid;
-        } catch (e) { // SqliteError: https://github.com/WiseLibs/better-sqlite3/blob/master/docs/api.md#class-sqliteerror
+        } catch(e) { // SqliteError: https://github.com/WiseLibs/better-sqlite3/blob/master/docs/api.md#class-sqliteerror
             if (e.code === 'SQLITE_CONSTRAINT') {
                 throw new UsuarioYaExiste(usuario.#username);
             }
@@ -56,24 +50,18 @@ export class Usuario {
     }
 
     static #update(usuario) {
-
-
-        const nombre = usuario.nombre;
-        const apellidos = usuario.apellidos;
         const username = usuario.#username;
         const password = usuario.#password;
+        const nombre = usuario.nombre;
         const rol = usuario.rol;
-        const direccion = usuario.direccion;
-        const correo = usuario.correo;
-        const activo = usuario.activo;
-
-        const datos = { username, password, nombre, apellidos, correo, direccion, rol, activo };
+        const datos = {username, password, nombre, rol};
 
         const result = this.#updateStmt.run(datos);
         if (result.changes === 0) throw new UsuarioNoEncontrado(username);
 
         return usuario;
     }
+
 
     static login(username, password) {
         let usuario = null;
@@ -84,31 +72,23 @@ export class Usuario {
         }
 
         // XXX: En el ej3 / P3 lo cambiaremos para usar async / await o Promises
-        if (!bcrypt.compareSync(password, usuario.#password)) throw new UsuarioOPasswordNoValido(username);
+        if ( ! bcrypt.compareSync(password, usuario.#password) ) throw new UsuarioOPasswordNoValido(username);
 
         return usuario;
     }
 
     #id;
-    nombre;
-    apellidos;
     #username;
     #password;
     rol;
-    direccion;
-    correo;
-    activo;
+    nombre;
 
-    constructor(id = null, nombre, apellidos, username, password, rol = RolesEnum.USUARIO, direccion, correo, activo = 0) {
-        this.#id = id;
-        this.nombre = nombre;
-        this.apellidos = apellidos;
+    constructor(username, password, nombre, rol = RolesEnum.USUARIO, id = null) {
         this.#username = username;
         this.#password = password;
+        this.nombre = nombre;
         this.rol = rol;
-        this.direccion = direccion;
-        this.correo = correo;
-        this.activo = activo;
+        this.#id = id;
     }
 
     get id() {

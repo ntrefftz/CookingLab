@@ -34,20 +34,19 @@ CREATE TABLE "Recetas" (
 	"id_usuario"	INTEGER NOT NULL,
 	"activo"	INTEGER NOT NULL DEFAULT 1 CHECK("activo" IN (0, 1)),
 	"imagen_url"	TEXT,
-	PRIMARY KEY("id" AUTOINCREMENT),
-	FOREIGN KEY("id_usuario") REFERENCES "Usuarios"("id")
+	PRIMARY KEY("id" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "Usuarios";
 CREATE TABLE "Usuarios" (
 	"id"	INTEGER NOT NULL,
-	"nombre"	TEXT NOT NULL,
-	"apellidos"	TEXT NOT NULL,
-	"username"	TEXT NOT NULL,
+	"username"	TEXT NOT NULL UNIQUE,
 	"password"	TEXT NOT NULL,
 	"rol"	TEXT NOT NULL DEFAULT 'U' CHECK("rol" IN ('U', 'A', 'C')),
-	"direccion"	TEXT NOT NULL,
-	"correo"	TEXT NOT NULL UNIQUE,
-	"activo"	INTEGER NOT NULL DEFAULT 1 CHECK("activo" IN (0, 1)),
+	"nombre"	TEXT NOT NULL,
+	"direccion"	TEXT,
+	"correo"	TEXT,
+	"apellidos"	TEXT,
+	"activo"	INTEGER CHECK("activo" IN (0, 1)),
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "calendario_Semanal";
@@ -104,5 +103,4 @@ CREATE TABLE "valoraciones" (
 	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id"),
 	FOREIGN KEY("id_usuario") REFERENCES "Usuarios"("id")
 );
-
 COMMIT;
