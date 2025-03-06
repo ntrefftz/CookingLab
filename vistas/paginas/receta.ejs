@@ -1,0 +1,7 @@
+<h1><%= recetas.nombre %></h1>
+
+<p>Tiempo de preparación: <%= Math.floor(recetas.tiempo_prep_segs/60)%> minutos</p>
+<p>Difilcultad: <% for(let i = 0; i < recetas.dificultad; i++){%>&#127775;<% } %></p>
+<p><%= recetas.descripcion %></p>
+<p></p>
+<button>Editar receta</button><button>Eliminar receta</button>

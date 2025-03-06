@@ -11,11 +11,9 @@ export function viewRecetasLista(req, res) {
 
 export function viewRecetasDetalle(req, res) {
     // TODO
-    const contenido = 'paginas/recetasDetalle';
-    const url = new URL(`${baseUrl}${req.url}`);
-    const params = url.searchParams;
-    const id = params.get('id');
-    const receta = Receta.getReceta(id);
+    const contenido = 'paginas/receta';
+    const id = req.query.id;
+    const receta = Receta.getRecetaById(id);
     res.render('pagina', {
         contenido,
         session: req.session,

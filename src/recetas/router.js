@@ -4,7 +4,7 @@ import { viewRecetasDetalle, viewRecetasLista, viewModificarReceta } from './con
 const recetasRouter = express.Router();
 
 recetasRouter.get('/catalogo', viewRecetasLista);
-recetasRouter.get('/receta/:id', viewRecetasDetalle);
+recetasRouter.get('/receta', viewRecetasDetalle);
 recetasRouter.get('/modificar', viewModificarReceta);
 
 export default recetasRouter;
