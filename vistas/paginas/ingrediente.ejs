@@ -1,0 +1,8 @@
+<h1>Ingredientes</h1>
+<div id="ingrediente">
+    <% ingredientes.forEach(ingredienteInd => { %>
+        <div class="ingredienteInd">
+            <a href="ingredienteInd/?id=<%= ingredienteInd.id %>"><h2><%= ingredienteInd.nombre %></h2></a>
+        </div>
+    <% }) %>
+</div>
