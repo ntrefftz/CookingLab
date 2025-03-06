@@ -134,3 +134,5 @@ dist
 #Ignore mysqlite files
 aw_sw.db-shm
 aw_sw.db-wal
+aw_sw.db
+*.db

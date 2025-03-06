@@ -38,15 +38,15 @@ CREATE TABLE "Recetas" (
 );
 DROP TABLE IF EXISTS "Usuarios";
 CREATE TABLE "Usuarios" (
-	"id"	INTEGER NOT NULL,
 	"username"	TEXT NOT NULL UNIQUE,
 	"password"	TEXT NOT NULL,
-	"rol"	TEXT NOT NULL DEFAULT 'U' CHECK("rol" IN ('U', 'A', 'C')),
 	"nombre"	TEXT NOT NULL,
+	"apellido"	TEXT,
+	"correo"	TEXT UNIQUE,
 	"direccion"	TEXT,
-	"correo"	TEXT,
-	"apellidos"	TEXT,
+	"rol"	TEXT NOT NULL DEFAULT 'U' CHECK("rol" IN ('U', 'A', 'C')),
 	"activo"	INTEGER CHECK("activo" IN (0, 1)),
+	"id"	INTEGER NOT NULL,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "calendario_Semanal";
