@@ -12,6 +12,17 @@ export function viewLogin(req, res) {
     });
 }
 
+export function viewRegister(req, res) {
+    let contenido = 'paginas/register';
+    if (req.session != null && req.session.login) {
+        contenido = 'paginas/home'
+    }
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
+}
+
 export function doLogin(req, res) {
     body('username').escape();
     body('password').escape();
@@ -34,6 +45,40 @@ export function doLogin(req, res) {
         res.render('pagina', {
             contenido: 'paginas/login',
             error: 'El usuario o contraseña no son válidos'
+        })
+    }
+}
+
+export function doRegister(req, res) {
+    body('username').escape();
+    body('nombre').escape();
+    body('apellido').escape();
+    body('correo').escape();
+    body('direccion').escape();
+    // Capturo las variables
+    const username = req.body.username.trim();
+    const password = req.body.password.trim();
+    const nombre = req.body.nombre.trim();
+    const apellido = req.body.apellido.trim();
+    const correo = req.body.correo.trim();
+    const direccion = req.body.direccion.trim();
+
+    
+    try {
+        const usuario = Usuario.register(username, password, nombre, apellido, correo, direccion);
+        req.session.login = true;
+        req.session.nombre = usuario.nombre;
+        req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
+
+        return res.render('pagina', {
+            contenido: 'paginas/home',
+            session: req.session
+        });
+
+    } catch (e) {
+        res.render('pagina', {
+            contenido: 'paginas/register',
+            error: 'Error al guardar los datos ' + e
         })
     }
 }

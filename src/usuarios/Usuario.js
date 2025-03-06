@@ -31,6 +31,7 @@ export class Usuario {
     static #insert(usuario) {
         let result = null;
         try {
+            console.log('Insertando...');
             const username = usuario.#username;
             const password = usuario.#password;
             const nombre = usuario.nombre;
@@ -39,12 +40,13 @@ export class Usuario {
             const direccion = usuario.direccion;
             const rol = usuario.rol;
             const activo = usuario.activo;
-            const datos = {username, password, nombre, apellido, correo, direccion, rol, activo, id};
+            const id = usuario.id;
+            const datos = { username, password, nombre, apellido, correo, direccion, rol, activo, id };
 
             result = this.#insertStmt.run(datos);
 
             usuario.#id = result.lastInsertRowid;
-        } catch(e) { // SqliteError: https://github.com/WiseLibs/better-sqlite3/blob/master/docs/api.md#class-sqliteerror
+        } catch (e) { // SqliteError: https://github.com/WiseLibs/better-sqlite3/blob/master/docs/api.md#class-sqliteerror
             if (e.code === 'SQLITE_CONSTRAINT') {
                 throw new UsuarioYaExiste(usuario.#username);
             }
@@ -62,7 +64,7 @@ export class Usuario {
         const direccion = usuario.direccion;
         const rol = usuario.rol;
         const activo = usuario.activo;
-        const datos = {username, password, nombre, apellido, correo, direccion, rol, activo, id};
+        const datos = { username, password, nombre, apellido, correo, direccion, rol, activo, id };
 
         const result = this.#updateStmt.run(datos);
         if (result.changes === 0) throw new UsuarioNoEncontrado(username);
@@ -80,10 +82,24 @@ export class Usuario {
         }
 
         // XXX: En el ej3 / P3 lo cambiaremos para usar async / await o Promises
-        if ( ! bcrypt.compareSync(password, usuario.#password) && ! usuario.activo ) throw new UsuarioOPasswordNoValido(username);
+        if (!bcrypt.compareSync(password, usuario.#password) && !usuario.activo) throw new UsuarioOPasswordNoValido(username);
 
         return usuario;
     }
+
+    static register(username, password, nombre, apellido, correo, direccion) {
+        let usuario = null;
+        try {
+            usuario = new Usuario(username, password, nombre, apellido, correo, direccion);
+            usuario = this.#insert(usuario);
+        } catch (e) {
+            throw new UsuarioYaExiste(username, { cause: e });
+        }
+
+
+        return usuario;
+    }
+
 
     #id;
     #username;
@@ -95,9 +111,9 @@ export class Usuario {
     rol;
     activo;
 
-    constructor(username, password, nombre, apellido, correo, direccion, rol = RolesEnum.USUARIO, activo, id = null) {
+    constructor(username, password, nombre, apellido, correo, direccion, rol = RolesEnum.USUARIO, activo = 1, id = null) {
         this.#username = username;
-        this.#password = password;
+        this.password = password;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
