@@ -5,5 +5,5 @@ import { Receta } from "./recetas/Recetas.js"; // Nuevo import
 export function inicializaModelos(db) {
     Usuario.initStatements(db);
     Ingrediente.initStatements(db); // Inicializa ingredientes
-    Receceta.initStatements(db); // Inicializa recetas
+    Receta.initStatements(db); // Inicializa recetas
 }
