@@ -4,4 +4,5 @@
 <p>Difilcultad: <% for(let i = 0; i < recetas.dificultad; i++){%>&#127775;<% } %></p>
 <p><%= recetas.descripcion %></p>
 <p></p>
-<button>Editar receta</button><button>Eliminar receta</button>
+<a href="/recetas/receta/eliminar?id=<%= recetas.id %>"><button>Eliminar receta</button></a>
+<a href="/recetas/receta/modificar?id=<%= recetas.id %>"><button>Editar receta</button></a>

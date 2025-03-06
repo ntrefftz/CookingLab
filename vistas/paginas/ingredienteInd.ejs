@@ -1,0 +1,8 @@
+<h1><%= ingredientes.nombre %></h1>
+
+<p>Categoría: <%= ingredientes.categoria %></p>
+<p>Precio: <%= ingredientes.precio %></p>
+<p>Stock: <%= ingredientes.stock %></p>
+<p></p>
+<a href="/recetas/ingredienteInd/eliminar?id=<%= ingredientes.id %>"><button>Eliminar ingrediente</button></a>
+<a href="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>"><button>Editar ingrediente</button></a>
