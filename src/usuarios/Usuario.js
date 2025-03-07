@@ -81,11 +81,10 @@ export class Usuario {
             throw new UsuarioOPasswordNoValido(username, { cause: e });
         }
         // XXX: En el ej3 / P3 lo cambiaremos para usar async / await o Promises
-
-        if (!bcrypt.compareSync(password, usuario.#password) && !usuario.activo) throw new UsuarioOPasswordNoValido(username);
+        console.log(usuario.#password);
+        if (!bcrypt.compareSync(password, usuario.#password)) throw new UsuarioOPasswordNoValido(username);
         
-        //return usuario; 
-        //CAMBIO PARA DEVOLVER ID
+
         return { 
             id: usuario.id, 
             username: usuario.username, 
@@ -98,7 +97,7 @@ export class Usuario {
     static register(username, password, nombre, apellido, correo, direccion) {
         let usuario = null;
         try {
-            usuario = new Usuario(username, password, nombre, apellido, correo, direccion);
+            usuario = new Usuario(username, bcrypt.hashSync(password), nombre, apellido, correo, direccion);
             usuario = this.#insert(usuario);
         } catch (e) {
             throw new UsuarioYaExiste(username, { cause: e });
@@ -121,7 +120,7 @@ export class Usuario {
 
     constructor(username, password, nombre, apellido, correo, direccion, rol = RolesEnum.USUARIO, activo = 1, id = null) {
         this.#username = username;
-        this.password = password;
+        this.#password = password;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
@@ -137,7 +136,7 @@ export class Usuario {
 
     set password(nuevoPassword) {
         // XXX: En el ej3 / P3 lo cambiaremos para usar async / await o Promises
-        this.#password = bcrypt.hashSync(nuevoPassword);
+        //this.#password = bcrypt.hashSync(nuevoPassword);
     }
 
     get username() {
