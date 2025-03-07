@@ -128,3 +128,66 @@ export function modificarIngrediente(req, res) {
         ingredientes: ingrediente
     });
 }
+
+//función para mostrar el formulario de añadir receta
+export function viewAniadirReceta(req, res) {
+    const contenido = 'paginas/aniadirReceta';
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
+}
+
+//función para el formulario de añadir receta
+export function aniadirReceta(req, res) {
+    console.log("Sesión actual:", req.session); // Verifica si userId está definido
+
+    body('nombre').escape();
+    body('descripcion').escape();
+    body('dificultad').escape();
+    body('tiempo_prep_segs').escape();
+
+    const nombre = req.body.nombre.trim();
+    const descripcion = req.body.descripcion.trim();
+    const dificultad = req.body.dificultad.trim();
+    const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
+    const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
+    const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
+
+    if (!id_usuario) {
+        console.error("Error: No se ha proporcionado un ID de usuario válido");
+        return res.status(400).send('No se ha proporcionado un ID de usuario válido');
+    }
+
+    try {
+        Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo);
+        res.redirect('/recetas/catalogo');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error al añadir la receta');
+    }
+
+    /*if (isNaN(dificultad) || dificultad < 1 || dificultad > 5) {
+        return res.status(400).send('La dificultad debe ser un número entre 1 y 5');
+    }
+    if (tiempo_prep_segs <= 0) {
+        return res.status(400).send('El tiempo de preparación debe ser mayor que 0');
+    }
+    if (!id_usuario) {
+        return res.status(400).send('No se ha proporcionado un ID de usuario válido');
+    }
+
+
+    const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo);
+    res.redirect('/recetas/catalogo');//redirigimos a la página de catálogo después de agregar la receta
+
+
+    try {
+        const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo);
+        //redirigimos a la página de catálogo después de agregar la receta
+        res.redirect('/recetas/catalogo');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error al añadir la receta');
+    }*/
+}

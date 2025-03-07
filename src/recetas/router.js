@@ -1,7 +1,9 @@
 import express from 'express';
 import { viewRecetasDetalle, viewRecetasLista, viewModificarReceta, eliminarReceta, modificarReceta,
-    viewIngredientesLista, viewIngredientesDetalle, viewModificarIngrediente, eliminarIngrediente, modificarIngrediente
- } from './controllers.js';
+    viewIngredientesLista, viewIngredientesDetalle, viewModificarIngrediente, eliminarIngrediente, modificarIngrediente, 
+    viewAniadirReceta, aniadirReceta
+     
+} from './controllers.js';
 
 const recetasRouter = express.Router();
 
@@ -17,5 +19,10 @@ recetasRouter.get('/ingredienteInd', viewIngredientesDetalle);
 recetasRouter.get('/ingredienteInd/modificar', viewModificarIngrediente);
 recetasRouter.get('/ingredienteInd/eliminar', eliminarIngrediente);
 recetasRouter.post('/ingredienteInd/modificar', modificarIngrediente);
+
+//GET para mostrar el formulario de añadir receta
+recetasRouter.get('/receta/aniadir', viewAniadirReceta);
+//POST para manejar el envío del formulario de añadir receta
+recetasRouter.post('/receta/aniadir', aniadirReceta);
 
 export default recetasRouter;

@@ -33,6 +33,9 @@ export function doLogin(req, res) {
     try {
         const usuario = Usuario.login(username, password);
         req.session.login = true;
+        //CAMBIO PARA GUARDAR EL ID DEL USUARIO
+        req.session.userId = usuario.id;
+
         req.session.nombre = usuario.nombre;
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
 
@@ -67,8 +70,9 @@ export function doRegister(req, res) {
     try {
         const usuario = Usuario.register(username, password, nombre, apellido, correo, direccion);
         req.session.login = true;
-        req.
-        session.nombre = usuario.nombre;
+        //CAMBIO PARA GUARDAR EL ID DEL USUARIO
+        req.session.userId = usuario.id;
+        req.session.nombre = usuario.nombre;
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
 
         return res.render('pagina', {

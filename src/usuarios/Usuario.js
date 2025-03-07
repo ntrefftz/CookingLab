@@ -81,9 +81,18 @@ export class Usuario {
             throw new UsuarioOPasswordNoValido(username, { cause: e });
         }
         // XXX: En el ej3 / P3 lo cambiaremos para usar async / await o Promises
-        if (!bcrypt.compareSync(password, usuario.#password) || !usuario.activo) throw new UsuarioOPasswordNoValido(username);
 
-        return usuario;
+        if (!bcrypt.compareSync(password, usuario.#password) && !usuario.activo) throw new UsuarioOPasswordNoValido(username);
+        
+        //return usuario; 
+        //CAMBIO PARA DEVOLVER ID
+        return { 
+            id: usuario.id, 
+            username: usuario.username, 
+            nombre: usuario.nombre, 
+            esAdmin: usuario.rol === RolesEnum.ADMIN 
+        };
+     
     }
 
     static register(username, password, nombre, apellido, correo, direccion) {
