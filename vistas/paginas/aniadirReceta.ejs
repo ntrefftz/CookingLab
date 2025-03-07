@@ -1,0 +1,16 @@
+<h2>Añadir nueva receta</h2>
+
+<form action="/recetas/receta/aniadir" method="POST">
+    <fieldset>
+        <% if (locals.error) { %>
+            <p><strong><%= locals.error %></strong></p>
+        <% } %>
+        <legend>Detalles de la receta</legend>
+        <div><label>Nombre:</label> <input type="text" name="nombre" required placeholder="Introduce el nombre de la receta" /></div>
+        <div><label>Tiempo de preparación (min):</label><input type="number" name="tiempo_prep_segs" required placeholder="Tiempo en minutos" min="1" /></div>
+        <div><label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" required placeholder="Dificultad de la receta" min="1" max="5" /></div>
+        <div><label>Descripción:</label><textarea name="descripcion" required placeholder="Introduce una breve descripción de la receta"></textarea></div>
+
+        <button type="submit">Añadir receta</button>
+    </fieldset>
+</form>
