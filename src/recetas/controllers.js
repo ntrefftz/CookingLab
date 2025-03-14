@@ -65,6 +65,44 @@ export function modificarReceta(req, res) {
     });
 }
 
+export function viewAniadirReceta(req, res) {
+    const contenido = 'paginas/aniadirReceta';
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
+}
+
+export function aniadirReceta(req, res) {
+    console.log("Sesión actual:", req.session); // Verifica si userId está definido
+
+    body('nombre').escape();
+    body('descripcion').escape();
+    body('dificultad').escape();
+    body('tiempo_prep_segs').escape();
+
+    const nombre = req.body.nombre.trim();
+    const descripcion = req.body.descripcion.trim();
+    const dificultad = req.body.dificultad.trim();
+    const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
+    const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
+    const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
+
+    if (!id_usuario) {
+        console.error("Error: No se ha proporcionado un ID de usuario válido");
+        return res.status(400).send('No se ha proporcionado un ID de usuario válido');
+    }
+
+    try {
+        Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo);
+        res.redirect('/recetas/catalogo');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error al añadir la receta');
+    }
+}
+
+//--------------------------------------------------------------------
 
 export function viewIngredientesLista(req, res) {
     const rows = Ingrediente.getAllIngredientes();
@@ -129,28 +167,26 @@ export function modificarIngrediente(req, res) {
     });
 }
 
-//función para mostrar el formulario de añadir receta
-export function viewAniadirReceta(req, res) {
-    const contenido = 'paginas/aniadirReceta';
+export function viewAniadirIngrediente(req, res) {
+    const contenido = 'paginas/aniadirIngrediente';
     res.render('pagina', {
         contenido,
         session: req.session
     });
 }
 
-//función para el formulario de añadir receta
-export function aniadirReceta(req, res) {
+export function aniadirIngrediente(req, res) {
     console.log("Sesión actual:", req.session); // Verifica si userId está definido
 
     body('nombre').escape();
-    body('descripcion').escape();
-    body('dificultad').escape();
-    body('tiempo_prep_segs').escape();
+    body('precio').escape();
+    body('categoria').escape();
+    body('stock').escape();
 
     const nombre = req.body.nombre.trim();
-    const descripcion = req.body.descripcion.trim();
-    const dificultad = req.body.dificultad.trim();
-    const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
+    const precio = req.body.precio.trim();
+    const categoria = req.body.categoria.trim();    
+    const stock = req.body.stock.trim();
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
 
@@ -160,11 +196,11 @@ export function aniadirReceta(req, res) {
     }
 
     try {
-        Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo);
-        res.redirect('/recetas/catalogo');
+        Ingrediente.addIngrediente(nombre, categoria, precio, stock, activo);
+        res.redirect('/recetas/ingrediente');
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error al añadir la receta');
+        res.status(500).send('Error al añadir el ingrediente');
     }
 
     /*if (isNaN(dificultad) || dificultad < 1 || dificultad > 5) {
