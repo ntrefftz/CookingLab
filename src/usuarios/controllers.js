@@ -1,4 +1,5 @@
 import { body } from 'express-validator';
+import { validationResult } from 'express-validator';
 import { Usuario, RolesEnum } from './Usuario.js';
 
 export function viewLogin(req, res) {
@@ -24,6 +25,16 @@ export function viewRegister(req, res) {
 }
 
 export function doLogin(req, res) {
+
+    // Verifica si hay errores en las validaciones
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('pagina', {
+            contenido: 'paginas/login',
+            error: errors.array().map(err => err.msg).join(', ') // Muestra los errores en un solo mensaje
+        });
+    }
+
     body('username').escape();
     body('password').escape();
     // Capturo las variables username y password
@@ -53,6 +64,16 @@ export function doLogin(req, res) {
 }
 
 export function doRegister(req, res) {
+
+    // Verifica si hay errores en las validaciones
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('pagina', {
+            contenido: 'paginas/register',
+            error: errors.array().map(err => err.msg).join(', ') // Muestra los errores en un solo mensaje
+        });
+    }
+
     body('username').escape();
     body('nombre').escape();
     body('apellido').escape();
