@@ -25,4 +25,5 @@ usuariosRouter.post('/register',
     body('password', 'La contraseña tiene que tener entre 6 y 10 caracteres').trim().isLength({ min: 6, max: 10 }),
     doRegister
 );
+
 export default usuariosRouter;
