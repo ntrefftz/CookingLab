@@ -2,6 +2,9 @@ import { body } from 'express-validator';
 import { validationResult } from 'express-validator';
 import { Usuario, RolesEnum } from './Usuario.js';
 
+//Para registrar en logs los intentos de inicio de sesion y los errores
+//import { logger } from './logger.js';
+
 export function viewLogin(req, res) {
     let contenido = 'paginas/login';
     if (req.session != null && req.session.login) {
@@ -29,6 +32,15 @@ export function doLogin(req, res) {
     // Verifica si hay errores en las validaciones
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        //Cambio paara los mensajes flash
+        /*const errores = result.mapped();
+        const datos = matchedData(req);
+
+        return res.render('pagina', {
+            contenido: 'paginas/login',
+            error: 'Usuario o contraseña incorrectos',
+            session: req.session
+        });*/
         return res.render('pagina', {
             contenido: 'paginas/login',
             error: errors.array().map(err => err.msg).join(', ') // Muestra los errores en un solo mensaje
@@ -50,12 +62,23 @@ export function doLogin(req, res) {
         req.session.nombre = usuario.nombre;
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
 
+        // Modificaciones para flash
+        /*res.setFlash(`Encantado de verte de nuevo, ${usuario.nombre}!`);
+        logger.info(`Usuario ${username} ha iniciado sesión.`);
+        return res.redirect('../vistas/paginas/home.ejs');*/
+
+        //Ahora en vez de renderizar la vista, redirigimos a la página de inicio
         return res.render('pagina', {
             contenido: 'paginas/home',
             session: req.session
         });
 
     } catch (e) {
+        //Cambio para los mensajes Flash
+        /*logger.warn(`Fallo en el login del usuario '${username}': ${e.message}`);
+        req.session.flashMsg = 'El usuario o contraseña no son válidos';
+        return res.redirect('/usuarios/login');*/
+
         res.render('pagina', {
             contenido: 'paginas/login',
             error: 'El usuario o contraseña no son válidos'

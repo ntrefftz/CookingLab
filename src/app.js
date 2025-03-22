@@ -12,6 +12,9 @@ import usuariosRouter from './usuarios/router.js';
 import contenidoRouter from './contenido/router.js';
 import recetasRouter from './recetas/router.js';
 
+//Modificacion para Flash
+import { flashMessages } from './middleware/flash.js';
+
 export const app = express();
 
 app.set('view engine', 'ejs');
@@ -19,6 +22,9 @@ app.set('views', config.vistas);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(session(config.session));
+
+//Modificacion para Flash
+app.use(flashMessages);
 
 app.use('/', express.static(config.recursos));
 app.get('/', (req, res) => {
