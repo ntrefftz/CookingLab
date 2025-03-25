@@ -1,59 +1,94 @@
 body {
 	background-color: #FFFFFF;
-}
-
-@font-face {
-    font-family: 'alice';
-    font-display: swap;
-    src: url('/static/fonts/Alice-Regular.ttf')format('ttf');
-}
-
-div#contenedor {
-	width: 900px;
+	width: auto;
 	margin: auto;
 	border: 1px solid black;
 	background-color: #FFE0EE;
-	margin-top: 30px;
 }
+
+@font-face {
+	font-family: 'alice';
+	font-display: swap;
+	src: url('/static/fonts/Alice-Regular.ttf')format('ttf');
+}
+
+/* Header, Navbar y login */
 
 header {
-	padding: 30px;
-	height: 100px;
-	background-color: #F383A0;
-	color: black;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    height: 100px;
+    background-color: #F383A0;
+    color: black;
 }
 
-header a, header a:visited {
+header a,
+header a:visited {
 	color: black;
 	font-weight: bold;
 	text-decoration: none;
-} 
+}
 
 header a:hover {
 	color: red;
 	font-weight: bold;
 	text-decoration: underline;
-} 
-
-
-nav {
-	padding: 10px;
-	float: left;
-	width: 170px;
-	height: 400px;
-	background-color: #FFE0EE;;
 }
 
-nav a, nav a:visited {
-	color: red;
+
+.navbar {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #F383A0;
+	padding: 10px;
+	margin: 0;
+}
+
+.navbar ul {
+	list-style-type: none;
+	display: flex;
+	gap: 20px;
+	padding: 0;
+	margin: 0;
+}
+
+.navbar li {
+	display: flex;
+}
+
+.navbar a {
+	color: black;
 	font-weight: bold;
 	text-decoration: none;
-} 
+	padding: 10px;
+}
 
-nav a:hover {
-	color: red;
+.navbar a:hover {
+	color: rgb(133, 16, 154);
 	text-decoration: underline;
-} 
+}
+.login {
+    margin-left: 0;
+    text-align: center;
+}
+
+.login p {
+	margin: 0;
+}
+
+.login a {
+	font-weight: bold;
+	color: blue;
+}
+
+.login a:hover {
+	color: red;
+}
 
 
 aside {
@@ -66,13 +101,13 @@ aside {
 
 main {
 	padding: 10px;
-	float: left;
+
 	min-height: 600px;
-	width: 500px;
+	width: 100%;
 	background-color: white;
 }
 
-footer	 {
+footer {
 	clear: both;
 	padding: 20px;
 	background-color: #FFE0EE;
@@ -80,7 +115,7 @@ footer	 {
 	text-align: center;
 }
 
-footer a{
+footer a {
 	color: red;
 }
 
@@ -100,7 +135,7 @@ legend {
 	background: #F383A0;
 	border: 1px solid black;
 	padding: 2px 6px;
-} 
+}
 
 label {
 	width: 4em;
@@ -111,56 +146,112 @@ label {
 }
 
 form {
-    width: 90%; /* Hace que el formulario no sea demasiado ancho */
-    max-width: 600px; /* Tamaño máximo */
-    margin: 20px auto; /* Centra el formulario */
-    background-color: #fff; 
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	width: 90%;
+	/* Hace que el formulario no sea demasiado ancho */
+	max-width: 600px;
+	/* Tamaño máximo */
+	margin: 20px auto;
+	/* Centra el formulario */
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Para alinear bien los elementos del formulario */
 form label {
-    width: auto;  /* Evita que el texto del label sea demasiado estrecho */
-    float: none;  /* Evita el flotado */
-    display: inline-block; 
-    text-align: left;
-    font-weight: bold;
+	width: auto;
+	/* Evita que el texto del label sea demasiado estrecho */
+	float: none;
+	/* Evita el flotado */
+	display: inline-block;
+	text-align: left;
+	font-weight: bold;
 }
 
 /* Para evitar que los input se rompan */
-form input, form textarea, form select {
-    width: calc(100% - 20px); /* Hace que los campos sean más anchos */
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+form input,
+form textarea,
+form select {
+	width: calc(100% - 20px);
+	/* Hace que los campos sean más anchos */
+	padding: 8px;
+	margin-top: 5px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
 }
 
 /* Para los radio buttons */
 .radio-group {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+	display: flex;
+	gap: 10px;
+	align-items: center;
 }
 
 /* Alineación del checkbox */
 .terms {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+	display: flex;
+	align-items: center;
+	gap: 5px;
 }
 
 /* Botón bien alineado */
 button {
-    width: auto;
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
+	width: auto;
+	display: block;
+	margin: 20px auto;
+	padding: 10px 20px;
+	background-color: #F383A0;
+	color: white;
+	border: none;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+
+/* Imagen */
+img {
+	max-width: 100%;
+}
+
+
+
+/* CSS tarjetas */
+.cards_container {
+	max-width: 80%;
+	margin: 10px auto;
+	justify-content: center;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	grid-gap: 5px;
+}
+.card {
+	border: 1px solid #999;
+	border-radius: 3px;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	background: white;
+	text-align: center;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+	width: fit-content;
+}
+.card img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+.card h4 {
+	margin: 0;
+	padding: 2px;
+}
+.card header {
     background-color: #F383A0;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
+    color: black;
+    padding: 10px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	
 }

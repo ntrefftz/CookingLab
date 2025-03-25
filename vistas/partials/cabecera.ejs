@@ -10,10 +10,19 @@ function mostrarSaludo(session){
 
 	return `<p>Bienvenido ${session.nombre}. <a href="/usuarios/logout">(salir)</a></p>`;
 }
-%><header>
+%>
+
+<header>
 	<h1>COOKINGLAB</h1>
-	
-	<div class="saludo">
-		<%- mostrarSaludo(session) %>
-	</div>
+	<ul class="navbar">
+		<li><a href="/">Inicio</a></li>
+		<li><a href="/contenido/conocenos">Conócenos</a></li>
+		<li><a href="/recetas/catalogo">Recetas</a></li>
+		<li><a href="/recetas/ingrediente">Ingredientes</a></li>
+		<li><a href="/contenido/cesta">Cesta</a></li>
+		<li><a href="/contenido/admin">Administrar</a></li>
+		<li><%- mostrarSaludo(session) %></li>
+	  </ul> 
+
+		
 </header>

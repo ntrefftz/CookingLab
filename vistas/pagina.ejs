@@ -5,20 +5,18 @@
 </head>
 
 <body>
+ <!-- <div id="contenedor"> -->
 
- <div id="contenedor">
   <%- include('./partials/cabecera.ejs', { session: locals.session }) %>
-  <%- include('./partials/sidebarIzq.ejs') %>
 
   <main>
     <article>
     <%- include(contenido) %>
     </article>
   </main>
-
-  <%- include('./partials/sidebarDer.ejs') %>
   <%- include('./partials/pie.ejs') %>
-</div> <!-- Fin del contenedor -->
+
+<!-- </div> Fin del contenedor -->
 
 </body>
 </html>
