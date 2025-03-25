@@ -1,19 +1,20 @@
 <h1>Catálogo</h1>
 <a href="/recetas/receta/aniadir"><button>Añadir receta</button></a>
 
-<div id="catalogo" class="cards_receta">
+<div id="catalogo" class="cards_container">
     <% recetas.forEach(receta=> { %>
         <article class="card">
             <header>
-                <h4>
-                    <%= receta.nombre %>
-                </h4>
+
+                <a href="receta/?id=<%= receta.id %>">
+                    <h4>
+                        <%= receta.nombre %>
+                    </h4>
+                </a>
+
             </header>
 
-            <img href="receta/?id=<%= receta.id %>" src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" alt="Pronto habrá una foto"  />
-            <div class="content">
-               
-            </div>
+            <img src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" alt="Pronto habrá una foto" />
         </article>
         <% }) %>
 </div>

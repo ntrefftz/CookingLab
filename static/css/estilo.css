@@ -216,45 +216,42 @@ img {
 
 
 
-/* CSS tarjetas receta */
-.cards_receta {
-	max-width: 400px;
+/* CSS tarjetas */
+.cards_container {
+	max-width: 80%;
 	margin: 10px auto;
 	justify-content: center;
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 	grid-gap: 5px;
 }
-
 .card {
 	border: 1px solid #999;
 	border-radius: 3px;
-	display: grid;
-	grid-template-rows: max-content 50px 1fr;
+	display: flex;
+	flex-direction: column;
 	overflow: hidden;
 	background: white;
 	text-align: center;
 	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+	width: fit-content;
 }
-
 .card img {
-	object-fit: cover;
+	display: block;
 	width: 100%;
 	height: auto;
 }
-
 .card h4 {
 	margin: 0;
-	padding: 10px;
+	padding: 2px;
 }
-
-.card .content {
-	padding: 10px;
-}
-
 .card header {
-
-	height: fit-content;
-	background-color: #F383A0;
-	color: black;
+    background-color: #F383A0;
+    color: black;
+    padding: 10px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	
 }

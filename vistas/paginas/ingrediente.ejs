@@ -1,9 +1,18 @@
 <h1>Ingredientes</h1>
 <a href="/recetas/ingredienteInd/aniadir"><button>Añadir ingrediente</button></a>
-<div id="ingrediente">
+<div id="catalogo" class="cards_container">
     <% ingredientes.forEach(ingredienteInd => { %>
-        <div class="ingredienteInd">
-            <a href="ingredienteInd/?id=<%= ingredienteInd.id %>"><h2><%= ingredienteInd.nombre %></h2></a>
-        </div>
-    <% }) %>
+        <article class="card">
+            <header>
+                <a href="ingredienteInd/?id=<%= ingredienteInd.id %>"><h4><%= ingredienteInd.nombre %></h4></a>
+            </header>
+
+            <img src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" alt="Pronto habrá una foto"  />
+           
+        </article>
+        <% }) %>
+      
 </div>
+
+
+
