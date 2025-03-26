@@ -29,4 +29,35 @@ INSERT INTO "Recetas" VALUES (9,'Empanadas','Empanadas rellenas de carne.',4200,
 INSERT INTO "Recetas" VALUES (10,'Churros','Postre frito con azúcar y canela.',2400,3,10,1,NULL);
 INSERT INTO "Usuarios" VALUES ('user','$2b$10$JdCg8yL3rRkkr.hhx1rjqOe30F9lhBlqA1sjYJW6ymzYExvQFHyjy','Usuario','Default','user@cookinglabs.com','C/ Calle 14, Madrid','U',1,1);
 INSERT INTO "Usuarios" VALUES ('admin','$2b$10$Htah5iG9eKj8ItIItpzK6uvny3c5/QjdZaLwwmFy32RPrfVspNgYS','Administrador','Default','admin@cookinglab.com','C/ Avenida 106, Segovia','A',1,2);
+
+
+-- Relaciones entre recetas e ingredientes
+-- Relaciones para Pizza Margarita (id_receta 4)
+INSERT INTO "tiene" VALUES (7, 4, 200);  -- Queso
+INSERT INTO "tiene" VALUES (6, 4, 150);  -- Tomate
+INSERT INTO "tiene" VALUES (1, 4, 300);  -- Harina
+INSERT INTO "tiene" VALUES (5, 4, 2);    -- Huevos
+
+-- Relaciones para Sopa de Tomate (id_receta 3)
+INSERT INTO "tiene" VALUES (6, 3, 400);  -- Tomate
+INSERT INTO "tiene" VALUES (3, 3, 10);   -- Sal
+
+-- Relaciones para Arroz con Pollo (id_receta 5)
+INSERT INTO "tiene" VALUES (9, 5, 500);  -- Pollo
+
+-- Relaciones para Tostadas Francesas (id_receta 7)
+INSERT INTO "tiene" VALUES (5, 7, 4);    -- Huevos
+INSERT INTO "tiene" VALUES (4, 7, 200);  -- Leche
+
+-- Relaciones para Omelette de Queso (id_receta 8)
+INSERT INTO "tiene" VALUES (5, 8, 3);    -- Huevos
+INSERT INTO "tiene" VALUES (7, 8, 150);  -- Queso
+
+-- Relaciones para Pasta Alfredo (id_receta 6)
+INSERT INTO "tiene" VALUES (10, 6, 300); -- Pasta
+INSERT INTO "tiene" VALUES (7, 6, 200);  -- Queso
+
+-- Relaciones para Churros (id_receta 10)
+INSERT INTO "tiene" VALUES (1, 10, 250); -- Harina
+INSERT INTO "tiene" VALUES (2, 10, 50);  -- Azúcar
 COMMIT;
