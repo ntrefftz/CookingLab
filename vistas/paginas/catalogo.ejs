@@ -5,13 +5,9 @@
     <% recetas.forEach(receta=> { %>
         <article class="card">
             <header>
-
                 <a href="receta/?id=<%= receta.id %>">
-                    <h4>
-                        <%= receta.nombre %>
-                    </h4>
+                    <h4><%= receta.nombre %></h4>
                 </a>
-
             </header>
 
             <img src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" alt="Pronto habrá una foto" />

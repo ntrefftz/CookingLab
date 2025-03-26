@@ -2,7 +2,6 @@ import express from 'express';
 import { viewRecetasDetalle, viewRecetasLista, viewModificarReceta, eliminarReceta, modificarReceta, viewAniadirReceta, aniadirReceta,
     viewIngredientesLista, viewIngredientesDetalle, viewModificarIngrediente, eliminarIngrediente, modificarIngrediente, 
     viewAniadirIngrediente, aniadirIngrediente
-     
 } from './controllers.js';
 
 const recetasRouter = express.Router();
