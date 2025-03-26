@@ -1,6 +1,8 @@
 import { body } from 'express-validator';
 import { Receta } from './Recetas.js';
 import { Ingrediente } from './Ingredientes.js';
+import { Tiene } from './Tiene.js'; 
+
 
 export function viewRecetasLista(req, res) {
     const rows = Receta.getAllRecetas();
@@ -16,6 +18,12 @@ export function viewRecetasDetalle(req, res) {
     const contenido = 'paginas/receta';
     const id = req.query.id;
     const receta = Receta.getRecetaById(id);
+
+    // Obtener los ingredientes de la receta
+    const ingredientes = Tiene.getIngredientesByReceta(id);
+    // Asociar los ingredientes a la receta
+    receta.ingredientes = ingredientes;
+
     res.render('pagina', {
         contenido,
         session: req.session,

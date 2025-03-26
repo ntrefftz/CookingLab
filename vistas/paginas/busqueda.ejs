@@ -42,7 +42,9 @@
 <ul>
     <% if (recetas.length > 0) { %>
         <% recetas.forEach(receta => { %>
-            <li><a href="/receta?id=<%= receta.id %>"><%= receta.nombre %></a></li>
+            <!-- <li><a href="/receta?id=<%= receta.id %>"><%= receta.nombre %></a></li>-->
+            <li><a href="/recetas/receta?id=<%= receta.id %>"><%= receta.nombre %></a></li>
+
         <% }); %>
     <% } else if (termino && !error) { %>
         <p>No se encontraron recetas para "<%= termino %>"</p>
