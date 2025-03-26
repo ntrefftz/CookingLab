@@ -2,19 +2,31 @@
 
 <!-- Formulario de búsqueda -->
 <form action="/recetas/buscarReceta" method="GET">
-    <input type="text" name="termino" placeholder="Buscar recetas o ingredientes..." required>
+   
+    <!-- añadido (value="<%= termino || '' %>) para que recuerde la opcion seleccionada-->
+    <input type="text" name="termino" placeholder="Buscar recetas o ingredientes..." value="<%= termino || '' %>" required>
     
+    <!-- añadido (<%= (tipo === 'nombre' || !tipo) ? 'selected' : '' %>) para que recuerde la opcion seleccionada-->
     <select name="tipo">
-        <option value="nombre">Recetas</option>
-        <option value="ingrediente">Ingredientes</option>
+        <option value="nombre"  <%= (tipo === 'nombre' || !tipo) ? 'selected' : '' %>> Recetas</option>
+        <option value="ingrediente" <%= tipo === 'ingrediente' ? 'selected' : '' %>>Ingredientes</option>
     </select>
 
     <!-- Opciones de ordenamiento -->
     <select name="orden">
+        <!--
         <option value="relevancia" selected>Relevancia</option>
         <option value="valoraciones">Valoraciones</option>
         <option value="dificultad">Dificultad</option>
         <option value="tiempo">Tiempo</option>
+        -->
+        
+        <!-- Cambios para que recuerde la opcion selecionada -->
+        <option value="relevancia" <%= (orden === 'relevancia' || !orden) ? 'selected' : '' %>>Relevancia</option>
+        <option value="valoraciones" <%= orden === 'valoraciones' ? 'selected' : '' %>>Valoraciones</option>
+        <option value="dificultad" <%= orden === 'dificultad' ? 'selected' : '' %>>Dificultad</option>
+        <option value="tiempo" <%= orden === 'tiempo' ? 'selected' : '' %>>Tiempo</option>
+        
     </select>
 
     <button type="submit">Buscar</button>
