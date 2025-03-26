@@ -1,18 +1,19 @@
 export class Tiene {
     static #insertStmt = null;
     static #deleteStmt = null;
-    static #getByRecetaStmt = null;
-    static #getByIngredienteStmt = null;
+    static #getByRecetaStmt = null;  
+    static #getByIngredienteStmt = null;  
     static #updateStmt = null;
 
     static initStatements(db) {
         if (this.#insertStmt !== null) return;
 
-        // Preparamos las consultas para la tabla 'Tiene'
         this.#insertStmt = db.prepare('INSERT INTO Tiene(id_ingrediente, id_receta, cantidad) VALUES (@id_ingrediente, @id_receta, @cantidad)');
         this.#deleteStmt = db.prepare('DELETE FROM Tiene WHERE id_ingrediente = @id_ingrediente AND id_receta = @id_receta');
+        
         this.#getByRecetaStmt = db.prepare('SELECT * FROM Tiene WHERE id_receta = @id_receta');
         this.#getByIngredienteStmt = db.prepare('SELECT * FROM Tiene WHERE id_ingrediente = @id_ingrediente');
+        
         this.#updateStmt = db.prepare('UPDATE Tiene SET cantidad = @cantidad WHERE id_ingrediente = @id_ingrediente AND id_receta = @id_receta');
     }
 
@@ -36,6 +37,9 @@ export class Tiene {
 
     // Obtener todos los ingredientes de una receta
     static getIngredientesByReceta(idReceta) {
+        if (!this.#getByRecetaStmt) {
+            throw new Error("La consulta 'getByRecetaStmt' no está inicializada.");
+        }
         const ingredientes = this.#getByRecetaStmt.all({ id_receta: idReceta });
         if (ingredientes.length === 0) throw new Error("No se encontraron ingredientes para esta receta.");
         return ingredientes;
@@ -43,6 +47,9 @@ export class Tiene {
 
     // Obtener todas las recetas que contienen un ingrediente
     static getRecetasByIngrediente(idIngrediente) {
+        if (!this.#getByIngredienteStmt) {
+            throw new Error("La consulta 'getByIngredienteStmt' no está inicializada.");
+        }
         const recetas = this.#getByIngredienteStmt.all({ id_ingrediente: idIngrediente });
         if (recetas.length === 0) throw new Error("No se encontraron recetas con este ingrediente.");
         return recetas;

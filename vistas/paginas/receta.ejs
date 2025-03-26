@@ -4,5 +4,15 @@
 <p>Difilcultad: <% for(let i = 0; i < recetas.dificultad; i++){%>&#127775;<% } %></p>
 <p><%= recetas.descripcion %></p>
 <p></p>
+<p>Ingredientes:</p>
+<ul>
+    <% if (recetas.ingredientes) { %>
+        <% recetas.ingredientes.forEach(function(ingrediente) { %>
+            <li><%= ingrediente.nombre %> - <%= ingrediente.cantidad %></li>
+        <% }); %>
+    <% } else { %>
+        <li>No se encontraron ingredientes.</li>
+    <% } %>
+</ul>
 <a href="/recetas/receta/eliminar?id=<%= recetas.id %>"><button>Eliminar receta</button></a>
 <a href="/recetas/receta/modificar?id=<%= recetas.id %>"><button>Editar receta</button></a>
