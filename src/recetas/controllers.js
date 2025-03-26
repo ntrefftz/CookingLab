@@ -102,6 +102,8 @@ export function aniadirReceta(req, res) {
         console.error(error);
         res.status(500).send('Error al añadir la receta');
     }
+
+    
 }
 
 //--------------------------------------------------------------------
@@ -236,3 +238,95 @@ export function aniadirIngrediente(req, res) {
     }*/
 }
 
+//--------------------------------------------------------------------
+
+export function buscarReceta(req, res) {
+    //tipo (si es búsqueda por nombre o ingrediente) y termino (el texto)
+    let { tipo = 'nombre', termino = '', orden = 'relevancia' } = req.query;
+    
+    //Importante!! Si no no funciona
+    termino = termino.trim().replace(/\s+/g, ' '); // quitar espacios
+    
+    //Comprobar que hay un texto
+    if (!termino) {
+        return res.render('pagina', {
+            contenido: 'paginas/busqueda',
+            session: req.session,
+            recetas: [],
+            termino: '',
+            orden,
+            tipo,
+            error: 'Ingrese un término de búsqueda'
+        });
+    }
+
+    try {
+
+        let recetas = [];
+        const terminoBusqueda = `%${termino}%`; //Para no distinguir entre mayusculas y minusculas
+        
+        if (tipo === 'nombre') {
+            recetas = Receta.searchByName(termino);
+        } else if (tipo === 'ingrediente') {
+            recetas = Receta.searchByIngredient(termino);
+        }
+
+        // Ordenar según lo que se haya seleccionado
+        switch (orden) {
+            case 'valoraciones':
+                recetas.sort((a, b) => (b.valoracion_promedio || 0) - (a.valoracion_promedio || 0));
+                break;
+                
+            case 'dificultad':
+                recetas.sort((a, b) => a.dificultad - b.dificultad);
+                break;
+                
+            case 'tiempo':
+                recetas.sort((a, b) => a.tiempo_prep_segs - b.tiempo_prep_segs);
+                break;
+                
+            case 'relevancia':
+            default:
+                // Ordenar por mejor coincidencia primero
+                recetas.sort((a, b) => {
+                    //coincidencia exacta
+                    const aMatch = a.nombre.toLowerCase().includes(termino.toLowerCase()) ? 1 : 0;
+                    
+                    //coincidencia parcial
+                    const bMatch = b.nombre.toLowerCase().includes(termino.toLowerCase()) ? 1 : 0;
+                    return bMatch - aMatch;
+                });
+                break;
+        }
+
+        //IMPORTANTE sin esto no funciona, no se muy bien que hace es de CHATgpt
+        //Transforma las cosas para que se vean correctamente por pantalla
+        const resultados = recetas.map(receta => ({
+            ...receta,
+            tiempo_minutos: Math.ceil(receta.tiempo_prep_segs / 60),
+            valoracion: receta.valoracion_promedio?.toFixed(1) || 'N/A'
+        }));
+
+        res.render('pagina', {
+            contenido: 'paginas/busqueda',
+            session: req.session,
+            recetas: resultados,
+            termino,
+            orden,
+            tipo,
+            error: resultados.length === 0 ? `No se encontraron recetas para "${termino}"` : null
+        });
+
+    } catch (error) {
+        console.error('Error en búsqueda:', error);
+        res.render('pagina', {
+            contenido: 'paginas/busqueda',
+            session: req.session,
+            recetas: [],
+            termino,
+            orden,
+            tipo,
+            error: 'Ocurrió un error al realizar la búsqueda'
+        });
+    }
+}

@@ -1,12 +1,51 @@
+<h1>Buscar Recetas</h1>
+
+<!-- Formulario de búsqueda -->
+<form action="/recetas/buscarReceta" method="GET">
+    <input type="text" name="termino" placeholder="Buscar recetas o ingredientes..." required>
+    
+    <select name="tipo">
+        <option value="nombre">Recetas</option>
+        <option value="ingrediente">Ingredientes</option>
+    </select>
+
+    <!-- Opciones de ordenamiento -->
+    <select name="orden">
+        <option value="relevancia" selected>Relevancia</option>
+        <option value="valoraciones">Valoraciones</option>
+        <option value="dificultad">Dificultad</option>
+        <option value="tiempo">Tiempo</option>
+    </select>
+
+    <button type="submit">Buscar</button>
+</form>
+
+
+<!-- Mostrar mensaje de error si no hay resultados -->
+<% if (error) { %>
+    <p style="color: red;"><%= error %></p>
+<% } %>
+
+<h2>Resultados para "<%= termino %>"</h2>
+<ul>
+    <% if (recetas.length > 0) { %>
+        <% recetas.forEach(receta => { %>
+            <li><a href="/receta?id=<%= receta.id %>"><%= receta.nombre %></a></li>
+        <% }); %>
+    <% } else if (termino && !error) { %>
+        <p>No se encontraron recetas para "<%= termino %>"</p>
+    <% } %>
+</ul>
+
+
+
+<!-- Codigo anterior 
 <select name="orden">
     <option value="relevancia" selected>Relevancia</option>
     <option value="valoraciones">Valoraciones</option>
     <option value="dificultad">Dificultad</option>
     <option value="tiempo">Tiempo</option>
 </select>
-
 <h1>Búsqueda de ingredientes</h1>
-
-
 <h1>Búsqueda de Recetas</h1>
-
+-->
