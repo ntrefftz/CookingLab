@@ -1,7 +1,7 @@
 import express from 'express';
 import { viewRecetasDetalle, viewRecetasLista, viewModificarReceta, eliminarReceta, modificarReceta, viewAniadirReceta, aniadirReceta,
     viewIngredientesLista, viewIngredientesDetalle, viewModificarIngrediente, eliminarIngrediente, modificarIngrediente, 
-    viewAniadirIngrediente, aniadirIngrediente
+    viewAniadirIngrediente, aniadirIngrediente, buscarReceta
      
 } from './controllers.js';
 
@@ -23,5 +23,7 @@ recetasRouter.get('/ingredienteInd/eliminar', eliminarIngrediente);
 recetasRouter.post('/ingredienteInd/modificar', modificarIngrediente);
 recetasRouter.get('/ingredienteInd/aniadir', viewAniadirIngrediente);
 recetasRouter.post('/ingredienteInd/aniadir', aniadirIngrediente);
+
+recetasRouter.get('/buscarReceta', buscarReceta);
 
 export default recetasRouter;

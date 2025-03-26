@@ -6,6 +6,11 @@ export class Receta {
     static #deleteStmt = null;
     static #getAllStmt = null;
 
+    static #searchByNameStmt = null;
+    static #searchByIngredientStmt = null;
+
+    
+
     static initStatements(db) {
         if (this.#getByIdStmt !== null) return;
 
@@ -15,6 +20,16 @@ export class Receta {
         this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, tiempo_prep_segs = @tiempo_prep_segs, dificultad = @dificultad, activo = @activo WHERE id = @id');
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas WHERE activo = 1'); // Obtener todas las recetas activas
+    
+        this.#searchByNameStmt = db.prepare('SELECT * FROM Recetas WHERE nombre LIKE @nombre AND activo = 1');
+        this.#searchByIngredientStmt = db.prepare(`
+            SELECT DISTINCT R.* 
+            FROM Recetas R
+            JOIN Tiene T ON R.id = T.id_receta
+            JOIN Ingredientes I ON T.id_ingrediente = I.id
+            WHERE I.nombre LIKE @ingrediente COLLATE NOCASE
+            AND R.activo = 1
+        `);
     }
 
     static getRecetaById(id) {
@@ -51,6 +66,22 @@ export class Receta {
         if (result.changes === 0) throw new RecetaNoEncontrada(id);
         return { mensaje: "Receta eliminada correctamente" };
     }
+
+    static searchByName(nombre) {
+        return this.#searchByNameStmt.all({ nombre: `%${nombre}%` });
+    
+        //Si queremos añadir paginacion entonces:
+        /*return this.#searchByNameStmt.all({ 
+        nombre: `%${nombre}%`,
+        limit,
+        offset 
+        });*/
+    }
+    
+    static searchByIngredient(ingrediente) {
+        return this.#searchByIngredientStmt.all({ ingrediente: `%${ingrediente}%` });
+    }
+
 }
 
 // ERRORES
