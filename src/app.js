@@ -27,12 +27,7 @@ app.use(session(config.session));
 app.use(flashMessages);
 
 app.use('/', express.static(config.recursos));
-app.get('/', (req, res) => {
-    res.render('pagina', {
-        contenido: 'paginas/index',
-        session: req.session
-    });
-})
+app.use('/', contenidoRouter);
 app.use('/usuarios', usuariosRouter);
 app.use('/contenido', contenidoRouter);
 app.use('/recetas', recetasRouter);

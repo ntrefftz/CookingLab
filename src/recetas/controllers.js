@@ -235,3 +235,4 @@ export function aniadirIngrediente(req, res) {
         res.status(500).send('Error al añadir la receta');
     }*/
 }
+

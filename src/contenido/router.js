@@ -1,8 +1,9 @@
 import express from 'express';
-import { viewContenidoAdmin, viewCesta, viewCestaCompra, viewContacto, viewCondiciones, viewConocenos } from './controllers.js';
+import { viewIndex, viewContenidoAdmin, viewCesta, viewCestaCompra, viewContacto, viewCondiciones, viewConocenos } from './controllers.js';
 
 const contenidoRouter = express.Router();
 
+contenidoRouter.get('/', viewIndex);
 contenidoRouter.get('/admin', viewContenidoAdmin);
 contenidoRouter.get('/contacto', viewContacto);
 contenidoRouter.get('/condiciones', viewCondiciones);

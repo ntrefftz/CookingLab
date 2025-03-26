@@ -101,9 +101,9 @@ aside {
 
 main {
 	padding: 10px;
-
+	margin: auto;
 	min-height: 600px;
-	width: 100%;
+	width: 90%;
 	background-color: white;
 }
 
