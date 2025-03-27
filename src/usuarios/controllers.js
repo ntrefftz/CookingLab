@@ -5,6 +5,61 @@ import { Usuario, RolesEnum } from './Usuario.js';
 //Para registrar en logs los intentos de inicio de sesion y los errores
 //import { logger } from './logger.js';
 
+export function viewConfiguracion(req, res) {
+    let contenido = 'paginas/configuracion';
+    if (req.session != null && req.session.login) {
+        contenido = 'paginas/home'
+    }
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
+}
+
+export function viewPerfil(req, res) {
+    let contenido = 'paginas/perfil';
+    if (req.session != null && req.session.login) {
+        contenido = 'paginas/home'
+    }
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
+}
+
+export function viewMisRecetas(req, res) {
+    let contenido = 'paginas/misRecetas';
+    if (req.session != null && req.session.login) {
+        contenido = 'paginas/home'
+    }
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
+}
+
+export function viewHistorial(req, res) {
+    let contenido = 'paginas/historial';
+    if (req.session != null && req.session.login) {
+        contenido = 'paginas/home'
+    }
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
+}
+
+export function viewCalendario(req, res) {
+    let contenido = 'paginas/calendario';
+    if (req.session != null && req.session.login) {
+        contenido = 'paginas/home'
+    }
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
+}
+
 export function viewLogin(req, res) {
     let contenido = 'paginas/login';
     if (req.session != null && req.session.login) {
