@@ -60,4 +60,16 @@ INSERT INTO "tiene" VALUES (7, 6, 200);  -- Queso
 -- Relaciones para Churros (id_receta 10)
 INSERT INTO "tiene" VALUES (1, 10, 250); -- Harina
 INSERT INTO "tiene" VALUES (2, 10, 50);  -- Azúcar
+
+
+UPDATE "Recetas" SET "imagen_url" = 'https://www.hola.com/horizon/landscape/2f4a35cad37e-sopa-tomate-t.jpg' WHERE "id" = 3;
+UPDATE "Recetas" SET "imagen_url" = 'https://media.istockphoto.com/id/1280329631/es/foto/pizza-margherita-italiana-con-tomates-y-queso-mozzarella-sobre-tabla-de-cortar-de-madera-de.jpg?s=612x612&w=0&k=20&c=3i8gzmaA2vbfIQRetPK1SLh0l6u_CC_HniYuBT884aU=' WHERE "id" = 4;
+UPDATE "Recetas" SET "imagen_url" = 'https://www.recetasderechupete.com/wp-content/uploads/2020/11/Arroz-con-pollo-cubano-3-1200x803.jpg' WHERE "id" = 5;
+UPDATE "Recetas" SET "imagen_url" = 'https://peopleenespanol.com/thmb/xv-XKxUO3fRnBnsM7E6tdSigSLI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/pasta-alfredo.jpg-2000-69428c009d434a03848151670738a5bc.jpg' WHERE "id" = 6;
+UPDATE "Recetas" SET "imagen_url" = 'https://www.hogarmania.com/archivos/201611/tostada-francesa-pain-perdu-receta-10-668x400x80xX.jpg' WHERE "id" = 7;
+UPDATE "Recetas" SET "imagen_url" = 'https://cdn0.uncomo.com/es/posts/6/3/7/como_hacer_un_omelette_de_queso_31736_orig.jpg' WHERE "id" = 8;
+UPDATE "Recetas" SET "imagen_url" = 'https://peopleenespanol.com/thmb/px5GarUe0rxAr66lKEaboMetCHM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1158987157-2000-25ff8f49b6af4027ac4a62eed28effd7.jpg' WHERE "id" = 9;
+UPDATE "Recetas" SET "imagen_url" = 'https://cdn.elcocinerocasero.com/imagen/paso-receta/1000/2022-11-29-18-05-17/como-hacer-churros-caseros-paso-7.jpeg' WHERE "id" = 10;
+
 COMMIT;
+
