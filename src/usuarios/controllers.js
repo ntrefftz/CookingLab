@@ -8,7 +8,7 @@ import { Usuario, RolesEnum } from './Usuario.js';
 export function viewConfiguracion(req, res) {
     let contenido = 'paginas/configuracion';
     if (req.session != null && req.session.login) {
-        contenido = 'paginas/home'
+        contenido = 'paginas/configuracion'
     }
     res.render('pagina', {
         contenido,
@@ -116,6 +116,7 @@ export function doLogin(req, res) {
 
         req.session.nombre = usuario.nombre;
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
+        req.session.rol = usuario.rol;
 
         // Modificaciones para flash
         /*res.setFlash(`Encantado de verte de nuevo, ${usuario.nombre}!`);

@@ -1,5 +1,29 @@
+<%
+    function botones(session){
+        if ( session.login && session.esAdmin == true){
+            return `<p><a href="/contenido/admin">Administrar</a></p>
+            <p><a href="/usuarios/perfil">Mi perfil</a></p>
+            <p><a href="/usuarios/historial">Historial de compra</a></p>
+            <p><a href="/usuarios/misrecetas">Mis recetas</a></p>
+            <p><a href="/usuarios/micalendario">Mi calendario</a></p>
+            `;
+        }
+        else if (session.login && session.rol === "C"){
+            return `<p><a href="/usuarios/perfil">Mi perfil</a></p>
+            <p><a href="/usuarios/historial">Historial de compra</a></p>
+            <p><a href="/usuarios/misrecetas">Mis recetas</a></p>
+            <p><a href="/usuarios/micalendario">Mi calendario</a></p>
+            `;
+        }
+        else if (session.login){
+            return `<p><a href="/usuarios/perfil">Mi perfil</a></p>
+            <p><a href="/usuarios/historial">Historial de compra</a></p>
+            <p><a href="/usuarios/misrecetas">Mis recetas</a></p>
+            <p><a href="/usuarios/micalendario">Mi calendario</a></p>
+            `;
+        }
+    }
+%>
+
 <h1>Configuración</h1>
-<p><a href="/usuarios/perfil">Mi perfil</a></p>
-<p><a href="/usuarios/historial">Historial de compra</a></p>
-<p><a href="/usuarios/misrecetas">Mis recetas</a></p>
-<p><a href="/usuarios/micalendario">Mi calendario</a></p>
+<%- botones(session) %>

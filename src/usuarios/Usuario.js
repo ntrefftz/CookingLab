@@ -89,7 +89,8 @@ export class Usuario {
             id: usuario.id, 
             username: usuario.username, 
             nombre: usuario.nombre, 
-            esAdmin: usuario.rol === RolesEnum.ADMIN 
+            esAdmin: usuario.rol === RolesEnum.ADMIN,
+            rol: usuario.rol
         };
      
     }
