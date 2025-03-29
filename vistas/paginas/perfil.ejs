@@ -1,1 +1,18 @@
 <h1>Mi perfil</h1>
+
+<form action="/usuarios/edit" method="POST">
+    <fieldset>
+        <% if (locals.error) { %>
+            <p><strong><%= locals.error %></strong></p>
+        <% } %>
+        <legend>Introduce tus datos</legend>
+        <div><label>Usuario:</label> <input type="text" name="username" /></div>
+        <div><label>Contraseña:</label> <input type="password" name="password" /></div>
+        <div><label>Nombre:</label> <input type="text" name="nombre" /></div>
+        <div><label>Apellido:</label> <input type="text" name="apellido" /></div>
+        <div><label>Mail:</label> <input type="text" name="correo" /></div>
+        <div><label>Dirección:</label> <input type="text" name="direccion" /></div>
+    
+        <button type="submit">Guardar</button>
+    </fieldset>
+    

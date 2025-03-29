@@ -208,3 +208,8 @@ export function doLogout(req, res, next) {
         })
     })
 }
+
+export function doUpdate(req, res) {
+
+
+}

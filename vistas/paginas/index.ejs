@@ -3,12 +3,14 @@
     <% if (ultimasRecetas && ultimasRecetas.length > 0) { %>
         <% ultimasRecetas.forEach(receta => { %>
             <article class="card">
+                <img src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" alt="Pronto habrá una foto"  />
                 <header>
                     <a href="/recetas/receta?id=<%= receta.id %>">
                         <h4><%= receta.nombre %></h4>
                     </a>
                 </header>
-            <img src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" alt="Pronto habrá una foto"  />
+                <p>Tiempo preparación: <%= Math.floor(recetaDelDia.tiempo_prep_segs / 60) %> minutos</p>
+                <p>Dificultad: <%= recetaDelDia.dificultad %></p>
             </article>
         <% }); %>
     <% } else { %>
@@ -20,13 +22,12 @@
 <div id="catalogo" class="cards_container">
     <% if (recetaDelDia) { %>
         <article class="card">
+            <img src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" alt="Pronto habrá una foto"  />
             <header>
                 <a href="/recetas/receta?id=<%= recetaDelDia.id %>">
                     <h4><%= recetaDelDia.nombre %></h4>
                 </a>
             </header>
-            <img src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" alt="Pronto habrá una foto"  />
-            <p><%= recetaDelDia.descripcion %></p>
             <p>Tiempo preparación: <%= Math.floor(recetaDelDia.tiempo_prep_segs / 60) %> minutos</p>
             <p>Dificultad: <%= recetaDelDia.dificultad %></p>
         </article>
@@ -40,12 +41,12 @@
     <% if (ultimosIngredientes && ultimosIngredientes.length > 0) { %>
         <% ultimosIngredientes.forEach(ingrediente => { %>
             <article class="card">
+                <img src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" alt="Pronto habrá una foto"  />
                 <header>
                     <a href="/ingredientes/ingrediente?id=<%= ingrediente.id %>">
                         <h4><%= ingrediente.nombre %></h4>
                     </a>    
                 </header>    
-                <img src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" alt="Pronto habrá una foto"  />
             </article>
         <% }); %>
     <% } else { %>
