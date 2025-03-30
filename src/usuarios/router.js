@@ -1,6 +1,7 @@
 import {body} from 'express-validator';
 import express from 'express';
-import { viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout, viewRegister, doRegister } from './controllers.js';
+import { viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout,
+     viewRegister, doRegister, viewModificarPerfil, modificarPerfil } from './controllers.js';
 
 const usuariosRouter = express.Router();
 
@@ -11,6 +12,7 @@ usuariosRouter.get('/historial', viewHistorial);
 usuariosRouter.get('/misrecetas', viewMisRecetas);
 usuariosRouter.get('/micalendario', viewCalendario);
 usuariosRouter.get('/login', viewLogin);
+usuariosRouter.get('/perfil/modificar', viewModificarPerfil);
 //usuariosRouter.post('/login', doLogin);
 
 usuariosRouter.post('/login', 
@@ -30,6 +32,16 @@ usuariosRouter.post('/register',
     body('nombre', 'El nombre no puede ser vacío').trim().notEmpty(),  //Asegura que el nombre no esté vacío
     body('password', 'La contraseña tiene que tener entre 6 y 10 caracteres').trim().isLength({ min: 6, max: 10 }),
     doRegister
+);
+
+usuariosRouter.post('/perfil/modificar', 
+    body('username').trim().notEmpty().withMessage('El nombre de usuario es requerido'),
+    body('nombre').trim().notEmpty().withMessage('El nombre es requerido'),
+    body('apellido').trim().notEmpty().withMessage('El apellido es requerido'),
+    body('correo').trim().isEmail().withMessage('Correo electrónico inválido'),
+    body('direccion').optional().trim(),
+    body('password').optional().trim(),
+    modificarPerfil
 );
 
 export default usuariosRouter;

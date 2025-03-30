@@ -174,6 +174,7 @@ export function modificarIngrediente(req, res) {
     const stock = req.body.stock.trim();
     const id = req.query.id;
     const contenido = 'paginas/ingredienteInd';
+    
     Ingrediente.updateIngrediente(id, nombre, categoria, precio, stock);
     const ingrediente = Ingrediente.getIngredienteById(id);
     res.render('pagina', {

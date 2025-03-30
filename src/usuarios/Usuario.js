@@ -8,15 +8,25 @@ export const RolesEnum = Object.freeze({
 });
 
 export class Usuario {
+    static #getByIdStmt = null;
     static #getByUsernameStmt = null;
     static #insertStmt = null;
     static #updateStmt = null;
 
     static initStatements(db) {
+        if (this.#getByIdStmt !== null) return;
         if (this.#getByUsernameStmt !== null) return;
+        
+        this.#getByIdStmt = db.prepare('SELECT * FROM Usuarios WHERE id = @id');
         this.#getByUsernameStmt = db.prepare('SELECT * FROM Usuarios WHERE username = @username');
         this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, apellido, correo, direccion, rol, activo) VALUES (@username, @password, @nombre, @apellido, @correo, @direccion, @rol, @activo)');
         this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre, apellido = @apellido, correo = @correo, direccion = @direccion, activo = @activo WHERE id = @id');
+    }
+
+    static getUsuarioById(id) {
+        const usuario = this.#getByIdStmt.get({ id });
+        if (!usuario) throw new UsuarioNoEncontrado(id);
+        return usuario;
     }
 
     static getUsuarioByUsername(username) {
@@ -64,11 +74,13 @@ export class Usuario {
         const direccion = usuario.direccion;
         const rol = usuario.rol;
         const activo = usuario.activo;
+        const id = usuario.id; // Añadir esta línea
+        
         const datos = { username, password, nombre, apellido, correo, direccion, rol, activo, id };
-
+    
         const result = this.#updateStmt.run(datos);
         if (result.changes === 0) throw new UsuarioNoEncontrado(username);
-
+    
         return usuario;
     }
 

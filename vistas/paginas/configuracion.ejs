@@ -1,29 +1,38 @@
 <%
-    function botones(session){
-        if ( session.login && session.esAdmin == true){
-            return `<p><a href="/contenido/admin">Administrar</a></p>
-            <p><a href="/usuarios/perfil">Mi perfil</a></p>
-            <p><a href="/usuarios/historial">Historial de compra</a></p>
-            <p><a href="/usuarios/misrecetas">Mis recetas</a></p>
-            <p><a href="/usuarios/micalendario">Mi calendario</a></p>
-            `;
+    function generarCards(session) {
+        if (!session.login) return '';
+        
+        let opciones = [
+            '<p><a href="/usuarios/perfil">Mi perfil</a></p>',
+            '<p><a href="/usuarios/historial">Historial de compra</a></p>',
+            '<p><a href="/usuarios/misrecetas">Mis recetas</a></p>',
+            '<p><a href="/usuarios/micalendario">Mi calendario</a></p>'
+        ];
+
+        if (session.esAdmin) {
+            opciones.unshift('<p><a href="/contenido/admin">Administrar</a></p>');
         }
-        else if (session.login && session.rol === "C"){
-            return `<p><a href="/usuarios/perfil">Mi perfil</a></p>
-            <p><a href="/usuarios/historial">Historial de compra</a></p>
-            <p><a href="/usuarios/misrecetas">Mis recetas</a></p>
-            <p><a href="/usuarios/micalendario">Mi calendario</a></p>
+
+        return opciones.map(opcion => {
+            const texto = opcion.match(/">(.*?)<\/a>/)[1];
+            const href = opcion.match(/href="(.*?)"/)[1];
+            
+            return `
+                <article class="card">
+                    <header>
+                        <a href="${href}">
+                            <h4>${texto}</h4>
+                        </a>
+                    </header>
+                    <img src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" alt="Pronto habrá una foto" />
+                </article>
             `;
-        }
-        else if (session.login){
-            return `<p><a href="/usuarios/perfil">Mi perfil</a></p>
-            <p><a href="/usuarios/historial">Historial de compra</a></p>
-            <p><a href="/usuarios/misrecetas">Mis recetas</a></p>
-            <p><a href="/usuarios/micalendario">Mi calendario</a></p>
-            `;
-        }
+        }).join('');
     }
 %>
 
 <h1>Configuración</h1>
-<%- botones(session) %>
+
+<div id="catalogo" class="cards_container">
+    <%- generarCards(session) %>
+</div>

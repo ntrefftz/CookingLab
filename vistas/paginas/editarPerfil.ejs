@@ -1,0 +1,16 @@
+<form action="/usuarios/perfil/modificar?id=<%= usuario.id %>" method="POST">
+    <fieldset>
+        <% if (locals.error) { %>
+            <p><strong><%= locals.error %></strong></p>
+        <% } %>
+        <legend>Editar perfil</legend>
+        <div><label>Usuario:</label> <input type="text" name="username" value="<%= usuario.username %>" /></div>
+        <div><label>Contraseña:</label> <input type="password" name="password" placeholder="Dejar vacío para no cambiar" /></div>
+        <div><label>Nombre:</label> <input type="text" name="nombre" value="<%= usuario.nombre %>" /></div>
+        <div><label>Apellido:</label> <input type="text" name="apellido" value="<%= usuario.apellido %>" /></div>
+        <div><label>Correo:</label> <input type="email" name="correo" value="<%= usuario.correo %>" /></div>
+        <div><label>Dirección:</label><input type="text" name="direccion" value="<%= usuario.direccion %>" /></div>
+        
+        <button type="submit">Guardar cambios</button>
+    </fieldset>
+</form>
