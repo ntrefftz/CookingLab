@@ -9,8 +9,6 @@ export class Receta {
     static #searchByNameStmt = null;
     static #searchByIngredientStmt = null;
 
-    
-
     static initStatements(db) {
         if (this.#getByIdStmt !== null) return;
 

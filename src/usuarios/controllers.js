@@ -7,9 +7,6 @@ import { Usuario, RolesEnum } from './Usuario.js';
 
 export function viewConfiguracion(req, res) {
     let contenido = 'paginas/configuracion';
-    if (req.session != null && req.session.login) {
-        contenido = 'paginas/configuracion'
-    }
     res.render('pagina', {
         contenido,
         session: req.session
@@ -17,21 +14,30 @@ export function viewConfiguracion(req, res) {
 }
 
 export function viewPerfil(req, res) {
-    let contenido = 'paginas/perfil';
-    if (req.session != null && req.session.login) {
-        contenido = 'paginas/home'
+    if (!req.session.login) {
+        return res.redirect('/usuarios/login');
     }
+
+    const usuario = {
+        id: req.session.userId,  
+        username: req.session.username,
+        password: req.session.password, 
+        nombre: req.session.nombre,
+        apellido: req.session.apellido,
+        correo: req.session.correo,
+        direccion: req.session.direccion,
+        rol: req.session.rol  
+    };
+
     res.render('pagina', {
-        contenido,
+        contenido: 'paginas/perfil',
+        usuario: usuario,
         session: req.session
     });
 }
 
 export function viewMisRecetas(req, res) {
     let contenido = 'paginas/misRecetas';
-    if (req.session != null && req.session.login) {
-        contenido = 'paginas/home'
-    }
     res.render('pagina', {
         contenido,
         session: req.session
@@ -40,9 +46,6 @@ export function viewMisRecetas(req, res) {
 
 export function viewHistorial(req, res) {
     let contenido = 'paginas/historial';
-    if (req.session != null && req.session.login) {
-        contenido = 'paginas/home'
-    }
     res.render('pagina', {
         contenido,
         session: req.session
@@ -51,9 +54,6 @@ export function viewHistorial(req, res) {
 
 export function viewCalendario(req, res) {
     let contenido = 'paginas/calendario';
-    if (req.session != null && req.session.login) {
-        contenido = 'paginas/home'
-    }
     res.render('pagina', {
         contenido,
         session: req.session
@@ -110,13 +110,16 @@ export function doLogin(req, res) {
 
     try {
         const usuario = Usuario.login(username, password);
+        
         req.session.login = true;
-        //CAMBIO PARA GUARDAR EL ID DEL USUARIO
         req.session.userId = usuario.id;
-
+        req.session.username = usuario.username;
         req.session.nombre = usuario.nombre;
-        req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
+        req.session.apellido = usuario.apellido || ''; 
+        req.session.correo = usuario.correo || '';
+        req.session.direccion = usuario.direccion || '';
         req.session.rol = usuario.rol;
+        req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
 
         // Modificaciones para flash
         /*res.setFlash(`Encantado de verte de nuevo, ${usuario.nombre}!`);
@@ -169,10 +172,15 @@ export function doRegister(req, res) {
     
     try {
         const usuario = Usuario.register(username, password, nombre, apellido, correo, direccion);
+        
         req.session.login = true;
-        //CAMBIO PARA GUARDAR EL ID DEL USUARIO
         req.session.userId = usuario.id;
+        req.session.username = usuario.username;
         req.session.nombre = usuario.nombre;
+        req.session.apellido = usuario.apellido || '';
+        req.session.correo = usuario.correo || '';
+        req.session.direccion = usuario.direccion || '';
+        req.session.rol = usuario.rol;
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
 
         return res.render('pagina', {
@@ -208,4 +216,103 @@ export function doLogout(req, res, next) {
             res.redirect('/');
         })
     })
+}
+
+export function viewModificarPerfil(req, res) {
+    const contenido = 'paginas/editarPerfil';
+    const id = req.query.id;
+    const perfil = Usuario.getUsuarioById(id);
+    res.render('pagina', {
+        contenido,
+        session: req.session,
+        usuario: perfil
+    });
+}
+
+export function modificarPerfil(req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('pagina', {
+            contenido: 'paginas/editarPerfil',
+            error: errors.array().map(err => err.msg).join(', '),
+            session: req.session,
+            usuario: Usuario.getUsuarioById(req.query.id)
+        });
+    }
+
+    body('username').escape();
+    body('nombre').escape();
+    body('apellido').escape();
+    body('correo').escape();
+    body('direccion').escape();
+
+    const id = req.query.id;
+    if (!id) {
+        return res.render('pagina', {
+            contenido: 'paginas/editarPerfil',
+            error: 'ID de usuario no proporcionado',
+            session: req.session
+        });
+    }
+
+    try {
+        const username = req.body.username?.trim() || '';
+        const rawPassword = req.body.password?.trim() || '';
+        const nombre = req.body.nombre?.trim() || '';
+        const apellido = req.body.apellido?.trim() || '';
+        const correo = req.body.correo?.trim() || '';
+        const direccion = req.body.direccion?.trim() || '';
+
+        const usuarioActual = Usuario.getUsuarioById(id);
+        
+        const password = rawPassword 
+            ? bcrypt.hashSync(rawPassword) 
+            : usuarioActual.password;
+
+        const usuarioActualizado = new Usuario(
+            username,
+            password,
+            nombre,
+            apellido,
+            correo,
+            direccion,
+            usuarioActual.rol,
+            usuarioActual.activo,
+            id
+        );
+
+        usuarioActualizado.persist();
+
+        if (req.session.userId === id) {
+            req.session.username = username;
+            req.session.nombre = nombre;
+            req.session.apellido = apellido;
+            req.session.correo = correo;
+            req.session.direccion = direccion;
+        }
+
+        return res.render('pagina', {
+            contenido: 'paginas/perfil',
+            session: req.session,
+            usuario: usuarioActualizado,
+            success: 'Perfil actualizado correctamente'
+        });
+
+    } catch (e) {
+        console.error('Error al modificar perfil:', e);
+        
+        let errorMessage = 'Error al actualizar el perfil';
+        if (e instanceof UsuarioNoEncontrado) {
+            errorMessage = 'Usuario no encontrado';
+        } else if (e instanceof UsuarioYaExiste) {
+            errorMessage = 'El nombre de usuario ya está en uso';
+        }
+
+        return res.render('pagina', {
+            contenido: 'paginas/editarPerfil',
+            session: req.session,
+            usuario: Usuario.getUsuarioById(id),
+            error: errorMessage
+        });
+    }
 }
