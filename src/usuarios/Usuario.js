@@ -34,7 +34,7 @@ export class Usuario {
         console.log(usuario);
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
         const { password, nombre, apellido, correo, direccion, rol, activo, id } = usuario;
-        console.log(usuario);
+        /*console.log(usuario);
         console.log("Usuario creado en getUsuarioByUsername:", new Usuario(
             usuario.username, 
             usuario.password, 
@@ -45,7 +45,7 @@ export class Usuario {
             usuario.rol,  // <-- Aquí debería imprimir 'A'
             usuario.activo, 
             usuario.id
-        ));
+        ));*/
 
         return new Usuario(username, password, nombre, apellido, correo, direccion, rol, activo, id);
     }
@@ -105,17 +105,10 @@ export class Usuario {
             throw new UsuarioOPasswordNoValido(username, { cause: e });
         }
         // XXX: En el ej3 / P3 lo cambiaremos para usar async / await o Promises
-        console.log(usuario.#password);
-        console.log("Rol del usuario en login:", usuario.rol);
+        //console.log(usuario.#password);
+        //console.log("Rol del usuario en login:", usuario.rol);
 
         if (!bcrypt.compareSync(password, usuario.#password)) throw new UsuarioOPasswordNoValido(username);
-        
-        /*let esAdmin;
-        if (usuario.rol === RolesEnum.ADMIN) {
-            esAdmin = true;
-        } else {
-            esAdmin = false;
-        }*/
 
         return { 
             id: usuario.id, 
@@ -159,9 +152,6 @@ export class Usuario {
         this.correo = correo;
         this.direccion = direccion;
         this.activo = activo;
-        //this.rol = rol;
-        //this.rol = rol ?? RolesEnum.USUARIO; // Asegura que nunca sea undefined;
-        //this.#rol = rol?.toString() || RolesEnum.USUARIO // Asegura que nunca sea undefined;
         this.#rol = rol.toString(); // Asegurarse que es string
 
         this.#id = id;

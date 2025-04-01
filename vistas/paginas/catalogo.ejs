@@ -1,5 +1,7 @@
 <h1>Catálogo</h1>
-<a href="/recetas/receta/aniadir"><button>Añadir receta</button></a>
+<% if (session.esAdmin) { %>
+    <a href="/recetas/receta/aniadir"><button>Añadir receta</button></a>
+<% } %>
 
 <div id="catalogo" class="cards_container">
     <% recetas.forEach(receta=> { %>

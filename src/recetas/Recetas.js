@@ -20,14 +20,6 @@ export class Receta {
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas WHERE activo = 1'); // Obtener todas las recetas activas
     
         this.#searchByNameStmt = db.prepare('SELECT * FROM Recetas WHERE nombre LIKE @nombre AND activo = 1');
-        /*this.#searchByIngredientStmt = db.prepare(`
-            SELECT DISTINCT R.* 
-            FROM Recetas R
-            JOIN tiene T ON R.id = T.id_receta
-            JOIN Ingredientes I ON T.id_ingrediente = I.id
-            WHERE I.nombre LIKE '%' || @ingrediente || '%' COLLATE NOCASE
-            AND R.activo = 1
-        `);*/
         this.#searchByIngredientStmt = db.prepare(`
             SELECT DISTINCT R.* 
             FROM Recetas R
@@ -84,9 +76,6 @@ export class Receta {
         });*/
     }
     
-    /*static searchByIngredient(ingrediente) {
-        return this.#searchByIngredientStmt.all({ ingrediente: ingrediente });
-    }*/
     static searchByIngredient(ingrediente) {
         return this.#searchByIngredientStmt.all({ ingrediente: ingrediente });
     }

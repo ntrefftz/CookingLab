@@ -96,8 +96,6 @@ export function aniadirReceta(req, res) {
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
 
-    //FALTA RESTRICCION PARA QUE SOLO PUEDA HACERLO UN ADMINISTRADOR Y NO CUALQUIER USUARIO LOGUEADO
-
     if (!id_usuario) {
         console.error("Error: No se ha proporcionado un ID de usuario válido");
         return res.status(400).send('No se ha proporcionado un ID de usuario válido');
@@ -149,7 +147,6 @@ export function viewModificarIngrediente(req, res) {
 }
 
 export function eliminarIngrediente(req, res) {
-    //FALTA RESTRICCION PARA QUE SOLO PUEDA HACERLO UN ADMINISTRADOR Y NO CUALQUIER USUARIO
 
     const contenido = 'paginas/eliminadaIng';
     const id = req.query.id;
@@ -161,7 +158,6 @@ export function eliminarIngrediente(req, res) {
 }
 
 export function modificarIngrediente(req, res) {
-    //FALTA RESTRICCION PARA QUE SOLO PUEDA HACERLO UN ADMINISTRADOR Y NO CUALQUIER USUARIO
 
     body('nombre').escape();
     body('categoria').escape();
@@ -208,7 +204,6 @@ export function aniadirIngrediente(req, res) {
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
 
-    //FALTA RESTRICCION PARA QUE SOLO PUEDA HACERLO UN ADMINISTRADOR Y NO CUALQUIER USUARIO
 
     if (!id_usuario) {
         console.error("Error: No se ha proporcionado un ID de usuario válido");
