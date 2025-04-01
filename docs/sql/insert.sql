@@ -61,6 +61,15 @@ INSERT INTO "tiene" VALUES (7, 6, 200);  -- Queso
 INSERT INTO "tiene" VALUES (1, 10, 250); -- Harina
 INSERT INTO "tiene" VALUES (2, 10, 50);  -- Azúcar
 
+-- Relación para Empanadas (id_receta 9)
+INSERT INTO "tiene" VALUES (9, 9, 300);  -- Pollo
+INSERT INTO "tiene" VALUES (1, 9, 250);  -- Harina
+INSERT INTO "tiene" VALUES (8, 9, 50);   -- Aceite
+INSERT INTO "tiene" VALUES (3, 9, 5);    -- Sal
+
+-- Relación para Omelette de Queso (id_receta 8)
+INSERT INTO "tiene" VALUES (5, 8, 3);    -- Huevos
+INSERT INTO "tiene" VALUES (7, 8, 150);  -- Queso
 
 UPDATE "Recetas" SET "imagen_url" = 'https://www.hola.com/horizon/landscape/2f4a35cad37e-sopa-tomate-t.jpg' WHERE "id" = 3;
 UPDATE "Recetas" SET "imagen_url" = 'https://media.istockphoto.com/id/1280329631/es/foto/pizza-margherita-italiana-con-tomates-y-queso-mozzarella-sobre-tabla-de-cortar-de-madera-de.jpg?s=612x612&w=0&k=20&c=3i8gzmaA2vbfIQRetPK1SLh0l6u_CC_HniYuBT884aU=' WHERE "id" = 4;
