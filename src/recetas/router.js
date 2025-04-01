@@ -25,6 +25,7 @@ recetasRouter.post('/ingredienteInd/modificar', modificarIngrediente);
 recetasRouter.get('/ingredienteInd/aniadir', viewAniadirIngrediente);
 recetasRouter.post('/ingredienteInd/aniadir', aniadirIngrediente);
 
+
 recetasRouter.get('/buscarReceta', buscarReceta);
 
 export default recetasRouter;

@@ -184,6 +184,7 @@ export function modificarIngrediente(req, res) {
 }
 
 export function viewAniadirIngrediente(req, res) {
+    console.log("Sesión actual:", req.session); // Verifica si userId está definido
     const contenido = 'paginas/aniadirIngrediente';
     res.render('pagina', {
         contenido,

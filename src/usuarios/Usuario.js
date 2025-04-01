@@ -24,6 +24,18 @@ export class Usuario {
         console.log(usuario);
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
         const { password, nombre, apellido, correo, direccion, rol, activo, id } = usuario;
+        console.log(usuario);
+        console.log("Usuario creado en getUsuarioByUsername:", new Usuario(
+            usuario.username, 
+            usuario.password, 
+            usuario.nombre, 
+            usuario.apellido, 
+            usuario.correo, 
+            usuario.direccion, 
+            usuario.rol,  // <-- Aquí debería imprimir 'A'
+            usuario.activo, 
+            usuario.id
+        ));
 
         return new Usuario(username, password, nombre, apellido, correo, direccion, rol, activo, id);
     }
@@ -82,14 +94,22 @@ export class Usuario {
         }
         // XXX: En el ej3 / P3 lo cambiaremos para usar async / await o Promises
         console.log(usuario.#password);
+        console.log("Rol del usuario en login:", usuario.rol);
+
         if (!bcrypt.compareSync(password, usuario.#password)) throw new UsuarioOPasswordNoValido(username);
         
+        /*let esAdmin;
+        if (usuario.rol === RolesEnum.ADMIN) {
+            esAdmin = true;
+        } else {
+            esAdmin = false;
+        }*/
 
         return { 
             id: usuario.id, 
             username: usuario.username, 
             nombre: usuario.nombre, 
-            esAdmin: usuario.rol === RolesEnum.ADMIN 
+            esAdmin: usuario.rol === RolesEnum.ADMIN     
         };
      
     }
@@ -115,7 +135,7 @@ export class Usuario {
     apellido;
     correo;
     direccion;
-    rol;
+    #rol;
     activo;
 
     constructor(username, password, nombre, apellido, correo, direccion, rol = RolesEnum.USUARIO, activo = 1, id = null) {
@@ -126,8 +146,16 @@ export class Usuario {
         this.correo = correo;
         this.direccion = direccion;
         this.activo = activo;
-        this.rol = rol;
+        //this.rol = rol;
+        //this.rol = rol ?? RolesEnum.USUARIO; // Asegura que nunca sea undefined;
+        //this.#rol = rol?.toString() || RolesEnum.USUARIO // Asegura que nunca sea undefined;
+        this.#rol = rol.toString(); // Asegurarse que es string
+
         this.#id = id;
+    }
+
+    get rol() {
+        return this.#rol;
     }
 
     get id() {

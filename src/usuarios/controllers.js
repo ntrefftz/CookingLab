@@ -115,6 +115,10 @@ export function doLogin(req, res) {
         req.session.userId = usuario.id;
 
         req.session.nombre = usuario.nombre;
+        
+        console.log("Rol del usuario desde BD:", usuario.rol);
+        console.log("RolesEnum.ADMIN:", RolesEnum.ADMIN);
+        console.log("Comparación:", usuario.rol === RolesEnum.ADMIN);
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
 
         // Modificaciones para flash
