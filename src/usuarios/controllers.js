@@ -119,6 +119,10 @@ export function doLogin(req, res) {
         req.session.correo = usuario.correo || '';
         req.session.direccion = usuario.direccion || '';
         req.session.rol = usuario.rol;
+        
+        console.log("Rol del usuario desde BD:", usuario.rol);
+        console.log("RolesEnum.ADMIN:", RolesEnum.ADMIN);
+        console.log("Comparación:", usuario.rol === RolesEnum.ADMIN);
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
 
         // Modificaciones para flash

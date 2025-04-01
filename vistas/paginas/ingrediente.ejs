@@ -1,5 +1,8 @@
 <h1>Ingredientes</h1>
+<% if (session.esAdmin) { %>
 <a href="/recetas/ingredienteInd/aniadir"><button>Añadir ingrediente</button></a>
+<% } %>
+
 <div id="catalogo" class="cards_container">
     <% ingredientes.forEach(ingredienteInd => { %>
         <article class="card">
