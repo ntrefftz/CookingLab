@@ -6,10 +6,12 @@
 <div id="catalogo" class="cards_container">
     <% ingredientes.forEach(ingredienteInd => { %>
         <article class="card">
+            <img src=<%= ingredienteInd.imagen_url %> alt="Pronto habrá una foto"  />
             <p></p>
             <a href="ingredienteInd/?id=<%= ingredienteInd.id %>">
                 <h4><%= ingredienteInd.nombre %></h4>
             </a>
+            <p>Precio: <%= ingredienteInd.precio %> €</p>  
         </article>
         <% }) %>
 </div>
