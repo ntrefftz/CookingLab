@@ -22,6 +22,11 @@ export function viewRecetasDetalle(req, res) {
     // Obtener los ingredientes de la receta
     const ingredientes = Tiene.getIngredientesByReceta(id);
     // Asociar los ingredientes a la receta
+    ingredientes.forEach(ingrediente => {
+        const ingredienteDetails = Ingrediente.getIngredienteById(ingrediente.id_ingrediente);
+        ingrediente.nombre = ingredienteDetails.nombre;
+    });
+
     receta.ingredientes = ingredientes;
 
     res.render('pagina', {

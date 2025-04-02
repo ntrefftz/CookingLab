@@ -80,8 +80,6 @@ UPDATE "Recetas" SET "imagen_url" = 'https://cdn0.uncomo.com/es/posts/6/3/7/como
 UPDATE "Recetas" SET "imagen_url" = 'https://peopleenespanol.com/thmb/px5GarUe0rxAr66lKEaboMetCHM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1158987157-2000-25ff8f49b6af4027ac4a62eed28effd7.jpg' WHERE "id" = 9;
 UPDATE "Recetas" SET "imagen_url" = 'https://cdn.elcocinerocasero.com/imagen/paso-receta/1000/2022-11-29-18-05-17/como-hacer-churros-caseros-paso-7.jpeg' WHERE "id" = 10;
 
-UPDATE "Ingredientes" SET "imagen_url" = '' WHERE "id" = 1;
-UPDATE
 
 COMMIT;
 
