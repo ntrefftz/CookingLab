@@ -7,11 +7,10 @@
     <% recetas.forEach(receta=> { %>
         <article class="card">
             <img src=<%= receta.imagen_url %> alt="Pronto habrá una foto" />
-            <header>
-                <a href="receta/?id=<%= receta.id %>">
-                    <h4><%= receta.nombre %></h4>
-                </a>
-            </header>
+            <p></p>
+            <a href="receta/?id=<%= receta.id %>">
+                <h4><%= receta.nombre %></h4>
+            </a>
             <p>Tiempo preparación: <%= Math.floor(receta.tiempo_prep_segs / 60) %> minutos</p>
             <p>Dificultad: <%= receta.dificultad %></p>
          </article>
