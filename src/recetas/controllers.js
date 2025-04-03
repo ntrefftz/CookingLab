@@ -5,12 +5,21 @@ import { Tiene } from './Tiene.js';
 
 
 export function viewRecetasLista(req, res) {
+    //NUEVO
+    // Verificamos si la solicitud viene del calendario
+    const esDesdeCalendario = req.query.origen === 'calendario';  // Se obtiene el parámetro 'origen'
+    //const diaSeleccionado = req.query.dia;  // El día seleccionado en el calendario, pasado como parámetro
+    console.log("¿Proviene del calendario?", esDesdeCalendario); // Aquí se verá si es true o false
+
     const rows = Receta.getAllRecetas();
     const contenido = 'paginas/catalogo';
     res.render('pagina', {
         contenido,
         session: req.session,
-        recetas: rows
+        recetas: rows,
+        
+        //diaSeleccionado,     // Enviamos el día seleccionado
+        esDesdeCalendario  // Enviamos el flag que indica si proviene del calendario
     });
 }
 
@@ -112,9 +121,7 @@ export function aniadirReceta(req, res) {
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al añadir la receta');
-    }
-
-    
+    }   
 }
 
 //--------------------------------------------------------------------
