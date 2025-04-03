@@ -124,14 +124,6 @@ export function aniadirReceta(req, res) {
     }   
 }
 
-export function viewCalendario(req, res) {
-    const contenido = 'paginas/calendario';
-    res.render('pagina', {
-        contenido,
-        session: req.session
-    });
-}
-
 //--------------------------------------------------------------------
 
 export function viewIngredientesLista(req, res) {
