@@ -121,9 +121,15 @@ export function aniadirReceta(req, res) {
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al añadir la receta');
-    }
+    }   
+}
 
-    
+export function viewCalendario(req, res) {
+    const contenido = 'paginas/calendario';
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
 }
 
 //--------------------------------------------------------------------

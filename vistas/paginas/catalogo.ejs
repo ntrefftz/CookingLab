@@ -4,9 +4,6 @@
 <% } %>
 
 <div id="catalogo" class="cards_container">
-    <% if (esDesdeCalendario) { %>
-        <button id="anadir-receta-calendario">Añadir receta al calendario</button>
-    <% } %>
     <% recetas.forEach(receta=> { %>
         <article class="card">
             <img src=<%= receta.imagen_url %> alt="Pronto habrá una foto" />
@@ -16,7 +13,12 @@
             </a>
             <p>Tiempo preparación: <%= Math.floor(receta.tiempo_prep_segs / 60) %> minutos</p>
             <p>Dificultad: <%= receta.dificultad %></p>
-        
+            
+            <% if (esDesdeCalendario) { %>
+                <a href="/algo/calendario"> 
+                    <button class="anadir-receta-calendario">Añadir receta al calendario</button>
+                </a>
+            <% } %>
         </article>
         <% }) %>
 </div>
