@@ -15,6 +15,6 @@
     <% } %>
 </ul>
 <% if (session.esAdmin) { %>
-    <a href="/recetas/receta/eliminar?id=<%= recetas.id %>"><button>Eliminar receta</button></a>
     <a href="/recetas/receta/modificar?id=<%= recetas.id %>"><button>Editar receta</button></a>
+    <a href="/recetas/receta/eliminar?id=<%= recetas.id %>"><button>Eliminar receta</button></a>
 <% } %>
