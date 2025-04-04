@@ -83,7 +83,7 @@ export function viewRegister(req, res) {
     });
 }
 
-export function doLogin(req, res) {
+export async function doLogin(req, res) {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -104,7 +104,7 @@ export function doLogin(req, res) {
     const password = req.body.password.trim();
 
     try {
-        const usuario = Usuario.login(username, password);
+        const usuario = await Usuario.login(username, password);
         
         req.session.login = true;
         req.session.userId = usuario.id;
@@ -119,10 +119,7 @@ export function doLogin(req, res) {
         //logger.info(`Usuario ${username} ha iniciado sesión.`);
         return res.redirect('/usuarios/home');
 
-        console.log("Rol del usuario desde BD:", usuario.rol);
-        console.log("RolesEnum.ADMIN:", RolesEnum.ADMIN);
-        console.log("Comparación:", usuario.rol === RolesEnum.ADMIN);
-       
+         
 
     } catch (e) {
         
@@ -139,7 +136,7 @@ export function doLogin(req, res) {
     }
 }
 
-export function doRegister(req, res) {
+export async function doRegister(req, res) {
 
     // Verifica si hay errores en las validaciones
     const errors = validationResult(req);
@@ -165,7 +162,7 @@ export function doRegister(req, res) {
 
     
     try {
-        const usuario = Usuario.register(username, password, nombre, apellido, correo, direccion);
+        const usuario = await Usuario.register(username, password, nombre, apellido, correo, direccion);
         
         req.session.login = true;
         req.session.userId = usuario.id;
@@ -183,10 +180,17 @@ export function doRegister(req, res) {
         });
 
     } catch (e) {
-        res.render('pagina', {
-            contenido: 'paginas/register',
-            error: 'Error al guardar los datos ' + e
-        })
+        let error = 'No se ha podido crear el usuario';
+        if (e instanceof UsuarioYaExiste) {
+            error = 'El nombre de usuario ya está utilizado';
+        }
+        req.log.error("Problemas al registrar un nuevo usuario '%s'", username);
+        req.log.debug('El usuario no ha podido registrarse: %s', e);
+        render(req, res, 'paginas/registro', {
+            error,
+            datos: {},
+            errores: {}
+        });
     }
 }
 
