@@ -1,4 +1,5 @@
 import { body } from 'express-validator';
+import asyncHandler from 'express-async-handler';
 import { validationResult } from 'express-validator';
 import { Usuario, RolesEnum } from './Usuario.js';
 
@@ -84,27 +85,21 @@ export function viewRegister(req, res) {
 
 export function doLogin(req, res) {
 
-    // Verifica si hay errores en las validaciones
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        //Cambio paara los mensajes flash
-        /*const errores = result.mapped();
+        const errores = result.mapped();
         const datos = matchedData(req);
 
-        return res.render('pagina', {
+        return render(req, res, 'pagina', {
             contenido: 'paginas/login',
             error: 'Usuario o contraseña incorrectos',
-            session: req.session
-        });*/
-        return res.render('pagina', {
-            contenido: 'paginas/login',
-            error: errors.array().map(err => err.msg).join(', ') // Muestra los errores en un solo mensaje
+            session: req.session,
+            datos
         });
     }
 
     body('username').escape();
     body('password').escape();
-    // Capturo las variables username y password
     const username = req.body.username.trim();
     const password = req.body.password.trim();
 
@@ -118,34 +113,29 @@ export function doLogin(req, res) {
         req.session.apellido = usuario.apellido || ''; 
         req.session.correo = usuario.correo || '';
         req.session.direccion = usuario.direccion || '';
-        req.session.rol = usuario.rol;
+        req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
         
+        res.setFlash(`Encantado de verte de nuevo: ${usuario.nombre}`);
+        //logger.info(`Usuario ${username} ha iniciado sesión.`);
+        return res.redirect('/usuarios/home');
+
         console.log("Rol del usuario desde BD:", usuario.rol);
         console.log("RolesEnum.ADMIN:", RolesEnum.ADMIN);
         console.log("Comparación:", usuario.rol === RolesEnum.ADMIN);
-        req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
-
-        // Modificaciones para flash
-        /*res.setFlash(`Encantado de verte de nuevo, ${usuario.nombre}!`);
-        logger.info(`Usuario ${username} ha iniciado sesión.`);
-        return res.redirect('../vistas/paginas/home.ejs');*/
-
-        //Ahora en vez de renderizar la vista, redirigimos a la página de inicio
-        return res.render('pagina', {
-            contenido: 'paginas/home',
-            session: req.session
-        });
+       
 
     } catch (e) {
-        //Cambio para los mensajes Flash
-        /*logger.warn(`Fallo en el login del usuario '${username}': ${e.message}`);
+        
+       // logger.warn(`Fallo en el login del usuario '${username}': ${e.message}`);
         req.session.flashMsg = 'El usuario o contraseña no son válidos';
-        return res.redirect('/usuarios/login');*/
+        
 
-        res.render('pagina', {
+        render(req, res, 'pagina', {
             contenido: 'paginas/login',
-            error: 'El usuario o contraseña no son válidos'
-        })
+            error: 'El usuario o contraseña no son válidos',
+            errores: {}
+        });
+        return res.redirect('/usuarios/login');
     }
 }
 
@@ -225,6 +215,16 @@ export function doLogout(req, res, next) {
 export function viewModificarPerfil(req, res) {
     const contenido = 'paginas/editarPerfil';
     const id = req.query.id;
+    const perfil = Usuario.getUsuarioById(id);
+    res.render('pagina', {
+        contenido,
+        session: req.session,
+        usuario: perfil
+    });
+}
+export function viewHome(req, res){
+    const contenido = 'paginas/home';
+    const id = req.session.userId;
     const perfil = Usuario.getUsuarioById(id);
     res.render('pagina', {
         contenido,

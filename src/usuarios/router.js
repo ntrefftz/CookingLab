@@ -1,7 +1,7 @@
 import {body} from 'express-validator';
 import express from 'express';
 import { viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout,
-     viewRegister, doRegister, viewModificarPerfil, modificarPerfil } from './controllers.js';
+     viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome } from './controllers.js';
 
 const usuariosRouter = express.Router();
 
@@ -13,7 +13,7 @@ usuariosRouter.get('/misrecetas', viewMisRecetas);
 usuariosRouter.get('/micalendario', viewCalendario);
 usuariosRouter.get('/login', viewLogin);
 usuariosRouter.get('/perfil/modificar', viewModificarPerfil);
-//usuariosRouter.post('/login', doLogin);
+usuariosRouter.get('/home', viewHome);
 
 usuariosRouter.post('/login', 
     body('username', 'El nombre no puede ser vacío').trim().notEmpty(),
@@ -22,10 +22,8 @@ usuariosRouter.post('/login',
 );
 
 usuariosRouter.get('/logout', doLogout);
-usuariosRouter.get('/logout', doLogout);
 usuariosRouter.get('/register', viewRegister);
 
-//usuariosRouter.post('/register', doRegister);
 usuariosRouter.post('/register', 
     body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i),
     body('username', 'El usuario no puede ser vacío').trim().notEmpty(),

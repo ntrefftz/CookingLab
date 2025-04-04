@@ -133,5 +133,8 @@ dist
 #*.db
 #Ignore mysqlite files
 *.db*
-
+*.env*
 /.vscode
+
+
+
