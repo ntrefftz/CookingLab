@@ -1,10 +1,8 @@
 import { body } from 'express-validator';
 import asyncHandler from 'express-async-handler';
-import { validationResult } from 'express-validator';
+import { validationResult, matchedData } from 'express-validator';
 import { Usuario, RolesEnum } from './Usuario.js';
-
-//Para registrar en logs los intentos de inicio de sesion y los errores
-//import { logger } from './logger.js';
+import { render } from '../utils/render.js';
 
 export function viewConfiguracion(req, res) {
     let contenido = 'paginas/configuracion';
@@ -86,13 +84,14 @@ export function viewRegister(req, res) {
 export async function doLogin(req, res) {
 
     const errors = validationResult(req);
+    
     if (!errors.isEmpty()) {
-        const errores = result.mapped();
+        const errores = errors.mapped();
         const datos = matchedData(req);
 
         return render(req, res, 'pagina', {
             contenido: 'paginas/login',
-            error: 'Usuario o contraseña incorrectos',
+            errores, 
             session: req.session,
             datos
         });
@@ -116,21 +115,18 @@ export async function doLogin(req, res) {
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
         
         res.setFlash(`Encantado de verte de nuevo: ${usuario.nombre}`);
-        //logger.info(`Usuario ${username} ha iniciado sesión.`);
+        req.log.info(`Usuario ${username} ha iniciado sesión.`);
         return res.redirect('/usuarios/home');
-
-         
 
     } catch (e) {
         
-       // logger.warn(`Fallo en el login del usuario '${username}': ${e.message}`);
+        req.log.warn(`Fallo en el login del usuario  %s`, username);
+        req.log.debug('El usuario %s, no ha podido logarse: %s', username, e.message);
         req.session.flashMsg = 'El usuario o contraseña no son válidos';
-        
-
-        render(req, res, 'pagina', {
+        return render(req, res, 'pagina', {
             contenido: 'paginas/login',
-            error: 'El usuario o contraseña no son válidos',
-            errores: {}
+            error: 'Usuario o contraseña incorrectos',
+            session: req.session,
         });
         return res.redirect('/usuarios/login');
     }
@@ -215,7 +211,6 @@ export function doLogout(req, res, next) {
         })
     })
 }
-
 export function viewModificarPerfil(req, res) {
     const contenido = 'paginas/editarPerfil';
     const id = req.query.id;
@@ -236,7 +231,6 @@ export function viewHome(req, res){
         usuario: perfil
     });
 }
-
 export function modificarPerfil(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

@@ -5,8 +5,8 @@
 		<p><strong><%= locals.error %></strong></p>
 	<% } %>
 	<legend>Usuario y contraseña</legend>
-	<div><label>Nombre:</label> <input type="text" name="username" /></div>
-	<div><label>Contraseña:</label> <input type="password" name="password" /></div>
+	<div><label>Nombre:</label> <input type="text" name="username" /><%- helpers.error(errores, 'username') %></div>
+	<div><label>Contraseña:</label> <input type="password" name="password" /><%- helpers.error(errores, 'password') %></div>
 	<button type="submit">Enviar</button>
 </fieldset>
 
