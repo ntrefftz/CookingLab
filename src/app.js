@@ -30,13 +30,6 @@ app.use(session(config.session));
 //Modificacion para Flash
 app.use(flashMessages);
 
-app.get('/', (req, res) => {
-    res.render('pagina', {
-        contenido: 'paginas/index',
-        session: req.session
-    });
-})
-
 app.use('/', express.static(config.recursos));
 app.use('/', contenidoRouter);
 app.use('/usuarios', usuariosRouter);

@@ -211,7 +211,7 @@ export class UsuarioYaExiste extends Error {
      * @param {ErrorOptions} [options]
      */
     constructor(username, options) {
-        super(`Pruebe con otro correo electronico, Usuario: ${username}`, options);
+        super(`Usuario ya existe: ${username}`, options);
         this.name = 'UsuarioYaExiste';
     }
 }

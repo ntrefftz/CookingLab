@@ -1,7 +1,6 @@
 import { body } from 'express-validator';
-import asyncHandler from 'express-async-handler';
+import { Usuario, UsuarioYaExiste, RolesEnum } from './Usuario.js';
 import { validationResult, matchedData } from 'express-validator';
-import { Usuario, RolesEnum } from './Usuario.js';
 import { render } from '../utils/render.js';
 
 export function viewConfiguracion(req, res) {
@@ -64,9 +63,9 @@ export function viewLogin(req, res) {
     if (req.session != null && req.session.login) {
         contenido = 'paginas/home'
     }
-    res.render('pagina', {
-        contenido,
-        session: req.session
+    render(req, res, contenido, {
+        errores: {},
+        datos: {}
     });
 }
 
@@ -75,25 +74,25 @@ export function viewRegister(req, res) {
     if (req.session != null && req.session.login) {
         contenido = 'paginas/home'
     }
-    res.render('pagina', {
-        contenido,
-        session: req.session
+    render(req, res, contenido, {
+        errores: {},
+        datos: {},
     });
 }
 
 export async function doLogin(req, res) {
-
-    const errors = validationResult(req);
     
+    let contenido = 'paginas/login';
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const errores = errors.mapped();
         const datos = matchedData(req);
 
-        return render(req, res, 'pagina', {
-            contenido: 'paginas/login',
-            errores, 
+        return render(req, res, contenido, {
+            error: 'Usuario o contraseña incorrectos',
             session: req.session,
-            datos
+            datos: {},
+            errores: {}
         });
     }
 
@@ -118,15 +117,19 @@ export async function doLogin(req, res) {
         req.log.info(`Usuario ${username} ha iniciado sesión.`);
         return res.redirect('/usuarios/home');
 
+         
+
     } catch (e) {
-        
+        const datos = matchedData(req);
         req.log.warn(`Fallo en el login del usuario  %s`, username);
         req.log.debug('El usuario %s, no ha podido logarse: %s', username, e.message);
         req.session.flashMsg = 'El usuario o contraseña no son válidos';
-        return render(req, res, 'pagina', {
-            contenido: 'paginas/login',
+
+        return render(req, res, contenido, {
             error: 'Usuario o contraseña incorrectos',
             session: req.session,
+            datos: {},
+            errores: {}
         });
         return res.redirect('/usuarios/login');
     }
@@ -137,10 +140,12 @@ export async function doRegister(req, res) {
     // Verifica si hay errores en las validaciones
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.render('pagina', {
-            contenido: 'paginas/register',
+        render(req, res, 'paginas/register', {
+            errores: {},
+            datos: {},
             error: errors.array().map(err => err.msg).join(', ') // Muestra los errores en un solo mensaje
         });
+          
     }
 
     body('username').escape();
@@ -170,10 +175,9 @@ export async function doRegister(req, res) {
         req.session.rol = usuario.rol;
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
 
-        return res.render('pagina', {
-            contenido: 'paginas/home',
-            session: req.session
-        });
+        res.setFlash(`Bienvenido a CookingLab: ${usuario.nombre}`);
+        req.log.info(`Usuario ${username} se ha registrado correctamente.`);
+        return res.redirect('/usuarios/home');
 
     } catch (e) {
         let error = 'No se ha podido crear el usuario';
@@ -182,10 +186,9 @@ export async function doRegister(req, res) {
         }
         req.log.error("Problemas al registrar un nuevo usuario '%s'", username);
         req.log.debug('El usuario no ha podido registrarse: %s', e);
-        render(req, res, 'paginas/registro', {
-            error,
-            datos: {},
-            errores: {}
+        render(req, res, 'paginas/register', {
+            errores: {},
+            datos: {}
         });
     }
 }
