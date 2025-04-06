@@ -29,6 +29,9 @@ usuariosRouter.post('/register',
     body('username', 'El usuario no puede ser vacío').trim().notEmpty(),
     body('nombre', 'El nombre no puede ser vacío').trim().notEmpty(),  //Asegura que el nombre no esté vacío
     body('password', 'La contraseña tiene que tener entre 6 y 10 caracteres').trim().isLength({ min: 6, max: 10 }),
+    body('apellido').trim().notEmpty().withMessage('El apellido es requerido'),
+    body('correo').trim().isEmail().withMessage('Correo electrónico inválido'),
+    body('direccion').optional().trim(),
     doRegister
 );
 

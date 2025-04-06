@@ -89,10 +89,9 @@ export async function doLogin(req, res) {
         const datos = matchedData(req);
 
         return render(req, res, contenido, {
-            error: 'Usuario o contraseña incorrectos',
             session: req.session,
-            datos: {},
-            errores: {}
+            datos,
+            errores,
         });
     }
 
@@ -128,7 +127,7 @@ export async function doLogin(req, res) {
         return render(req, res, contenido, {
             error: 'Usuario o contraseña incorrectos',
             session: req.session,
-            datos: {},
+            datos,
             errores: {}
         });
         return res.redirect('/usuarios/login');
@@ -139,10 +138,13 @@ export async function doRegister(req, res) {
 
     // Verifica si hay errores en las validaciones
     const errors = validationResult(req);
+    
     if (!errors.isEmpty()) {
+        const errores = errors.mapped();
+        const datos = matchedData(req);
         render(req, res, 'paginas/register', {
-            errores: {},
-            datos: {},
+            errores,
+            datos,
             error: errors.array().map(err => err.msg).join(', ') // Muestra los errores en un solo mensaje
         });
           
@@ -184,11 +186,15 @@ export async function doRegister(req, res) {
         if (e instanceof UsuarioYaExiste) {
             error = 'El nombre de usuario ya está utilizado';
         }
+
         req.log.error("Problemas al registrar un nuevo usuario '%s'", username);
         req.log.debug('El usuario no ha podido registrarse: %s', e);
+
+        const datos = matchedData(req);
         render(req, res, 'paginas/register', {
             errores: {},
-            datos: {}
+            datos,
+            error
         });
     }
 }
