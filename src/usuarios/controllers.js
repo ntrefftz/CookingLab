@@ -18,17 +18,10 @@ export function viewPerfil(req, res) {
         return res.redirect('/usuarios/login');
     }
 
-    const usuario = {
-        id: req.session.userId,  
-        username: req.session.username,
-        password: req.session.password, 
-        nombre: req.session.nombre,
-        apellido: req.session.apellido,
-        correo: req.session.correo,
-        direccion: req.session.direccion,
-        rol: req.session.rol  
-    };
+    const usuario = Usuario.getUsuarioById(req.session.userId);
 
+    console.log("Usuario desde session:", usuario);
+    
     res.render('pagina', {
         contenido: 'paginas/perfil',
         usuario: usuario,

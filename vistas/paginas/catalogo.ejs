@@ -13,6 +13,12 @@
             </a>
             <p>Tiempo preparación: <%= Math.floor(receta.tiempo_prep_segs / 60) %> minutos</p>
             <p>Dificultad: <%= receta.dificultad %></p>
-         </article>
+            
+            <% if (esDesdeCalendario) { %>
+                <a href="/usuarios/micalendario"> 
+                    <button class="anadir-receta-calendario">Añadir receta al calendario</button>
+                </a>
+            <% } %>
+        </article>
         <% }) %>
 </div>

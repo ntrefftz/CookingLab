@@ -2,7 +2,6 @@ import express from 'express';
 import asyncHandler from 'express-async-handler';
 import { viewRecetasDetalle, viewRecetasLista, viewModificarReceta, eliminarReceta, modificarReceta, viewAniadirReceta, aniadirReceta,
     viewIngredientesLista, viewIngredientesDetalle, viewModificarIngrediente, eliminarIngrediente, modificarIngrediente, 
-    //viewAniadirIngrediente, aniadirIngrediente
     viewAniadirIngrediente, aniadirIngrediente, buscarReceta
      
 } from './controllers.js';
