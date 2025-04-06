@@ -1,5 +1,39 @@
+<%
+    function generarCards(session) {
+        if (!session.login) return '';
+        
+        let opciones = [
+            '<p><a href="/usuarios/perfil">Mi perfil</a><img src = "/image/User_Icon.png"></p>',
+            '<p><a href="/usuarios/historial">Historial de compra</a><img src = "/image/history_icon.png"></p>',
+            '<p><a href="/usuarios/misrecetas">Mis recetas</a><img src = "/image/recipe_icon.png"></p>',
+            '<p><a href="/usuarios/micalendario">Mi calendario</a><img src = "/image/calendar_icon.png"></p>'
+        ];
+
+        if (session.esAdmin) {
+            opciones.unshift('<p><a href="/contenido/admin">Administrar</a><img src = "/image/User_Icon.png"></p>');
+        }
+
+        return opciones.map(opcion => {
+            // Extracción más segura con operador de encadenamiento opcional
+            const texto = opcion.match(/">(.*?)<\/a>/)?.[1] || 'Sin texto';
+            const href = opcion.match(/href="(.*?)"/)?.[1] || '#';
+            const img = opcion.match(/<img[^>]*src\s*=\s*["']([^"']*)["']/i)?.[1];
+
+            return `
+                <article class="card">
+                    <img src="${img}" alt="${texto}" loading="lazy" />
+                    <p></p>
+                    <a href="${href}">
+                        <h4>${texto}</h4>
+                    </a>
+                </article>
+            `;
+        }).join('');
+    }
+%>
+
 <h1>Configuración</h1>
-<p><a href="/usuarios/perfil">Mi perfil</a></p>
-<p><a href="/usuarios/historial">Historial de compra</a></p>
-<p><a href="/usuarios/misrecetas">Mis recetas</a></p>
-<p><a href="/usuarios/micalendario">Mi calendario</a></p>
+
+<div id="catalogo" class="cards_container">
+    <%- generarCards(session) %>
+</div>

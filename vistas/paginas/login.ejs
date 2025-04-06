@@ -1,20 +1,15 @@
 <h1>Acceso al sistema</h1>
-<!-- Modificado para mensajes Flash	-->
-<% if (locals.getAndClearFlash()) { %>
-    <p><strong><%= locals.getAndClearFlash() %></strong></p>
-<% } %>
-
 <form action="/usuarios/login" method="POST">
 <fieldset>
-	<!-- Modificado para mensajes Flash
 	<% if (locals.error) { %>
 		<p><strong><%= locals.error %></strong></p>
 	<% } %>
-	-->
 	<legend>Usuario y contraseña</legend>
-	<div><label>Nombre:</label> <input type="text" name="username" /></div>
-	<div><label>Contraseña:</label> <input type="password" name="password" /></div>
+	<div><label>Nombre:</label> <input type="text" name="username" value=" <%= datos.username || '' %>" /><%- helpers.error(errores, 'username') %></div>
+	<div><label>Contraseña:</label> <input type="password" name="password" /><%- helpers.error(errores, 'password') %></div>
 	<button type="submit">Enviar</button>
 </fieldset>
 
 <a href="/usuarios/register">¿Aun no te has registrado? Pincha aquí.</a>
+
+

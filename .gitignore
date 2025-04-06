@@ -132,9 +132,9 @@ dist
 #Excluimos la base de datos
 #*.db
 #Ignore mysqlite files
-aw_sw.db-shm
-aw_sw.db-wal
-aw_sw.db
-*.db
-
+*.db*
+*.env*
 /.vscode
+
+
+

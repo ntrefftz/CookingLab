@@ -8,11 +8,13 @@
 <ul>
     <% if (recetas.ingredientes) { %>
         <% recetas.ingredientes.forEach(function(ingrediente) { %>
-            <li><%= ingrediente.nombre %> - <%= ingrediente.cantidad %></li>
+            <li><%= ingrediente.nombre %> - <%= ingrediente.cantidad %>gr.</li>
         <% }); %>
     <% } else { %>
         <li>No se encontraron ingredientes.</li>
     <% } %>
 </ul>
-<a href="/recetas/receta/eliminar?id=<%= recetas.id %>"><button>Eliminar receta</button></a>
-<a href="/recetas/receta/modificar?id=<%= recetas.id %>"><button>Editar receta</button></a>
+<% if (session.esAdmin) { %>
+    <a href="/recetas/receta/eliminar?id=<%= recetas.id %>"><button>Eliminar receta</button></a>
+    <a href="/recetas/receta/modificar?id=<%= recetas.id %>"><button>Editar receta</button></a>
+<% } %>

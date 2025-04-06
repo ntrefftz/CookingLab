@@ -1,4 +1,5 @@
 import express from 'express';
+import asyncHandler from 'express-async-handler';
 import { viewRecetasDetalle, viewRecetasLista, viewModificarReceta, eliminarReceta, modificarReceta, viewAniadirReceta, aniadirReceta,
     viewIngredientesLista, viewIngredientesDetalle, viewModificarIngrediente, eliminarIngrediente, modificarIngrediente, 
     //viewAniadirIngrediente, aniadirIngrediente
@@ -8,23 +9,24 @@ import { viewRecetasDetalle, viewRecetasLista, viewModificarReceta, eliminarRece
 
 const recetasRouter = express.Router();
 
-recetasRouter.get('/catalogo', viewRecetasLista);
-recetasRouter.get('/receta', viewRecetasDetalle);
-recetasRouter.get('/receta/modificar', viewModificarReceta);
-recetasRouter.get('/receta/eliminar', eliminarReceta);
-recetasRouter.post('/receta/modificar', modificarReceta);
-recetasRouter.get('/receta/aniadir', viewAniadirReceta);
-recetasRouter.post('/receta/aniadir', aniadirReceta);
+recetasRouter.get('/catalogo', asyncHandler(viewRecetasLista));
+recetasRouter.get('/receta', asyncHandler(viewRecetasDetalle));
+recetasRouter.get('/receta/modificar', asyncHandler(viewModificarReceta));
+recetasRouter.get('/receta/eliminar', asyncHandler(eliminarReceta));
+recetasRouter.post('/receta/modificar', asyncHandler(modificarReceta));
+recetasRouter.get('/receta/aniadir', asyncHandler(viewAniadirReceta));
+recetasRouter.post('/receta/aniadir', asyncHandler(aniadirReceta));
 
 
-recetasRouter.get('/ingrediente', viewIngredientesLista);
-recetasRouter.get('/ingredienteInd', viewIngredientesDetalle);
-recetasRouter.get('/ingredienteInd/modificar', viewModificarIngrediente);
-recetasRouter.get('/ingredienteInd/eliminar', eliminarIngrediente);
-recetasRouter.post('/ingredienteInd/modificar', modificarIngrediente);
-recetasRouter.get('/ingredienteInd/aniadir', viewAniadirIngrediente);
-recetasRouter.post('/ingredienteInd/aniadir', aniadirIngrediente);
+recetasRouter.get('/ingrediente', asyncHandler(viewIngredientesLista));
+recetasRouter.get('/ingredienteInd', asyncHandler(viewIngredientesDetalle));
+recetasRouter.get('/ingredienteInd/modificar',asyncHandler(viewModificarIngrediente));
+recetasRouter.get('/ingredienteInd/eliminar', asyncHandler(eliminarIngrediente));
+recetasRouter.post('/ingredienteInd/modificar', asyncHandler(modificarIngrediente));
+recetasRouter.get('/ingredienteInd/aniadir',asyncHandler( viewAniadirIngrediente));
+recetasRouter.post('/ingredienteInd/aniadir', asyncHandler(aniadirIngrediente));
 
-recetasRouter.get('/buscarReceta', buscarReceta);
+
+recetasRouter.get('/buscarReceta', asyncHandler(buscarReceta));
 
 export default recetasRouter;

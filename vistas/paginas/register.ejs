@@ -6,12 +6,12 @@
 		<p><strong><%= locals.error %></strong></p>
 	<% } %>
 	<legend>Introduce tus datos</legend>
-	<div><label>Usuario:</label> <input type="text" name="username" /></div>
-	<div><label>Contraseña:</label> <input type="password" name="password" /></div>
-    <div><label>Nombre:</label> <input type="text" name="nombre" /></div>
-    <div><label>Apellido:</label> <input type="text" name="apellido" /></div>
-    <div><label>Mail:</label> <input type="text" name="correo" /></div>
-    <div><label>Dirección:</label> <input type="text" name="direccion" /></div>
+	<div><label>Usuario:</label> <input type="text" name="username" value="<%= datos?.username || '' %>"/><%- helpers.error(errores, 'username') %></div>
+	<div><label>Contraseña:</label> <input type="password" name="password" /><%- helpers.error(errores, 'password') %></div>
+    <div><label>Nombre:</label> <input type="text" name="nombre" value="<%= datos?.nombre || '' %>"/><%- helpers.error(errores, 'nombre') %></div>
+    <div><label>Apellido:</label> <input type="text" name="apellido" value="<%= datos?.apellido || '' %>" /><%- helpers.error(errores, 'apellido') %></div>
+    <div><label>Mail:</label> <input type="text" name="correo" value="<%= datos?.correo || '' %>" /><%- helpers.error(errores, 'correo') %></div>
+    <div><label>Dirección:</label> <input type="text" name="direccion" value="<%= datos?.direccion || '' %>" /><%- helpers.error(errores, 'direccion') %></div>
 
 	<button type="submit">Enviar</button>
 </fieldset>

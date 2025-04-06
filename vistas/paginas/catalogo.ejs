@@ -1,16 +1,18 @@
 <h1>Catálogo</h1>
-<a href="/recetas/receta/aniadir"><button>Añadir receta</button></a>
+<% if (session.esAdmin) { %>
+    <a href="/recetas/receta/aniadir"><button>Añadir receta</button></a>
+<% } %>
 
 <div id="catalogo" class="cards_container">
     <% recetas.forEach(receta=> { %>
         <article class="card">
-            <header>
-                <a href="receta/?id=<%= receta.id %>">
-                    <h4><%= receta.nombre %></h4>
-                </a>
-            </header>
-
-            <img src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" alt="Pronto habrá una foto" />
-        </article>
+            <img src=<%= receta.imagen_url %> alt="Pronto habrá una foto" />
+            <p></p>
+            <a href="receta/?id=<%= receta.id %>">
+                <h4><%= receta.nombre %></h4>
+            </a>
+            <p>Tiempo preparación: <%= Math.floor(receta.tiempo_prep_segs / 60) %> minutos</p>
+            <p>Dificultad: <%= receta.dificultad %></p>
+         </article>
         <% }) %>
 </div>

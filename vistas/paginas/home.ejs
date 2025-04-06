@@ -1,2 +1,19 @@
-<h1>Bienvenido <%=  session.nombre %></h1>
-<p>Usa el menú de la izquierda para navegar.</p>
+<%
+const flashMsg = getAndClearFlash();
+if( flashMsg ) {
+%>
+<dialog id="flashModal">
+    <form method="dialog">
+    <p><%= flashMsg %></p>
+    <a href="/">Cerrar</a>
+    </form>
+</dialog>
+<% } %>
+
+<script>
+const flashDialogEl = document.getElementById("flashModal");
+if (flashDialogEl) {
+    flashDialogEl.showModal();
+}
+
+</script>

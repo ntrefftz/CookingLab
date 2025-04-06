@@ -5,13 +5,27 @@
  */
 function mostrarSaludo(session){
 	if (session == null || ! session.login){
-		return `<p>Usuario desconocido. <a href="/usuarios/login">Login</a></p>`;
+		return `<p>Usuario desconocido. &rarr;</p>`;
 	}
 
-	return `<p>Bienvenido ${session.nombre}. <a href="/usuarios/logout">(salir)</a></p>`;
+	return `<p>Bienvenido ${session.nombre}.</a></p>`;
 }
 %>
-
+<%
+function menu(session){
+	/**
+	 * Muestra el menu de opciones del usuario, si no esta registrado
+	 * muestra las opciones de login y registro.
+	 */
+	if (session == null || ! session.login){
+		return `<li><a href="/usuarios/login">Login</a></li>
+				<li><a href="/usuarios/register">Registro</a></li>`;
+	}
+	
+	return `<li><a href="/usuarios/configuracion">Configuración</a></li>
+			<li><a href="/usuarios/logout">Cerrar sesión</a></li>`;
+}
+%>
 <header>
 	<h1>COOKINGLAB</h1>
 	<ul class="navbar">
@@ -20,17 +34,13 @@ function mostrarSaludo(session){
 		<li><a href="/recetas/catalogo">Recetas</a></li>
 		<li><a href="/recetas/ingrediente">Ingredientes</a></li>
 		<li><a href="/contenido/cesta">Cesta</a></li>
-		<li><a href="/contenido/admin">Administrar</a></li>
 		<li><a href="/recetas/buscarReceta">Buscar</a></li>
 		<li><%- mostrarSaludo(session) %></li>
 		<li><div class= "dropdown">
 			<button class="dropdown-btn"><img src="/image/User_Icon.png" alt="User Icon"></button>
 			<div class="dropdown-content">
 				<ul class =>
-					<li><a href="/usuarios/configuracion">Configuración</a></li>
-					<li><a href="/usuarios/login">Login</a></li>
-					<li><a href="/usuarios/register">Registro</a></li>
-					<li><a href="/usuarios/logout">Logout</a></li>
+					<%- menu(session) %>
 				</ul>
 			</div>
 		</div></li>
