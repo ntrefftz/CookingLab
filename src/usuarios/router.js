@@ -1,30 +1,32 @@
-import {body} from 'express-validator';
+import { body } from 'express-validator';
 import express from 'express';
-import { viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout,
-     viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome } from './controllers.js';
-
+import {
+    viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout,
+    viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome
+} from './controllers.js';
+import asyncHandler from 'express-async-handler';
 const usuariosRouter = express.Router();
 
 
-usuariosRouter.get('/configuracion', viewConfiguracion);
-usuariosRouter.get('/perfil', viewPerfil);
-usuariosRouter.get('/historial', viewHistorial);
-usuariosRouter.get('/misrecetas', viewMisRecetas);
-usuariosRouter.get('/micalendario', viewCalendario);
-usuariosRouter.get('/login', viewLogin);
-usuariosRouter.get('/perfil/modificar', viewModificarPerfil);
-usuariosRouter.get('/home', viewHome);
+usuariosRouter.get('/configuracion', asyncHandler(viewConfiguracion));
+usuariosRouter.get('/perfil', asyncHandler(viewPerfil));
+usuariosRouter.get('/historial', asyncHandler(viewHistorial));
+usuariosRouter.get('/misrecetas', asyncHandler(viewMisRecetas));
+usuariosRouter.get('/micalendario', asyncHandler(viewCalendario));
+usuariosRouter.get('/login', asyncHandler(viewLogin));
+usuariosRouter.get('/perfil/modificar', asyncHandler(viewModificarPerfil));
+usuariosRouter.get('/home', asyncHandler(viewHome));
 
-usuariosRouter.post('/login', 
+usuariosRouter.post('/login',
     body('username', 'El nombre no puede ser vacío').trim().notEmpty(),
     body('password', 'La contraseña no puede ser vacía').trim().notEmpty(),
-    doLogin
+    asyncHandler(doLogin)
 );
 
-usuariosRouter.get('/logout', doLogout);
-usuariosRouter.get('/register', viewRegister);
+usuariosRouter.get('/logout', asyncHandler(doLogout));
+usuariosRouter.get('/register',asyncHandler(viewRegister));
 
-usuariosRouter.post('/register', 
+usuariosRouter.post('/register',
     body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i),
     body('username', 'El usuario no puede ser vacío').trim().notEmpty(),
     body('nombre', 'El nombre no puede ser vacío').trim().notEmpty(),  //Asegura que el nombre no esté vacío
@@ -32,17 +34,17 @@ usuariosRouter.post('/register',
     body('apellido').trim().notEmpty().withMessage('El apellido es requerido'),
     body('correo').trim().isEmail().withMessage('Correo electrónico inválido'),
     body('direccion').optional().trim(),
-    doRegister
+    asyncHandler(doRegister)
 );
 
-usuariosRouter.post('/perfil/modificar', 
+usuariosRouter.post('/perfil/modificar',
     body('username').trim().notEmpty().withMessage('El nombre de usuario es requerido'),
     body('nombre').trim().notEmpty().withMessage('El nombre es requerido'),
     body('apellido').trim().notEmpty().withMessage('El apellido es requerido'),
     body('correo').trim().isEmail().withMessage('Correo electrónico inválido'),
     body('direccion').optional().trim(),
     body('password').optional().trim(),
-    modificarPerfil
+    asyncHandler(modificarPerfil)
 );
 
 export default usuariosRouter;

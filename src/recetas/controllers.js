@@ -1,7 +1,9 @@
 import { body } from 'express-validator';
 import { Receta } from './Recetas.js';
 import { Ingrediente } from './Ingredientes.js';
-import { Tiene } from './Tiene.js'; 
+import { Tiene } from './Tiene.js';
+import { logger } from '../logger.js';
+
 
 
 export function viewRecetasLista(req, res) {
@@ -87,7 +89,8 @@ export function viewAniadirReceta(req, res) {
 }
 
 export function aniadirReceta(req, res) {
-    console.log("Sesión actual:", req.session); // Verifica si userId está definido
+     // Verifica si userId está definido
+    logger.debug("Sesión actual:", req.session); 
 
     body('nombre').escape();
     body('descripcion').escape();
@@ -102,7 +105,8 @@ export function aniadirReceta(req, res) {
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
 
     if (!id_usuario) {
-        console.error("Error: No se ha proporcionado un ID de usuario válido");
+        logger.error("Error: No se ha proporcionado un ID de usuario válido"); 
+
         return res.status(400).send('No se ha proporcionado un ID de usuario válido');
     }
 
@@ -110,7 +114,7 @@ export function aniadirReceta(req, res) {
         Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo);
         res.redirect('/recetas/catalogo');
     } catch (error) {
-        console.error(error);
+        logger.error(error); 
         res.status(500).send('Error al añadir la receta');
     }
 
@@ -186,7 +190,8 @@ export function modificarIngrediente(req, res) {
 }
 
 export function viewAniadirIngrediente(req, res) {
-    console.log("Sesión actual:", req.session); // Verifica si userId está definido
+   // Verifica si userId está definido
+    logger.debug("Sesión actual:", req.session);
     const contenido = 'paginas/aniadirIngrediente';
     res.render('pagina', {
         contenido,
@@ -195,7 +200,8 @@ export function viewAniadirIngrediente(req, res) {
 }
 
 export function aniadirIngrediente(req, res) {
-    console.log("Sesión actual:", req.session); // Verifica si userId está definido
+ // Verifica si userId está definido
+    logger.debug("Sesión actual:", req.session);
 
     body('nombre').escape();
     body('precio').escape();
@@ -211,7 +217,7 @@ export function aniadirIngrediente(req, res) {
 
 
     if (!id_usuario) {
-        console.error("Error: No se ha proporcionado un ID de usuario válido");
+        logger.error("Error: No se ha proporcionado un ID de usuario válido");
         return res.status(400).send('No se ha proporcionado un ID de usuario válido');
     }
 
@@ -219,7 +225,7 @@ export function aniadirIngrediente(req, res) {
         Ingrediente.addIngrediente(nombre, categoria, precio, stock, activo);
         res.redirect('/recetas/ingrediente');
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         res.status(500).send('Error al añadir el ingrediente');
     }
 
@@ -243,7 +249,7 @@ export function aniadirIngrediente(req, res) {
         //redirigimos a la página de catálogo después de agregar la receta
         res.redirect('/recetas/catalogo');
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         res.status(500).send('Error al añadir la receta');
     }*/
 }
@@ -328,7 +334,7 @@ export function buscarReceta(req, res) {
         });
 
     } catch (error) {
-        console.error('Error en búsqueda:', error);
+        logger.error('Error en búsqueda:', error);
         res.render('pagina', {
             contenido: 'paginas/busqueda',
             session: req.session,

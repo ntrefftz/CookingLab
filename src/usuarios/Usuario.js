@@ -1,5 +1,7 @@
 
 import bcrypt from "bcryptjs";
+import { logger } from '../logger.js';
+
 
 export const RolesEnum = Object.freeze({
     USUARIO: 'U',
@@ -31,11 +33,11 @@ export class Usuario {
 
     static getUsuarioByUsername(username) {
         const usuario = this.#getByUsernameStmt.get({ username });
-        console.log(usuario);
+
+        logger.debug('GetUsuarioByUsername:', usuario);
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
         const { password, nombre, apellido, correo, direccion, rol, activo, id } = usuario;
-        /*console.log(usuario);
-        console.log("Usuario creado en getUsuarioByUsername:", new Usuario(
+        logger.debug('"Usuario creado en getUsuarioByUsername:',
             usuario.username, 
             usuario.password, 
             usuario.nombre, 
@@ -45,7 +47,7 @@ export class Usuario {
             usuario.rol,  // <-- Aquí debería imprimir 'A'
             usuario.activo, 
             usuario.id
-        ));*/
+        );
 
         return new Usuario(username, password, nombre, apellido, correo, direccion, rol, activo, id);
     }
@@ -53,7 +55,7 @@ export class Usuario {
     static #insert(usuario) {
         let result = null;
         try {
-            console.log('Insertando...');
+            logger.debug('Insertando...:', usuario);
             const username = usuario.#username;
             const password = usuario.#password;
             const nombre = usuario.nombre;
@@ -62,8 +64,8 @@ export class Usuario {
             const direccion = usuario.direccion;
             const rol = usuario.rol;
             const activo = usuario.activo;
-            const id = usuario.id;
-            const datos = { username, password, nombre, apellido, correo, direccion, rol, activo, id };
+            //const id = usuario.id;
+            const datos = { username, password, nombre, apellido, correo, direccion, rol, activo };
 
             result = this.#insertStmt.run(datos);
 
@@ -105,7 +107,7 @@ export class Usuario {
             throw new UsuarioOPasswordNoValido(username, { cause: e });
         }
         // XXX: En el ej3 / P3 lo cambiaremos para usar async / await o Promises
-        //console.log("Rol del usuario en login:", usuario.rol);
+        //logger.log("Rol del usuario en login:", usuario.rol);
 
         if (!bcrypt.compareSync(password, usuario.#password)) throw new UsuarioOPasswordNoValido(username);
 

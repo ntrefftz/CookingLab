@@ -1,5 +1,7 @@
 import { Ingrediente } from '../recetas/Ingredientes.js';
 import { Receta } from '../recetas/Recetas.js'; // Ruta relativa correcta
+import { logger } from '../logger.js';
+
 
 export function viewIndex(req, res) {
     try {
@@ -36,7 +38,8 @@ export function viewIndex(req, res) {
         });
         
     } catch (error) {
-        console.error('Error en viewIndex:', error);
+        logger.error('Error en viewIndex:', error);
+        
         res.status(500).render('pagina', {
             contenido: 'paginas/error',
             session: req.session,
