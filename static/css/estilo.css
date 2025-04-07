@@ -348,4 +348,31 @@ img {
     padding: 0 15px;
 }
 
+/* Flashcards */
+#flashModal {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #FFE0EE;
+    border: 1px solid #F383A0; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    text-align: center;
+    color: black; 
+}
 
+#flashModal p {
+    margin: 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#flashModal a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #F383A0;
+    color: white;
+    border-radius: 4px;
+    font-weight: bold;
+}
