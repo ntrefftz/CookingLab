@@ -2,7 +2,7 @@ import { body } from 'express-validator';
 import express from 'express';
 import {
     viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout,
-    viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome
+    viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome, viewListaUsuario
 } from './controllers.js';
 import asyncHandler from 'express-async-handler';
 const usuariosRouter = express.Router();
@@ -16,7 +16,7 @@ usuariosRouter.get('/micalendario', asyncHandler(viewCalendario));
 usuariosRouter.get('/login', asyncHandler(viewLogin));
 usuariosRouter.get('/perfil/modificar', asyncHandler(viewModificarPerfil));
 usuariosRouter.get('/home', asyncHandler(viewHome));
-
+usuariosRouter.get('/listaUsuarios', asyncHandler(viewListaUsuario));
 usuariosRouter.post('/login',
     body('username', 'El nombre no puede ser vacío').trim().notEmpty(),
     body('password', 'La contraseña no puede ser vacía').trim().notEmpty(),

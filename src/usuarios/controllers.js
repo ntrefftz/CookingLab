@@ -13,6 +13,21 @@ export function viewConfiguracion(req, res) {
     });
 }
 
+export async function viewListaUsuario(req, res) {
+    try {
+        const usuarios = await Usuario.getAllUsuarios();
+
+        res.render('pagina', {
+            contenido: 'paginas/gestionUsuarios',
+            session: req.session,
+            usuarios: usuarios
+        });
+    } catch (error) {
+        logger.error('Error al obtener la lista de usuarios:', error);
+        res.status(500).send('Error al cargar la lista de usuarios');
+    }
+}
+
 export function viewPerfil(req, res) {
     if (!req.session.login) {
         return res.redirect('/usuarios/login');
@@ -21,7 +36,7 @@ export function viewPerfil(req, res) {
     const usuario = Usuario.getUsuarioById(req.session.userId);
 
     console.log("Usuario desde session:", usuario);
-    
+
     res.render('pagina', {
         contenido: 'paginas/perfil',
         usuario: usuario,
@@ -76,7 +91,7 @@ export function viewRegister(req, res) {
 }
 
 export async function doLogin(req, res) {
-    
+
     let contenido = 'paginas/login';
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -97,21 +112,21 @@ export async function doLogin(req, res) {
 
     try {
         const usuario = await Usuario.login(username, password);
-        
+
         req.session.login = true;
         req.session.userId = usuario.id;
         req.session.username = usuario.username;
         req.session.nombre = usuario.nombre;
-        req.session.apellido = usuario.apellido || ''; 
+        req.session.apellido = usuario.apellido || '';
         req.session.correo = usuario.correo || '';
         req.session.direccion = usuario.direccion || '';
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
-        
+
         res.setFlash(`Encantado de verte de nuevo: ${usuario.nombre}`);
         logger.info(`Usuario ${username} ha iniciado sesión.`);
         return res.redirect('/usuarios/home');
 
-         
+
 
     } catch (e) {
         const datos = matchedData(req);
@@ -125,7 +140,7 @@ export async function doLogin(req, res) {
             datos,
             errores: {}
         });
-   
+
     }
 }
 
@@ -133,7 +148,7 @@ export async function doRegister(req, res) {
 
     // Verifica si hay errores en las validaciones
     const errors = validationResult(req);
-    
+
     if (!errors.isEmpty()) {
         const errores = errors.mapped();
         const datos = matchedData(req);
@@ -142,7 +157,7 @@ export async function doRegister(req, res) {
             datos,
             error: errors.array().map(err => err.msg).join(', ') // Muestra los errores en un solo mensaje
         });
-          
+
     }
 
     body('username').escape();
@@ -158,10 +173,10 @@ export async function doRegister(req, res) {
     const correo = req.body.correo.trim();
     const direccion = req.body.direccion.trim();
 
-    
+
     try {
         const usuario = await Usuario.register(username, password, nombre, apellido, correo, direccion);
-        
+
         req.session.login = true;
         req.session.userId = usuario.id;
         req.session.username = usuario.username;
@@ -215,6 +230,7 @@ export function doLogout(req, res, next) {
         })
     })
 }
+
 export function viewModificarPerfil(req, res) {
     const contenido = 'paginas/editarPerfil';
     const id = req.query.id;
@@ -225,7 +241,7 @@ export function viewModificarPerfil(req, res) {
         usuario: perfil
     });
 }
-export function viewHome(req, res){
+export function viewHome(req, res) {
     const contenido = 'paginas/home';
     const id = req.session.userId;
     const perfil = Usuario.getUsuarioById(id);
@@ -235,6 +251,7 @@ export function viewHome(req, res){
         usuario: perfil
     });
 }
+
 export function modificarPerfil(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -270,9 +287,9 @@ export function modificarPerfil(req, res) {
         const direccion = req.body.direccion?.trim() || '';
 
         const usuarioActual = Usuario.getUsuarioById(id);
-        
-        const password = rawPassword 
-            ? bcrypt.hashSync(rawPassword) 
+
+        const password = rawPassword
+            ? bcrypt.hashSync(rawPassword)
             : usuarioActual.password;
 
         const usuarioActualizado = new Usuario(
@@ -307,7 +324,7 @@ export function modificarPerfil(req, res) {
     } catch (e) {
 
         logger.error('Error al modificar perfil:', e);
-        
+
         let errorMessage = 'Error al actualizar el perfil';
         if (e instanceof UsuarioNoEncontrado) {
             errorMessage = 'Usuario no encontrado';

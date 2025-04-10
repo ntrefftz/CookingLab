@@ -1,0 +1,37 @@
+<table class="tabla-usuarios">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Permisos</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% usuarios.forEach(usuario => { %>
+            <tr>
+                <td><%= usuario.id %></td>
+                <td><%= usuario.nombre %></td>
+                <td><%= usuario.correo %></td>
+                <td>
+                    <form class="form-permisos" action="/usuarios/cambiarPermisos/<%= usuario.id %>" method="POST">
+                        <select nameclass=""="permiso" selected=" <%= usuario.rol%>" onchange="this.form.submit()">
+                            <option value="Administrador" <%= usuario.permiso === 'Administrador' ? 'selected' : '' %>>Administrador</option>
+                            <option value="Cocinero" <%= usuario.permiso === 'Cocinero' ? 'selected' : '' %>>Cocinero</option>
+                            <option value="Usuario" <%= usuario.permiso === 'Usuario' ? 'selected' : '' %>>Usuario</option>
+                        </select>
+                    </form>
+                </td>
+                <td>
+                    <a href="/usuarios/perfil/modificar?id=<%= usuario.id %>">
+                        <button class="boton-editar">Editar</button>
+                    </a>
+                    <form class="form-permisos" action="/usuarios/borrarUsuario/<%= usuario.id %>" method="POST" style="display:inline;">
+                        <button class="boton-borrar" onclick="return confirm('¿Estás seguro de que deseas borrar este usuario?')">Borrar</button>
+                    </form>
+                </td>
+            </tr>
+        <% }) %>
+    </tbody>
+</table>

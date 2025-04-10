@@ -14,6 +14,7 @@ export class Usuario {
     static #getByUsernameStmt = null;
     static #insertStmt = null;
     static #updateStmt = null;
+    static #getAllStmt = null;
 
     static initStatements(db) {
         if (this.#getByIdStmt !== null) return;
@@ -22,6 +23,7 @@ export class Usuario {
         this.#getByIdStmt = db.prepare('SELECT * FROM Usuarios WHERE id = @id');
         this.#getByUsernameStmt = db.prepare('SELECT * FROM Usuarios WHERE username = @username');
         this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, apellido, correo, direccion, rol, activo) VALUES (@username, @password, @nombre, @apellido, @correo, @direccion, @rol, @activo)');
+        this.#getAllStmt = db.prepare('SELECT * FROM Usuarios');
         this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre, apellido = @apellido, correo = @correo, direccion = @direccion, activo = @activo WHERE id = @id');
     }
 
@@ -31,23 +33,42 @@ export class Usuario {
         return usuario;
     }
 
+    static cambiarPermisos(id, rol) {
+        let usuario = null;
+        try {
+            usuario = this.#getByIdStmt.get({ id });
+            if (!usuario) throw new UsuarioNoEncontrado(id);
+            usuario.rol = rol;
+            usuario = this.#update(usuario);
+        } catch (e) {
+            throw new UsuarioNoEncontrado(id, { cause: e });
+        }
+        return usuario;
+    }
+
+    static editarUsuario(id, username, password, nombre, apellido, correo, direccion, rol) {
+        let usuario = null;
+        try {
+            usuario = new Usuario(username, password, nombre, apellido, correo, direccion, rol);
+            usuario.id = id;
+            usuario = this.#update(usuario);
+        } catch (e) {
+            throw new UsuarioYaExiste(username, { cause: e });
+        }
+        return usuario;
+
+    }
+    static borrarUsuario(id){
+
+        
+    }
+
     static getUsuarioByUsername(username) {
         const usuario = this.#getByUsernameStmt.get({ username });
 
         logger.debug('GetUsuarioByUsername:', usuario);
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
         const { password, nombre, apellido, correo, direccion, rol, activo, id } = usuario;
-        logger.debug('"Usuario creado en getUsuarioByUsername:',
-            usuario.username, 
-            usuario.password, 
-            usuario.nombre, 
-            usuario.apellido, 
-            usuario.correo, 
-            usuario.direccion, 
-            usuario.rol,  // <-- Aquí debería imprimir 'A'
-            usuario.activo, 
-            usuario.id
-        );
 
         return new Usuario(username, password, nombre, apellido, correo, direccion, rol, activo, id);
     }
@@ -98,7 +119,6 @@ export class Usuario {
         return usuario;
     }
 
-
     static login(username, password) {
         let usuario = null;
         try {
@@ -134,6 +154,11 @@ export class Usuario {
         return usuario;
     }
 
+    static getAllUsuarios(){
+        const usuarios = this.#getAllStmt.all();
+        if (!usuarios) throw new UsuarioNoEncontrado(id);
+        return usuarios;
+    }
 
     #id;
     #username;
