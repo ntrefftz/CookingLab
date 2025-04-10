@@ -33,7 +33,8 @@ export class CalendarioSemanal {
     }
 
     // Asignar una receta a un usuario en un día específico
-    static asignarRecetaAUsuario(id_receta, id_usuario, fecha) {
+    /*static asignarRecetaAUsuario(id_receta, id_usuario, fecha) { 
+    
         try {
             this.#insertStmt.run({ id_receta, id_usuario, fecha });
             return { mensaje: "Receta asignada correctamente" };
@@ -41,7 +42,25 @@ export class CalendarioSemanal {
             if (e.code === 'SQLITE_CONSTRAINT') throw new CalendarioSemanalYaExiste(id_receta, id_usuario, fecha);
             throw new ErrorDatos("No se pudo asignar la receta al usuario en la fecha", { cause: e });
         }
+    }*/
+
+    static asignarRecetaAUsuario(id_receta, id_usuario, fecha) {
+        console.log(" Intentando asignar receta al calendario:");
+        console.log("   id_receta:", id_receta);
+        console.log("   id_usuario:", id_usuario);
+        console.log("   fecha:", fecha);
+    
+        try {
+            const result = this.#insertStmt.run({ id_receta, id_usuario, fecha });
+            console.log("Inserción completada:", result);
+            return { mensaje: "Receta asignada correctamente" };
+        } catch (e) {
+            console.error(" Error al insertar receta en calendario:", e);
+            if (e.code === 'SQLITE_CONSTRAINT') throw new CalendarioSemanalYaExiste(id_receta, id_usuario, fecha);
+            throw new ErrorDatos("No se pudo asignar la receta al usuario en la fecha", { cause: e });
+        }
     }
+        
 
     // Actualizar la receta asignada a un usuario en un día específico
     //Ej. si ya hay una receta asignada para ese dia se cambia por la nueva

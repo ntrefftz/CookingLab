@@ -6,11 +6,15 @@ import { logger } from '../logger.js';
 
 
 export function viewRecetasLista(req, res) {
-    //NUEVO
     // Verificamos si la solicitud viene del calendario
     const esDesdeCalendario = req.query.origen === 'calendario';  // Se obtiene el parámetro 'origen'
+    const fecha = req.query.fecha || null; // Fecha seleccionada, si viene desde el calendario
+
     //const diaSeleccionado = req.query.dia;  // El día seleccionado en el calendario, pasado como parámetro
     console.log("¿Proviene del calendario?", esDesdeCalendario); // Aquí se verá si es true o false
+    if (fecha) {
+        console.log("Fecha seleccionada:", fecha);
+    }
 
     const rows = Receta.getAllRecetas();
     const contenido = 'paginas/catalogo';
@@ -19,6 +23,7 @@ export function viewRecetasLista(req, res) {
         session: req.session,
         recetas: rows,
         
+        fecha, // Importante para usarla luego al añadir receta al calendario
         //diaSeleccionado,     // Enviamos el día seleccionado
         esDesdeCalendario  // Enviamos el flag que indica si proviene del calendario
     });

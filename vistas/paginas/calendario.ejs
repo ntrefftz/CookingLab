@@ -2,8 +2,27 @@
 
 <section id="calendario">
     <% let diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]; %>
+    <% let hoy = new Date(inicioSemana); %>
 
-    <% diasSemana.forEach(dia => { %>
+    <% diasSemana.forEach((dia, i) => { 
+        let fecha = new Date(hoy);
+        fecha.setDate(hoy.getDate() + i);
+        let fechaStr = fecha.toISOString().split('T')[0];
+    %>
+        <div>
+            <h3><%= dia %> (<%= fechaStr %>)</h3>
+            <form action="/recetas/catalogo" method="GET">
+                <input type="hidden" name="origen" value="calendario" />
+                <input type="hidden" name="fecha" value="<%= fechaStr %>" />
+                <button>Añadir Receta</button>
+            </form>
+        </div>
+    <% }); %>
+    
+</section>
+<!-- 
+<% diasSemana.forEach(dia => { 
+        %>
         <div>
             <h3><%= dia %></h3>
             <a href="/recetas/catalogo?origen=calendario"> 
@@ -11,4 +30,4 @@
             </a>
         </div>
     <% }); %>
-</section>
+-->

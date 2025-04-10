@@ -2,7 +2,7 @@ import { body } from 'express-validator';
 import express from 'express';
 import {
     viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout,
-    viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome
+    viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome, aniadirRecetaACalendario
 } from './controllers.js';
 import asyncHandler from 'express-async-handler';
 const usuariosRouter = express.Router();
@@ -46,5 +46,9 @@ usuariosRouter.post('/perfil/modificar',
     body('password').optional().trim(),
     asyncHandler(modificarPerfil)
 );
+
+//NUEVO
+usuariosRouter.post('/calendario/aniadir', asyncHandler(aniadirRecetaACalendario));
+
 
 export default usuariosRouter;

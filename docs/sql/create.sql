@@ -72,7 +72,7 @@ DROP TABLE IF EXISTS "guardado";
 CREATE TABLE "guardado" (
 	"id_usuario"	INTEGER NOT NULL,
 	"id_receta"	INTEGER NOT NULL,
-	"guardado"	INTEGER NOT NULL CHECK("guardad" BETWEEN 0 AND 1),
+	"guardado"	INTEGER NOT NULL CHECK("guardado" BETWEEN 0 AND 1),
 	PRIMARY KEY("id_usuario","id_receta"),
 	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id"),
 	FOREIGN KEY("id_usuario") REFERENCES "Usuarios"("id")

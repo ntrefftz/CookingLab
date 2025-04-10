@@ -1,0 +1,10 @@
+<h2>Confirmar receta para el calendario</h2>
+
+<p><strong>Receta:</strong> <%= receta.nombre %></p>
+<p><strong>Fecha:</strong> <%= fecha %></p>
+
+<form action="/calendario/confirmar" method="POST">
+    <input type="hidden" name="recetaId" value="<%= receta.id %>" />
+    <input type="hidden" name="fecha" value="<%= fecha %>" />
+    <button type="submit">Confirmar y añadir al calendario</button>
+</form>

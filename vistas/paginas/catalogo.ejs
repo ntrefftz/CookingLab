@@ -15,9 +15,17 @@
             <p>Dificultad: <%= receta.dificultad %></p>
             
             <% if (esDesdeCalendario) { %>
+                <!--
                 <a href="/usuarios/micalendario"> 
                     <button class="anadir-receta-calendario">Añadir receta al calendario</button>
                 </a>
+                -->
+                <form action="/usuarios/calendario/aniadir" method="POST">
+                    <input type="hidden" name="recetaId" value="<%= receta.id %>" />
+                    <input type="hidden" name="fecha" value="<%= fecha %>" />
+                    <button class="anadir-receta-calendario">Añadir receta al calendario</button>
+                </form>
+
             <% } %>
         </article>
         <% }) %>
