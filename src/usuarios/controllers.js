@@ -3,6 +3,7 @@ import { Usuario, UsuarioYaExiste, RolesEnum } from './Usuario.js';
 import { validationResult, matchedData } from 'express-validator';
 import { render } from '../utils/render.js';
 import { logger } from '../logger.js';
+import { CalendarioSemanal } from './CalendarioSemanal.js';
 
 
 export function viewConfiguracion(req, res) {
@@ -45,13 +46,27 @@ export function viewHistorial(req, res) {
     });
 }
 
-export function viewCalendario(req, res) {
+/*export function viewCalendario(req, res) {
     let contenido = 'paginas/calendario';
     res.render('pagina', {
         contenido,
         session: req.session
     });
+}*/
+
+export function viewCalendario(req, res) {
+    const contenido = 'paginas/calendario';
+    const hoy = new Date();
+    const primerDiaSemana = new Date(hoy);
+    primerDiaSemana.setDate(hoy.getDate() - hoy.getDay() + 1); // Lunes como primer día
+
+    res.render('pagina', {
+        contenido,
+        session: req.session,
+        inicioSemana: primerDiaSemana.toISOString() // Se pasa como string ISO para evitar problemas en EJS
+    });
 }
+
 
 export function viewLogin(req, res) {
     let contenido = 'paginas/login';
@@ -320,6 +335,31 @@ export function modificarPerfil(req, res) {
             session: req.session,
             usuario: Usuario.getUsuarioById(id),
             error: errorMessage
+        });
+    }
+
+}
+
+export function aniadirRecetaACalendario(req, res) {
+    //console.log(" Intentando buscar los id en controller:");
+        
+    const recetaId = req.body.recetaId;
+    const fecha = req.body.fecha;
+    const usuarioId = req.session.userId;
+
+    //console.log("   id_receta:", recetaId);
+    //console.log("   id_usuario:", usuarioId);
+    //console.log("   fecha:", fecha);
+    
+    try {
+        CalendarioSemanal.asignarRecetaAUsuario(recetaId, usuarioId, fecha);
+        res.redirect('/usuarios/micalendario');
+    } catch (e) {
+        console.error("Error al añadir receta al calendario:", e);
+        res.render('pagina', {
+            contenido: 'paginas/error',
+            session: req.session,
+            error: "No se pudo asignar la receta al calendario"
         });
     }
 }
