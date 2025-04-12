@@ -8,9 +8,23 @@
         let fecha = new Date(hoy);
         fecha.setDate(hoy.getDate() + i);
         let fechaStr = fecha.toISOString().split('T')[0];
+        
+        <!--Filtramos las recetas de ese día-->
+        let recetasDelDia = recetasSemana.filter(r => r.fecha === fechaStr);
     %>
         <div>
             <h3><%= dia %> (<%= fechaStr %>)</h3>
+
+            <% if (recetasDelDia.length > 0) { %>
+                <ul>
+                    <% recetasDelDia.forEach(r => { %>
+                        <li><%= r.nombre %></li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <p>No hay recetas asignadas para este día.</p>
+            <% } %>
+
             <form action="/recetas/catalogo" method="GET">
                 <input type="hidden" name="origen" value="calendario" />
                 <input type="hidden" name="fecha" value="<%= fechaStr %>" />
@@ -20,14 +34,3 @@
     <% }); %>
     
 </section>
-<!-- 
-<% diasSemana.forEach(dia => { 
-        %>
-        <div>
-            <h3><%= dia %></h3>
-            <a href="/recetas/catalogo?origen=calendario"> 
-                <button>Añadir Receta</button>
-            </a>
-        </div>
-    <% }); %>
--->
