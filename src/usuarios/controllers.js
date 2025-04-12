@@ -46,24 +46,22 @@ export function viewHistorial(req, res) {
     });
 }
 
-/*export function viewCalendario(req, res) {
-    let contenido = 'paginas/calendario';
-    res.render('pagina', {
-        contenido,
-        session: req.session
-    });
-}*/
-
 export function viewCalendario(req, res) {
     const contenido = 'paginas/calendario';
     const hoy = new Date();
     const primerDiaSemana = new Date(hoy);
     primerDiaSemana.setDate(hoy.getDate() - hoy.getDay() + 1); // Lunes como primer día
 
+    //nuevo para ver las recetas
+    const recetasSemana = CalendarioSemanal.getRecetasSemana(req.session.userId, primerDiaSemana);
+    console.log("Recetas de la semana:", recetasSemana);
+    ////
+
     res.render('pagina', {
         contenido,
         session: req.session,
-        inicioSemana: primerDiaSemana.toISOString() // Se pasa como string ISO para evitar problemas en EJS
+        inicioSemana: primerDiaSemana.toISOString(), //Lo pasamos como string ISO para evitar problemas en EJS
+        recetasSemana
     });
 }
 

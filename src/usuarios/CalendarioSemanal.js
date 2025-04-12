@@ -4,6 +4,7 @@ export class CalendarioSemanal {
     static #deleteStmt = null;               // Eliminar una receta de un usuario en un día específico de una semana
     static #updateStmt = null;               // Actualizar una receta asignada en un día específico
     static #getByUsuarioYFechaStmt = null;   // Obtener receta asignada a un usuario en una fecha específica
+    static #getRecetasSemanaStmt = null; //  NUEVA 
 
     static initStatements(db) {
         if (this.#getByUsuarioYSemanaStmt !== null) return;
@@ -25,6 +26,14 @@ export class CalendarioSemanal {
 
         // Obtener receta asignada a un usuario en una fecha específica
         this.#getByUsuarioYFechaStmt = db.prepare('SELECT * FROM Calendario_Semanal WHERE id_usuario = @id_usuario AND fecha = @fecha');
+    
+        // NUEVA: recetas con nombre y fecha
+        this.#getRecetasSemanaStmt = db.prepare(`
+            SELECT r.id AS id_receta, r.nombre, cs.fecha
+            FROM Calendario_Semanal cs
+            JOIN Recetas r ON cs.id_receta = r.id
+            WHERE cs.id_usuario = @id_usuario AND cs.fecha BETWEEN @inicioSemana AND @finSemana
+        `);
     }
 
     // Obtener todas las recetas asignadas a un usuario en una semana (de lunes a domingo)
@@ -33,17 +42,6 @@ export class CalendarioSemanal {
     }
 
     // Asignar una receta a un usuario en un día específico
-    /*static asignarRecetaAUsuario(id_receta, id_usuario, fecha) { 
-    
-        try {
-            this.#insertStmt.run({ id_receta, id_usuario, fecha });
-            return { mensaje: "Receta asignada correctamente" };
-        } catch (e) {
-            if (e.code === 'SQLITE_CONSTRAINT') throw new CalendarioSemanalYaExiste(id_receta, id_usuario, fecha);
-            throw new ErrorDatos("No se pudo asignar la receta al usuario en la fecha", { cause: e });
-        }
-    }*/
-
     static asignarRecetaAUsuario(id_receta, id_usuario, fecha) {
         console.log(" Intentando asignar receta al calendario:");
         console.log("   id_receta:", id_receta);
@@ -83,6 +81,24 @@ export class CalendarioSemanal {
         if (!receta) throw new CalendarioSemanalNoEncontrado(id_usuario, fecha);
         return receta;
     }
+
+    //NUEVA
+    static getRecetasSemana(id_usuario, inicioSemana) {
+        // Calculamos la fecha de fin (domingo)
+        const fechaInicio = new Date(inicioSemana);
+        const fechaFin = new Date(fechaInicio);
+        fechaFin.setDate(fechaInicio.getDate() + 6); // lunes + 6 días = domingo
+
+        const inicioStr = fechaInicio.toISOString().split('T')[0];
+        const finStr = fechaFin.toISOString().split('T')[0];
+
+        return this.#getRecetasSemanaStmt.all({
+            id_usuario,
+            inicioSemana: inicioStr,
+            finSemana: finStr
+        });
+    }
+    
 }
 
 //ERRORES
