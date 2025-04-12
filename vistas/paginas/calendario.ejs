@@ -3,7 +3,14 @@
 <section id="calendario">
     <% let diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]; %>
     <% let hoy = new Date(inicioSemana); %>
-
+    <!--Modificaciones para tener en cuenta solo la semana siguiente-->
+    <% 
+    let hoyFecha = new Date(); <!--fecha actual-->
+    let primerDiaSemanaSiguiente = new Date(hoyFecha);
+    primerDiaSemanaSiguiente.setDate(hoyFecha.getDate() - hoyFecha.getDay() + 1 + 7); <!--lunes de la semana que viene-->
+    let ultimoDiaSemanaSiguiente = new Date(primerDiaSemanaSiguiente);
+    ultimoDiaSemanaSiguiente.setDate(primerDiaSemanaSiguiente.getDate() + 6); <!--domingo de la semana que viene-->
+    %>
     <% diasSemana.forEach((dia, i) => { 
         let fecha = new Date(hoy);
         fecha.setDate(hoy.getDate() + i);
@@ -11,6 +18,9 @@
         
         <!--Filtramos las recetas de ese día-->
         let recetasDelDia = recetasSemana.filter(r => r.fecha === fechaStr);
+    
+        <!--Es fecha de la semana siguiente?-->
+        let esSemanaSiguiente = fecha >= primerDiaSemanaSiguiente && fecha <= ultimoDiaSemanaSiguiente;
     %>
         <div>
             <h3><%= dia %> (<%= fechaStr %>)</h3>
@@ -22,24 +32,29 @@
                     <% }) %>
                 </ul>
                 
-                <form action="/usuarios/calendario/eliminar" method="POST">
-                    <input type="hidden" name="origen" value="calendario" />
-                    <input type="hidden" name="fecha" value="<%= fechaStr %>" />
-                    <button>Eliminar Receta</button>
-                </form>
+                <% if (esSemanaSiguiente) { %>
+                    <form action="/usuarios/calendario/eliminar" method="POST">
+                        <input type="hidden" name="origen" value="calendario" />
+                        <input type="hidden" name="fecha" value="<%= fechaStr %>" />
+                        <button>Eliminar Receta</button>
+                    </form>
+                <% } %>
+
                 
             <% } else { %>
                 <p>No hay recetas asignadas para este día.</p>
 
-                <form action="/recetas/catalogo" method="GET">
-                    <input type="hidden" name="origen" value="calendario" />
-                    <input type="hidden" name="fecha" value="<%= fechaStr %>" />
-                    <button>Añadir Receta</button>
-                </form>
-            <% } %>
+                <% if (esSemanaSiguiente) { %>
+                    <form action="/recetas/catalogo" method="GET">
+                        <input type="hidden" name="origen" value="calendario" />
+                        <input type="hidden" name="fecha" value="<%= fechaStr %>" />
+                        <button>Añadir Receta</button>
+                    </form>
+                <% } %>
 
-            
+            <% } %>
         </div>
     <% }); %>
+
     
 </section>
