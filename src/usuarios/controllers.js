@@ -65,7 +65,6 @@ export function viewCalendario(req, res) {
     });
 }
 
-
 export function viewLogin(req, res) {
     let contenido = 'paginas/login';
     if (req.session != null && req.session.login) {
