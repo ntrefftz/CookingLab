@@ -21,15 +21,24 @@
                         <li><%= r.nombre %></li>
                     <% }) %>
                 </ul>
+                
+                <form action="/usuarios/calendario/eliminar" method="POST">
+                    <input type="hidden" name="origen" value="calendario" />
+                    <input type="hidden" name="fecha" value="<%= fechaStr %>" />
+                    <button>Eliminar Receta</button>
+                </form>
+                
             <% } else { %>
                 <p>No hay recetas asignadas para este día.</p>
+
+                <form action="/recetas/catalogo" method="GET">
+                    <input type="hidden" name="origen" value="calendario" />
+                    <input type="hidden" name="fecha" value="<%= fechaStr %>" />
+                    <button>Añadir Receta</button>
+                </form>
             <% } %>
 
-            <form action="/recetas/catalogo" method="GET">
-                <input type="hidden" name="origen" value="calendario" />
-                <input type="hidden" name="fecha" value="<%= fechaStr %>" />
-                <button>Añadir Receta</button>
-            </form>
+            
         </div>
     <% }); %>
     

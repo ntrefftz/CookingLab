@@ -24,6 +24,7 @@ export class CalendarioSemanal {
         // Actualizar la receta asignada a un usuario en un día específico
         this.#updateStmt = db.prepare('UPDATE Calendario_Semanal SET id_receta = @id_receta WHERE id_usuario = @id_usuario AND fecha = @fecha');
 
+        //ESTA HAY QUE QUITARLA YA NO LA NECESITAMOS
         // Obtener receta asignada a un usuario en una fecha específica
         this.#getByUsuarioYFechaStmt = db.prepare('SELECT * FROM Calendario_Semanal WHERE id_usuario = @id_usuario AND fecha = @fecha');
     
@@ -69,11 +70,25 @@ export class CalendarioSemanal {
     }
 
     // Eliminar una receta asignada a un usuario en un día específico
-    static eliminarRecetaDeUsuario(id_usuario, fecha) {
+    /*static eliminarRecetaDeUsuario(id_usuario, fecha) {
         const result = this.#deleteStmt.run({ id_usuario, fecha });
         if (result.changes === 0) throw new CalendarioSemanalNoEncontrado(id_usuario, fecha);
         return { mensaje: "Receta eliminada correctamente" };
+    }*/
+    static eliminarRecetaDeUsuario(id_usuario, fecha) {
+        console.log(`Eliminando receta para usuario ${id_usuario} en la fecha ${fecha}`);
+        
+        const result = this.#deleteStmt.run({ id_usuario, fecha });
+    
+        if (result.changes === 0) {
+            throw new CalendarioSemanalNoEncontrado(id_usuario, fecha);
+        }
+    
+        console.log("Receta eliminada correctamente");
+        return { mensaje: "Receta eliminada correctamente" };
     }
+
+    
 
     // Obtener receta asignada a un usuario en una fecha específica
     static getRecetaPorUsuarioYFecha(id_usuario, fecha) {

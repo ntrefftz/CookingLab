@@ -360,3 +360,37 @@ export function aniadirRecetaACalendario(req, res) {
         });
     }
 }
+
+export function eliminarRecetaDeCalendario(req, res) {
+    const fecha = req.body.fecha;
+    const usuarioId = req.session.userId;
+
+    if (!fecha || !usuarioId) {
+        return res.render('pagina', {
+            contenido: 'paginas/error',
+            session: req.session,
+            error: "Faltan datos necesarios para eliminar la receta"
+        });
+    }
+
+    try {
+        CalendarioSemanal.eliminarRecetaDeUsuario(usuarioId, fecha);
+        res.redirect('/usuarios/micalendario');
+    } catch (e) {
+        console.error("Error al eliminar receta del calendario:", e);
+        res.render('pagina', {
+            contenido: 'paginas/error',
+            session: req.session,
+            error: "No se pudo eliminar la receta del calendario"
+        });
+    }
+}
+
+/*
+ <!--
+                <form action="/usuarios/calendario/eliminar" method="POST">
+                    <input type="hidden" name="fecha" value="<%= receta.fecha %>">
+                    <button type="submit">Eliminar</button>
+                </form>
+                -->
+*/
