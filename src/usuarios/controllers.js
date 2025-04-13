@@ -46,7 +46,7 @@ export function viewHistorial(req, res) {
     });
 }
 
-export function viewCalendario(req, res) {
+/*export function viewCalendario(req, res) {
     const contenido = 'paginas/calendario';
     const hoy = new Date();
     const primerDiaSemana = new Date(hoy);
@@ -63,7 +63,42 @@ export function viewCalendario(req, res) {
         inicioSemana: primerDiaSemana.toISOString(), //Lo pasamos como string ISO para evitar problemas en EJS
         recetasSemana
     });
+}*/
+
+export function viewCalendario(req, res) {
+    const contenido = 'paginas/calendario';
+    const hoy = new Date();
+
+    // Lunes de esta semana
+    const lunesEstaSemana = new Date(hoy);
+    lunesEstaSemana.setDate(hoy.getDate() - hoy.getDay() + 1);
+    lunesEstaSemana.setHours(0, 0, 0, 0);
+
+    // Lunes de la próxima semana
+    const lunesProximaSemana = new Date(lunesEstaSemana);
+    lunesProximaSemana.setDate(lunesEstaSemana.getDate() + 7);
+
+    // Obtener recetas de ambas semanas
+    const recetasEstaSemana = CalendarioSemanal.getRecetasSemana(req.session.userId, lunesEstaSemana);
+    const recetasProximaSemana = CalendarioSemanal.getRecetasSemana(req.session.userId, lunesProximaSemana);
+    console.log("Recetas de esta semana:", recetasEstaSemana);
+    console.log("Recetas de la próxima semana:", recetasProximaSemana);
+    
+    // Unimos ambas semanas en un solo array
+    //const recetasSemana = [...recetasEstaSemana, ...recetasProximaSemana];
+    // Unimos ambas semanas en un solo array, asegurándonos de que ambos arrays sean válidos
+    const recetasSemana = [...(recetasEstaSemana || []), ...(recetasProximaSemana || [])];
+    console.log("Recetas de la semana:", recetasSemana);
+
+    res.render('pagina', {
+        contenido,
+        session: req.session,
+        inicioSemana: lunesEstaSemana.toISOString(),
+        recetasSemana
+    });
 }
+
+
 
 export function viewLogin(req, res) {
     let contenido = 'paginas/login';
@@ -385,12 +420,3 @@ export function eliminarRecetaDeCalendario(req, res) {
         });
     }
 }
-
-/*
- <!--
-                <form action="/usuarios/calendario/eliminar" method="POST">
-                    <input type="hidden" name="fecha" value="<%= receta.fecha %>">
-                    <button type="submit">Eliminar</button>
-                </form>
-                -->
-*/
