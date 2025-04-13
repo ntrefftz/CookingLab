@@ -10,8 +10,6 @@
     // Calculamos el lunes de la semana actual
     let diaSemana = hoy.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
     let lunesActual = new Date(hoy);
-    //lunesActual.setDate(hoy.getDate() - ((diaSemana + 6) % 7)); // retroceder hasta el lunes actual
-    lunesActual.setDate(hoy.getDate() - hoy.getDay() + 1); // lunes como primer día
 
     // Modificaciones para tener en cuenta la semana siguiente
     let primerDiaSemanaSiguiente = new Date(lunesActual);
@@ -22,19 +20,27 @@
     
     <!-- CAMBIO el foreach por un loop a 14 días -->
     <% for(let i = 0; i < 14; i++) { 
+
         let dia = diasSemana[i % 7]; 
         let fecha = new Date(lunesActual);
         fecha.setDate(lunesActual.getDate() + i);
         let fechaStr = fecha.toISOString().split('T')[0];
         
+        <!-- Fecha "ficticia" para mostrar una semana menos y que no se descuajaringue todo -->
+        let fechaMostrada = new Date(fecha);
+        fechaMostrada.setDate(fechaMostrada.getDate() - 6);
+        let fechaStrMostrada = fechaMostrada.toISOString().split('T')[0];
+
+
         <!--Filtramos las recetas de ese día-->
         let recetasDelDia = recetasSemana.filter(r => r.fecha === fechaStr);
         
         <!--Es fecha de la semana siguiente?-->
         let esSemanaSiguiente = fecha >= primerDiaSemanaSiguiente && fecha <= ultimoDiaSemanaSiguiente;
+    
     %>
         <div>
-            <h3><%= dia %> (<%= fechaStr %>)</h3>
+            <h3><%= dia %> (<%= fechaStrMostrada %>)</h3>
 
             <% if (recetasDelDia.length > 0) { %>
                 <ul>
