@@ -36,7 +36,7 @@ export class CalendarioSemanal {
             WHERE cs.id_usuario = @id_usuario AND cs.fecha BETWEEN @inicioSemana AND @finSemana
         `);
     }
-
+     // YA NO HACE FALTA
     // Obtener todas las recetas asignadas a un usuario en una semana (de lunes a domingo)
     static getRecetasPorUsuarioYSemana(id_usuario, inicioSemana, finSemana) {
         return this.#getByUsuarioYSemanaStmt.all({ id_usuario, inicioSemana, finSemana });
@@ -60,7 +60,7 @@ export class CalendarioSemanal {
         }
     }
         
-
+    // YA NO HACE FALTA
     // Actualizar la receta asignada a un usuario en un día específico
     //Ej. si ya hay una receta asignada para ese dia se cambia por la nueva
     static actualizarRecetaDeUsuario(id_receta, id_usuario, fecha) {
@@ -70,11 +70,6 @@ export class CalendarioSemanal {
     }
 
     // Eliminar una receta asignada a un usuario en un día específico
-    /*static eliminarRecetaDeUsuario(id_usuario, fecha) {
-        const result = this.#deleteStmt.run({ id_usuario, fecha });
-        if (result.changes === 0) throw new CalendarioSemanalNoEncontrado(id_usuario, fecha);
-        return { mensaje: "Receta eliminada correctamente" };
-    }*/
     static eliminarRecetaDeUsuario(id_usuario, fecha) {
         console.log(`Eliminando receta para usuario ${id_usuario} en la fecha ${fecha}`);
         
@@ -89,7 +84,7 @@ export class CalendarioSemanal {
     }
 
     
-
+    // YA NO HACE FALTA
     // Obtener receta asignada a un usuario en una fecha específica
     static getRecetaPorUsuarioYFecha(id_usuario, fecha) {
         const receta = this.#getByUsuarioYFechaStmt.get({ id_usuario, fecha });
