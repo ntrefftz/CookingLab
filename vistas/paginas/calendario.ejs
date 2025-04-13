@@ -2,23 +2,34 @@
 
 <section id="calendario">
     <% let diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]; %>
-    <% let hoy = new Date(inicioSemana); %>
-    <!--Modificaciones para tener en cuenta solo la semana siguiente-->
+    
     <% 
-    let hoyFecha = new Date(); <!--fecha actual-->
-    let primerDiaSemanaSiguiente = new Date(hoyFecha);
-    primerDiaSemanaSiguiente.setDate(hoyFecha.getDate() - hoyFecha.getDay() + 1 + 7); <!--lunes de la semana que viene-->
+    // Obtenemos la fecha de hoy
+    let hoy = new Date();
+    
+    // Calculamos el lunes de la semana actual
+    let diaSemana = hoy.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+    let lunesActual = new Date(hoy);
+    //lunesActual.setDate(hoy.getDate() - ((diaSemana + 6) % 7)); // retroceder hasta el lunes actual
+    lunesActual.setDate(hoy.getDate() - hoy.getDay() + 1); // lunes como primer día
+
+    // Modificaciones para tener en cuenta la semana siguiente
+    let primerDiaSemanaSiguiente = new Date(lunesActual);
+    primerDiaSemanaSiguiente.setDate(primerDiaSemanaSiguiente.getDate() + 7); <!--Lunes de la semana siguiente-->
     let ultimoDiaSemanaSiguiente = new Date(primerDiaSemanaSiguiente);
-    ultimoDiaSemanaSiguiente.setDate(primerDiaSemanaSiguiente.getDate() + 6); <!--domingo de la semana que viene-->
+    ultimoDiaSemanaSiguiente.setDate(primerDiaSemanaSiguiente.getDate() + 6); <!--Domingo de la semana siguiente-->
     %>
-    <% diasSemana.forEach((dia, i) => { 
-        let fecha = new Date(hoy);
-        fecha.setDate(hoy.getDate() + i);
+    
+    <!-- CAMBIO el foreach por un loop a 14 días -->
+    <% for(let i = 0; i < 14; i++) { 
+        let dia = diasSemana[i % 7]; 
+        let fecha = new Date(lunesActual);
+        fecha.setDate(lunesActual.getDate() + i);
         let fechaStr = fecha.toISOString().split('T')[0];
         
         <!--Filtramos las recetas de ese día-->
         let recetasDelDia = recetasSemana.filter(r => r.fecha === fechaStr);
-    
+        
         <!--Es fecha de la semana siguiente?-->
         let esSemanaSiguiente = fecha >= primerDiaSemanaSiguiente && fecha <= ultimoDiaSemanaSiguiente;
     %>
@@ -40,7 +51,6 @@
                     </form>
                 <% } %>
 
-                
             <% } else { %>
                 <p>No hay recetas asignadas para este día.</p>
 
@@ -54,7 +64,5 @@
 
             <% } %>
         </div>
-    <% }); %>
-
-    
+    <% } %>
 </section>
