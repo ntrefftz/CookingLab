@@ -16,10 +16,10 @@
                 <td><%= usuario.correo %></td>
                 <td>
                     <form class="form-permisos" action="/usuarios/cambiarPermisos/<%= usuario.id %>" method="POST">
-                        <select nameclass=""="permiso" selected=" <%= usuario.rol%>" onchange="this.form.submit()">
-                            <option value="Administrador" <%= usuario.permiso === 'Administrador' ? 'selected' : '' %>>Administrador</option>
-                            <option value="Cocinero" <%= usuario.permiso === 'Cocinero' ? 'selected' : '' %>>Cocinero</option>
-                            <option value="Usuario" <%= usuario.permiso === 'Usuario' ? 'selected' : '' %>>Usuario</option>
+                        <select nameclass="permiso" onchange="this.form.submit()">
+                            <option value="Administrador" <%= usuario.rol === 'A' ? 'selected' : '' %>>Administrador</option>
+                            <option value="Cocinero" <%= usuario.rol === 'C' ? 'selected' : '' %>>Cocinero</option>
+                            <option value="Usuario" <%= usuario.rol === 'U' ? 'selected' : '' %>>Usuario</option>
                         </select>
                     </form>
                 </td>
@@ -27,7 +27,8 @@
                     <a href="/usuarios/perfil/modificar?id=<%= usuario.id %>">
                         <button class="boton-editar">Editar</button>
                     </a>
-                    <form class="form-permisos" action="/usuarios/borrarUsuario/<%= usuario.id %>" method="POST" style="display:inline;">
+                    <form class="form-permisos" action="/usuarios/borrarUsuario/<%= usuario.id %>" method="POST">
+                        Se puede cambiar con fetch
                         <button class="boton-borrar" onclick="return confirm('¿Estás seguro de que deseas borrar este usuario?')">Borrar</button>
                     </form>
                 </td>
