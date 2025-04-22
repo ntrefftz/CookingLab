@@ -3,14 +3,22 @@ export class Realiza {
     static #insertStmt = null;
     static #updateStmt = null;
     static #deleteStmt = null;
+    static #getByUsuarioStmt = null;
 
     static initStatements(db) {
         if (this.#getByUsuarioYPedidoStmt !== null) return;
 
         this.#getByUsuarioYPedidoStmt = db.prepare('SELECT * FROM Realiza WHERE id_usuario = @id_usuario AND id_pedido = @id_pedido');
+        this.#getByUsuarioStmt = db.prepare('SELECT * FROM Realiza WHERE id_usuario = @id_usuario');
         this.#insertStmt = db.prepare('INSERT INTO Realiza(id_usuario, id_pedido, cantidad) VALUES (@id_usuario, @id_pedido, @cantidad)');
         this.#updateStmt = db.prepare('UPDATE Realiza SET cantidad = @cantidad WHERE id_usuario = @id_usuario AND id_pedido = @id_pedido');
         this.#deleteStmt = db.prepare('DELETE FROM Realiza WHERE id_usuario = @id_usuario AND id_pedido = @id_pedido');
+    }
+
+    static getByUsuario(id_usuario) {
+        const realiza = this.#getByUsuarioStmt.get({ id_usuario });
+        if (!realiza) throw new RelacionNoEncontrada(id_usuario);
+        return realiza;
     }
 
     static getRelacion(id_usuario, id_pedido) {

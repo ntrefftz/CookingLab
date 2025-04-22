@@ -19,7 +19,8 @@ export function viewRecetasLista(req, res) {
         contenido,
         session: req.session,
         recetas: rows,
-
+        aniadirIngredientesEnReceta,
+        fecha,
         //diaSeleccionado,     // Enviamos el día seleccionado
         esDesdeCalendario  // Enviamos el flag que indica si proviene del calendario
     });

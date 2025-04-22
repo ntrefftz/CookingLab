@@ -22,7 +22,7 @@ CREATE TABLE "Pedidos" (
 	"id"	INTEGER NOT NULL,
 	"precio_total"	REAL NOT NULL CHECK("precio_total" >= 0),
 	"enviado"	INTEGER NOT NULL DEFAULT 0 CHECK("enviado" IN (0, 1)),
-	"activo"	INTEGER NOT NULL DEFAULT 1 CHECK("activo" IN (0, 1)),
+	"pagado"	INTEGER NOT NULL DEFAULT 1 CHECK("pagado" IN (0, 1)),
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "Recetas";
@@ -81,7 +81,6 @@ DROP TABLE IF EXISTS "realiza";
 CREATE TABLE "realiza" (
 	"id_usuario"	INTEGER NOT NULL,
 	"id_pedido"	INTEGER NOT NULL,
-	"cantidad"	INTEGER NOT NULL CHECK("cantidad" > 0),
 	PRIMARY KEY("id_usuario","id_pedido"),
 	FOREIGN KEY("id_pedido") REFERENCES "Pedidos"("id"),
 	FOREIGN KEY("id_usuario") REFERENCES "Usuarios"("id")

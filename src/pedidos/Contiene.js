@@ -1,5 +1,6 @@
 export class Contiene {
     static #getByIngredienteYPedidosStmt = null;
+    static #getByPedidosStmt = null;
     static #insertStmt = null;
     static #updateStmt = null;
     static #deleteStmt = null;
@@ -10,6 +11,8 @@ export class Contiene {
         // Obtener la relación entre un ingrediente y una factura
         this.#getByIngredienteYPedidosStmt = db.prepare('SELECT * FROM Contiene WHERE id_ingrediente = @id_ingrediente AND id_pedidos = @id_pedidos');
 
+        this.#getByPedidosStmt = db.prepare('SELECT * FROM Contiene WHERE id_pedidos = @id_pedidos');
+
         // Insertar una nueva relación entre un ingrediente y una factura
         this.#insertStmt = db.prepare('INSERT INTO Contiene(id_ingrediente, id_pedidos, cantidad) VALUES (@id_ingrediente, @id_pedidos, @cantidad)');
 
@@ -18,6 +21,12 @@ export class Contiene {
 
         // Eliminar una relación
         this.#deleteStmt = db.prepare('DELETE FROM Contiene WHERE id_ingrediente = @id_ingrediente AND id_pedidos = @id_pedidos');
+    }
+
+    static getByPedido(id_pedidos) {
+        const contiene = this.#getByPedidosStmt.all({ id_pedidos });
+        if (!contiene) throw new RelacionNoEncontrada(id_pedidos);
+        return contiene;
     }
 
     // Obtener la relación entre un ingrediente y una factura específica
