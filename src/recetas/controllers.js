@@ -22,7 +22,6 @@ export function viewRecetasLista(req, res) {
         contenido,
         session: req.session,
         recetas: rows,
-        
         fecha, // Importante para usarla luego al añadir receta al calendario
         //diaSeleccionado,     // Enviamos el día seleccionado
         esDesdeCalendario  // Enviamos el flag que indica si proviene del calendario
@@ -88,8 +87,14 @@ export function modificarReceta(req, res) {
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id = req.query.id;
     const contenido = 'paginas/receta';
-    Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs*60, dificultad, 1);
+    Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1);
     const receta = Receta.getRecetaById(id);
+    const ingredientes = Tiene.getIngredientesByReceta(id);
+    forEach(ingrediente => {
+        const ingredienteDetails = Ingrediente.getIngredienteById(ingrediente.id_ingrediente);
+        ingrediente.nombre = ingredienteDetails.nombre;
+    });
+    receta.ingredientes = ingredientes;
     res.render('pagina', {
         contenido,
         session: req.session,
@@ -106,8 +111,8 @@ export function viewAniadirReceta(req, res) {
 }
 
 export function aniadirReceta(req, res) {
-     // Verifica si userId está definido
-    logger.debug("Sesión actual:", req.session); 
+    // Verifica si userId está definido
+    logger.debug("Sesión actual:", req.session);
 
     body('nombre').escape();
     body('descripcion').escape();
@@ -122,7 +127,7 @@ export function aniadirReceta(req, res) {
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
 
     if (!id_usuario) {
-        logger.error("Error: No se ha proporcionado un ID de usuario válido"); 
+        logger.error("Error: No se ha proporcionado un ID de usuario válido");
 
         return res.status(400).send('No se ha proporcionado un ID de usuario válido');
     }
@@ -131,9 +136,9 @@ export function aniadirReceta(req, res) {
         Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo);
         res.redirect('/recetas/catalogo');
     } catch (error) {
-        logger.error(error); 
+        logger.error(error);
         res.status(500).send('Error al añadir la receta');
-    }   
+    }
 }
 
 export function viewAniadirRecetaCarrito(req, res) {
@@ -202,7 +207,7 @@ export function modificarIngrediente(req, res) {
     const stock = req.body.stock.trim();
     const id = req.query.id;
     const contenido = 'paginas/ingredienteInd';
-    
+
     Ingrediente.updateIngrediente(id, nombre, categoria, precio, stock);
     const ingrediente = Ingrediente.getIngredienteById(id);
     res.render('pagina', {
@@ -213,7 +218,7 @@ export function modificarIngrediente(req, res) {
 }
 
 export function viewAniadirIngrediente(req, res) {
-   // Verifica si userId está definido
+    // Verifica si userId está definido
     logger.debug("Sesión actual:", req.session);
     const contenido = 'paginas/aniadirIngrediente';
     res.render('pagina', {
@@ -223,7 +228,7 @@ export function viewAniadirIngrediente(req, res) {
 }
 
 export function aniadirIngrediente(req, res) {
- // Verifica si userId está definido
+    // Verifica si userId está definido
     logger.debug("Sesión actual:", req.session);
 
     body('nombre').escape();
@@ -233,7 +238,7 @@ export function aniadirIngrediente(req, res) {
 
     const nombre = req.body.nombre.trim();
     const precio = req.body.precio.trim();
-    const categoria = req.body.categoria.trim();    
+    const categoria = req.body.categoria.trim();
     const stock = req.body.stock.trim();
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
@@ -282,10 +287,10 @@ export function aniadirIngrediente(req, res) {
 export function buscarReceta(req, res) {
     //tipo (si es búsqueda por nombre o ingrediente) y termino (el texto)
     let { tipo = 'nombre', termino = '', orden = 'relevancia' } = req.query;
-    
+
     //Importante!! Si no no funciona
     termino = termino.trim().replace(/\s+/g, ' '); // quitar espacios
-    
+
     //Comprobar que hay un texto
     if (!termino) {
         return res.render('pagina', {
@@ -303,7 +308,7 @@ export function buscarReceta(req, res) {
 
         let recetas = [];
         const terminoBusqueda = `%${termino}%`; //Para no distinguir entre mayusculas y minusculas
-        
+
         if (tipo === 'nombre') {
             recetas = Receta.searchByName(termino);
         } else if (tipo === 'ingrediente') {
@@ -315,22 +320,22 @@ export function buscarReceta(req, res) {
             case 'valoraciones':
                 recetas.sort((a, b) => (b.valoracion_promedio || 0) - (a.valoracion_promedio || 0));
                 break;
-                
+
             case 'dificultad':
                 recetas.sort((a, b) => a.dificultad - b.dificultad);
                 break;
-                
+
             case 'tiempo':
                 recetas.sort((a, b) => a.tiempo_prep_segs - b.tiempo_prep_segs);
                 break;
-                
+
             case 'relevancia':
             default:
                 // Ordenar por mejor coincidencia primero
                 recetas.sort((a, b) => {
                     //coincidencia exacta
                     const aMatch = a.nombre.toLowerCase().includes(termino.toLowerCase()) ? 1 : 0;
-                    
+
                     //coincidencia parcial
                     const bMatch = b.nombre.toLowerCase().includes(termino.toLowerCase()) ? 1 : 0;
                     return bMatch - aMatch;
