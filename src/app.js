@@ -11,6 +11,7 @@ import { config } from './config.js';
 import usuariosRouter from './usuarios/router.js';
 import contenidoRouter from './contenido/router.js';
 import recetasRouter from './recetas/router.js';
+import pedidosRouter from './pedidos/router.js';
 import { flashMessages } from './middleware/flash.js';
 import { errorHandler } from './middleware/error.js';
 import { logger } from './logger.js';
@@ -35,5 +36,6 @@ app.use('/', contenidoRouter);
 app.use('/usuarios', usuariosRouter);
 app.use('/contenido', contenidoRouter);
 app.use('/recetas', recetasRouter);
+app.use('/pedidos', pedidosRouter);
 
 app.use(errorHandler);

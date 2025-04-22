@@ -88,17 +88,19 @@ export function viewConocenos(req, res) {
 
 export function viewCesta(req, res) {
     let contenido = 'paginas/cesta';
+    const listaCompra = generarlistaCompra(req);
 
     res.render('pagina', {
         contenido,
+        listaCompra,
         session: req.session
     });
 }
 
-export function viewCestaCompra(req, res) {
+export function viewCompraReceta(req, res) {
     let contenido = 'paginas/noPermisos';
     if (req.session != null && req.session.nombre != null) {
-        contenido = 'paginas/cestaCompra';
+        contenido = 'paginas/compraReceta';
     }
     res.render('pagina', {
         contenido,

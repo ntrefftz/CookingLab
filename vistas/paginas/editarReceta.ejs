@@ -4,10 +4,19 @@
             <p><strong><%= locals.error %></strong></p>
         <% } %>
         <legend>Editar receta</legend>
-        <div><label>Nombre:</label> <input type="text" name="nombre" value="<%= recetas.nombre %>" /></div>
-        <div><label>Tiempo de preparación (min):</label> <input type="number" name="tiempo_prep_segs" value="<%= Math.floor(recetas.tiempo_prep_segs/60) %>" /></div>
-        <div><label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" value="<%= recetas.dificultad %>" /></div>
-        <div><label>Descripción:</label> <textarea name="descripcion"><%= recetas.descripcion %></textarea></div>
+        <label>Nombre:</label> <input type="text" name="nombre" value="<%= recetas.nombre %>" />
+        <label>Tiempo de preparación (min):</label> <input type="number" name="tiempo_prep_segs" value="<%= Math.floor(recetas.tiempo_prep_segs/60) %>" />
+        <label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" value="<%= recetas.dificultad %>" />
+        <label>Descripción:</label> <textarea name="descripcion"><%= recetas.descripcion %></textarea>
+        <label>Ingredientes:</label>
+
+        <ol>
+        <% recetas.ingredientes.forEach(function(ingrediente) { %>
+            <li><%= ingrediente.nombre %></li>
+        <% }) %>
+        </ol>
+        <button type="button" id="aniadirIngrediente">Añadir ingrediente</button>
+        
         <button type="submit">Editar</button>
     </fieldset>
 </form>
