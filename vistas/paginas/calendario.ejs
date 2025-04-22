@@ -8,8 +8,9 @@
     let hoy = new Date();
     
     // Calculamos el lunes de la semana actual
-    let diaSemana = hoy.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
     let lunesActual = new Date(hoy);
+    let diasDesdeLunes = (hoy.getDay() + 6) % 7;
+    lunesActual.setDate(hoy.getDate() - diasDesdeLunes);
 
     // Modificaciones para tener en cuenta la semana siguiente
     let primerDiaSemanaSiguiente = new Date(lunesActual);
@@ -21,14 +22,17 @@
     <!-- CAMBIO el foreach por un loop a 14 días -->
     <% for(let i = 0; i < 14; i++) { 
 
-        let dia = diasSemana[i % 7]; 
         let fecha = new Date(lunesActual);
         fecha.setDate(lunesActual.getDate() + i);
         let fechaStr = fecha.toISOString().split('T')[0];
+
+        let diaSemanaReal = fecha.getDay(); <!-- 0 (Domingo) a 6 (Sábado)-->
+        let dia = diasSemana[(diaSemanaReal + 6) % 7]; <!-- Ajustamos para que 0 sea Lunes-->
+
         
         <!-- Fecha "ficticia" para mostrar una semana menos y que no se descuajaringue todo -->
         let fechaMostrada = new Date(fecha);
-        fechaMostrada.setDate(fechaMostrada.getDate() - 6);
+        fechaMostrada.setDate(fechaMostrada.getDate());
         let fechaStrMostrada = fechaMostrada.toISOString().split('T')[0];
 
 
