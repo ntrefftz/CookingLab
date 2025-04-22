@@ -3,6 +3,7 @@ import { Usuario, UsuarioYaExiste, RolesEnum } from './Usuario.js';
 import { validationResult, matchedData } from 'express-validator';
 import { render } from '../utils/render.js';
 import { logger } from '../logger.js';
+import { CalendarioSemanal } from './CalendarioSemanal.js';
 
 
 export function viewConfiguracion(req, res) {
@@ -45,13 +46,72 @@ export function viewHistorial(req, res) {
     });
 }
 
-export function viewCalendario(req, res) {
-    let contenido = 'paginas/calendario';
+/*export function viewCalendario(req, res) {
+    const contenido = 'paginas/calendario';
+    const hoy = new Date();
+
+    // Lunes de esta semana
+    const lunesEstaSemana = new Date(hoy);
+    lunesEstaSemana.setDate(hoy.getDate() - hoy.getDay() + 1);
+    lunesEstaSemana.setHours(0, 0, 0, 0);
+
+    // Lunes de la próxima semana
+    const lunesProximaSemana = new Date(lunesEstaSemana);
+    lunesProximaSemana.setDate(lunesEstaSemana.getDate() + 7);
+
+    // Obtener recetas de ambas semanas
+    const recetasEstaSemana = CalendarioSemanal.getRecetasSemana(req.session.userId, lunesEstaSemana);
+    const recetasProximaSemana = CalendarioSemanal.getRecetasSemana(req.session.userId, lunesProximaSemana);
+    console.log("Recetas de esta semana:", recetasEstaSemana);
+    console.log("Recetas de la próxima semana:", recetasProximaSemana);
+    
+    // Unimos ambas semanas en un solo array, asegurándonos de que ambos arrays sean válidos
+    const recetasSemana = [...(recetasEstaSemana || []), ...(recetasProximaSemana || [])];
+    console.log("Recetas de la semana:", recetasSemana);
+
     res.render('pagina', {
         contenido,
-        session: req.session
+        session: req.session,
+        inicioSemana: lunesEstaSemana.toISOString(),
+        recetasSemana
+    });
+}*/
+export async function viewCalendario(req, res) {
+    const contenido = 'paginas/calendario';
+    const hoy = new Date();
+
+    // Lunes de esta semana (semana que contiene "hoy")
+    const lunesEstaSemana = new Date(hoy);
+    const diaSemana = hoy.getDay(); // 0 = domingo, 1 = lunes, ...
+    const offsetLunes = diaSemana === 0 ? -6 : 1 - diaSemana; // para que domingo cuente como fin de semana anterior
+    lunesEstaSemana.setDate(hoy.getDate() + offsetLunes);
+    lunesEstaSemana.setHours(0, 0, 0, 0);
+
+    // Domingo de la semana siguiente (14 días desde lunes incluido)
+    const domingoProximaSemana = new Date(lunesEstaSemana);
+    domingoProximaSemana.setDate(lunesEstaSemana.getDate() + 13); // lunes + 13 = domingo siguiente
+    domingoProximaSemana.setHours(23, 59, 59, 999);
+
+    // Obtener recetas en el rango de 14 días
+    const recetasSemana = await CalendarioSemanal.getRecetasRango(
+        req.session.userId,
+        lunesEstaSemana,
+        domingoProximaSemana
+    );
+
+    console.log("Recetas entre", lunesEstaSemana, "y", domingoProximaSemana);
+    console.log("Recetas de la semana:", recetasSemana);
+
+    res.render('pagina', {
+        contenido,
+        session: req.session,
+        inicioSemana: lunesEstaSemana.toISOString(),
+        recetasSemana
     });
 }
+
+
+
 
 export function viewLogin(req, res) {
     let contenido = 'paginas/login';
@@ -320,6 +380,56 @@ export function modificarPerfil(req, res) {
             session: req.session,
             usuario: Usuario.getUsuarioById(id),
             error: errorMessage
+        });
+    }
+
+}
+
+export function aniadirRecetaACalendario(req, res) {
+    //console.log(" Intentando buscar los id en controller:");
+        
+    const recetaId = req.body.recetaId;
+    const fecha = req.body.fecha;
+    const usuarioId = req.session.userId;
+
+    //console.log("   id_receta:", recetaId);
+    //console.log("   id_usuario:", usuarioId);
+    //console.log("   fecha:", fecha);
+    
+    try {
+        CalendarioSemanal.asignarRecetaAUsuario(recetaId, usuarioId, fecha);
+        res.redirect('/usuarios/micalendario');
+    } catch (e) {
+        console.error("Error al añadir receta al calendario:", e);
+        res.render('pagina', {
+            contenido: 'paginas/error',
+            session: req.session,
+            error: "No se pudo asignar la receta al calendario"
+        });
+    }
+}
+
+export function eliminarRecetaDeCalendario(req, res) {
+    const fecha = req.body.fecha;
+    const usuarioId = req.session.userId;
+
+    if (!fecha || !usuarioId) {
+        return res.render('pagina', {
+            contenido: 'paginas/error',
+            session: req.session,
+            error: "Faltan datos necesarios para eliminar la receta"
+        });
+    }
+
+    try {
+        CalendarioSemanal.eliminarRecetaDeUsuario(usuarioId, fecha);
+        res.redirect('/usuarios/micalendario');
+    } catch (e) {
+        console.error("Error al eliminar receta del calendario:", e);
+        res.render('pagina', {
+            contenido: 'paginas/error',
+            session: req.session,
+            error: "No se pudo eliminar la receta del calendario"
         });
     }
 }

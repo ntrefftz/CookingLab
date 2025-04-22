@@ -5,13 +5,16 @@ import { Tiene } from './Tiene.js';
 import { logger } from '../logger.js';
 
 
-
 export function viewRecetasLista(req, res) {
-    //NUEVO
     // Verificamos si la solicitud viene del calendario
     const esDesdeCalendario = req.query.origen === 'calendario';  // Se obtiene el parámetro 'origen'
+    const fecha = req.query.fecha || null; // Fecha seleccionada, si viene desde el calendario
+
     //const diaSeleccionado = req.query.dia;  // El día seleccionado en el calendario, pasado como parámetro
     console.log("¿Proviene del calendario?", esDesdeCalendario); // Aquí se verá si es true o false
+    if (fecha) {
+        console.log("Fecha seleccionada:", fecha);
+    }
 
     const rows = Receta.getAllRecetas();
     const contenido = 'paginas/catalogo';
@@ -19,8 +22,7 @@ export function viewRecetasLista(req, res) {
         contenido,
         session: req.session,
         recetas: rows,
-        aniadirIngredientesEnReceta,
-        fecha,
+        fecha, // Importante para usarla luego al añadir receta al calendario
         //diaSeleccionado,     // Enviamos el día seleccionado
         esDesdeCalendario  // Enviamos el flag que indica si proviene del calendario
     });
@@ -57,6 +59,10 @@ export function viewModificarReceta(req, res) {
         session: req.session,
         recetas: receta
     });
+}
+
+export function aniadirRecetaCarrito(req, res) {
+
 }
 
 export function eliminarReceta(req, res) {
@@ -133,6 +139,14 @@ export function aniadirReceta(req, res) {
         logger.error(error);
         res.status(500).send('Error al añadir la receta');
     }
+}
+
+export function viewAniadirRecetaCarrito(req, res) {
+    const contenido = 'paginas/aniadirRecetaCarrito';
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
 }
 
 //--------------------------------------------------------------------
@@ -359,4 +373,16 @@ export function buscarReceta(req, res) {
             error: 'Ocurrió un error al realizar la búsqueda'
         });
     }
+}
+
+export function viewAniadirIngredienteCarrito(req, res) {
+    const contenido = 'paginas/aniadirIngredienteCarrito';
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
+}
+
+export function aniadirIngredienteCarrito(req, res) {
+
 }
