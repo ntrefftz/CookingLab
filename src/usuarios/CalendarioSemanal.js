@@ -5,6 +5,7 @@ export class CalendarioSemanal {
     static #updateStmt = null;               // Actualizar una receta asignada en un día específico
     static #getByUsuarioYFechaStmt = null;   // Obtener receta asignada a un usuario en una fecha específica
     static #getRecetasSemanaStmt = null; //  NUEVA 
+    static #getRecetasRangoStmt = null; // NUEVA: porque siguen petando las malditas fechas
 
     static initStatements(db) {
         if (this.#getByUsuarioYSemanaStmt !== null) return;
@@ -34,6 +35,14 @@ export class CalendarioSemanal {
             FROM Calendario_Semanal cs
             JOIN Recetas r ON cs.id_receta = r.id
             WHERE cs.id_usuario = @id_usuario AND cs.fecha BETWEEN @inicioSemana AND @finSemana
+        `);
+
+        // NUEVA: porque siguen petando las malditas fechas
+        this.#getRecetasRangoStmt = db.prepare(`
+            SELECT r.id AS id_receta, r.nombre, cs.fecha
+            FROM Calendario_Semanal cs
+            JOIN Recetas r ON cs.id_receta = r.id
+            WHERE cs.id_usuario = @id_usuario AND cs.fecha BETWEEN @inicio AND @fin
         `);
     }
      // YA NO HACE FALTA
@@ -108,6 +117,18 @@ export class CalendarioSemanal {
             finSemana: finStr
         });
     }
+
+    static getRecetasRango(id_usuario, inicio, fin) {
+        const inicioStr = new Date(inicio).toISOString().split('T')[0];
+        const finStr = new Date(fin).toISOString().split('T')[0];
+    
+        return this.#getRecetasRangoStmt.all({
+            id_usuario,
+            inicio: inicioStr,
+            fin: finStr
+        });
+    }
+    
     
 }
 

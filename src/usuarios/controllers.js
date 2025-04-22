@@ -49,25 +49,6 @@ export function viewHistorial(req, res) {
 /*export function viewCalendario(req, res) {
     const contenido = 'paginas/calendario';
     const hoy = new Date();
-    const primerDiaSemana = new Date(hoy);
-    primerDiaSemana.setDate(hoy.getDate() - hoy.getDay() + 1); // Lunes como primer día
-
-    //nuevo para ver las recetas
-    const recetasSemana = CalendarioSemanal.getRecetasSemana(req.session.userId, primerDiaSemana);
-    console.log("Recetas de la semana:", recetasSemana);
-    ////
-
-    res.render('pagina', {
-        contenido,
-        session: req.session,
-        inicioSemana: primerDiaSemana.toISOString(), //Lo pasamos como string ISO para evitar problemas en EJS
-        recetasSemana
-    });
-}*/
-
-export function viewCalendario(req, res) {
-    const contenido = 'paginas/calendario';
-    const hoy = new Date();
 
     // Lunes de esta semana
     const lunesEstaSemana = new Date(hoy);
@@ -84,8 +65,6 @@ export function viewCalendario(req, res) {
     console.log("Recetas de esta semana:", recetasEstaSemana);
     console.log("Recetas de la próxima semana:", recetasProximaSemana);
     
-    // Unimos ambas semanas en un solo array
-    //const recetasSemana = [...recetasEstaSemana, ...recetasProximaSemana];
     // Unimos ambas semanas en un solo array, asegurándonos de que ambos arrays sean válidos
     const recetasSemana = [...(recetasEstaSemana || []), ...(recetasProximaSemana || [])];
     console.log("Recetas de la semana:", recetasSemana);
@@ -96,7 +75,41 @@ export function viewCalendario(req, res) {
         inicioSemana: lunesEstaSemana.toISOString(),
         recetasSemana
     });
+}*/
+export async function viewCalendario(req, res) {
+    const contenido = 'paginas/calendario';
+    const hoy = new Date();
+
+    // Lunes de esta semana (semana que contiene "hoy")
+    const lunesEstaSemana = new Date(hoy);
+    const diaSemana = hoy.getDay(); // 0 = domingo, 1 = lunes, ...
+    const offsetLunes = diaSemana === 0 ? -6 : 1 - diaSemana; // para que domingo cuente como fin de semana anterior
+    lunesEstaSemana.setDate(hoy.getDate() + offsetLunes);
+    lunesEstaSemana.setHours(0, 0, 0, 0);
+
+    // Domingo de la semana siguiente (14 días desde lunes incluido)
+    const domingoProximaSemana = new Date(lunesEstaSemana);
+    domingoProximaSemana.setDate(lunesEstaSemana.getDate() + 13); // lunes + 13 = domingo siguiente
+    domingoProximaSemana.setHours(23, 59, 59, 999);
+
+    // Obtener recetas en el rango de 14 días
+    const recetasSemana = await CalendarioSemanal.getRecetasRango(
+        req.session.userId,
+        lunesEstaSemana,
+        domingoProximaSemana
+    );
+
+    console.log("Recetas entre", lunesEstaSemana, "y", domingoProximaSemana);
+    console.log("Recetas de la semana:", recetasSemana);
+
+    res.render('pagina', {
+        contenido,
+        session: req.session,
+        inicioSemana: lunesEstaSemana.toISOString(),
+        recetasSemana
+    });
 }
+
 
 
 
