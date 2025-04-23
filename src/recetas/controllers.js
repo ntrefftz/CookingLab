@@ -54,6 +54,16 @@ export function viewModificarReceta(req, res) {
     const contenido = 'paginas/editarReceta';
     const id = req.query.id;
     const receta = Receta.getRecetaById(id);
+    const ingredientes = Tiene.getIngredientesByReceta(id);
+    
+    // Asociar los ingredientes a la receta
+    ingredientes.forEach(ingrediente => {
+        const ingredienteDetails = Ingrediente.getIngredienteById(ingrediente.id_ingrediente);
+        ingrediente.nombre = ingredienteDetails.nombre;
+    });
+
+    receta.ingredientes = ingredientes;
+    
     res.render('pagina', {
         contenido,
         session: req.session,
@@ -87,19 +97,43 @@ export function modificarReceta(req, res) {
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id = req.query.id;
     const contenido = 'paginas/receta';
+    
     Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1);
     const receta = Receta.getRecetaById(id);
     const ingredientes = Tiene.getIngredientesByReceta(id);
-    forEach(ingrediente => {
+
+    if (!receta) {
+        return res.status(404).send('Receta no encontrada');
+    }
+
+    if (!Array.isArray(ingredientes)) {
+        return res.status(500).send('Los ingredientes no son un arreglo');
+    }
+
+    // nos aseguramos de que cada ingrediente tenga un nombre
+    ingredientes.forEach(ingrediente => {
         const ingredienteDetails = Ingrediente.getIngredienteById(ingrediente.id_ingrediente);
-        ingrediente.nombre = ingredienteDetails.nombre;
+        if (ingredienteDetails && ingredienteDetails.nombre) {
+            ingrediente.nombre = ingredienteDetails.nombre;
+        } else {
+            ingrediente.nombre = 'Desconocido'; // Si no se encuentra el ingrediente
+        }
     });
+
+    // Asignamos los ingredientes modificados a la receta
     receta.ingredientes = ingredientes;
+
+    console.log("Receta:", receta);
+    console.log("Ingredientes:", ingredientes);
+    console.log("Receta con ingredientes:", receta.ingredientes);
+ 
     res.render('pagina', {
         contenido,
         session: req.session,
         recetas: receta
     });
+
+
 }
 
 export function viewAniadirReceta(req, res) {

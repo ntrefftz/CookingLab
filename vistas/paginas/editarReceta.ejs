@@ -9,12 +9,17 @@
         <label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" value="<%= recetas.dificultad %>" />
         <label>Descripción:</label> <textarea name="descripcion"><%= recetas.descripcion %></textarea>
         <label>Ingredientes:</label>
-
-        <ol>
-        <% recetas.ingredientes.forEach(function(ingrediente) { %>
-            <li><%= ingrediente.nombre %></li>
-        <% }) %>
-        </ol>
+        
+        <% if (recetas.ingredientes && recetas.ingredientes.length > 0) { %>
+            <ol>
+                <% recetas.ingredientes.forEach(function(ingrediente) { %>
+                    <li><%= ingrediente.nombre %></li>
+                <% }) %>
+            </ol>
+        <% } else { %>
+            <p>No hay ingredientes disponibles.</p>
+        <% } %>
+        
         <button type="button" id="aniadirIngrediente">Añadir ingrediente</button>
         
         <button type="submit">Editar</button>
