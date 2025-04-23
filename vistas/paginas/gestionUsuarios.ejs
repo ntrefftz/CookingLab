@@ -27,7 +27,7 @@
                     <a href="/usuarios/perfil/modificar?id=<%= usuario.id %>">
                         <button class="boton-editar">Editar</button>
                     </a>
-                    <form class="form-permisos" action="/usuarios/eliminarPerfil/<%= usuario.id %>" method="POST">
+                    <form class="form-permisos" action="/usuarios/eliminarUsuario?id=<%= usuario.id %>" method="POST">
                         <button class="boton-borrar" onclick="return confirm('¿Estás seguro de que deseas borrar este usuario?')">Borrar</button>
                     </form>
                 </td>

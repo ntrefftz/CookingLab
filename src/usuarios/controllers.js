@@ -6,6 +6,10 @@ import { logger } from '../logger.js';
 
 
 export function viewConfiguracion(req, res) {
+    if(!req.session.login) {
+        logger.info(`No se ha iniciado sesión :|`);
+        return res.redirect('/usuarios/login');
+    }
     let contenido = 'paginas/configuracion';
     res.render('pagina', {
         contenido,
@@ -15,10 +19,23 @@ export function viewConfiguracion(req, res) {
 
 export async function viewListaUsuario(req, res) {
     try {
+        let contenido;
+        if (req.session != null && req.session.login && req.session.esAdmin ) {
+            contenido = "paginas/gestionUsuarios";
+        }
+        else if(!req.session.login) {
+            logger.info(`No se ha iniciado sesión :|`);
+            return res.redirect('/usuarios/login');
+        }
+        else {
+            res.setFlash(`No dispone de permisos para ver esta página`);
+            logger.info(`Se ha intentado acceder a la lista de perfiles sin permisos de adminstrador :|`);
+            return res.redirect('/usuarios/home');
+        }
         const usuarios = await Usuario.getAllUsuarios();
 
         res.render('pagina', {
-            contenido: 'paginas/gestionUsuarios',
+            contenido,
             session: req.session,
             usuarios: usuarios
         });
@@ -232,9 +249,23 @@ export function doLogout(req, res, next) {
 }
 
 export function viewModificarPerfil(req, res) {
-    const contenido = 'paginas/editarPerfil';
-    const id = req.query.id;
+    let contenido;
+    const id = parseInt(req.query.id);
     const perfil = Usuario.getUsuarioById(id);
+
+    if (req.session != null && req.session.login && (req.session.esAdmin ||req.session.userId === id)) {
+        contenido = 'paginas/editarPerfil';
+    }
+    else if(!req.session.login) {
+        logger.info(`Se ha intentado editar un perfil sin inicar sesion :|`);
+        return res.redirect('/usuarios/login');
+    }
+    else {
+        res.setFlash(`No se puede editar el perfil de otro usuario`);
+        logger.info(`Se ha intentado acceder a un perfil ajeno :|`);
+        return res.redirect('/usuarios/home');
+    }
+  
     res.render('pagina', {
         contenido,
         session: req.session,
@@ -343,7 +374,7 @@ export function modificarPerfil(req, res) {
 }
 
 export function eliminarPerfil(req, res) {
-    const contenido = 'paginas/eliminadaPerfil';
+    const contenido = 'paginas/eliminadaPerfil'; //TODO: ARREGLAR EN CASO DE FALLO
     const id = req.query.id;
     Usuario.borrarUsuario(id);
     res.render('pagina', {
@@ -355,6 +386,8 @@ export function eliminarPerfil(req, res) {
 export async function cambiarPermisos(req, res) {
     const userId = req.params.id;
     const { rol } = req.body;
+
+
 
     if (!rol) {
         return res.status(400).json({ mensaje: 'El rol es requerido' });
