@@ -1,0 +1,37 @@
+<!--<script src="/js/cambiarPermisos.js" defer></script>-->
+<!--<script src="/js/cambiarPermisos.js" type="module" defer></script>-->
+<table class="tabla-usuarios">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Permisos</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% usuarios.forEach(usuario => { %>
+            <tr>
+                <td><%= usuario.id %></td>
+                <td><%= usuario.nombre %></td>
+                <td><%= usuario.correo %></td>
+                <td>
+                    <select class="permiso" data-id="<%= usuario.id %>" onchange="cambiarPermisos(this)">
+                        <option value="A" <%= usuario.rol === 'A' ? 'selected' : '' %>>Administrador</option>
+                        <option value="C" <%= usuario.rol ===  'C' ? 'selected' : '' %>>Cocinero</option>
+                        <option value="U" <%= usuario.rol === 'U' ? 'selected' : '' %>>Usuario</option>
+                    </select>
+                </td>
+                <td>
+                    <a href="/usuarios/perfil/modificar?id=<%= usuario.id %>">
+                        <button class="boton-editar">Editar</button>
+                    </a>
+                    <form class="form-permisos" action="/usuarios/eliminarUsuario?id=<%= usuario.id %>" method="POST">
+                        <button class="boton-borrar" onclick="return confirm('¿Estás seguro de que deseas borrar este usuario?')">Borrar</button>
+                    </form>
+                </td>
+            </tr>
+        <% }) %>
+    </tbody>
+</table>

@@ -3,14 +3,14 @@
         if (!session.login) return '';
         
         let opciones = [
-            '<p><a href="/usuarios/perfil">Mi perfil</a><img src = "/image/user_icon.png"></p>',
+            '<p><a href="/usuarios/perfil">Mi perfil</a><img src = "/image/User_Icon.png"></p>',
             '<p><a href="/usuarios/historial">Historial de compra</a><img src = "/image/history_icon.png"></p>',
             '<p><a href="/usuarios/misrecetas">Mis recetas</a><img src = "/image/recipe_icon.png"></p>',
             '<p><a href="/usuarios/micalendario">Mi calendario</a><img src = "/image/calendar_icon.png"></p>'
         ];
 
         if (session.esAdmin) {
-            opciones.unshift('<p><a href="/contenido/admin">Administrar</a><img src = "/image/admin_Icon.png"></p>');
+            opciones.unshift('<p><a href="/usuarios/listaUsuarios">Gestión de Usuarios</a><img src = "/image/admin_icon.png"></p>');
         }
 
         return opciones.map(opcion => {

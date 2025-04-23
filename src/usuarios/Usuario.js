@@ -14,15 +14,19 @@ export class Usuario {
     static #getByUsernameStmt = null;
     static #insertStmt = null;
     static #updateStmt = null;
+    static #getAllStmt = null;
+    static #deleteStmt = null;
 
     static initStatements(db) {
         if (this.#getByIdStmt !== null) return;
         if (this.#getByUsernameStmt !== null) return;
-        
+
         this.#getByIdStmt = db.prepare('SELECT * FROM Usuarios WHERE id = @id');
         this.#getByUsernameStmt = db.prepare('SELECT * FROM Usuarios WHERE username = @username');
         this.#insertStmt = db.prepare('INSERT INTO Usuarios(username, password, nombre, apellido, correo, direccion, rol, activo) VALUES (@username, @password, @nombre, @apellido, @correo, @direccion, @rol, @activo)');
+        this.#getAllStmt = db.prepare('SELECT * FROM Usuarios');
         this.#updateStmt = db.prepare('UPDATE Usuarios SET username = @username, password = @password, rol = @rol, nombre = @nombre, apellido = @apellido, correo = @correo, direccion = @direccion, activo = @activo WHERE id = @id');
+        this.#deleteStmt = db.prepare('DELETE FROM Usuarios WHERE id = @id');
     }
 
     static getUsuarioById(id) {
@@ -31,23 +35,44 @@ export class Usuario {
         return usuario;
     }
 
+    static cambiarPermisos(id, rol) {
+        let usuario = null;
+        try {
+            usuario = this.#getByIdStmt.get({ id });
+            if (!usuario) throw new UsuarioNoEncontrado(id);
+            usuario.rol = rol;
+            usuario = this.#update(usuario);
+        } catch (e) {
+            throw new UsuarioNoEncontrado(id, { cause: e });
+        }
+        return usuario;
+    }
+
+    static editarUsuario(id, username, password, nombre, apellido, correo, direccion, rol) {
+        let usuario = null;
+        try {
+            usuario = new Usuario(username, password, nombre, apellido, correo, direccion, rol);
+            usuario.id = id;
+            usuario = this.#update(usuario);
+        } catch (e) {
+            throw new UsuarioYaExiste(username, { cause: e });
+        }
+        return usuario;
+
+    }
+    static borrarUsuario(id) {
+        const result = this.#deleteStmt.run({ id });
+        if (result.changes === 0) throw new UsuarioNoEncontrado(id);
+        return { mensaje: "Usuario eliminado correctamente" };
+
+    }
+
     static getUsuarioByUsername(username) {
         const usuario = this.#getByUsernameStmt.get({ username });
 
         logger.debug('GetUsuarioByUsername:', usuario);
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
         const { password, nombre, apellido, correo, direccion, rol, activo, id } = usuario;
-        logger.debug('"Usuario creado en getUsuarioByUsername:',
-            usuario.username, 
-            usuario.password, 
-            usuario.nombre, 
-            usuario.apellido, 
-            usuario.correo, 
-            usuario.direccion, 
-            usuario.rol,  // <-- Aquí debería imprimir 'A'
-            usuario.activo, 
-            usuario.id
-        );
 
         return new Usuario(username, password, nombre, apellido, correo, direccion, rol, activo, id);
     }
@@ -80,8 +105,8 @@ export class Usuario {
     }
 
     static #update(usuario) {
-        const username = usuario.#username;
-        const password = usuario.#password;
+        const username = usuario.username;
+        const password = usuario.password;
         const nombre = usuario.nombre;
         const apellido = usuario.apellido;
         const correo = usuario.correo;
@@ -89,15 +114,14 @@ export class Usuario {
         const rol = usuario.rol;
         const activo = usuario.activo;
         const id = usuario.id; // Añadir esta línea
-        
+
         const datos = { username, password, nombre, apellido, correo, direccion, rol, activo, id };
-    
+
         const result = this.#updateStmt.run(datos);
         if (result.changes === 0) throw new UsuarioNoEncontrado(username);
-    
+
         return usuario;
     }
-
 
     static login(username, password) {
         let usuario = null;
@@ -111,14 +135,14 @@ export class Usuario {
 
         if (!bcrypt.compareSync(password, usuario.#password)) throw new UsuarioOPasswordNoValido(username);
 
-        return { 
-            id: usuario.id, 
-            username: usuario.username, 
-            nombre: usuario.nombre, 
+        return {
+            id: usuario.id,
+            username: usuario.username,
+            nombre: usuario.nombre,
             esAdmin: usuario.rol === RolesEnum.ADMIN,
             rol: usuario.rol
         };
-     
+
     }
 
     static register(username, password, nombre, apellido, correo, direccion) {
@@ -134,6 +158,11 @@ export class Usuario {
         return usuario;
     }
 
+    static getAllUsuarios() {
+        const usuarios = this.#getAllStmt.all();
+        if (!usuarios) throw new UsuarioNoEncontrado(id);
+        return usuarios;
+    }
 
     #id;
     #username;
@@ -164,11 +193,6 @@ export class Usuario {
 
     get id() {
         return this.#id;
-    }
-
-    set password(nuevoPassword) {
-        // XXX: En el ej3 / P3 lo cambiaremos para usar async / await o Promises
-        //this.#password = bcrypt.hashSync(nuevoPassword);
     }
 
     get username() {
