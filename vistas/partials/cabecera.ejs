@@ -35,6 +35,10 @@ function menu(session){
 		<li><a href="/recetas/ingrediente">Ingredientes</a></li>
 		<li><a href="/contenido/cesta">Cesta</a></li>
 		<li><a href="/recetas/buscarReceta">Buscar</a></li>
+		<% if (session && session.login) { %>
+			<li><a href="/usuarios/micalendario">Calendario</a></li>
+		<% } %>
+
 		<li><%- mostrarSaludo(session) %></li>
 		<li><div class= "dropdown">
 			<button class="dropdown-btn"><img src="/image/User.png" alt="User Icon"></button>
