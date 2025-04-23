@@ -2,7 +2,7 @@ import { body } from 'express-validator';
 import express from 'express';
 import {
     viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout,
-    viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome, viewListaUsuario
+    viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome, viewListaUsuario, cambiarPermisos
 } from './controllers.js';
 import asyncHandler from 'express-async-handler';
 const usuariosRouter = express.Router();
@@ -46,5 +46,7 @@ usuariosRouter.post('/perfil/modificar',
     body('password').optional().trim(),
     asyncHandler(modificarPerfil)
 );
+usuariosRouter.post('/cambiarPermisos/:id', asyncHandler(cambiarPermisos));
+
 
 export default usuariosRouter;

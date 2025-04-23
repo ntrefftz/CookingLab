@@ -241,6 +241,7 @@ export function viewModificarPerfil(req, res) {
         usuario: perfil
     });
 }
+
 export function viewHome(req, res) {
     const contenido = 'paginas/home';
     const id = req.session.userId;
@@ -338,5 +339,32 @@ export function modificarPerfil(req, res) {
             usuario: Usuario.getUsuarioById(id),
             error: errorMessage
         });
+    }
+}
+
+export function eliminarPerfil(req, res) {
+    const contenido = 'paginas/eliminadaPerfil';
+    const id = req.query.id;
+    Usuario.borrarUsuario(id);
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
+}
+
+export async function cambiarPermisos(req, res) {
+    const userId = req.params.id;
+    const { rol } = req.body;
+
+    if (!rol) {
+        return res.status(400).json({ mensaje: 'El rol es requerido' });
+    }
+
+    try {
+        const usuarioActualizado = Usuario.cambiarPermisos(userId, rol);
+        res.json({ mensaje: 'Permisos actualizados correctamente', usuario: usuarioActualizado });
+    } catch (error) {
+        logger.error('Error al cambiar permisos:', error);
+        res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
     }
 }
