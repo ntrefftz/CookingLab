@@ -2,8 +2,11 @@ import { body } from 'express-validator';
 import express from 'express';
 import {
     viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout,
-    viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome, aniadirRecetaACalendario, eliminarRecetaDeCalendario
-} from './controllers.js';
+    viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome, viewListaUsuario, cambiarPermisos,
+    eliminarPerfil,aniadirRecetaACalendario, eliminarRecetaDeCalendario
+
+} 
+from './controllers.js';
 import asyncHandler from 'express-async-handler';
 const usuariosRouter = express.Router();
 
@@ -16,7 +19,7 @@ usuariosRouter.get('/micalendario', asyncHandler(viewCalendario));
 usuariosRouter.get('/login', asyncHandler(viewLogin));
 usuariosRouter.get('/perfil/modificar', asyncHandler(viewModificarPerfil));
 usuariosRouter.get('/home', asyncHandler(viewHome));
-
+usuariosRouter.get('/listaUsuarios', asyncHandler(viewListaUsuario));
 usuariosRouter.post('/login',
     body('username', 'El nombre no puede ser vacío').trim().notEmpty(),
     body('password', 'La contraseña no puede ser vacía').trim().notEmpty(),
@@ -46,6 +49,9 @@ usuariosRouter.post('/perfil/modificar',
     body('password').optional().trim(),
     asyncHandler(modificarPerfil)
 );
+usuariosRouter.post('/cambiarPermisos/:id', asyncHandler(cambiarPermisos));
+
+usuariosRouter.post('/eliminarUsuario/:id', asyncHandler(eliminarPerfil));
 
 //Para el calendario semanal del usuario
 usuariosRouter.post('/calendario/aniadir', asyncHandler(aniadirRecetaACalendario));

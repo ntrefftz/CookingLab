@@ -26,6 +26,7 @@ app.set('views', config.vistas);
 
 app.use(pinoMiddleware);
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(session(config.session));
 
 //Modificacion para Flash

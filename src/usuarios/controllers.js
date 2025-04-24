@@ -7,11 +7,43 @@ import { CalendarioSemanal } from './CalendarioSemanal.js';
 
 
 export function viewConfiguracion(req, res) {
+    if (!req.session.login) {
+        logger.info(`No se ha iniciado sesión :|`);
+        return res.redirect('/usuarios/login');
+    }
     let contenido = 'paginas/configuracion';
     res.render('pagina', {
         contenido,
         session: req.session
     });
+}
+
+export async function viewListaUsuario(req, res) {
+    try {
+        let contenido;
+        if (req.session != null && req.session.login && req.session.esAdmin) {
+            contenido = "paginas/gestionUsuarios";
+        }
+        else if (!req.session.login) {
+            logger.info(`No se ha iniciado sesión :|`);
+            return res.redirect('/usuarios/login');
+        }
+        else {
+            res.setFlash(`No dispone de permisos para ver esta página`);
+            logger.info(`Se ha intentado acceder a la lista de perfiles sin permisos de adminstrador :|`);
+            return res.redirect('/usuarios/home');
+        }
+        const usuarios = await Usuario.getAllUsuarios();
+
+        res.render('pagina', {
+            contenido,
+            session: req.session,
+            usuarios: usuarios
+        });
+    } catch (error) {
+        logger.error('Error al obtener la lista de usuarios:', error);
+        res.status(500).send('Error al cargar la lista de usuarios');
+    }
 }
 
 export function viewPerfil(req, res) {
@@ -22,7 +54,7 @@ export function viewPerfil(req, res) {
     const usuario = Usuario.getUsuarioById(req.session.userId);
 
     console.log("Usuario desde session:", usuario);
-    
+
     res.render('pagina', {
         contenido: 'paginas/perfil',
         usuario: usuario,
@@ -136,7 +168,7 @@ export function viewRegister(req, res) {
 }
 
 export async function doLogin(req, res) {
-    
+
     let contenido = 'paginas/login';
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -157,21 +189,21 @@ export async function doLogin(req, res) {
 
     try {
         const usuario = await Usuario.login(username, password);
-        
+
         req.session.login = true;
         req.session.userId = usuario.id;
         req.session.username = usuario.username;
         req.session.nombre = usuario.nombre;
-        req.session.apellido = usuario.apellido || ''; 
+        req.session.apellido = usuario.apellido || '';
         req.session.correo = usuario.correo || '';
         req.session.direccion = usuario.direccion || '';
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
-        
+
         res.setFlash(`Encantado de verte de nuevo: ${usuario.nombre}`);
         logger.info(`Usuario ${username} ha iniciado sesión.`);
         return res.redirect('/usuarios/home');
 
-         
+
 
     } catch (e) {
         const datos = matchedData(req);
@@ -185,7 +217,7 @@ export async function doLogin(req, res) {
             datos,
             errores: {}
         });
-   
+
     }
 }
 
@@ -193,7 +225,7 @@ export async function doRegister(req, res) {
 
     // Verifica si hay errores en las validaciones
     const errors = validationResult(req);
-    
+
     if (!errors.isEmpty()) {
         const errores = errors.mapped();
         const datos = matchedData(req);
@@ -202,7 +234,7 @@ export async function doRegister(req, res) {
             datos,
             error: errors.array().map(err => err.msg).join(', ') // Muestra los errores en un solo mensaje
         });
-          
+
     }
 
     body('username').escape();
@@ -218,10 +250,10 @@ export async function doRegister(req, res) {
     const correo = req.body.correo.trim();
     const direccion = req.body.direccion.trim();
 
-    
+
     try {
         const usuario = await Usuario.register(username, password, nombre, apellido, correo, direccion);
-        
+
         req.session.login = true;
         req.session.userId = usuario.id;
         req.session.username = usuario.username;
@@ -275,17 +307,33 @@ export function doLogout(req, res, next) {
         })
     })
 }
+
 export function viewModificarPerfil(req, res) {
-    const contenido = 'paginas/editarPerfil';
-    const id = req.query.id;
+    let contenido;
+    const id = parseInt(req.query.id);
     const perfil = Usuario.getUsuarioById(id);
+
+    if (req.session != null && req.session.login && (req.session.esAdmin || req.session.userId === id)) {
+        contenido = 'paginas/editarPerfil';
+    }
+    else if (!req.session.login) {
+        logger.info(`Se ha intentado editar un perfil sin inicar sesion :|`);
+        return res.redirect('/usuarios/login');
+    }
+    else {
+        res.setFlash(`No se puede editar el perfil de otro usuario`);
+        logger.info(`Se ha intentado acceder a un perfil ajeno :|`);
+        return res.redirect('/usuarios/home');
+    }
+
     res.render('pagina', {
         contenido,
         session: req.session,
         usuario: perfil
     });
 }
-export function viewHome(req, res){
+
+export function viewHome(req, res) {
     const contenido = 'paginas/home';
     const id = req.session.userId;
     const perfil = Usuario.getUsuarioById(id);
@@ -295,6 +343,7 @@ export function viewHome(req, res){
         usuario: perfil
     });
 }
+
 export function modificarPerfil(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -330,9 +379,9 @@ export function modificarPerfil(req, res) {
         const direccion = req.body.direccion?.trim() || '';
 
         const usuarioActual = Usuario.getUsuarioById(id);
-        
-        const password = rawPassword 
-            ? bcrypt.hashSync(rawPassword) 
+
+        const password = rawPassword
+            ? bcrypt.hashSync(rawPassword)
             : usuarioActual.password;
 
         const usuarioActualizado = new Usuario(
@@ -367,7 +416,7 @@ export function modificarPerfil(req, res) {
     } catch (e) {
 
         logger.error('Error al modificar perfil:', e);
-        
+
         let errorMessage = 'Error al actualizar el perfil';
         if (e instanceof UsuarioNoEncontrado) {
             errorMessage = 'Usuario no encontrado';
@@ -382,12 +431,11 @@ export function modificarPerfil(req, res) {
             error: errorMessage
         });
     }
-
 }
 
 export function aniadirRecetaACalendario(req, res) {
     //console.log(" Intentando buscar los id en controller:");
-        
+
     const recetaId = req.body.recetaId;
     const fecha = req.body.fecha;
     const usuarioId = req.session.userId;
@@ -395,7 +443,7 @@ export function aniadirRecetaACalendario(req, res) {
     //console.log("   id_receta:", recetaId);
     //console.log("   id_usuario:", usuarioId);
     //console.log("   fecha:", fecha);
-    
+
     try {
         CalendarioSemanal.asignarRecetaAUsuario(recetaId, usuarioId, fecha);
         res.redirect('/usuarios/micalendario');
@@ -431,5 +479,32 @@ export function eliminarRecetaDeCalendario(req, res) {
             session: req.session,
             error: "No se pudo eliminar la receta del calendario"
         });
+    }
+}
+
+export function eliminarPerfil(req, res) {
+    const contenido = 'paginas/eliminadaPerfil'; //TODO: ARREGLAR EN CASO DE FALLO
+    const id = req.query.id;
+    Usuario.borrarUsuario(id);
+    res.render('pagina', {
+        contenido,
+        session: req.session
+    });
+}
+
+export async function cambiarPermisos(req, res) {
+    const userId = req.params.id;
+    const { rol } = req.body;
+
+    if (!rol) {
+        return res.status(400).json({ mensaje: 'El rol es requerido' });
+    }
+
+    try {
+        const usuarioActualizado = Usuario.cambiarPermisos(userId, rol);
+        res.json({ mensaje: 'Permisos actualizados correctamente', usuario: usuarioActualizado });
+    } catch (error) {
+        logger.error('Error al cambiar permisos:', error);
+        res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
     }
 }
