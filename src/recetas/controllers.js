@@ -251,6 +251,15 @@ export function modificarIngrediente(req, res) {
     });
 }
 
+export async function jsonRecetas(req, res) {
+    try {
+        const recetas = await  Receta.getAllRecetas(); // Ajusta el nombre de tu tabla
+        res.json(recetas); // Devuelve las recetas como JSON
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al obtener las recetas.' });
+    }
+}
 export function viewAniadirIngrediente(req, res) {
     // Verifica si userId está definido
     logger.debug("Sesión actual:", req.session);
