@@ -78,36 +78,6 @@ export function viewHistorial(req, res) {
     });
 }
 
-/*export function viewCalendario(req, res) {
-    const contenido = 'paginas/calendario';
-    const hoy = new Date();
-
-    // Lunes de esta semana
-    const lunesEstaSemana = new Date(hoy);
-    lunesEstaSemana.setDate(hoy.getDate() - hoy.getDay() + 1);
-    lunesEstaSemana.setHours(0, 0, 0, 0);
-
-    // Lunes de la próxima semana
-    const lunesProximaSemana = new Date(lunesEstaSemana);
-    lunesProximaSemana.setDate(lunesEstaSemana.getDate() + 7);
-
-    // Obtener recetas de ambas semanas
-    const recetasEstaSemana = CalendarioSemanal.getRecetasSemana(req.session.userId, lunesEstaSemana);
-    const recetasProximaSemana = CalendarioSemanal.getRecetasSemana(req.session.userId, lunesProximaSemana);
-    console.log("Recetas de esta semana:", recetasEstaSemana);
-    console.log("Recetas de la próxima semana:", recetasProximaSemana);
-    
-    // Unimos ambas semanas en un solo array, asegurándonos de que ambos arrays sean válidos
-    const recetasSemana = [...(recetasEstaSemana || []), ...(recetasProximaSemana || [])];
-    console.log("Recetas de la semana:", recetasSemana);
-
-    res.render('pagina', {
-        contenido,
-        session: req.session,
-        inicioSemana: lunesEstaSemana.toISOString(),
-        recetasSemana
-    });
-}*/
 export async function viewCalendario(req, res) {
     const contenido = 'paginas/calendario';
     const hoy = new Date();
@@ -141,9 +111,6 @@ export async function viewCalendario(req, res) {
         recetasSemana
     });
 }
-
-
-
 
 export function viewLogin(req, res) {
     let contenido = 'paginas/login';
@@ -483,13 +450,16 @@ export function eliminarRecetaDeCalendario(req, res) {
 }
 
 export function eliminarPerfil(req, res) {
-    const contenido = 'paginas/eliminadaPerfil'; //TODO: ARREGLAR EN CASO DE FALLO
     const id = req.query.id;
-    Usuario.borrarUsuario(id);
-    res.render('pagina', {
-        contenido,
-        session: req.session
-    });
+    try {
+        Usuario.borrarUsuario(id);
+        req.json = { mensaje: 'Usuario borrado con éxito'};
+    } catch (error) {
+        logger.error('Error al borrar usuario:', error);
+       res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
+    }
+
+    return res.redirect('/usuarios/listaUsuarios');
 }
 
 export async function cambiarPermisos(req, res) {
