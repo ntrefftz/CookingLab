@@ -11,6 +11,20 @@
         <div><label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" required placeholder="Dificultad de la receta" min="1" max="5" /></div>
         <div><label>Descripción:</label><textarea name="descripcion" required placeholder="Introduce una breve descripción de la receta"></textarea></div>
 
+        <legend>Ingredientes disponibles</legend>
+        <% if (ingredientes && ingredientes.length > 0) { %>
+            <ul>
+                <% ingredientes.forEach(ingrediente => { %>
+                    <li> 
+                        <%= ingrediente.nombre %> 
+                        <input type="checkbox" name="ingredientes[]" value="<%= ingrediente.id %>" /> 
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p>No hay ingredientes disponibles.</p>
+        <% } %>
+
         <button type="submit">Añadir receta</button>
     </fieldset>
 </form>

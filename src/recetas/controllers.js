@@ -138,10 +138,19 @@ export function modificarReceta(req, res) {
 
 export function viewAniadirReceta(req, res) {
     const contenido = 'paginas/aniadirReceta';
-    res.render('pagina', {
+    const ingredientes = Ingrediente.getAllIngredientes(); // Lista de ingredientes
+
+    /*res.render('pagina', {
         contenido,
         session: req.session
+    });*/
+    res.render('pagina', {
+        contenido,
+        session: req.session,
+        ingredientes,
+        error: null
     });
+    
 }
 
 export function aniadirReceta(req, res) {
@@ -159,6 +168,9 @@ export function aniadirReceta(req, res) {
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
+    
+    const ingredientes = Ingrediente.getAllIngredientes();
+    console.log("Ingredientes disponibles:", ingredientes);
 
     if (!id_usuario) {
         logger.error("Error: No se ha proporcionado un ID de usuario válido");
