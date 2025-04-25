@@ -37,6 +37,15 @@ CREATE TABLE "Recetas" (
 	"imagen_url"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
+DROP TABLE IF EXISTS "Cesta";
+CREATE TABLE "Cesta" (
+	"id_usuario"	INTEGER NOT NULL,
+	"id_ingrediente"	INTEGER NOT NULL,
+	"cantidad"	INTEGER NOT NULL CHECK("cantidad" > 0),
+	PRIMARY KEY("id_usuario"),
+	FOREIGN KEY("id_ingrediente") REFERENCES "Ingredientes"("id"),
+	FOREIGN KEY("id_usuario") REFERENCES "Usuarios"("id")
+);
 DROP TABLE IF EXISTS "Usuarios";
 CREATE TABLE "Usuarios" (
 	"username"	TEXT NOT NULL UNIQUE,

@@ -1,14 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Obtiene los datos del elemento HTML
     const cestaData = document.getElementById('cesta-data');
-    const precio = parseFloat(cestaData.dataset.precio);
-    const ingredientes = JSON.parse(cestaData.dataset.ingredientes);
-    
-    // Limpia el contenedor
+    const ingredientes = cestaData ? JSON.parse(cestaData.dataset.ingredientes) : [];
+    const precioTotal = cestaData ? parseFloat(cestaData.dataset.precio) : 0;
+
     const cestaContainer = document.getElementById('cesta');
     cestaContainer.innerHTML = '';
-    
-    // Tu función original con pequeñas mejoras
+
     if (ingredientes.length === 0) {
         const div = document.createElement('div');
         div.className = 'cesta-vacia';
@@ -19,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cestaContainer.appendChild(div);
         return;
     }
-    
+
     ingredientes.forEach(ingrediente => {
         const div = document.createElement('div');
         div.className = 'ingrediente';
@@ -30,20 +27,11 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         cestaContainer.appendChild(div);
     });
-    
+
     const total = document.createElement('div');
     total.className = 'total';
     total.innerHTML = `
-        <h3>Total: ${precio} €</h3>
+        <h3>Total: ${precioTotal.toFixed(2)} €</h3>
     `;
     cestaContainer.appendChild(total);
-    
-    // Añade event listeners para los botones de eliminar
-    document.querySelectorAll('.eliminar-ingrediente').forEach(button => {
-        button.addEventListener('click', function() {
-            const ingredienteId = this.dataset.id;
-            // Aquí puedes añadir la lógica para eliminar el ingrediente
-            console.log('Eliminar ingrediente:', ingredienteId);
-        });
-    });
 });
