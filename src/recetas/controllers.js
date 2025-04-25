@@ -420,7 +420,7 @@ export function buscarReceta(req, res) {
         });
     }
 }
-
+/*
 export function viewAniadirIngredienteCarrito(req, res) {
     const contenido = 'paginas/aniadirIngredienteCarrito';
     res.render('pagina', {
@@ -428,7 +428,13 @@ export function viewAniadirIngredienteCarrito(req, res) {
         session: req.session
     });
 }
-
+*/
 export function aniadirIngredienteCarrito(req, res) {
-
+    try{
+        
+        res.redirect('/pedidos/viewCesta');
+    }catch(e){
+        logger.error(e);
+        res.status(500).send('Error al añadir el ingrediente al carrito');
+    }
 }

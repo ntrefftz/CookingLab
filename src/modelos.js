@@ -6,6 +6,7 @@ import { CalendarioSemanal } from "./usuarios/CalendarioSemanal.js"; // Nuevo im
 import { Pedido } from "./pedidos/Pedidos.js"; // Nuevo import para Pedidos
 import { Realiza } from "./pedidos/Realiza.js"; // Nuevo import para Realiza
 import { Contiene } from "./pedidos/Contiene.js"; // Nuevo import para Contiene
+import { Cesta } from "./pedidos/Cesta.js";
 
 
 export function inicializaModelos(db) {
@@ -17,4 +18,5 @@ export function inicializaModelos(db) {
     Pedido.initStatements(db); // Inicializa los pedidos
     Realiza.initStatements(db); // Inicializa la relación entre usuarios y pedidos
     Contiene.initStatements(db); // Inicializa la relación entre ingredientes y pedidos
+    Cesta.initStatements(db); // Inicializa la cesta
 }
