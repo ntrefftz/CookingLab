@@ -1,6 +1,8 @@
 <h1>Mi Calendario Semanal</h1>
 
+
 <script>
+
   document.addEventListener('DOMContentLoaded', function () {
     const calendarEl = document.getElementById('calendarWk');
 
@@ -16,7 +18,7 @@
         const response = await fetch('/recetas/apirecetas');
         const recetas = await response.json();
         console.log('Recetas obtenidas:', recetas);
-        
+
         const recipeSelector = document.createElement('select');
         recipeSelector.innerHTML = '<option value="">Selecciona una receta</option>';
         recetas.forEach(receta => {
@@ -32,7 +34,7 @@
           const recipeId = recipeSelector.value;
 
           if (recipeId) {
-            fetch('/guardar-receta', {
+            fetch('/calendario/guardar-receta', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -41,14 +43,14 @@
             })
               .then(response => response.json())
               .then(data => {
-                alert(data.message);
+                Toast.show(data.message);
                 calendar.addEvent({
                   title: recetas.find(r => r.id == recipeId).nombre, // Mostrar el nombre de la receta
                   start: day,
                 });
               })
               .catch(error => {
-                console.error('Error:', error);
+               Toast.error('Error:', error);
               });
           } else {
             alert('Por favor selecciona una receta.');

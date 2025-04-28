@@ -52,7 +52,6 @@ usuariosRouter.post('/perfil/modificar',
 usuariosRouter.post('/cambiarPermisos/:id', asyncHandler(cambiarPermisos));
 
 usuariosRouter.post('/eliminarUsuario', asyncHandler(eliminarPerfil));
-
 //Para el calendario semanal del usuario
 usuariosRouter.post('/calendario/aniadir', asyncHandler(aniadirRecetaACalendario));
 usuariosRouter.post('/calendario/eliminar', asyncHandler(eliminarRecetaDeCalendario));

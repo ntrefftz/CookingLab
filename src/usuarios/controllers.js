@@ -401,27 +401,19 @@ export function modificarPerfil(req, res) {
 }
 
 export function aniadirRecetaACalendario(req, res) {
-    //console.log(" Intentando buscar los id en controller:");
-
+    
     const recetaId = req.body.recetaId;
     const fecha = req.body.fecha;
     const usuarioId = req.session.userId;
-
-    //console.log("   id_receta:", recetaId);
-    //console.log("   id_usuario:", usuarioId);
-    //console.log("   fecha:", fecha);
-
+    
     try {
         CalendarioSemanal.asignarRecetaAUsuario(recetaId, usuarioId, fecha);
-        res.redirect('/usuarios/micalendario');
-    } catch (e) {
-        console.error("Error al añadir receta al calendario:", e);
-        res.render('pagina', {
-            contenido: 'paginas/error',
-            session: req.session,
-            error: "No se pudo asignar la receta al calendario"
-        });
+        res.json({ message: 'Receta guardada con éxito' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al guardar la receta' });
     }
+
 }
 
 export function eliminarRecetaDeCalendario(req, res) {
@@ -453,10 +445,10 @@ export function eliminarPerfil(req, res) {
     const id = req.query.id;
     try {
         Usuario.borrarUsuario(id);
-        req.json = { mensaje: 'Usuario borrado con éxito'};
+        req.json = { mensaje: 'Usuario borrado con éxito' };
     } catch (error) {
         logger.error('Error al borrar usuario:', error);
-       res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
+        res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
     }
 
     return res.redirect('/usuarios/listaUsuarios');
