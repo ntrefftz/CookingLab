@@ -1,5 +1,3 @@
-<h1>Mi Calendario Semanal</h1>
-
 <section id="calendario">
     <% let diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]; %>
     
@@ -19,60 +17,76 @@
     ultimoDiaSemanaSiguiente.setDate(primerDiaSemanaSiguiente.getDate() + 6); <!--Domingo de la semana siguiente-->
     %>
     
-    <!-- CAMBIO el foreach por un loop a 14 días -->
-    <% for(let i = 0; i < 14; i++) { 
-
-        let fecha = new Date(lunesActual);
-        fecha.setDate(lunesActual.getDate() + i);
-        let fechaStr = fecha.toISOString().split('T')[0];
-
-        let diaSemanaReal = fecha.getDay(); <!-- 0 (Domingo) a 6 (Sábado)-->
-        let dia = diasSemana[(diaSemanaReal + 6) % 7]; <!-- Ajustamos para que 0 sea Lunes-->
-
-        
-        <!-- Fecha "ficticia" para mostrar una semana menos y que no se descuajaringue todo -->
-        let fechaMostrada = new Date(fecha);
-        fechaMostrada.setDate(fechaMostrada.getDate());
-        let fechaStrMostrada = fechaMostrada.toISOString().split('T')[0];
-
-
-        <!--Filtramos las recetas de ese día-->
-        let recetasDelDia = recetasSemana.filter(r => r.fecha === fechaStr);
-        
-        <!--Es fecha de la semana siguiente?-->
-        let esSemanaSiguiente = fecha >= primerDiaSemanaSiguiente && fecha <= ultimoDiaSemanaSiguiente;
-    
-    %>
-        <div>
-            <h3><%= dia %> (<%= fechaStrMostrada %>)</h3>
-
-            <% if (recetasDelDia.length > 0) { %>
-                <ul>
-                    <% recetasDelDia.forEach(r => { %>
-                        <li><%= r.nombre %></li>
-                    <% }) %>
-                </ul>
-                
-                <% if (esSemanaSiguiente) { %>
-                    <form action="/usuarios/calendario/eliminar" method="POST">
-                        <input type="hidden" name="origen" value="calendario" />
-                        <input type="hidden" name="fecha" value="<%= fechaStr %>" />
-                        <button>Eliminar Receta</button>
-                    </form>
-                <% } %>
-
-            <% } else { %>
-                <p>No hay recetas asignadas para este día.</p>
-
-                <% if (esSemanaSiguiente) { %>
-                    <form action="/recetas/catalogo" method="GET">
-                        <input type="hidden" name="origen" value="calendario" />
-                        <input type="hidden" name="fecha" value="<%= fechaStr %>" />
-                        <button>Añadir Receta</button>
-                    </form>
-                <% } %>
-
+    <!-- Semana actual -->
+    <div class="semana">
+        <h2>Semana Actual</h2>
+        <div class="dias-semana">
+            <% for(let i = 0; i < 7; i++) { 
+                let fecha = new Date(lunesActual);
+                fecha.setDate(lunesActual.getDate() + i);
+                let fechaStr = fecha.toISOString().split('T')[0];
+                let dia = diasSemana[i];
+                let recetasDelDia = recetasSemana.filter(r => r.fecha === fechaStr);
+            %>
+                <div class="dia">
+                    <h3><%= dia %> (<%= fechaStr %>)</h3>
+                    <% if (recetasDelDia.length > 0) { %>
+                        <ul>
+                            <% recetasDelDia.forEach(r => { %>
+                                <li>
+                                    <strong><%= r.nombre %></strong>
+                                    <p>Tiempo: <%= r.tiempo_prep_segs || '---' %></p>
+                                    <p>Dificultad: <%= r.dificultad || '---' %></p>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } else { %>
+                        <p>No hay recetas asignadas</p>
+                    <% } %>
+                </div>
             <% } %>
         </div>
-    <% } %>
+    </div>
+
+    <!-- Semana siguiente -->
+    <div class="semana">
+        <h2>Próxima Semana</h2>
+        <div class="dias-semana">
+            <% for(let i = 7; i < 14; i++) { 
+                let fecha = new Date(lunesActual);
+                fecha.setDate(lunesActual.getDate() + i);
+                let fechaStr = fecha.toISOString().split('T')[0];
+                let dia = diasSemana[i % 7];
+                let recetasDelDia = recetasSemana.filter(r => r.fecha === fechaStr);
+                let esSemanaSiguiente = true;
+            %>
+                <div class="dia">
+                    <h3><%= dia %> (<%= fechaStr %>)</h3>
+                    <% if (recetasDelDia.length > 0) { %>
+                        <ul>
+                            <% recetasDelDia.forEach(r => { %>
+                                <li>
+                                    <strong><%= r.nombre %></strong>
+                                    <p>Tiempo: <%= r.tiempo_prep_segs || '---' %></p>
+                                    <p>Dificultad: <%= r.dificultad || '---' %></p>
+                                </li>
+                            <% }) %>
+                        </ul>
+                        <form action="/usuarios/calendario/eliminar" method="POST">
+                            <input type="hidden" name="origen" value="calendario" />
+                            <input type="hidden" name="fecha" value="<%= fechaStr %>" />
+                            <button>Eliminar Receta</button>
+                        </form>
+                    <% } else { %>
+                        <p>No hay recetas asignadas</p>
+                        <form action="/recetas/catalogo" method="GET">
+                            <input type="hidden" name="origen" value="calendario" />
+                            <input type="hidden" name="fecha" value="<%= fechaStr %>" />
+                            <button>Añadir Receta</button>
+                        </form>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+    </div>
 </section>
