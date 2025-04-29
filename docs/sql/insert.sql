@@ -65,6 +65,12 @@ INSERT INTO "tiene" VALUES (2, 10, 50);  -- Azúcar
 INSERT INTO "tiene" VALUES (9, 9, 300);  -- Pollo
 INSERT INTO "tiene" VALUES (1, 9, 250);  -- Harina
 
+-- Recetas guardadas por el usuario 1
+INSERT INTO "guardado" VALUES (1, 3, 1);  -- Sopa de Tomate
+INSERT INTO "guardado" VALUES (1, 4, 1);  -- Pizza Margarita
+INSERT INTO "guardado" VALUES (1, 6, 1);  -- Pasta Alfredo
+
+
 UPDATE "Recetas" SET "imagen_url" = 'https://www.hola.com/horizon/landscape/2f4a35cad37e-sopa-tomate-t.jpg' WHERE "id" = 3;
 UPDATE "Recetas" SET "imagen_url" = 'https://media.istockphoto.com/id/1280329631/es/foto/pizza-margherita-italiana-con-tomates-y-queso-mozzarella-sobre-tabla-de-cortar-de-madera-de.jpg?s=612x612&w=0&k=20&c=3i8gzmaA2vbfIQRetPK1SLh0l6u_CC_HniYuBT884aU=' WHERE "id" = 4;
 UPDATE "Recetas" SET "imagen_url" = 'https://www.recetasderechupete.com/wp-content/uploads/2020/11/Arroz-con-pollo-cubano-3-1200x803.jpg' WHERE "id" = 5;

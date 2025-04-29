@@ -1,1 +1,17 @@
-<h1>Mis recetas</h1>
+<h1>Mis Recetas Favoritas</h1>
+
+<div class="cards_container_tall">
+    <% if (recetas.length === 0) { %>
+        <p>No has guardado ninguna receta aún.</p>
+    <% } else { %>
+        <% recetas.forEach(receta => { %>
+            <article class="card">
+                <img src="<%= receta.imagen_url %>" alt="<%= receta.nombre %>" loading="lazy" />
+                <a href="/recetas/<%= receta.id %>">
+                    <h4><%= receta.nombre %></h4>
+                </a>
+                <p><%= receta.descripcion %></p>
+            </article>
+        <% }) %>
+    <% } %>
+</div>

@@ -4,6 +4,7 @@ import { validationResult, matchedData } from 'express-validator';
 import { render } from '../utils/render.js';
 import { logger } from '../logger.js';
 import { CalendarioSemanal } from './CalendarioSemanal.js';
+import { Guardado } from './Guardado.js';
 
 
 export function viewConfiguracion(req, res) {
@@ -64,14 +65,21 @@ export function viewPerfil(req, res) {
 
 export function viewMisRecetas(req, res) {
     let contenido = 'paginas/misRecetas';
+    if (!req.session.login) {
+        return res.redirect('/usuarios/login');
+    }
+
+    const recetasGuardadas = Guardado.getFavoritosByUsuario(req.session.userId);
+
     res.render('pagina', {
-        contenido,
-        session: req.session
+        contenido: 'paginas/misRecetas',
+        session: req.session,
+        recetas: recetasGuardadas
     });
 }
 
 export function viewHistorial(req, res) {
-    let contenido = 'paginas/historial';
+    let contenido;
     res.render('pagina', {
         contenido,
         session: req.session
@@ -478,3 +486,7 @@ export async function cambiarPermisos(req, res) {
         res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
     }
 }
+
+
+
+
