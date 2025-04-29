@@ -225,7 +225,7 @@ export function aniadirReceta(req, res) {
     const ingredientes = Ingrediente.getAllIngredientes();
     //console.log("Ingredientes disponibles:", ingredientes);
 
-    //console.log("Body completo recibido:", req.body);
+    console.log("Body completo recibido:", req.body);
 
     if (!id_usuario) {
         logger.error("Error: No se ha proporcionado un ID de usuario válido");
@@ -237,20 +237,33 @@ export function aniadirReceta(req, res) {
         const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, imagen_url);
         
         const recetaId = result.id;
-        console.log("Nuevo id de receta:", recetaId);
+       // console.log("Nuevo id de receta:", recetaId);
         
         const ingredientesSeleccionados = req.body['ingredientes[]'] || []; // array de ingredientes que vienen del form
-        console.log("Ingredientes seleccionados:", ingredientesSeleccionados);
+        //console.log("Ingredientes seleccionados:", ingredientesSeleccionados);
+
+        const cantidades = {};
+        for (const key in req.body) {
+            if (key.startsWith('cantidades[')) {
+                const id = key.match(/\[(\d+)\]/)[1];
+                cantidades[id] = req.body[key] || 1; // Default a 1 si está vacío
+            }
+        }
+        console.log("Cantidades extraídas:", cantidades);
+
 
         // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
         const ingredientesArray = Array.isArray(ingredientesSeleccionados) 
             ? ingredientesSeleccionados 
             : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
 
-        // Añadir cada ingrediente
+
+        // Añadir cada ingrediente con su cantidad
         for (const ingredienteId of ingredientesArray) {
-            if (ingredienteId) { // Verificar que no sea undefined/null
-                Tiene.addIngredienteToReceta(recetaId, ingredienteId, 1);
+            if (ingredienteId) {
+                const cantidad = cantidades[ingredienteId] || 1;
+                console.log(`Añadiendo ingrediente ${ingredienteId} con cantidad ${cantidad}`);
+                Tiene.addIngredienteToReceta(recetaId, ingredienteId, cantidad);
             }
         }
 
@@ -362,6 +375,16 @@ export function aniadirIngrediente(req, res) {
     const stock = req.body.stock.trim();
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
+    const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
+    
+    console.log("Body completo recibido:", req.body);
+    console.log("imagen", imagen_url);
+
+
+    if (!imagen_url == null || !imagen_url == undefined) {
+        // Si no se proporciona una URL de imagen, se asigna una por defecto
+        imagen_url = "https://www.pastasgallo.es/wp-content/uploads/2020/11/pack_harina_trigo.png"; // Imagen por defecto
+    }
 
 
     if (!id_usuario) {
@@ -370,36 +393,12 @@ export function aniadirIngrediente(req, res) {
     }
 
     try {
-        Ingrediente.addIngrediente(nombre, categoria, precio, stock, activo);
+        Ingrediente.addIngrediente(nombre, categoria, precio, stock, activo, imagen_url);
         res.redirect('/recetas/ingrediente');
     } catch (error) {
         logger.error(error);
         res.status(500).send('Error al añadir el ingrediente');
     }
-
-    /*if (isNaN(dificultad) || dificultad < 1 || dificultad > 5) {
-        return res.status(400).send('La dificultad debe ser un número entre 1 y 5');
-    }
-    if (tiempo_prep_segs <= 0) {
-        return res.status(400).send('El tiempo de preparación debe ser mayor que 0');
-    }
-    if (!id_usuario) {
-        return res.status(400).send('No se ha proporcionado un ID de usuario válido');
-    }
-
-
-    const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo);
-    res.redirect('/recetas/catalogo');//redirigimos a la página de catálogo después de agregar la receta
-
-
-    try {
-        const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo);
-        //redirigimos a la página de catálogo después de agregar la receta
-        res.redirect('/recetas/catalogo');
-    } catch (error) {
-        logger.error(error);
-        res.status(500).send('Error al añadir la receta');
-    }*/
 }
 
 //--------------------------------------------------------------------

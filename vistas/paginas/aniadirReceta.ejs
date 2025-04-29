@@ -19,7 +19,9 @@
                 <% ingredientes.forEach(ingrediente => { %>
                     <li> 
                         <%= ingrediente.nombre %> 
-                        <input type="checkbox" name="ingredientes[]" value="<%= ingrediente.id %>" /> 
+                        <input type="checkbox" name="ingredientes[]" value="<%= ingrediente.id %>" />
+                        <input type="number" name="cantidades[<%= ingrediente.id %>]" id="cantidad-<%= ingrediente.id %>" placeholder="Cantidad" min="0" />
+                    
                     </li>
                 <% }) %>
             </ul>
