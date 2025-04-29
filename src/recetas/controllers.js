@@ -78,11 +78,26 @@ export function aniadirRecetaCarrito(req, res) {
 export function eliminarReceta(req, res) {
     const contenido = 'paginas/eliminada';
     const id = req.query.id;
-    Receta.deleteReceta(id);
-    res.render('pagina', {
-        contenido,
-        session: req.session
-    });
+    try {
+        const ingredientes = Tiene.getIngredientesByReceta(id);
+        console.log("Ingredientes:", ingredientes);
+
+        //Eliminar las relaciones con ingredientes
+        ingredientes.forEach(ing => {
+            Tiene.removeIngredienteFromReceta(id, ing.id_ingrediente);
+        });
+     
+        //Eliminar la receta
+        Receta.deleteReceta(id);
+
+        res.render('pagina', {
+            contenido,
+            session: req.session
+        });
+    } catch (error) {
+        logger.error("Error al eliminar la receta:", error);
+        res.status(500).send("Error al eliminar la receta.");
+    }
 }
 
 export function modificarReceta(req, res) {
@@ -140,10 +155,6 @@ export function viewAniadirReceta(req, res) {
     const contenido = 'paginas/aniadirReceta';
     const ingredientes = Ingrediente.getAllIngredientes(); // Lista de ingredientes
 
-    /*res.render('pagina', {
-        contenido,
-        session: req.session
-    });*/
     res.render('pagina', {
         contenido,
         session: req.session,
