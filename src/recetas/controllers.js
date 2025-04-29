@@ -56,6 +56,9 @@ export function viewModificarReceta(req, res) {
     const receta = Receta.getRecetaById(id);
     const ingredientes = Tiene.getIngredientesByReceta(id);
     
+    const listaIngredientes = Ingrediente.getAllIngredientes();
+    console.log("Ingredientes en viewModificarReceta:", listaIngredientes);   
+
     // Asociar los ingredientes a la receta
     ingredientes.forEach(ingrediente => {
         const ingredienteDetails = Ingrediente.getIngredienteById(ingrediente.id_ingrediente);
@@ -67,7 +70,8 @@ export function viewModificarReceta(req, res) {
     res.render('pagina', {
         contenido,
         session: req.session,
-        recetas: receta
+        recetas: receta,
+        listaIngredientes
     });
 }
 
@@ -117,12 +121,15 @@ export function modificarReceta(req, res) {
     const receta = Receta.getRecetaById(id);
     const ingredientes = Tiene.getIngredientesByReceta(id);
 
+    const listaIngredientes = Ingrediente.getAllIngredientes();
+    console.log("Ingredientes disponibles:", listaIngredientes);
+
     if (!receta) {
         return res.status(404).send('Receta no encontrada');
     }
 
     if (!Array.isArray(ingredientes)) {
-        return res.status(500).send('Los ingredientes no son un arreglo');
+        return res.status(500).send('Los ingredientes no son un Array');
     }
 
     // nos aseguramos de que cada ingrediente tenga un nombre
@@ -141,11 +148,30 @@ export function modificarReceta(req, res) {
     console.log("Receta:", receta);
     console.log("Ingredientes:", ingredientes);
     console.log("Receta con ingredientes:", receta.ingredientes);
+
+    console.log("Body completo recibido:", req.body);
+
+    const ingredientesSeleccionados = req.body['ingredientesSeleccionados[]'] || []; // array de ingredientes que vienen del form
+    console.log("Ingredientes seleccionados:", ingredientesSeleccionados);
+
+    // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
+    const ingredientesArray = Array.isArray(ingredientesSeleccionados) 
+        ? ingredientesSeleccionados 
+        : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
+
+    // Añadir cada ingrediente
+    for (const ingredienteId of ingredientesArray) {
+        if (ingredienteId) { // Verificar que no sea undefined/null
+            Tiene.addIngredienteToReceta(id, ingredienteId, 1);
+        }
+    }
+
  
     res.render('pagina', {
         contenido,
         session: req.session,
-        recetas: receta
+        recetas: receta,
+        listaIngredientes
     });
 
 
