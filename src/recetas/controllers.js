@@ -181,13 +181,6 @@ export function modificarReceta(req, res) {
         }
     }
 
-    // Añadir cada ingrediente
-    /*for (const ingredienteId of ingredientesArray) {
-        if (ingredienteId) { // Verificar que no sea undefined/null
-            Tiene.addIngredienteToReceta(id, ingredienteId, 1);
-        }
-    }*/
-
     const ingredientesAEliminar = req.body['ingredientesAEliminar[]'] || [];
     console.log("Ingredientes a eliminar:", ingredientesAEliminar);
 
