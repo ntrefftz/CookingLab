@@ -20,7 +20,22 @@
             <p>No hay ingredientes disponibles.</p>
         <% } %>
         
-        <button type="button" id="aniadirIngrediente">Añadir ingrediente</button>
+        <details>
+            <summary>Añadir ingredientes</summary>
+            <% if (listaIngredientes && listaIngredientes.length > 0) { %>
+                <ul>
+                    <% listaIngredientes.forEach(ingrediente => { %>
+                        <li> 
+                            <%= ingrediente.nombre %> 
+                            <input type="checkbox" name="ingredientesSeleccionados[]" value="<%= ingrediente.id %>" /> 
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <p>No hay ingredientes disponibles.</p>
+            <% } %>
+        </details>
+
         
         <button type="submit">Editar</button>
     </fieldset>
