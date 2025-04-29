@@ -28,6 +28,8 @@
                         <li> 
                             <%= ingrediente.nombre %> 
                             <input type="checkbox" name="ingredientesSeleccionados[]" value="<%= ingrediente.id %>" /> 
+                            <input type="number" name="cantidades[<%= ingrediente.id %>]" id="cantidad-<%= ingrediente.id %>" placeholder="Cantidad" min="0" />
+
                         </li>
                     <% }) %>
                 </ul>
@@ -44,6 +46,8 @@
                         <li>
                             <%= ingrediente.nombre %>
                             <input type="checkbox" name="ingredientesAEliminar[]" value="<%= ingrediente.id_ingrediente || ingrediente.id %>" />
+                            <input type="number" name="cantidades[<%= ingrediente.id %>]" id="cantidad-<%= ingrediente.id %>" placeholder="Cantidad" min="0" />
+
                         </li>
                     <% }) %>
                 </ul>
