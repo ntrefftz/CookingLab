@@ -22,10 +22,60 @@ document.addEventListener('DOMContentLoaded', function() {
         div.className = 'ingrediente';
         div.innerHTML = `
             <h3>${ingrediente.nombre}</h3>
+            <p>Cantidad: ${ingrediente.cantidad}</p>
             <p>Precio: ${ingrediente.precio} €</p>
+            <button class="aumentar-cantidad" data-id="${ingrediente.id}">Añadir</button>
             <button class="eliminar-ingrediente" data-id="${ingrediente.id}">Eliminar</button>
         `;
         cestaContainer.appendChild(div);
+
+        // Agregar evento al botón "Añadir"
+        const aumentarBtn = div.querySelector('.aumentar-cantidad');
+        aumentarBtn.addEventListener('click', function() {
+            const id = this.dataset.id;
+
+            // Enviar solicitud para aumentar la cantidad del ingrediente
+            fetch('/pedidos/cesta/aumentar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Recargar la página o actualizar la lista de ingredientes
+                    location.reload();
+                } else {
+                    console.error('Error al aumentar la cantidad del ingrediente');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        // Agregar evento al botón "Eliminar"
+        const eliminarBtn = div.querySelector('.eliminar-ingrediente');
+        eliminarBtn.addEventListener('click', function() {
+            const id = this.dataset.id;
+
+            // Enviar solicitud para eliminar el ingrediente
+            fetch('/pedidos/cesta/eliminar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Recargar la página o actualizar la lista de ingredientes
+                    location.reload();
+                } else {
+                    console.error('Error al eliminar el ingrediente');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
     });
 
     const total = document.createElement('div');

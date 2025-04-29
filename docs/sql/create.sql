@@ -42,7 +42,7 @@ CREATE TABLE "Cesta" (
 	"id_usuario"	INTEGER NOT NULL,
 	"id_ingrediente"	INTEGER NOT NULL,
 	"cantidad"	INTEGER NOT NULL CHECK("cantidad" > 0),
-	PRIMARY KEY("id_usuario"),
+	PRIMARY KEY("id_usuario", "id_ingrediente"),
 	FOREIGN KEY("id_ingrediente") REFERENCES "Ingredientes"("id"),
 	FOREIGN KEY("id_usuario") REFERENCES "Usuarios"("id")
 );
