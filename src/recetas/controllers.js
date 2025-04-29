@@ -184,6 +184,14 @@ export function modificarReceta(req, res) {
     const ingredientesAEliminar = req.body['ingredientesAEliminar[]'] || [];
     console.log("Ingredientes a eliminar:", ingredientesAEliminar);
 
+    // Cantidad de ingredientes que se quieren eliminar
+    //const cantidadAEliminar = ingredientesEliminarArray.length;
+
+    // Verificamos si eliminar esos ingredientes dejaría la receta vacía
+    if (ingredientes.length - ingredientesAEliminar.length < 1) {
+        return res.status(400).send('No puedes eliminar todos los ingredientes. La receta debe tener al menos uno.');
+    }
+
     const ingredientesEliminarArray = Array.isArray(ingredientesAEliminar)
     ? ingredientesAEliminar
     : ingredientesAEliminar ? [ingredientesAEliminar] : [];
