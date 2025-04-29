@@ -159,12 +159,34 @@ export function modificarReceta(req, res) {
         ? ingredientesSeleccionados 
         : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
 
-    // Añadir cada ingrediente
+    
+    const cantidades = {};
+    for (const key in req.body) {
+        if (key.startsWith('cantidades[')) {
+            const match = key.match(/\[(\d+)\]/);
+            if (match) {
+                const id = match[1];
+                cantidades[id] = req.body[key] || 1; // Por defecto a 1 si está vacío
+            }
+        }
+    }
+    console.log("Cantidades extraídas:", cantidades);
+
+    // Añadir cada ingrediente con su cantidad
     for (const ingredienteId of ingredientesArray) {
+        if (ingredienteId) {
+            const cantidad = cantidades[ingredienteId] || 1;
+            console.log(`Añadiendo ingrediente ${ingredienteId} con cantidad ${cantidad}`);
+            Tiene.addIngredienteToReceta(id, ingredienteId, cantidad);
+        }
+    }
+
+    // Añadir cada ingrediente
+    /*for (const ingredienteId of ingredientesArray) {
         if (ingredienteId) { // Verificar que no sea undefined/null
             Tiene.addIngredienteToReceta(id, ingredienteId, 1);
         }
-    }
+    }*/
 
     const ingredientesAEliminar = req.body['ingredientesAEliminar[]'] || [];
     console.log("Ingredientes a eliminar:", ingredientesAEliminar);
@@ -176,10 +198,12 @@ export function modificarReceta(req, res) {
     // Eliminar cada ingrediente
     for (const ingredienteId of ingredientesEliminarArray) {
         if (ingredienteId) {
-            Tiene.removeIngredienteFromReceta(id, ingredienteId);
+            const cantidad = cantidades[ingredienteId] || 1;
+            console.log(`Eliminando ingrediente ${ingredienteId} con cantidad ${cantidad}`);
+            Tiene.removeIngredienteFromReceta(id, ingredienteId,cantidad);
         }
     }
- 
+
     res.render('pagina', {
         contenido,
         session: req.session,
