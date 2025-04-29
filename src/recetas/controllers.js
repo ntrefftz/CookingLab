@@ -168,9 +168,14 @@ export function aniadirReceta(req, res) {
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
+    const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
     
+    //const imagen_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fes%2Ffotos%2Fno-encontrado-mensaje-de-error-fotos&psig=AOvVaw3yClaJKuZYliDgG5DHGhJC&ust=1745919601499000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLCLvr-3-owDFQAAAAAdAAAAABAE"; // Imagen por defecto
+
     const ingredientes = Ingrediente.getAllIngredientes();
-    console.log("Ingredientes disponibles:", ingredientes);
+    //console.log("Ingredientes disponibles:", ingredientes);
+
+    //console.log("Body completo recibido:", req.body);
 
     if (!id_usuario) {
         logger.error("Error: No se ha proporcionado un ID de usuario válido");
@@ -179,7 +184,26 @@ export function aniadirReceta(req, res) {
     }
 
     try {
-        Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo);
+        const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, imagen_url);
+        
+        const recetaId = result.id;
+        console.log("Nuevo id de receta:", recetaId);
+        
+        const ingredientesSeleccionados = req.body['ingredientes[]'] || []; // array de ingredientes que vienen del form
+        console.log("Ingredientes seleccionados:", ingredientesSeleccionados);
+
+        // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
+        const ingredientesArray = Array.isArray(ingredientesSeleccionados) 
+            ? ingredientesSeleccionados 
+            : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
+
+        // Añadir cada ingrediente
+        for (const ingredienteId of ingredientesArray) {
+            if (ingredienteId) { // Verificar que no sea undefined/null
+                Tiene.addIngredienteToReceta(recetaId, ingredienteId, 1);
+            }
+        }
+
         res.redirect('/recetas/catalogo');
     } catch (error) {
         logger.error(error);
