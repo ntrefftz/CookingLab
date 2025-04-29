@@ -7,6 +7,7 @@ import { Pedido } from "./pedidos/Pedidos.js"; // Nuevo import para Pedidos
 import { Realiza } from "./pedidos/Realiza.js"; // Nuevo import para Realiza
 import { Contiene } from "./pedidos/Contiene.js"; // Nuevo import para Contiene
 import { Cesta } from "./pedidos/Cesta.js";
+import { Guardado } from "./usuarios/Guardado.js";  // Nuevo import para Guardado
 
 
 export function inicializaModelos(db) {
@@ -19,4 +20,5 @@ export function inicializaModelos(db) {
     Realiza.initStatements(db); // Inicializa la relación entre usuarios y pedidos
     Contiene.initStatements(db); // Inicializa la relación entre ingredientes y pedidos
     Cesta.initStatements(db); // Inicializa la cesta
+    Guardado.initStatements(db); // Inicializa la relación entre usuarios y recetas guardadas
 }
