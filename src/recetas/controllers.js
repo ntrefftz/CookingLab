@@ -3,6 +3,7 @@ import { Receta } from './Recetas.js';
 import { Ingrediente } from './Ingredientes.js';
 import { Tiene } from './Tiene.js';
 import { logger } from '../logger.js';
+import { Cesta } from '../pedidos/Cesta.js';
 
 
 export function viewRecetasLista(req, res) {
@@ -455,8 +456,28 @@ export function viewAniadirIngredienteCarrito(req, res) {
 */
 export function aniadirIngredienteCarrito(req, res) {
     try{
-        
-        res.redirect('/pedidos/viewCesta');
+        const id = req.body.id;
+        const user = req.session.userId;
+        if (!user) {
+            logger.info('No autenticado');
+            return res.redirect('/usuarios/login');
+        }
+
+        if (!id || isNaN(parseInt(id))) {
+            return res.status(400).send('ID de ingrediente inválido');
+        }
+
+        const ingrediente = Cesta.getByUserAndIngredient(user, id);
+
+        if(!ingrediente){
+            Cesta.addCesta(user, id, 1);
+        }
+        else{
+            const cantidad = ingrediente.cantidad + 1;
+            Cesta.updateCesta(user, id, cantidad);
+        }
+
+        res.redirect('/pedidos/cesta');
     }catch(e){
         logger.error(e);
         res.status(500).send('Error al añadir el ingrediente al carrito');

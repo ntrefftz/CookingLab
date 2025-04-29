@@ -23,7 +23,7 @@ export class Ingrediente {
 
     static getIngredienteById(id) {
         const ingrediente = this.#getByIdStmt.get({ id });
-        if (!ingrediente) throw new IngredienteNoEncontradoNoEncontrada(id);
+        if (!ingrediente) throw new IngredienteNoEncontrado(id);
         return ingrediente;
     }
 

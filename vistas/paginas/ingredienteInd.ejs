@@ -9,4 +9,8 @@
     <a href="/recetas/ingredienteInd/eliminar?id=<%= ingredientes.id %>"><button>Eliminar ingrediente</button></a>
 <% } %>
 
-<a href="/recetas/ingredienteInd/aniadirCarritoIng?id=<%= ingredientes.id %>"><button>Añadir al carrito</button></a>
+
+<form action="/recetas/ingredienteInd/aniadirCarritoIng" method="POST">
+    <input type="hidden" name="id" value="<%= ingredientes.id %>">
+    <button type="submit">Añadir al carrito</button>
+</form>
