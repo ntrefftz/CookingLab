@@ -36,6 +36,22 @@
             <% } %>
         </details>
 
+        <details>
+            <summary>Eliminar ingredientes</summary>
+            <% if (recetas.ingredientes && recetas.ingredientes.length > 0) { %>
+                <ul>
+                    <% recetas.ingredientes.forEach(ingrediente => { %>
+                        <li>
+                            <%= ingrediente.nombre %>
+                            <input type="checkbox" name="ingredientesAEliminar[]" value="<%= ingrediente.id_ingrediente || ingrediente.id %>" />
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <p>No hay ingredientes para eliminar.</p>
+            <% } %>
+          </details>
+
         
         <button type="submit">Editar</button>
     </fieldset>

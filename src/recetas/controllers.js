@@ -57,7 +57,6 @@ export function viewModificarReceta(req, res) {
     const ingredientes = Tiene.getIngredientesByReceta(id);
     
     const listaIngredientes = Ingrediente.getAllIngredientes();
-    console.log("Ingredientes en viewModificarReceta:", listaIngredientes);   
 
     // Asociar los ingredientes a la receta
     ingredientes.forEach(ingrediente => {
@@ -166,6 +165,19 @@ export function modificarReceta(req, res) {
         }
     }
 
+    const ingredientesAEliminar = req.body['ingredientesAEliminar[]'] || [];
+    console.log("Ingredientes a eliminar:", ingredientesAEliminar);
+
+    const ingredientesEliminarArray = Array.isArray(ingredientesAEliminar)
+    ? ingredientesAEliminar
+    : ingredientesAEliminar ? [ingredientesAEliminar] : [];
+
+    // Eliminar cada ingrediente
+    for (const ingredienteId of ingredientesEliminarArray) {
+        if (ingredienteId) {
+            Tiene.removeIngredienteFromReceta(id, ingredienteId);
+        }
+    }
  
     res.render('pagina', {
         contenido,
