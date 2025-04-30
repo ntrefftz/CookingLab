@@ -4,28 +4,22 @@
 <form action="/recetas/buscarReceta" method="GET">
    
     <!-- añadido (value="<%= termino || '' %>) para que recuerde la opcion seleccionada-->
-    <input type="text" name="termino" placeholder="Buscar recetas o ingredientes..." value="<%= termino || '' %>" required>
+    <input type="text" name="termino" placeholder="Buscar ..." value="<%= termino || '' %>" required>
     
     <!-- añadido (<%= (tipo === 'nombre' || !tipo) ? 'selected' : '' %>) para que recuerde la opcion seleccionada-->
     <select name="tipo">
-        <option value="nombre"  <%= (tipo === 'nombre' || !tipo) ? 'selected' : '' %>> Recetas</option>
-        <option value="ingrediente" <%= tipo === 'ingrediente' ? 'selected' : '' %>>Ingredientes</option>
+        <option value="nombre"  <%= (tipo === 'nombre' || !tipo) ? 'selected' : '' %>> Buscar por nombre o por letra</option>
+        <option value="ingrediente" <%= tipo === 'ingrediente' ? 'selected' : '' %>>Buscar por ingrediente</option>
     </select>
 
     <!-- Opciones de ordenamiento -->
     <select name="orden">
-        <!--
-        <option value="relevancia" selected>Relevancia</option>
-        <option value="valoraciones">Valoraciones</option>
-        <option value="dificultad">Dificultad</option>
-        <option value="tiempo">Tiempo</option>
-        -->
-        
+
         <!-- Cambios para que recuerde la opcion selecionada -->
-        <option value="relevancia" <%= (orden === 'relevancia' || !orden) ? 'selected' : '' %>>Relevancia</option>
-        <option value="valoraciones" <%= orden === 'valoraciones' ? 'selected' : '' %>>Valoraciones</option>
-        <option value="dificultad" <%= orden === 'dificultad' ? 'selected' : '' %>>Dificultad</option>
-        <option value="tiempo" <%= orden === 'tiempo' ? 'selected' : '' %>>Tiempo</option>
+        <option value="relevancia" <%= (orden === 'relevancia' || !orden) ? 'selected' : '' %>>Ordenar por relevancia</option>
+        <option value="valoraciones" <%= orden === 'valoraciones' ? 'selected' : '' %>>Ordenar por valoraciones</option>
+        <option value="dificultad" <%= orden === 'dificultad' ? 'selected' : '' %>>Ordenar por dificultad</option>
+        <option value="tiempo" <%= orden === 'tiempo' ? 'selected' : '' %>>Ordenar por tiempo</option>
         
     </select>
 
@@ -42,24 +36,9 @@
 <ul>
     <% if (recetas.length > 0) { %>
         <% recetas.forEach(receta => { %>
-            <!-- <li><a href="/receta?id=<%= receta.id %>"><%= receta.nombre %></a></li>-->
             <li><a href="/recetas/receta?id=<%= receta.id %>"><%= receta.nombre %></a></li>
-
         <% }); %>
     <% } else if (termino && !error) { %>
         <p>No se encontraron recetas para "<%= termino %>"</p>
     <% } %>
 </ul>
-
-
-
-<!-- Codigo anterior 
-<select name="orden">
-    <option value="relevancia" selected>Relevancia</option>
-    <option value="valoraciones">Valoraciones</option>
-    <option value="dificultad">Dificultad</option>
-    <option value="tiempo">Tiempo</option>
-</select>
-<h1>Búsqueda de ingredientes</h1>
-<h1>Búsqueda de Recetas</h1>
--->
