@@ -80,10 +80,6 @@ export function viewModificarReceta(req, res) {
     });
 }
 
-export function aniadirRecetaCarrito(req, res) {
-
-}
-
 export function eliminarReceta(req, res) {
     const contenido = 'paginas/eliminada';
     const id = req.query.id;
@@ -166,6 +162,8 @@ export function modificarReceta(req, res) {
 
     
     const cantidades = {};
+    const cantidadesEsp = {};
+
     for (const key in req.body) {
         if (key.startsWith('cantidades[')) {
             const match = key.match(/\[(\d+)\]/);
@@ -174,15 +172,21 @@ export function modificarReceta(req, res) {
                 cantidades[id] = req.body[key] || 1; // Por defecto a 1 si está vacío
             }
         }
+        if(key.startsWith('cantidad_especifica[')){
+            const match = key.match(/\[(\d+)\]/);
+            if (match) {
+                const id = match[1];
+                cantidadesEsp[id] = req.body[key] || 1; // Por defecto a 1 si está vacío
+            }
+        }
     }
-    console.log("Cantidades extraídas:", cantidades);
 
     // Añadir cada ingrediente con su cantidad
     for (const ingredienteId of ingredientesArray) {
         if (ingredienteId) {
             const cantidad = cantidades[ingredienteId] || 1;
-            console.log(`Añadiendo ingrediente ${ingredienteId} con cantidad ${cantidad}`);
-            Tiene.addIngredienteToReceta(id, ingredienteId, cantidad);
+            const cantidad_esp = cantidadesEsp[ingredienteId] || 1;
+            Tiene.addIngredienteToReceta(id, ingredienteId, cantidad, cantidad_esp);
         }
     }
 
@@ -216,8 +220,6 @@ export function modificarReceta(req, res) {
         recetas: receta,
         listaIngredientes
     });
-
-
 }
 
 export function viewAniadirReceta(req, res) {
@@ -304,12 +306,54 @@ export function aniadirReceta(req, res) {
     }
 }
 
-export function viewAniadirRecetaCarrito(req, res) {
-    const contenido = 'paginas/aniadirRecetaCarrito';
-    res.render('pagina', {
-        contenido,
-        session: req.session
-    });
+export function aniadirRecetaCarrito(req, res) {
+    try {
+        const id_receta = req.body.id;
+        const user = req.session.userId;
+        
+        if (!user) {
+            logger.info('No autenticado');
+            return res.redirect('/usuarios/login');
+        }
+
+        if (!id_receta || isNaN(parseInt(id_receta))) {
+            return res.status(400).send('ID de receta inválido');
+        }
+
+        // Obtener todos los ingredientes de la receta usando la clase Tiene
+        let ingredientes;
+        try {
+            ingredientes = Tiene.getIngredientesByReceta(id_receta);
+        } catch (e) {
+            if (e.message.includes("No se encontraron ingredientes")) {
+                return res.status(404).send('La receta no tiene ingredientes');
+            }
+            throw e;
+        }
+
+        // Añadir cada ingrediente al carrito
+        for (const ingrediente of ingredientes) {
+            try {
+                const ingReceta = Cesta.getByUserAndIngredient(user, ingrediente.id_ingrediente);
+                
+                if (!ingReceta) {
+                    Cesta.addCesta(user, ingrediente.id_ingrediente, ingrediente.cantidad);
+                } else {
+                    const nuevaCantidad = ingReceta.cantidad + ingrediente.cantidad;
+                    Cesta.updateCesta(user, ingrediente.id_ingrediente, nuevaCantidad);
+                }
+            } catch (e) {
+                logger.error(`Error al procesar ingrediente ${ingrediente.id_ingrediente}: ${e.message}`);
+                // Continuar con el siguiente ingrediente aunque falle uno
+                continue;
+            }
+        }
+
+        res.redirect('/pedidos/cesta');
+    } catch(e) {
+        logger.error(e);
+        res.status(500).send('Error al añadir los ingredientes al carrito');
+    }
 }
 
 //--------------------------------------------------------------------
@@ -431,6 +475,36 @@ export function aniadirIngrediente(req, res) {
     }
 }
 
+export function aniadirIngredienteCarrito(req, res) {
+    try{
+        const id = req.body.id;
+        const user = req.session.userId;
+        if (!user) {
+            logger.info('No autenticado');
+            return res.redirect('/usuarios/login');
+        }
+
+        if (!id || isNaN(parseInt(id))) {
+            return res.status(400).send('ID de ingrediente inválido');
+        }
+
+        const ingrediente = Cesta.getByUserAndIngredient(user, id);
+
+        if(!ingrediente){
+            Cesta.addCesta(user, id, 1);
+        }
+        else{
+            const cantidad = ingrediente.cantidad + 1;
+            Cesta.updateCesta(user, id, cantidad);
+        }
+
+        res.redirect('/pedidos/cesta');
+    }catch(e){
+        logger.error(e);
+        res.status(500).send('Error al añadir el ingrediente al carrito');
+    }
+}
+
 //--------------------------------------------------------------------
 
 export function buscarReceta(req, res) {
@@ -532,32 +606,3 @@ export function viewAniadirIngredienteCarrito(req, res) {
     });
 }
 */
-export function aniadirIngredienteCarrito(req, res) {
-    try{
-        const id = req.body.id;
-        const user = req.session.userId;
-        if (!user) {
-            logger.info('No autenticado');
-            return res.redirect('/usuarios/login');
-        }
-
-        if (!id || isNaN(parseInt(id))) {
-            return res.status(400).send('ID de ingrediente inválido');
-        }
-
-        const ingrediente = Cesta.getByUserAndIngredient(user, id);
-
-        if(!ingrediente){
-            Cesta.addCesta(user, id, 1);
-        }
-        else{
-            const cantidad = ingrediente.cantidad + 1;
-            Cesta.updateCesta(user, id, cantidad);
-        }
-
-        res.redirect('/pedidos/cesta');
-    }catch(e){
-        logger.error(e);
-        res.status(500).send('Error al añadir el ingrediente al carrito');
-    }
-}

@@ -8,7 +8,7 @@ export class Tiene {
     static initStatements(db) {
         if (this.#insertStmt !== null) return;
 
-        this.#insertStmt = db.prepare('INSERT INTO Tiene(id_ingrediente, id_receta, cantidad) VALUES (@id_ingrediente, @id_receta, @cantidad)');
+        this.#insertStmt = db.prepare('INSERT INTO Tiene(id_ingrediente, id_receta, cantidad, cantidad_esp) VALUES (@id_ingrediente, @id_receta, @cantidad, @cantidad_esp)');
         this.#deleteStmt = db.prepare('DELETE FROM Tiene WHERE id_ingrediente = @id_ingrediente AND id_receta = @id_receta');
         
         this.#getByRecetaStmt = db.prepare('SELECT * FROM Tiene WHERE id_receta = @id_receta');
@@ -18,9 +18,9 @@ export class Tiene {
     }
 
     // Añadir un ingrediente a una receta
-    static addIngredienteToReceta(idReceta, idIngrediente, cantidad) {
+    static addIngredienteToReceta(idReceta, idIngrediente, cantidad, cantidad_esp) {
         try {
-            this.#insertStmt.run({ id_ingrediente: idIngrediente, id_receta: idReceta, cantidad });
+            this.#insertStmt.run({ id_ingrediente: idIngrediente, id_receta: idReceta, cantidad, cantidad_esp });
             return { mensaje: "Ingrediente añadido a la receta correctamente." };
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') throw new Error("El ingrediente ya está en la receta.");

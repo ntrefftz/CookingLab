@@ -29,7 +29,7 @@
                             <%= ingrediente.nombre %> 
                             <input type="checkbox" name="ingredientesSeleccionados[]" value="<%= ingrediente.id %>" /> 
                             <input type="number" name="cantidades[<%= ingrediente.id %>]" id="cantidad-<%= ingrediente.id %>" placeholder="Cantidad" min="0" />
-
+                            <input type="number" name="cantidad_especifica[<%= ingrediente.id %>]" id="cantidad_esp-<%= ingrediente.id %>" placeholder="Unidades/gramos" min="0" />
                         </li>
                     <% }) %>
                 </ul>

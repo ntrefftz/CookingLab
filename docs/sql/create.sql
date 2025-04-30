@@ -99,6 +99,7 @@ CREATE TABLE "tiene" (
 	"id_ingrediente"	INTEGER NOT NULL,
 	"id_receta"	INTEGER NOT NULL,
 	"cantidad"	INTEGER NOT NULL CHECK("cantidad" > 0),
+	"cantidad_esp"	INTEGER NOT NULL CHECK("cantidad_esp" > 0),
 	PRIMARY KEY("id_ingrediente","id_receta"),
 	FOREIGN KEY("id_ingrediente") REFERENCES "Ingredientes"("id"),
 	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id")
