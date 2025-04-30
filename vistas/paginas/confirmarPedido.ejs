@@ -1,0 +1,21 @@
+<h1>Confirmar Pedido</h1>
+<p>Fecha: <%= pedido.fecha %></p>
+<p>Hora: <%= pedido.hora %></p>
+<p>Total: <%= pedido.precioTotal %> €</p>
+
+<h2>Ingredientes</h2>
+<ul>
+    <% ingredientes.forEach(ingrediente => { %>
+        <li><%= ingrediente.nombre %> - Cantidad: <%= ingrediente.cantidad %> - Precio: <%= ingrediente.precio %> €</li>
+    <% }); %>
+</ul>
+
+<form action="/pedidos/comprarPedido" method="POST">
+    <input type="hidden" name="id" value="<%= pedido.id %>">
+    <button type="submit">Comprar Pedido</button>
+</form>
+
+<form action="/pedidos/cancelarPedido" method="POST">
+    <input type="hidden" name="id" value="<%= pedido.id %>">
+    <button type="submit">Cancelar Pedido</button>
+</form>

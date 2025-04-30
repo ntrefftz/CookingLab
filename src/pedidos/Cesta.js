@@ -4,6 +4,7 @@ export class Cesta {
     static #insertStmt = null;
     static #deleteStmt = null;
     static #updateStmt = null;
+    static #clearCestaStmt = null;
 
     static initStatements(db) {
         if (this.#getByIdStmt !== null) return;
@@ -13,6 +14,7 @@ export class Cesta {
         this.#insertStmt = db.prepare('INSERT INTO Cesta(id_usuario, id_ingrediente, cantidad) VALUES (@id_usuario, @id_ingrediente, @cantidad)');
         this.#deleteStmt = db.prepare('DELETE FROM Cesta WHERE id_usuario = @id_usuario AND id_ingrediente = @id_ingrediente');
         this.#updateStmt = db.prepare('UPDATE Cesta SET cantidad = @cantidad WHERE id_usuario = @id_usuario AND id_ingrediente = @id_ingrediente');
+        this.#clearCestaStmt = db.prepare('DELETE FROM Cesta WHERE id_usuario = @id_usuario');
     }
 
     static getById(id_usuario) {
@@ -45,6 +47,11 @@ export class Cesta {
             throw new CestaNoEncontrada(id_usuario);
         }
         return { mensaje: "Cesta actualizada correctamente" };
+    }
+    
+    static clearCesta(id_usuario) {
+        this.#clearCestaStmt.run({ id_usuario });
+        return { mensaje: "Cesta vaciada correctamente" };
     }
 }
 

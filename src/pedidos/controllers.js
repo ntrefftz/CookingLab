@@ -119,3 +119,101 @@ export function viewCompraReceta(req, res) {
         session: req.session
     });
 }
+
+export function tramitarPedido(req, res) {
+    try {
+        const id_usuario = req.session.userId;
+
+        // Obtener la cesta del usuario
+        const cesta = Cesta.getById(id_usuario);
+        if (cesta.length === 0) {
+            return res.status(400).json({ error: 'La cesta está vacía' });
+        }
+        const fecha = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const hora = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+        // Procesar los ingredientes
+        const ingredientes = cesta.map(item => {
+            const ingrediente = Ingrediente.getIngredienteById(item.id_ingrediente);
+            const precio = parseFloat(ingrediente.precio) || 0;
+            return {
+                id: ingrediente.id,
+                nombre: ingrediente.nombre,
+                precio: (precio * item.cantidad).toFixed(2),
+                cantidad: item.cantidad
+            };
+        });
+
+        const precioTotal = ingredientes.reduce((total, ing) => total + parseFloat(ing.precio), 0).toFixed(2);
+
+        // Crear el pedido
+        const pedido = Pedido.addPedido(fecha, hora, precioTotal, 0, 0);
+        ingredientes.forEach(ingrediente => {
+            Contiene.addRelacion(ingrediente.id, pedido.id, ingrediente.cantidad);
+        });
+
+        // Vaciar la cesta
+        Cesta.clearCesta(id_usuario);
+
+        // Relacionar el pedido con el usuario
+        Realiza.addRelacion(id_usuario, pedido.id);
+
+        // Responder con JSON
+        res.status(200).json({ mensaje: 'Pedido tramitado correctamente', pedidoId: pedido.id });
+    } catch (error) {
+        console.error('Error al tramitar el pedido:', error);
+        res.status(500).json({ error: 'Error al tramitar el pedido' });
+    }
+}
+
+export function confirmarPedido(req, res) {
+    let contenido = 'paginas/noPermisos';
+    if (req.session != null && req.session.nombre != null && Realiza.getRelacion(req.session.userId, req.query.id)) {
+        contenido = 'paginas/confirmarPedido';
+    
+    try{
+    const id_pedido = req.query.id;
+    const pedido = Pedido.getPedidoById(id_pedido);
+    const ingredientes = Contiene.getByPedido(id_pedido);
+    const precioTotal = ingredientes.reduce((total, ing) => total + parseFloat(ing.precio), 0).toFixed(2);
+
+    res.render('pagina', {
+        contenido,
+        session: req.session,
+        pedido,
+        ingredientes,
+        precioTotal
+    });
+    }
+    catch (error) {
+        console.error('Error al confirmar el pedido:', error);
+        res.status(500).send('Error al confirmar el pedido');
+    }
+    }
+}
+
+export function comprarPedido(req, res) {
+    try{
+    const id_pedido = req.body.id;
+    Pedido.updatePedido(id_pedido, 0, 1);
+    res.redirect('/');
+    }
+    catch (error) {
+        console.error('Error al comprar el pedido:', error);
+        res.status(500).send('Error al comprar el pedido');
+    }
+}
+
+export function cancelarPedido(req, res) {
+    try{
+    const id_pedido = req.body.id;
+    Contiene.deletePedido(id_pedido);
+    Realiza.deletePedido(id_pedido);
+    Pedido.deletePedido(id_pedido);
+    res.redirect('/pedidos/cesta');
+    }
+    catch (error) {
+        console.error('Error al cancelar el pedido:', error);
+        res.status(500).send('Error al cancelar el pedido');
+    }
+}

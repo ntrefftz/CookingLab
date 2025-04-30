@@ -10,8 +10,8 @@ export class Pedido {
 
         this.#getByIdStmt = db.prepare('SELECT * FROM Pedidos WHERE id = @id');
         this.#getAllStmt = db.prepare('SELECT * FROM Pedidos WHERE pagado = 1');
-        this.#insertStmt = db.prepare('INSERT INTO Pedidos(precio_total, enviado, pagado) VALUES (@precio_total, @enviado, @pagado)');
-        this.#updateStmt = db.prepare('UPDATE Pedidos SET precio_total = @precio_total, enviado = @enviado, pagado = @pagado WHERE id = @id');
+        this.#insertStmt = db.prepare('INSERT INTO Pedidos(fecha, hora, precio_total, enviado, pagado) VALUES (@fecha, @hora, @precio_total, @enviado, @pagado)');
+        this.#updateStmt = db.prepare('UPDATE Pedidos SET enviado = @enviado, pagado = @pagado WHERE id = @id');
         this.#deleteStmt = db.prepare('DELETE FROM Pedidos WHERE id = @id');
     }
 
@@ -25,24 +25,23 @@ export class Pedido {
         return this.#getAllStmt.all();
     }
 
-    static addPedido(precio_total, enviado = 0, pagado = 0) {
+    static addPedido(fecha, hora, precio_total, enviado = 0, pagado = 0) {
         try {
-            const result = this.#insertStmt.run({ precio_total, enviado, pagado });
+            const result = this.#insertStmt.run({ fecha, hora, precio_total, enviado, pagado });
             return { mensaje: "Pedido añadido correctamente", id: result.lastInsertRowid };
         } catch (e) {
             throw new ErrorDatos("No se pudo añadir el pedido", { cause: e });
         }
     }
 
-    static updatePedido(id, precio_total, enviado, pagado) {
-        const result = this.#updateStmt.run({ id, precio_total, enviado, pagado });
+    static updatePedido(id, enviado, pagado) {
+        const result = this.#updateStmt.run({ id, enviado, pagado });
         if (result.changes === 0) throw new PedidoNoEncontrado(id);
         return { mensaje: "Pedido actualizado correctamente" };
     }
 
     static deletePedido(id) {
         const result = this.#deleteStmt.run({ id });
-        if (result.changes === 0) throw new PedidoNoEncontrado(id);
         return { mensaje: "Pedido eliminado correctamente" };
     }
 }
