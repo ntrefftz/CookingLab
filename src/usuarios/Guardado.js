@@ -43,8 +43,7 @@ export class Guardado {
     // Obtener las recetas favoritas de un usuario
     static getFavoritosByUsuario(idUsuario) {
         const favoritos = this.#getByUsuarioStmt.all({ id_usuario: idUsuario });
-        if (favoritos.length === 0) throw new Error("El usuario no tiene recetas favoritas.");
-        return favoritos;
+        return favoritos; // Devuelve [] si no hay ninguno
     }
 
     // Obtener los usuarios que guardaron una receta como favorita
