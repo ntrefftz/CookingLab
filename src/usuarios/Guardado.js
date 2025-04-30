@@ -34,11 +34,21 @@ export class Guardado {
     }
 
     // Quitar una receta de favoritos
-    static removeRecetaFromFavoritos(idUsuario, idReceta) {
+    /*static removeRecetaFromFavoritos(idUsuario, idReceta) {
         const result = this.#deleteStmt.run({ id_usuario: idUsuario, id_receta: idReceta });
         if (result.changes === 0) throw new Error("La receta no estaba marcada como favorita.");
         return { mensaje: "Receta eliminada de favoritos." };
+    }*/
+    static removeRecetaFromFavoritos(idUsuario, idReceta) {
+        const result = this.#deleteStmt.run({ id_usuario: idUsuario, id_receta: idReceta });
+        console.log("Resultado de intento de borrado:", result);
+        if (result.changes === 0) {
+            console.warn(`No se pudo eliminar la receta ${idReceta} de favoritos del usuario ${idUsuario}. Verifica si guardado = 1 existe.`);
+            throw new Error("La receta no estaba marcada como favorita.");
+        }
+        return { mensaje: "Receta eliminada de favoritos." };
     }
+        
 
     // Obtener las recetas favoritas de un usuario
     static getFavoritosByUsuario(idUsuario) {

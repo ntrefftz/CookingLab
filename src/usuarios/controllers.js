@@ -537,6 +537,27 @@ export function aniadirRecetaAFavoritos(req, res) {
     }
 }
 
+export function eliminarRecetaDeFavoritos(req, res) {
+    const recetaId = req.body.recetaId;
+    const usuarioId = req.session.userId;
+
+    console.log("Intentando eliminar receta de favoritos:");
+    console.log("   id_receta:", recetaId);
+    console.log("   id_usuario:", usuarioId);
+
+    try {
+        Guardado.removeRecetaFromFavoritos(usuarioId, recetaId);
+        res.redirect('/usuarios/misrecetas');
+    } catch (e) {
+        console.error("Error al eliminar receta de favoritos:", e);
+        res.render('pagina', {
+            contenido: 'paginas/error',
+            session: req.session,
+            error: "No se pudo eliminar la receta de favoritos"
+        });
+    }
+}
+
 
 
 

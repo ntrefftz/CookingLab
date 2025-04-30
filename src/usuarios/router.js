@@ -3,7 +3,7 @@ import express from 'express';
 import {
     viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout,
     viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome, viewListaUsuario, cambiarPermisos,
-    eliminarPerfil, aniadirRecetaACalendario, eliminarRecetaDeCalendario, aniadirRecetaAFavoritos
+    eliminarPerfil, aniadirRecetaACalendario, eliminarRecetaDeCalendario, aniadirRecetaAFavoritos, eliminarRecetaDeFavoritos
 } 
 from './controllers.js';
 import asyncHandler from 'express-async-handler';
@@ -57,6 +57,7 @@ usuariosRouter.post('/calendario/aniadir', asyncHandler(aniadirRecetaACalendario
 usuariosRouter.post('/calendario/eliminar', asyncHandler(eliminarRecetaDeCalendario));
 
 usuariosRouter.post('/favoritos/aniadir', asyncHandler(aniadirRecetaAFavoritos));
+usuariosRouter.post('/favoritos/eliminar', asyncHandler(eliminarRecetaDeFavoritos));
 
 
 export default usuariosRouter;
