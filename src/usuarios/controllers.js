@@ -136,6 +136,8 @@ export async function viewCalendario(req, res) {
     });
 }
 
+////////////////////////////////////////////////////////////////
+
 export function viewLogin(req, res) {
     let contenido = 'paginas/login';
     if (req.session != null && req.session.login) {
@@ -424,6 +426,38 @@ export function modificarPerfil(req, res) {
     }
 }
 
+export function eliminarPerfil(req, res) {
+    const id = req.query.id;
+    try {
+        Usuario.borrarUsuario(id);
+        req.json = { mensaje: 'Usuario borrado con éxito'};
+    } catch (error) {
+        logger.error('Error al borrar usuario:', error);
+       res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
+    }
+
+    return res.redirect('/usuarios/listaUsuarios');
+}
+
+export async function cambiarPermisos(req, res) {
+    const userId = req.params.id;
+    const { rol } = req.body;
+
+    if (!rol) {
+        return res.status(400).json({ mensaje: 'El rol es requerido' });
+    }
+
+    try {
+        const usuarioActualizado = Usuario.cambiarPermisos(userId, rol);
+        res.json({ mensaje: 'Permisos actualizados correctamente', usuario: usuarioActualizado });
+    } catch (error) {
+        logger.error('Error al cambiar permisos:', error);
+        res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
+    }
+}
+
+////////////////////////////////////////
+
 export function aniadirRecetaACalendario(req, res) {
     //console.log(" Intentando buscar los id en controller:");
 
@@ -473,35 +507,38 @@ export function eliminarRecetaDeCalendario(req, res) {
     }
 }
 
-export function eliminarPerfil(req, res) {
-    const id = req.query.id;
-    try {
-        Usuario.borrarUsuario(id);
-        req.json = { mensaje: 'Usuario borrado con éxito'};
-    } catch (error) {
-        logger.error('Error al borrar usuario:', error);
-       res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
-    }
+export function aniadirRecetaAFavoritos(req, res) {
+    const recetaId = req.body.recetaId;
+    const usuarioId = req.session.userId;
 
-    return res.redirect('/usuarios/listaUsuarios');
-}
+    console.log("Añadiendo receta a favoritos");
+    console.log("id_receta:", recetaId);
+    console.log("id_usuario:", usuarioId);
 
-export async function cambiarPermisos(req, res) {
-    const userId = req.params.id;
-    const { rol } = req.body;
-
-    if (!rol) {
-        return res.status(400).json({ mensaje: 'El rol es requerido' });
+    if (!usuarioId || !recetaId) {
+        return res.render('pagina', {
+            contenido: 'paginas/error',
+            session: req.session,
+            error: "Faltan datos necesarios para guardar la receta"
+        });
     }
 
     try {
-        const usuarioActualizado = Usuario.cambiarPermisos(userId, rol);
-        res.json({ mensaje: 'Permisos actualizados correctamente', usuario: usuarioActualizado });
-    } catch (error) {
-        logger.error('Error al cambiar permisos:', error);
-        res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
+        Guardado.addRecetaToFavoritos(usuarioId, recetaId);
+        console.log(`Receta ${recetaId} guardada correctamente para el usuario ${usuarioId}`);
+        res.redirect('/usuarios/misrecetas');
+    } catch (e) {
+        console.error("Error al guardar receta en favoritos:", e);
+        res.render('pagina', {
+            contenido: 'paginas/error',
+            session: req.session,
+            error: "No se pudo guardar la receta en favoritos"
+        });
     }
 }
+
+
+
 
 
 
