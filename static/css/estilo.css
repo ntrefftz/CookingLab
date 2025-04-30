@@ -486,3 +486,51 @@ select {
     margin-top: 10px;
     width: 100%;
 }
+
+/*EDICION*/
+/* Estilos específicos para el formulario de edición de recetas */
+#editar-receta fieldset {
+    width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 2px solid #F383A0;
+    border-radius: 10px;
+}
+
+#editar-receta legend {
+    font-size: 1.5em;
+    padding: 5px 15px;
+    background-color: #F383A0;
+    color: white;
+    border-radius: 5px;
+}
+
+#editar-receta label {
+    display: block;
+    margin: 15px 0 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Estilos para las secciones de ingredientes */
+.ingredientes-section {
+    margin: 15px 0;
+    padding: 14px;
+    background-color: #FFE0EE;
+    border-radius: 8px;
+}
+
+.ingredientes-section summary {
+    font-weight: bold;
+    padding: 5px;
+    margin: -5px -5px 5px;
+}
+
+.ingredientes-section li {
+    padding: 10px 0;
+	display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    gap: 10px;
+}
