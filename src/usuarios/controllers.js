@@ -5,6 +5,8 @@ import { render } from '../utils/render.js';
 import { logger } from '../logger.js';
 import { CalendarioSemanal } from './CalendarioSemanal.js';
 import { Guardado } from './Guardado.js';
+import { Receta } from '../recetas/Recetas.js';
+
 
 
 export function viewConfiguracion(req, res) {
@@ -70,11 +72,25 @@ export function viewMisRecetas(req, res) {
     }
 
     const recetasGuardadas = Guardado.getFavoritosByUsuario(req.session.userId);
+    console.log("Recetas favoritas:", recetasGuardadas);
+
+    const recetas = [];
+
+    for (const fav of recetasGuardadas) {
+        try {
+            const receta = Receta.getRecetaById(fav.id_receta);
+            recetas.push(receta);
+        } catch (error) {
+            console.error(`Error al obtener receta con ID ${fav.id_receta}:`, error.message);
+        }
+    }
+    
+    console.log("Recetas encontradas:", recetas);
 
     res.render('pagina', {
         contenido: 'paginas/misRecetas',
         session: req.session,
-        recetas: recetasGuardadas
+        recetas: recetas
     });
 }
 
