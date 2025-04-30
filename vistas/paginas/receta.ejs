@@ -8,7 +8,7 @@
 <ul>
     <% if (recetas.ingredientes) { %>
         <% recetas.ingredientes.forEach(function(ingrediente) { %>
-            <li><%= ingrediente.nombre %> - <%= ingrediente.cantidad %>gr.</li>
+            <li><%= ingrediente.nombre %> - <%= ingrediente.cantidad_esp %>gr.</li>
         <% }); %>
     <% } else { %>
         <li>No se encontraron ingredientes.</li>
@@ -19,4 +19,7 @@
     <a href="/recetas/receta/eliminar?id=<%= recetas.id %>"><button>Eliminar receta</button></a>
 <% } %>
 
-<a href="/recetas/receta/aniadirCarrito?id=<%= recetas.id %>"><button>Añadir al carrito</button></a>
+<form action="/recetas/receta/aniadirCarritoReceta" method="POST">
+    <input type="hidden" name="id" value="<%= recetas.id %>">
+    <button type="submit">Añadir al carrito</button>
+</form>

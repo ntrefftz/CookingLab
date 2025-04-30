@@ -33,37 +33,37 @@ INSERT INTO "Usuarios" VALUES ('admin','$2b$10$Htah5iG9eKj8ItIItpzK6uvny3c5/QjdZ
 
 -- Relaciones entre recetas e ingredientes
 -- Relaciones para Pizza Margarita (id_receta 4)
-INSERT INTO "tiene" VALUES (7, 4, 200);  -- Queso
-INSERT INTO "tiene" VALUES (6, 4, 150);  -- Tomate
-INSERT INTO "tiene" VALUES (1, 4, 300);  -- Harina
-INSERT INTO "tiene" VALUES (5, 4, 2);    -- Huevos
+INSERT INTO "tiene" VALUES (7, 4, 1, 200);  -- Queso
+INSERT INTO "tiene" VALUES (6, 4, 3, 150);  -- Tomate
+INSERT INTO "tiene" VALUES (1, 4, 1, 300);  -- Harina
+INSERT INTO "tiene" VALUES (5, 4, 1, 2);    -- Huevos
 
 -- Relaciones para Sopa de Tomate (id_receta 3)
-INSERT INTO "tiene" VALUES (6, 3, 400);  -- Tomate
-INSERT INTO "tiene" VALUES (3, 3, 10);   -- Sal
+INSERT INTO "tiene" VALUES (6, 3, 7, 400);  -- Tomate
+INSERT INTO "tiene" VALUES (3, 3, 1, 10);   -- Sal
 
 -- Relaciones para Arroz con Pollo (id_receta 5)
-INSERT INTO "tiene" VALUES (9, 5, 500);  -- Pollo
+INSERT INTO "tiene" VALUES (9, 5, 2, 500);  -- Pollo
 
 -- Relaciones para Tostadas Francesas (id_receta 7)
-INSERT INTO "tiene" VALUES (5, 7, 4);    -- Huevos
-INSERT INTO "tiene" VALUES (4, 7, 200);  -- Leche
+INSERT INTO "tiene" VALUES (5, 7, 1, 4);    -- Huevos
+INSERT INTO "tiene" VALUES (4, 7, 1, 200);  -- Leche
 
 -- Relaciones para Omelette de Queso (id_receta 8)
-INSERT INTO "tiene" VALUES (5, 8, 3);    -- Huevos
-INSERT INTO "tiene" VALUES (7, 8, 150);  -- Queso
+INSERT INTO "tiene" VALUES (5, 8, 1, 3);    -- Huevos
+INSERT INTO "tiene" VALUES (7, 8, 1, 150);  -- Queso
 
 -- Relaciones para Pasta Alfredo (id_receta 6)
-INSERT INTO "tiene" VALUES (10, 6, 300); -- Pasta
-INSERT INTO "tiene" VALUES (7, 6, 200);  -- Queso
+INSERT INTO "tiene" VALUES (10, 6, 2, 300); -- Pasta
+INSERT INTO "tiene" VALUES (7, 6, 1, 200);  -- Queso
 
 -- Relaciones para Churros (id_receta 10)
-INSERT INTO "tiene" VALUES (1, 10, 250); -- Harina
-INSERT INTO "tiene" VALUES (2, 10, 50);  -- Azúcar
+INSERT INTO "tiene" VALUES (1, 10, 1, 250); -- Harina
+INSERT INTO "tiene" VALUES (2, 10, 1, 50);  -- Azúcar
 
 -- Relación para Empanadas (id_receta 9)
-INSERT INTO "tiene" VALUES (9, 9, 300);  -- Pollo
-INSERT INTO "tiene" VALUES (1, 9, 250);  -- Harina
+INSERT INTO "tiene" VALUES (9, 9, 1, 300);  -- Pollo
+INSERT INTO "tiene" VALUES (1, 9, 1, 250);  -- Harina
 
 -- Recetas guardadas por el usuario 1
 INSERT INTO "guardado" VALUES (1, 3, 1);  -- Sopa de Tomate

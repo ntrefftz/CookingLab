@@ -5,7 +5,7 @@ import { Contiene } from './Contiene.js';
 import { Cesta } from './Cesta.js';
 
 export function viewCesta(req, res) {
-    let contenido = 'paginas/noPermisos';
+    let contenido = 'paginas/nocesta';
     if (req.session != null && req.session.nombre != null) {
         contenido = 'paginas/cesta';
     }
