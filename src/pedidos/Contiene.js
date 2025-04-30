@@ -4,6 +4,7 @@ export class Contiene {
     static #insertStmt = null;
     static #updateStmt = null;
     static #deleteStmt = null;
+    static #deletePedidoStmt = null;
 
     static initStatements(db) {
         if (this.#getByIngredienteYPedidosStmt !== null) return;
@@ -21,6 +22,9 @@ export class Contiene {
 
         // Eliminar una relación
         this.#deleteStmt = db.prepare('DELETE FROM Contiene WHERE id_ingrediente = @id_ingrediente AND id_pedidos = @id_pedidos');
+    
+        // Eliminar una relación por ID de pedido
+        this.#deletePedidoStmt = db.prepare('DELETE FROM Contiene WHERE id_pedidos = @id_pedidos');
     }
 
     static getByPedido(id_pedidos) {
@@ -63,6 +67,11 @@ export class Contiene {
         const result = this.#deleteStmt.run({ id_ingrediente, id_pedidos });
         if (result.changes === 0) throw new RelacionNoEncontrada(id_ingrediente, id_pedidos);
         return { mensaje: "Relación eliminada correctamente" };
+    }
+
+    static deletePedido(id_pedidos) {
+        const result = this.#deletePedidoStmt.run({ id_pedidos });
+        return { mensaje: "Pedido eliminado correctamente" };
     }
 }
 

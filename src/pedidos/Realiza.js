@@ -3,6 +3,7 @@ export class Realiza {
     static #insertStmt = null;
     static #deleteStmt = null;
     static #getByUsuarioStmt = null;
+    static #deletePedidoStmt = null;
 
     static initStatements(db) {
         if (this.#getByUsuarioYPedidoStmt !== null) return;
@@ -11,6 +12,7 @@ export class Realiza {
         this.#getByUsuarioStmt = db.prepare('SELECT * FROM Realiza WHERE id_usuario = @id_usuario');
         this.#insertStmt = db.prepare('INSERT INTO Realiza(id_usuario, id_pedido) VALUES (@id_usuario, @id_pedido)');
         this.#deleteStmt = db.prepare('DELETE FROM Realiza WHERE id_usuario = @id_usuario AND id_pedido = @id_pedido');
+        this.#deletePedidoStmt = db.prepare('DELETE FROM Realiza WHERE id_pedido = @id_pedido');
     }
 
     static getByUsuario(id_usuario) {
@@ -21,8 +23,8 @@ export class Realiza {
 
     static getRelacion(id_usuario, id_pedido) {
         const realiza = this.#getByUsuarioYPedidoStmt.get({ id_usuario, id_pedido });
-        if (!realiza) throw new RelacionNoEncontrada(id_usuario, id_ingrediente);
-        return realiza;
+        if (!realiza) return false;
+        return true;
     }
 
     static addRelacion(id_usuario, id_pedido) {
@@ -39,6 +41,11 @@ export class Realiza {
     static deleteRelacion(id_usuario, id_pedido) {
         const result = this.#deleteStmt.run({ id_usuario, id_pedido });
         if (result.changes === 0) throw new RelacionNoEncontrada(id_usuario, id_pedido);
+        return { mensaje: "Relación eliminada correctamente" };
+    }
+
+    static deletePedido(id_pedido) {
+        const result = this.#deletePedidoStmt.run({ id_pedido });
         return { mensaje: "Relación eliminada correctamente" };
     }
 }

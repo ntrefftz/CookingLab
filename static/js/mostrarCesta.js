@@ -24,8 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <h3>${ingrediente.nombre}</h3>
             <p>Cantidad: ${ingrediente.cantidad}</p>
             <p>Precio: ${ingrediente.precio} €</p>
-            <button class="aumentar-cantidad" data-id="${ingrediente.id}">Añadir</button>
-            <button class="eliminar-ingrediente" data-id="${ingrediente.id}">Eliminar</button>
+            <form><button class="aumentar-cantidad" data-id="${ingrediente.id}">Añadir</button></form>
+            <form><button class="eliminar-ingrediente" data-id="${ingrediente.id}">Eliminar</button></form>
         `;
         cestaContainer.appendChild(div);
 
@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
         aumentarBtn.addEventListener('click', function() {
             const id = this.dataset.id;
 
-            // Enviar solicitud para aumentar la cantidad del ingrediente
             fetch('/pedidos/cesta/aumentar', {
                 method: 'POST',
                 headers: {
@@ -44,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => {
                 if (response.ok) {
-                    // Recargar la página o actualizar la lista de ingredientes
                     location.reload();
                 } else {
                     console.error('Error al aumentar la cantidad del ingrediente');
@@ -58,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
         eliminarBtn.addEventListener('click', function() {
             const id = this.dataset.id;
 
-            // Enviar solicitud para eliminar el ingrediente
             fetch('/pedidos/cesta/eliminar', {
                 method: 'POST',
                 headers: {
@@ -68,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => {
                 if (response.ok) {
-                    // Recargar la página o actualizar la lista de ingredientes
                     location.reload();
                 } else {
                     console.error('Error al eliminar el ingrediente');
@@ -83,5 +79,30 @@ document.addEventListener('DOMContentLoaded', function() {
     total.innerHTML = `
         <h3>Total: ${precioTotal.toFixed(2)} €</h3>
     `;
+    const botonFinalizar = document.createElement('button');
+    botonFinalizar.className = 'tramitar';
+    botonFinalizar.innerHTML = 'Tramitar pedido';
+    total.appendChild(botonFinalizar);
+
+    // Agregar evento al botón "Tramitar pedido"
+    botonFinalizar.addEventListener('click', function() {
+        fetch('/pedidos/tramitarPedido', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.pedidoId) {
+                window.location.href = `/pedidos/confirmarPedido?id=${data.pedidoId}`;
+            } else if (data.error) {
+                console.error('Error al tramitar el pedido:', data.error);
+                alert('No se pudo tramitar el pedido: ' + data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
     cestaContainer.appendChild(total);
 });

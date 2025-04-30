@@ -20,6 +20,8 @@ CREATE TABLE "Ingredientes" (
 DROP TABLE IF EXISTS "Pedidos";
 CREATE TABLE "Pedidos" (
 	"id"	INTEGER NOT NULL,
+	"fecha"	DATE NOT NULL,
+	"hora"	TIME NOT NULL,
 	"precio_total"	REAL NOT NULL CHECK("precio_total" >= 0),
 	"enviado"	INTEGER NOT NULL DEFAULT 0 CHECK("enviado" IN (0, 1)),
 	"pagado"	INTEGER NOT NULL DEFAULT 1 CHECK("pagado" IN (0, 1)),

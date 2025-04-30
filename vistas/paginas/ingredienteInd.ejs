@@ -5,8 +5,8 @@
 <p>Stock: <%= ingredientes.stock %></p>
 <p></p>
 <% if (session.esAdmin) { %>
-    <a href="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>"><button>Editar ingrediente</button></a>
-    <a href="/recetas/ingredienteInd/eliminar?id=<%= ingredientes.id %>"><button>Eliminar ingrediente</button></a>
+    <form><a href="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>"><button>Editar ingrediente</button></a></form>
+    <form><a href="/recetas/ingredienteInd/eliminar?id=<%= ingredientes.id %>"><button>Eliminar ingrediente</button></a></form>
 <% } %>
 
 
