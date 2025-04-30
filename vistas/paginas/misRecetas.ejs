@@ -11,7 +11,17 @@
                     <h4><%= receta.nombre %></h4>
                 </a>
                 <p><%= receta.descripcion %></p>
+
+                <button class="btn-eliminar">Eliminar receta</button>
+
             </article>
         <% }) %>
     <% } %>
 </div>
+<div>
+    <form action="/recetas/catalogo" method="GET">
+        <input type="hidden" name="origen" value="misRecetas" />
+        <button type="submit">Añadir receta</button>
+    </form>
+</div>
+
