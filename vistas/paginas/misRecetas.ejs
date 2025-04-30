@@ -12,8 +12,12 @@
                 </a>
                 <p><%= receta.descripcion %></p>
 
-                <button class="btn-eliminar">Eliminar receta</button>
-
+                <form action="/usuarios/favoritos/eliminar" method="POST">
+                    <input type="hidden" name="recetaId" value="<%= receta.id %>" />
+                    <button class="eliminar-favorito">Eliminar de favoritos</button>
+                </form>
+                
+                
             </article>
         <% }) %>
     <% } %>
