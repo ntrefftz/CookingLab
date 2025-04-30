@@ -6,6 +6,7 @@ export class CalendarioSemanal {
     static #getByUsuarioYFechaStmt = null;   // Obtener receta asignada a un usuario en una fecha específica
     static #getRecetasSemanaStmt = null; //  NUEVA 
     static #getRecetasRangoStmt = null; // NUEVA: porque siguen petando las malditas fechas
+    static #getRecetaPorDiaStmt = null; // NUEVA: Obtener receta asignada a un usuario en un día específico
 
     static initStatements(db) {
         if (this.#getByUsuarioYSemanaStmt !== null) return;

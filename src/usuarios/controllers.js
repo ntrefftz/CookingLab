@@ -470,3 +470,20 @@ export async function cambiarPermisos(req, res) {
         res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
     }
 }
+
+export async function consultarRecetaDelCalendario(req, res) {
+
+    const fecha = req.body.fecha;
+    const usuarioId = req.session.userId;
+    
+    try {
+        logger.debug("Receta del calendario para el usuario %s en la fecha %s", usuarioId, fecha);
+        CalendarioSemanal.getRecetaPorUsuarioYFecha(usuarioId, fecha);
+        res.json({ message: 'Receta guardada con éxito' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al guardar la receta' });
+    }
+}
+
+
