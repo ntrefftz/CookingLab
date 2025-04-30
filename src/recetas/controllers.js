@@ -9,10 +9,14 @@ import { Cesta } from '../pedidos/Cesta.js';
 export function viewRecetasLista(req, res) {
     // Verificamos si la solicitud viene del calendario
     const esDesdeCalendario = req.query.origen === 'calendario';  // Se obtiene el parámetro 'origen'
+    const esDesdeMisRecetas = req.query.origen === 'misRecetas';  
+
     const fecha = req.query.fecha || null; // Fecha seleccionada, si viene desde el calendario
 
     //const diaSeleccionado = req.query.dia;  // El día seleccionado en el calendario, pasado como parámetro
     console.log("¿Proviene del calendario?", esDesdeCalendario); // Aquí se verá si es true o false
+    console.log("¿Proviene de mis recetas?", esDesdeMisRecetas); // Aquí se verá si es true o false
+    
     if (fecha) {
         console.log("Fecha seleccionada:", fecha);
     }
@@ -25,7 +29,8 @@ export function viewRecetasLista(req, res) {
         recetas: rows,
         fecha, // Importante para usarla luego al añadir receta al calendario
         //diaSeleccionado,     // Enviamos el día seleccionado
-        esDesdeCalendario  // Enviamos el flag que indica si proviene del calendario
+        esDesdeCalendario,  // Enviamos el flag que indica si proviene del calendario
+        esDesdeMisRecetas // Enviamos el flag que indica si proviene de misRecetas
     });
 }
 

@@ -15,11 +15,6 @@
             <p>Dificultad: <%= receta.dificultad %></p>
             
             <% if (esDesdeCalendario) { %>
-                <!--
-                <a href="/usuarios/micalendario"> 
-                    <button class="anadir-receta-calendario">Añadir receta al calendario</button>
-                </a>
-                -->
                 <form action="/usuarios/calendario/aniadir" method="POST">
                     <input type="hidden" name="recetaId" value="<%= receta.id %>" />
                     <input type="hidden" name="fecha" value="<%= fecha %>" />
@@ -27,6 +22,10 @@
                 </form>
 
             <% } %>
+            <% if (esDesdeMisRecetas) { %>
+                <button class="anadir-receta-calendario">Añadir receta a favoritos</button>
+            <% } %>
+            
         </article>
         <% }) %>
 </div>
