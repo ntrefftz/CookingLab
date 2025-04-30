@@ -37,6 +37,7 @@ function menu(session){
 		<li><a href="/recetas/buscarReceta">Buscar</a></li>
 		<% if (session && session.login) { %>
 			<li><a href="/usuarios/micalendario">Calendario</a></li>
+			<li><a href="/usuarios/misrecetas">Mis recetas</a></li>
 		<% } %>
 
 		<li><%- mostrarSaludo(session) %></li>
