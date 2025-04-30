@@ -1,15 +1,16 @@
-<form action="/recetas/receta/modificar?id=<%= recetas.id %>" method="POST">
-    <fieldset>
-        <% if (locals.error) { %>
-            <p><strong><%= locals.error %></strong></p>
-        <% } %>
-        <legend>Editar receta</legend>
-        <label>Nombre:</label> <input type="text" name="nombre" value="<%= recetas.nombre %>" />
-        <label>Tiempo de preparación (min):</label> <input type="number" name="tiempo_prep_segs" value="<%= Math.floor(recetas.tiempo_prep_segs/60) %>" />
-        <label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" value="<%= recetas.dificultad %>" />
-        <label>Descripción:</label> <textarea name="descripcion"><%= recetas.descripcion %></textarea>
-        <label>Ingredientes:</label>
-        
+<form id="editar-receta" action="/recetas/receta/modificar?id=<%= recetas.id %>" method="POST">
+    <% if (locals.error) { %>
+        <p><strong><%= locals.error %></strong></p>
+    <% } %>
+    <legend>Editar receta</legend>
+    <label>Nombre:</label> <input type="text" name="nombre" value="<%= recetas.nombre %>" />
+    <label>Tiempo de preparación (min):</label> <input type="number" name="tiempo_prep_segs" value="<%= Math.floor(recetas.tiempo_prep_segs/60) %>" />
+    <label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" value="<%= recetas.dificultad %>" />
+    <label>Descripción:</label> <textarea name="descripcion"><%= recetas.descripcion %></textarea>
+    <label>Ingredientes:</label>
+    
+    <div class="ingredientes-section">
+        <h3>Ingredientes actuales:</h3>
         <% if (recetas.ingredientes && recetas.ingredientes.length > 0) { %>
             <ol>
                 <% recetas.ingredientes.forEach(function(ingrediente) { %>
@@ -19,17 +20,19 @@
         <% } else { %>
             <p>No hay ingredientes disponibles.</p>
         <% } %>
-        
-        <details>
-            <summary>Añadir ingredientes</summary>
+    </div>
+
+    <div class="acciones-ingredientes">
+        <details class="ingredientes-section">
+            <summary>Añadir ingrediente</summary>
             <% if (listaIngredientes && listaIngredientes.length > 0) { %>
                 <ul>
                     <% listaIngredientes.forEach(ingrediente => { %>
-                        <li> 
-                            <%= ingrediente.nombre %> 
-                            <input type="checkbox" name="ingredientesSeleccionados[]" value="<%= ingrediente.id %>" /> 
-                            <input type="number" name="cantidades[<%= ingrediente.id %>]" id="cantidad-<%= ingrediente.id %>" placeholder="Cantidad" min="0" />
-                            <input type="number" name="cantidad_especifica[<%= ingrediente.id %>]" id="cantidad_esp-<%= ingrediente.id %>" placeholder="Unidades/gramos" min="0" />
+                        <li>
+                            <input type="checkbox" id="ing-<%= ingrediente.id %>" name="ingredientesSeleccionados[]" value="<%= ingrediente.id %>">
+                            <label for="ing-<%= ingrediente.id %>"><%= ingrediente.nombre %></label>
+                            <input type="number" name="cantidades[<%= ingrediente.id %>]" placeholder="Cantidad" min="0">
+                            <input type="number" name="cantidad_especifica[<%= ingrediente.id %>]" placeholder="Unidades/gramos" min="0">
                         </li>
                     <% }) %>
                 </ul>
@@ -38,23 +41,23 @@
             <% } %>
         </details>
 
-        <details>
-            <summary>Eliminar ingredientes</summary>
+        <details class="ingredientes-section">
+            <summary>Eliminar ingrediente</summary>
             <% if (recetas.ingredientes && recetas.ingredientes.length > 0) { %>
                 <ul>
                     <% recetas.ingredientes.forEach(ingrediente => { %>
                         <li>
-                            <%= ingrediente.nombre %>
-                            <input type="checkbox" name="ingredientesAEliminar[]" value="<%= ingrediente.id_ingrediente || ingrediente.id %>" />
+                            <input type="checkbox" id="del-<%= ingrediente.id_ingrediente || ingrediente.id %>" name="ingredientesAEliminar[]" value="<%= ingrediente.id_ingrediente || ingrediente.id %>">
+                            <label for="del-<%= ingrediente.id_ingrediente || ingrediente.id %>"><%= ingrediente.nombre %></label>
                         </li>
                     <% }) %>
                 </ul>
             <% } else { %>
                 <p>No hay ingredientes para eliminar.</p>
             <% } %>
-          </details>
+        </details>
+    </div>
+    
+    <button type="submit">Guardar cambios</button>
 
-        
-        <button type="submit">Editar</button>
-    </fieldset>
 </form>
