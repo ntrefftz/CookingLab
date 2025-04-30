@@ -1,13 +1,15 @@
-<form action="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>" method="POST">
-    <fieldset>
-        <% if (locals.error) { %>
-            <p><strong><%= locals.error %></strong></p>
-        <% } %>
-        <legend>Editar receta</legend>
-        <div><label>Nombre:</label> <input type="text" name="nombre" value="<%= ingredientes.nombre %>" /></div>
-        <div><label>Categoría:</label> <textarea name="categoria"><%= ingredientes.categoria %></textarea></div>
-        <div><label>Precio:</label> <textarea name="precio"><%= ingredientes.precio %></textarea></div>
-        <div><label>Stock:</label> <textarea name="stock"><%= ingredientes.stock %></textarea></div>
-        <button type="submit">Editar</button>
-    </fieldset>
-</form>
+<div id="catalogo" class="form">
+    <form action="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>" method="POST">
+        <fieldset>
+            <% if (locals.error) { %>
+                <p><strong><%= locals.error %></strong></p>
+            <% } %>
+            <legend>Editar receta</legend>
+            <div><label>Nombre:</label> <input type="text" name="nombre" value="<%= ingredientes.nombre %>" /></div>
+            <div><label>Categoría:</label> <textarea name="categoria"><%= ingredientes.categoria %></textarea></div>
+            <div><label>Precio:</label> <textarea name="precio"><%= ingredientes.precio %></textarea></div>
+            <div><label>Stock:</label> <textarea name="stock"><%= ingredientes.stock %></textarea></div>
+            <button type="submit">Editar</button>
+        </fieldset>
+    </form>
+</div>
