@@ -19,10 +19,12 @@ export class Cesta {
         const cesta = this.#getByIdStmt.all({ id_usuario });
         return cesta || [];
     }
+
     static getByUserAndIngredient(id_usuario, id_ingrediente) {
         const cesta = this.#getByUserAndIngredientStmt.get({ id_usuario, id_ingrediente });
         return cesta || null;
     }
+
     static addCesta(id_usuario, id_ingrediente, cantidad) {
         try {
             const result = this.#insertStmt.run({ id_usuario, id_ingrediente, cantidad });
@@ -31,11 +33,13 @@ export class Cesta {
             throw new ErrorDatos("No se pudo añadir la cesta", { cause: e });
         }
     }
+
     static deleteCesta(id_usuario, id_ingrediente) {
         const result = this.#deleteStmt.run({ id_usuario, id_ingrediente });
         if (result.changes === 0) throw new CestaNoEncontrada(id_usuario);
         return { mensaje: "Cesta eliminada correctamente" };
     }
+    
     static updateCesta(id_usuario, id_ingrediente, cantidad) {
         if (cantidad <= 0) {
             throw new ErrorDatos("La cantidad debe ser mayor que cero");

@@ -80,10 +80,6 @@ export function viewModificarReceta(req, res) {
     });
 }
 
-export function aniadirRecetaCarrito(req, res) {
-
-}
-
 export function eliminarReceta(req, res) {
     const contenido = 'paginas/eliminada';
     const id = req.query.id;
@@ -304,12 +300,54 @@ export function aniadirReceta(req, res) {
     }
 }
 
-export function viewAniadirRecetaCarrito(req, res) {
-    const contenido = 'paginas/aniadirRecetaCarrito';
-    res.render('pagina', {
-        contenido,
-        session: req.session
-    });
+export async function aniadirRecetaCarrito(req, res) {
+    try {
+        const id_receta = req.body.id;
+        const user = req.session.userId;
+        
+        if (!user) {
+            logger.info('No autenticado');
+            return res.redirect('/usuarios/login');
+        }
+
+        if (!id_receta || isNaN(parseInt(id_receta))) {
+            return res.status(400).send('ID de receta inválido');
+        }
+
+        // Obtener todos los ingredientes de la receta usando la clase Tiene
+        let ingredientes;
+        try {
+            ingredientes = Tiene.getIngredientesByReceta(id_receta);
+        } catch (e) {
+            if (e.message.includes("No se encontraron ingredientes")) {
+                return res.status(404).send('La receta no tiene ingredientes');
+            }
+            throw e;
+        }
+
+        // Añadir cada ingrediente al carrito
+        for (const ingrediente of ingredientes) {
+            try {
+                const ingReceta = Cesta.getByUserAndIngredient(user, ingrediente.id_ingrediente);
+                
+                if (!ingReceta) {
+                    Cesta.addCesta(user, ingrediente.id_ingrediente, ingrediente.cantidad);
+                } else {
+                    const nuevaCantidad = ingReceta.cantidad + ingrediente.cantidad;
+                    Cesta.updateCesta(user, ingrediente.id_ingrediente, nuevaCantidad);
+                }
+            } catch (e) {
+                logger.error(`Error al procesar ingrediente ${ingrediente.id_ingrediente}: ${e.message}`);
+                // Continuar con el siguiente ingrediente aunque falle uno
+                continue;
+            }
+        }
+
+        res.redirect('/pedidos/cesta');
+    } catch(e) {
+        logger.error(e);
+        res.status(500).send('Error al añadir los ingredientes al carrito');
+    }
 }
 
 //--------------------------------------------------------------------
