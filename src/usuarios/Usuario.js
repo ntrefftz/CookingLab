@@ -130,8 +130,7 @@ export class Usuario {
         } catch (e) {
             throw new UsuarioOPasswordNoValido(username, { cause: e });
         }
-        // XXX: En el ej3 / P3 lo cambiaremos para usar async / await o Promises
-        //logger.log("Rol del usuario en login:", usuario.rol);
+        logger.debug("Rol del usuario en login:", usuario.rol);
 
         if (!bcrypt.compareSync(password, usuario.#password)) throw new UsuarioOPasswordNoValido(username);
 

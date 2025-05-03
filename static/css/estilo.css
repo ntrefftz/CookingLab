@@ -627,3 +627,43 @@ form.navbar-search {
     margin-left: 5px;
     padding: 0;
 }
+
+#calendar-simple {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #F383A0;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#prev-day-btn {
+    background-color: white;
+    color: #F383A0;
+    border: 1px solid #F383A0;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+#prev-day-btn:hover {
+    background-color: #F383A0;
+    color: white;
+}
+
+#current-date {
+    font-size: 16px;
+    font-weight: bold;
+}

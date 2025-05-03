@@ -1,3 +1,5 @@
+<script src="/js/calendario.js"></script>
+
 <h1>Descubre nuevas recetas</h1>
 <div id="catalogo" class="cards_container">
     <% if (ultimasRecetas && ultimasRecetas.length > 0) { %>
@@ -21,8 +23,8 @@
 <div class="receta-y-calendario">
     <div id="receta-del-dia">
         <% if (recetaDelDia) { %>
-            <article class="card">
-                <img src=<%= recetaDelDia.imagen_url %> alt="Pronto habrá una foto" />
+            <article class="card" id="receta-seleccionada">
+                <img src="<%= recetaDelDia.imagen_url %>" alt="Pronto habrá una foto" />
                 <p></p>
                 <a href="/recetas/receta?id=<%= recetaDelDia.id %>">
                     <h4><%= recetaDelDia.nombre %></h4>
@@ -35,7 +37,12 @@
         <% } %>
     </div>
 
-    <div id="calendar"></div>
+    <div id="calendar-simple">
+        <div class="calendar-header">
+            <button id="prev-day-btn">← Día anterior</button>
+            <span id="current-date"></span>
+        </div>
+    </div>
 </div>
 
 <h1>Realiza tu compra</h1>
