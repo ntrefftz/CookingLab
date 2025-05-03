@@ -7,6 +7,7 @@ export class Ingrediente {
     static #updateStmt = null;
     static #reduceStockStmt = null;
     static #existsStmt = null;
+    static #setStock = null;
 
     static initStatements(db) {
         if (this.#getByIdStmt !== null) return;
@@ -19,6 +20,7 @@ export class Ingrediente {
         this.#updateStmt = db.prepare('UPDATE Ingredientes SET nombre = @nombre, categoria = @categoria, precio = @precio, stock = @stock WHERE id = @id');
         this.#reduceStockStmt = db.prepare('UPDATE Ingredientes SET stock = stock - @cantidad WHERE id = @id AND stock >= @cantidad');
         this.#existsStmt = db.prepare('SELECT COUNT(*) as count FROM Ingredientes WHERE nombre = @nombre');
+        this.#setStock = db.prepare('UPDATE Ingredientes SET stock = @stock WHERE id = @id');
     }
 
     static getIngredienteById(id) {
@@ -68,6 +70,11 @@ export class Ingrediente {
     static existeIngrediente(nombre) {
         const result = this.#existsStmt.get({ nombre });
         return result.count > 0;
+    }
+    static setStock(id, stock) {
+        const result = this.#setStock.run({ id, stock });
+        if (result.changes === 0) throw new IngredienteNoEncontrado(id);
+        return { mensaje: "Stock actualizado correctamente" };
     }
 }
 

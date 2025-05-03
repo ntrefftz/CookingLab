@@ -18,23 +18,25 @@
 </div>
 
 <h1>Receta del día</h1>
-<div id="catalogo" class="cards_container">
-    <% if (recetaDelDia) { %>
-        <article class="card">
-            <img src=<%= recetaDelDia.imagen_url %> alt="Pronto habrá una foto"  />
-            <p></p>
-            <a href="/recetas/receta?id=<%= recetaDelDia.id %>">
-                <h4><%= recetaDelDia.nombre %></h4>
-            </a>
-            <p>Tiempo preparación: <%= Math.floor(recetaDelDia.tiempo_prep_segs / 60) %> minutos</p>
-            <p>Dificultad: <%= recetaDelDia.dificultad %></p>
-        </article>
-    <% } else { %>
-        <p>No hay receta del día disponible</p>
-    <% } %>
-</div>
+<div class="receta-y-calendario">
+    <div id="receta-del-dia">
+        <% if (recetaDelDia) { %>
+            <article class="card">
+                <img src=<%= recetaDelDia.imagen_url %> alt="Pronto habrá una foto" />
+                <p></p>
+                <a href="/recetas/receta?id=<%= recetaDelDia.id %>">
+                    <h4><%= recetaDelDia.nombre %></h4>
+                </a>
+                <p>Tiempo preparación: <%= Math.floor(recetaDelDia.tiempo_prep_segs / 60) %> minutos</p>
+                <p>Dificultad: <%= recetaDelDia.dificultad %></p>
+            </article>
+        <% } else { %>
+            <p>No hay receta del día disponible</p>
+        <% } %>
+    </div>
 
-<div id='calendar'></div>
+    <div id="calendar"></div>
+</div>
 
 <h1>Realiza tu compra</h1>
 <div id="catalogo" class="cards_container_tall">

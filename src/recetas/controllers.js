@@ -34,6 +34,15 @@ export function viewRecetasLista(req, res) {
     });
 }
 
+export function viewGestionStock(req, res) {
+    const rows = Ingrediente.getAllIngredientes();
+    const contenido = 'paginas/gestionStock';
+    res.render('pagina', {
+        contenido,
+        session: req.session,
+        ingredientes: rows,
+    });
+}
 export function viewRecetasDetalle(req, res) {
     const contenido = 'paginas/receta';
     const id = req.query.id;
@@ -595,6 +604,21 @@ export function buscarReceta(req, res) {
             tipo,
             error: 'Ocurrió un error al realizar la búsqueda'
         });
+    }
+}
+
+export async function actualizarStock(req, res){
+
+    const { id, stock } = req.body;
+
+    try {
+        console.log("ID:", id);
+        console.log("Stock:", stock);
+        Ingrediente.setStock(id, stock);
+        res.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: 'Error al actualizar el stock' });
     }
 }
 /*

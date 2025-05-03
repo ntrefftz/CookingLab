@@ -1,0 +1,34 @@
+<table class="tabla-usuarios">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Stock Disponible</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% ingredientes.forEach(ingredientes => { %>
+            <tr>
+                <td><%= ingredientes.id %></td>
+                <td>
+                    <img class ="imagen-ingredientes" src="<%= ingredientes.imagen_url %>" alt="Imagen de <%= ingredientes.nombre %>" class="imagen-ingredientes">
+                </td>
+                <td><%= ingredientes.nombre %></td>
+                <td><%= ingredientes.precio %></td>
+                <td>
+                    <input 
+                        type="number" 
+                        class="stock-input" 
+                        data-id="<%= ingredientes.id %>" 
+                        value="<%= ingredientes.stock %>" 
+                        min="0" 
+                        onchange="actualizarStock(this)"
+                    >
+                </td>
+            </tr>
+        <% }) %>
+    </tbody>
+</table>
+
