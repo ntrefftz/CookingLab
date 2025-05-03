@@ -587,3 +587,43 @@ select {
 	height: auto; /* Mantiene la proporción de la imagen */
 	object-fit: cover; /* Opcional: ajusta cómo se recorta la imagen si es necesario */
 }
+
+/* Estilo para el formulario de búsqueda en la barra de navegación */
+.navbar-search {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+form.navbar-search {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    background-color: transparent; /* Sin fondo para que se integre mejor */
+    box-shadow: none; /* Sin sombra */
+    border: none; /* Sin bordes */
+}
+
+.navbar-search input[type="text"] {
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 150px; /* Ajusta el ancho para que no ocupe demasiado espacio */
+    transition: width 0.3s ease; /* Efecto de transición al enfocar */
+}
+
+.navbar-search input[type="text"]:focus {
+    width: 200px; /* Expande el campo al enfocarlo */
+}
+
+.navbar-search button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 5px;
+    padding: 0;
+}
