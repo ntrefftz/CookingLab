@@ -1,12 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
     const prevDayBtn = document.getElementById("prev-day-btn");
+    const todayBtn = document.getElementById("today-btn");
+    const nextDayBtn = document.getElementById("next-day-btn");
     const currentDateSpan = document.getElementById("current-date");
     const recetaSeleccionada = document.getElementById("receta-seleccionada");
 
-    // Fecha actual
     let currentDate = new Date();
+    const today = new Date();
 
-    // Función para formatear la fecha como "YYYY-MM-DD"
     function formatDate(date) {
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -14,16 +15,21 @@ document.addEventListener("DOMContentLoaded", () => {
         return `${year}-${month}-${day}`;
     }
 
-    // Función para actualizar la fecha mostrada
     function updateDateDisplay() {
         const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
         currentDateSpan.textContent = currentDate.toLocaleDateString("es-ES", options);
     }
 
-    // Función para cargar la receta del día
     async function loadRecetaDelDia(date) {
         try {
-            const response = await fetch(`/recetas/recetaPorFecha?fecha=${formatDate(date)}`);
+            console.log("Cargando receta del día para la fecha:", formatDate(date));
+            const response = await fetch('/recetas/recetaPorFecha', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ fecha: formatDate(date) }),
+            });
             const receta = await response.json();
 
             if (receta) {
@@ -44,14 +50,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Evento para retroceder un día
     prevDayBtn.addEventListener("click", () => {
-        currentDate.setDate(currentDate.getDate() - 1); // Retrocede un día
+        currentDate.setDate(currentDate.getDate() - 1);
         updateDateDisplay();
         loadRecetaDelDia(currentDate);
     });
 
-    // Inicializar la vista
+    todayBtn.addEventListener("click", () => {
+        currentDate = new Date(today);
+        updateDateDisplay();
+        loadRecetaDelDia(currentDate);
+    });
+
+    nextDayBtn.addEventListener("click", () => {
+        const nextDate = new Date(currentDate);
+        nextDate.setDate(currentDate.getDate() + 1);
+        if (nextDate <= today) {
+            currentDate = nextDate;
+            updateDateDisplay();
+            loadRecetaDelDia(currentDate);
+        }
+    });
+
     updateDateDisplay();
     loadRecetaDelDia(currentDate);
 });

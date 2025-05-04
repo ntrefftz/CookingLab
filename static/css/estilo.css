@@ -1,669 +1,755 @@
-body {
-	background-color: #FFFFFF;
-	width: auto;
-	margin: auto;
-	border: 1px solid black;
-	background-color: #FFE0EE;
-}
-
-@font-face {
-	font-family: 'alice';
-	font-display: swap;
-	src: url('/static/fonts/Alice-Regular.ttf')format('ttf');
-}
-
-/* Header, Navbar y login */
-
-header {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	text-align: center;
-	padding: 30px;
-	height: 100px;
-	background-color: #F383A0;
-	color: black;
-}
-
-header a,
-header a:visited {
-	color: black;
-	font-weight: bold;
-	text-decoration: none;
-}
-
-header a:hover {
-	color: red;
-	font-weight: bold;
-	text-decoration: underline;
-}
-
-
-.navbar {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	background-color: #F383A0;
-	padding: 0;
-	margin: 0;
-}
-
-.navbar ul {
-	list-style-type: none;
-	display: flex;
-	gap: 20px;
-	padding: 0;
-	margin: 0;
-}
-
-.navbar li {
-	display: flex;
-}
-
-.navbar a {
-	color: black;
-	font-weight: bold;
-	text-decoration: none;
-	padding: 10px;
-}
-
-.navbar a:hover {
-	color: rgb(133, 16, 154);
-	text-decoration: underline;
-}
-
-.login {
-	margin-left: 0;
-	text-align: center;
-}
-
-.login p {
-	margin: 0;
-}
-
-.login a {
-	font-weight: bold;
-	color: blue;
-}
-
-.login a:hover {
-	color: red;
-}
-
-aside {
-	padding: 10px;
-	float: right;
-	width: 170px;
-	height: 400px;
-	background-color: #FFE0EE;
-}
-
-main {
-	padding: 10px;
-	margin: auto;
-	min-height: 600px;
-	width: 90%;
-	background-color: white;
-}
-
-footer {
-	clear: both;
-	padding: 20px;
-	background-color: #FFE0EE;
-	color: white;
-	text-align: center;
-}
-
-footer a {
-	color: red;
-}
-
-div.saludo {
-	width: 100%;
-	text-align: right;
-}
-
-fieldset {
-	border: 1px solid black;
-	width: 15em;
-	margin: 0 auto;
-}
-
-legend {
-	color: #fff;
-	background: #F383A0;
-	border: 1px solid black;
-	padding: 2px 6px;
-}
-
-label {
-	width: 4em;
-	float: left;
-	text-align: right;
-	margin-right: 0.5em;
-	display: block;
-}
-
-/*formulario*/
-form {
-	width: 90%;
-	max-width: 600px;
-	margin: 20px auto;
-	background-color: #fff;
-	padding: 20px;
-	border-radius: 8px;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-form label {
-	width: auto;
-	float: none;
-	display: inline-block;
-	text-align: left;
-	font-weight: bold;
-}
-
-form input,
-form textarea,
-form select {
-	width: calc(100% - 20px);
-	padding: 8px;
-	margin-top: 5px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-}
-
-/* Para los radio buttons */
-.radio-group {
-	display: flex;
-	gap: 10px;
-	align-items: center;
-}
-
-/* Alineación del checkbox */
-.terms {
-	display: flex;
-	align-items: center;
-	gap: 5px;
-}
-
-/* Botón bien alineado */
-button {
-	width: auto;
-	display: block;
-	margin: 20px auto;
-	padding: 10px 20px;
-	font-family: 'alice';
-	background-color: #F383A0;
-	color: white;
-	border: none;
-	cursor: pointer;
-	font-size: 16px;
-}
-
-/* Imagen */
-img {
-	max-width: 100%;
-}
-
-/* CSS tarjetas */
-.cards_container {
-	max-width: 90%;
-	margin: 30px auto;
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 25px;
-	padding: 0 15px;
-	/* Espaciado lateral */
-}
-
-.card {
-	border: 1px solid #e0e0e0;
-	border-radius: 8px;
-	/* Bordes más redondeados */
-	background: white;
-	text-align: center;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	overflow: hidden;
-	transition: transform 0.3s ease;
-	width: 100%;
-	/* Ocupa todo el ancho de la celda grid */
-	overflow: hidden;
-}
-
-.card img {
-	display: block;
-	width: 100%;
-	height: 180px;
-	/* Altura fija para uniformidad */
-	object-fit: cover;
-}
-
-.card h4 {
-	margin: 0;
-	padding: 2px;
-}
-
-.card a {
-	font-weight: bold;
-	color: black;
-}
-
-.card header {
-	background-color: #F383A0;
-	color: black;
-	padding: 15px;
-	font-size: 1.1em;
-	font-weight: bold;
-	min-height: auto;
-}
-
-.dropdown {
-	position: relative;
-	/*display: inline-block;*/
-}
-
-.dropdown-btn {
-	background-color: #F383A0;
-	color: black;
-	padding: 0;
-	line-height: 0;
-	border: none;
-	cursor: pointer;
-}
-
-.dropdown img {
-	width: 21px;
-	height: 21px;
-	display: block;
-}
-
-.dropdown-content {
-	display: none;
-	position: absolute;
-	padding-right: auto;
-	background-color: #FFE0EE;
-	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 1;
-}
-
-.dropdown:hover .dropdown-content {
-	display: block;
-}
-
-.dropdown-content ul {
-	display: block;
-}
-
-.dropdown-content li {
-	border: 1px solid palevioletred;
-}
-
-/*profile*/
-.profile-container {
-	max-width: 600px;
-	margin: 20px auto;
-	padding: 20px;
-	border: 1px solid #ddd;
-	border-radius: 8px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.profile-info p {
-	margin: 10px 0;
-	padding: 8px;
-	background: #f9f9f9;
-	border-radius: 4px;
-}
-
-.profile-actions {
-	margin-top: 20px;
-	display: flex;
-	gap: 10px;
-}
-
-/*botones perfil*/
-.btn {
-	padding: 8px 16px;
-	text-decoration: none;
-	border-radius: 4px;
-	font-weight: bold;
-}
-
-.btn-edit {
-	background-color: #4CAF50;
-	color: white;
-}
-
-.btn-delete {
-	background-color: #f44336;
-	color: white;
-}
-
-/*cartas altas para ingredientes */
-.cards_container_tall {
-	max-width: 90%;
-	margin: 30px auto;
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	gap: 25px;
-	padding: 0 15px;
-}
-
-/* Flashcards */
-#flashModal {
-	max-width: 400px;
-	margin: auto;
-	padding: 20px;
-	background-color: #FFE0EE;
-	border: 1px solid #F383A0;
-	border-radius: 8px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	text-align: center;
-	color: black;
-}
-
-#flashModal p {
-	margin: 10px 0;
-	font-size: 16px;
-	font-weight: bold;
-}
-
-#flashModal a {
-	display: inline-block;
-	margin-top: 10px;
-	padding: 8px 16px;
-	background-color: #F383A0;
-	color: white;
-	border-radius: 4px;
-	font-weight: bold;
-}
-
-.tabla-usuarios {
-	width: 100%;
-	border-collapse: collapse;
-	margin: 20px 0;
-	font-size: 16px;
-	text-align: left;
-}
-
-.tabla-usuarios thead tr {
-	background-color: #f4f4f4;
-	border-bottom: 2px solid #ddd;
-}
-
-.tabla-usuarios th,
-.tabla-usuarios td {
-	padding: 12px 15px;
-	border: 1px solid #ddd;
-}
-
-.tabla-usuarios tbody tr:nth-child(even) {
-	background-color: #f9f9f9;
-}
-
-.tabla-usuarios tbody tr:hover {
-	background-color: #f1f1f1;
-}
-
-.boton-editar,
-.boton-borrar {
-	padding: 8px 12px;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-	font-size: 14px;
-}
-
-.boton-editar {
-	background-color: #4CAF50;
-	color: white;
-}
-
-.boton-borrar {
-	background-color: #f44336;
-	color: white;
-}
-
-.boton-borrar:hover {
-	background-color: #d32f2f;
-}
-
-.boton-editar:hover {
-	background-color: #45a049;
-}
-
-select {
-	padding: 5px;
-	font-size: 14px;
-}
-
-.form-permisos {
-	width: auto;
-	/* Ajusta el ancho al contenido */
-	margin: 0;
-	/* Elimina márgenes */
-	padding: 0;
-	/* Elimina el padding */
-	background-color: transparent;
-	/* Sin fondo */
-	box-shadow: none;
-	/* Sin sombra */
-	border: none;
-	/* Sin bordes */
-}
-
-/*CALENDARIO*/
-/* Estilos específicos para el calendario */
-#calendario {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	gap: 15px;
-	margin: 20px auto;
-	max-width: 1200px;
-}
-
-#calendario>div {
-	background-color: white;
-	border: 1px solid #F383A0;
-	border-radius: 8px;
-	padding: 15px;
-	min-height: 200px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#calendario h3 {
-	color: #F383A0;
-	border-bottom: 1px solid #F383A0;
-	padding-bottom: 10px;
-	margin-top: 0;
-	font-size: 1.2em;
-}
-
-#calendario p {
-	color: #666;
-	font-style: italic;
-}
-
-#calendario button {
-	background-color: #F383A0;
-	color: white;
-	border: none;
-	padding: 5px 10px;
-	border-radius: 4px;
-	cursor: pointer;
-	font-size: 0.9em;
-	margin-top: 10px;
-	width: 100%;
-}
-
-/*EDICION*/
-/* Estilos específicos para el formulario de edición de recetas */
-#editar-receta fieldset {
-	width: 100%;
-	margin: 20px auto;
-	padding: 20px;
-	background-color: #fff;
-	border: 2px solid #F383A0;
-	border-radius: 10px;
-}
-
-#editar-receta legend {
-	font-size: 1.5em;
-	padding: 5px 15px;
-	background-color: #F383A0;
-	color: white;
-	border-radius: 5px;
-}
-
-#editar-receta label {
-	display: block;
-	margin: 15px 0 5px;
-	font-weight: bold;
-	color: #333;
-}
-
-/* Estilos para las secciones de ingredientes */
-.ingredientes-section {
-	margin: 15px 0;
-	padding: 14px;
-	background-color: #FFE0EE;
-	border-radius: 8px;
-}
-
-.ingredientes-section summary {
-	font-weight: bold;
-	padding: 5px;
-	margin: -5px -5px 5px;
-}
-
-.ingredientes-section li {
-	padding: 10px 0;
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	align-items: center;
-	gap: 10px;
-}
-
-/* Contenedor para la receta del día y el calendario */
-.receta-y-calendario {
-	display: grid;
-	grid-template-columns: auto auto;
-	gap: 100px;
-	margin: 10px auto;
-	max-width: 90%;
-	align-items: center;
-}
-
-#recetas-del-dia {
-
-	max-width: auto;
-	margin: auto auto;
-	display: grid;
-	gap: 25px;
-	padding: 0 15px;
-	/* Espaciado lateral */
-
-}
-
-/* Ajusta el tamaño del calendario */
-#calendar {
-	background-color: white;
-	border: 1px solid #F383A0;
-	border-radius: 8px;
-	padding: 15px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	min-height: 300px;
-	/* Altura mínima para que coincida con la tarjeta */
-}.imagen-ingredientes {
-	width: 100px; /* Ajusta el ancho según tus necesidades */
-	height: auto; /* Mantiene la proporción de la imagen */
-	object-fit: cover; /* Opcional: ajusta cómo se recorta la imagen si es necesario */
-}
-.imagen-ingredientes {
-	width: 100px; /* Ajusta el ancho según tus necesidades */
-	height: auto; /* Mantiene la proporción de la imagen */
-	object-fit: cover; /* Opcional: ajusta cómo se recorta la imagen si es necesario */
-}
-
-/* Estilo para el formulario de búsqueda en la barra de navegación */
-.navbar-search {
-    display: flex;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-form.navbar-search {
-    display: flex;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-    background-color: transparent; /* Sin fondo para que se integre mejor */
-    box-shadow: none; /* Sin sombra */
-    border: none; /* Sin bordes */
-}
-
-.navbar-search input[type="text"] {
-    padding: 5px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 150px; /* Ajusta el ancho para que no ocupe demasiado espacio */
-    transition: width 0.3s ease; /* Efecto de transición al enfocar */
-}
-
-.navbar-search input[type="text"]:focus {
-    width: 200px; /* Expande el campo al enfocarlo */
-}
-
-.navbar-search button {
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    margin-left: 5px;
-    padding: 0;
-}
-
-#calendar-simple {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.calendar-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background-color: #F383A0;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#prev-day-btn {
-    background-color: white;
-    color: #F383A0;
-    border: 1px solid #F383A0;
-    border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
-
-#prev-day-btn:hover {
-    background-color: #F383A0;
-    color: white;
-}
-
-#current-date {
-    font-size: 16px;
-    font-weight: bold;
-}
+	body {
+		background-color: #FFFFFF;
+		width: auto;
+		margin: auto;
+		border: 1px solid black;
+		background-color: #FFE0EE;
+	}
+
+	@font-face {
+		font-family: 'alice';
+		font-display: swap;
+		src: url('/static/fonts/Alice-Regular.ttf')format('ttf');
+	}
+
+	/* Header, Navbar y login */
+
+	header {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		padding: 30px;
+		height: 100px;
+		background-color: #F383A0;
+		color: black;
+	}
+
+	header a,
+	header a:visited {
+		color: black;
+		font-weight: bold;
+		text-decoration: none;
+	}
+
+	header a:hover {
+		color: red;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+
+
+	.navbar {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: #F383A0;
+		padding: 0;
+		margin: 0;
+	}
+
+	.navbar ul {
+		list-style-type: none;
+		display: flex;
+		gap: 20px;
+		padding: 0;
+		margin: 0;
+	}
+
+	.navbar li {
+		display: flex;
+	}
+
+	.navbar a {
+		color: black;
+		font-weight: bold;
+		text-decoration: none;
+		padding: 10px;
+	}
+
+	.navbar a:hover {
+		color: rgb(133, 16, 154);
+		text-decoration: underline;
+	}
+
+	.login {
+		margin-left: 0;
+		text-align: center;
+	}
+
+	.login p {
+		margin: 0;
+	}
+
+	.login a {
+		font-weight: bold;
+		color: blue;
+	}
+
+	.login a:hover {
+		color: red;
+	}
+
+	aside {
+		padding: 10px;
+		float: right;
+		width: 170px;
+		height: 400px;
+		background-color: #FFE0EE;
+	}
+
+	main {
+		padding: 10px;
+		margin: auto;
+		min-height: 600px;
+		width: 90%;
+		background-color: white;
+	}
+
+	footer {
+		clear: both;
+		padding: 20px;
+		background-color: #FFE0EE;
+		color: white;
+		text-align: center;
+	}
+
+	footer a {
+		color: red;
+	}
+
+	div.saludo {
+		width: 100%;
+		text-align: right;
+	}
+
+	fieldset {
+		border: 1px solid black;
+		width: 15em;
+		margin: 0 auto;
+	}
+
+	legend {
+		color: #fff;
+		background: #F383A0;
+		border: 1px solid black;
+		padding: 2px 6px;
+	}
+
+	label {
+		width: 4em;
+		float: left;
+		text-align: right;
+		margin-right: 0.5em;
+		display: block;
+	}
+
+	/*formulario*/
+	form {
+		width: 90%;
+		max-width: 600px;
+		margin: 20px auto;
+		background-color: #fff;
+		padding: 20px;
+		border-radius: 8px;
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	}
+
+	form label {
+		width: auto;
+		float: none;
+		display: inline-block;
+		text-align: left;
+		font-weight: bold;
+	}
+
+	form input,
+	form textarea,
+	form select {
+		width: calc(100% - 20px);
+		padding: 8px;
+		margin-top: 5px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+	}
+
+	/* Para los radio buttons */
+	.radio-group {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+	}
+
+	/* Alineación del checkbox */
+	.terms {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+	}
+
+	/* Botón bien alineado */
+	button {
+		width: auto;
+		display: block;
+		margin: 20px auto;
+		padding: 10px 20px;
+		font-family: 'alice';
+		background-color: #F383A0;
+		color: white;
+		border: none;
+		cursor: pointer;
+		font-size: 16px;
+	}
+
+	/* Imagen */
+	img {
+		max-width: 100%;
+	}
+
+	/* CSS tarjetas */
+	.cards_container {
+		max-width: 90%;
+		margin: 30px auto;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 25px;
+		padding: 0 15px;
+		/* Espaciado lateral */
+	}
+
+	.card {
+		border: 1px solid #e0e0e0;
+		border-radius: 8px;
+		/* Bordes más redondeados */
+		background: white;
+		text-align: center;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		overflow: hidden;
+		transition: transform 0.3s ease;
+		width: 100%;
+		/* Ocupa todo el ancho de la celda grid */
+		overflow: hidden;
+	}
+
+	.card img {
+		display: block;
+		width: 100%;
+		height: 180px;
+		/* Altura fija para uniformidad */
+		object-fit: cover;
+	}
+
+	.card h4 {
+		margin: 0;
+		padding: 2px;
+	}
+
+	.card a {
+		font-weight: bold;
+		color: black;
+	}
+
+	.card header {
+		background-color: #F383A0;
+		color: black;
+		padding: 15px;
+		font-size: 1.1em;
+		font-weight: bold;
+		min-height: auto;
+	}
+
+	.dropdown {
+		position: relative;
+		/*display: inline-block;*/
+	}
+
+	.dropdown-btn {
+		background-color: #F383A0;
+		color: black;
+		padding: 0;
+		line-height: 0;
+		border: none;
+		cursor: pointer;
+	}
+
+	.dropdown img {
+		width: 21px;
+		height: 21px;
+		display: block;
+	}
+
+	.dropdown-content {
+		display: none;
+		position: absolute;
+		padding-right: auto;
+		background-color: #FFE0EE;
+		min-width: 160px;
+		box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+		z-index: 1;
+	}
+
+	.dropdown:hover .dropdown-content {
+		display: block;
+	}
+
+	.dropdown-content ul {
+		display: block;
+	}
+
+	.dropdown-content li {
+		border: 1px solid palevioletred;
+	}
+
+	/*profile*/
+	.profile-container {
+		max-width: 600px;
+		margin: 20px auto;
+		padding: 20px;
+		border: 1px solid #ddd;
+		border-radius: 8px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.profile-info p {
+		margin: 10px 0;
+		padding: 8px;
+		background: #f9f9f9;
+		border-radius: 4px;
+	}
+
+	.profile-actions {
+		margin-top: 20px;
+		display: flex;
+		gap: 10px;
+	}
+
+	/*botones perfil*/
+	.btn {
+		padding: 8px 16px;
+		text-decoration: none;
+		border-radius: 4px;
+		font-weight: bold;
+	}
+
+	.btn-edit {
+		background-color: #4CAF50;
+		color: white;
+	}
+
+	.btn-delete {
+		background-color: #f44336;
+		color: white;
+	}
+
+	/*cartas altas para ingredientes */
+	.cards_container_tall {
+		max-width: 90%;
+		margin: 30px auto;
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: 25px;
+		padding: 0 15px;
+	}
+
+	/* Flashcards */
+	#flashModal {
+		max-width: 400px;
+		margin: auto;
+		padding: 20px;
+		background-color: #FFE0EE;
+		border: 1px solid #F383A0;
+		border-radius: 8px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		text-align: center;
+		color: black;
+	}
+
+	#flashModal p {
+		margin: 10px 0;
+		font-size: 16px;
+		font-weight: bold;
+	}
+
+	#flashModal a {
+		display: inline-block;
+		margin-top: 10px;
+		padding: 8px 16px;
+		background-color: #F383A0;
+		color: white;
+		border-radius: 4px;
+		font-weight: bold;
+	}
+
+	.tabla-usuarios {
+		width: 100%;
+		border-collapse: collapse;
+		margin: 20px 0;
+		font-size: 16px;
+		text-align: left;
+	}
+
+	.tabla-usuarios thead tr {
+		background-color: #f4f4f4;
+		border-bottom: 2px solid #ddd;
+	}
+
+	.tabla-usuarios th,
+	.tabla-usuarios td {
+		padding: 12px 15px;
+		border: 1px solid #ddd;
+	}
+
+	.tabla-usuarios tbody tr:nth-child(even) {
+		background-color: #f9f9f9;
+	}
+
+	.tabla-usuarios tbody tr:hover {
+		background-color: #f1f1f1;
+	}
+
+	.boton-editar,
+	.boton-borrar {
+		padding: 8px 12px;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 14px;
+	}
+
+	.boton-editar {
+		background-color: #4CAF50;
+		color: white;
+	}
+
+	.boton-borrar {
+		background-color: #f44336;
+		color: white;
+	}
+
+	.boton-borrar:hover {
+		background-color: #d32f2f;
+	}
+
+	.boton-editar:hover {
+		background-color: #45a049;
+	}
+
+	select {
+		padding: 5px;
+		font-size: 14px;
+	}
+
+	.form-permisos {
+		width: auto;
+		/* Ajusta el ancho al contenido */
+		margin: 0;
+		/* Elimina márgenes */
+		padding: 0;
+		/* Elimina el padding */
+		background-color: transparent;
+		/* Sin fondo */
+		box-shadow: none;
+		/* Sin sombra */
+		border: none;
+		/* Sin bordes */
+	}
+
+	/*CALENDARIO*/
+	/* Estilos específicos para el calendario */
+	#calendario {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 15px;
+		margin: 20px auto;
+		max-width: 1200px;
+	}
+
+	#calendario>div {
+		background-color: white;
+		border: 1px solid #F383A0;
+		border-radius: 8px;
+		padding: 15px;
+		min-height: 200px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	}
+
+	#calendario h3 {
+		color: #F383A0;
+		border-bottom: 1px solid #F383A0;
+		padding-bottom: 10px;
+		margin-top: 0;
+		font-size: 1.2em;
+	}
+
+	#calendario p {
+		color: #666;
+		font-style: italic;
+	}
+
+	#calendario button {
+		background-color: #F383A0;
+		color: white;
+		border: none;
+		padding: 5px 10px;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 0.9em;
+		margin-top: 10px;
+		width: 100%;
+	}
+
+	/*EDICION*/
+	/* Estilos específicos para el formulario de edición de recetas */
+	#editar-receta fieldset {
+		width: 100%;
+		margin: 20px auto;
+		padding: 20px;
+		background-color: #fff;
+		border: 2px solid #F383A0;
+		border-radius: 10px;
+	}
+
+	#editar-receta legend {
+		font-size: 1.5em;
+		padding: 5px 15px;
+		background-color: #F383A0;
+		color: white;
+		border-radius: 5px;
+	}
+
+	#editar-receta label {
+		display: block;
+		margin: 15px 0 5px;
+		font-weight: bold;
+		color: #333;
+	}
+
+	/* Estilos para las secciones de ingredientes */
+	.ingredientes-section {
+		margin: 15px 0;
+		padding: 14px;
+		background-color: #FFE0EE;
+		border-radius: 8px;
+	}
+
+	.ingredientes-section summary {
+		font-weight: bold;
+		padding: 5px;
+		margin: -5px -5px 5px;
+	}
+
+	.ingredientes-section li {
+		padding: 10px 0;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		align-items: center;
+		gap: 10px;
+	}
+
+	/* Contenedor para la receta del día y el calendario */
+	.receta-y-calendario {
+		display: grid;
+		grid-template-columns: auto auto;
+		gap: 100px;
+		margin: 10px auto;
+		max-width: 90%;
+		align-items: center;
+	}
+
+	#recetas-del-dia {
+
+		max-width: auto;
+		margin: auto auto;
+		display: grid;
+		gap: 25px;
+		padding: 0 15px;
+		/* Espaciado lateral */
+
+	}
+
+	/* Ajusta el tamaño del calendario */
+	#calendar {
+		background-color: white;
+		border: 1px solid #F383A0;
+		border-radius: 8px;
+		padding: 15px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		min-height: 300px;
+		/* Altura mínima para que coincida con la tarjeta */
+	}
+
+	.imagen-ingredientes {
+		width: 100px;
+		/* Ajusta el ancho según tus necesidades */
+		height: auto;
+		/* Mantiene la proporción de la imagen */
+		object-fit: cover;
+		/* Opcional: ajusta cómo se recorta la imagen si es necesario */
+	}
+
+	.imagen-ingredientes {
+		width: 100px;
+		/* Ajusta el ancho según tus necesidades */
+		height: auto;
+		/* Mantiene la proporción de la imagen */
+		object-fit: cover;
+		/* Opcional: ajusta cómo se recorta la imagen si es necesario */
+	}
+
+	/* Estilo para el formulario de búsqueda en la barra de navegación */
+	.navbar-search {
+		display: flex;
+		align-items: center;
+		margin: 0;
+		padding: 0;
+	}
+
+	form.navbar-search {
+		display: flex;
+		align-items: center;
+		margin: 0;
+		padding: 0;
+		background-color: transparent;
+		/* Sin fondo para que se integre mejor */
+		box-shadow: none;
+		/* Sin sombra */
+		border: none;
+		/* Sin bordes */
+	}
+
+	.navbar-search input[type="text"] {
+		padding: 5px;
+		font-size: 14px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		width: 150px;
+		/* Ajusta el ancho para que no ocupe demasiado espacio */
+		transition: width 0.3s ease;
+		/* Efecto de transición al enfocar */
+	}
+
+	.navbar-search input[type="text"]:focus {
+		width: 200px;
+		/* Expande el campo al enfocarlo */
+	}
+
+	.navbar-search button {
+		background: none;
+		border: none;
+		font-size: 16px;
+		cursor: pointer;
+		margin-left: 5px;
+		padding: 0;
+	}
+
+	#calendar-simple {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-top: 20px;
+	}
+
+	#calendar-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-top: 20px;
+	}
+
+	.calendar-header {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		background-color: #F383A0;
+		color: white;
+		padding: 10px 20px;
+		border-radius: 8px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	}
+	.calendar-header button {
+		background-color: F383A0;
+		color: white;
+		border: 1px solid #F383A0;
+		border-radius: 4px;
+		padding: 5px 10px;
+		cursor: pointer;
+		font-size: 14px;
+		transition: background-color 0.3s ease;
+	}
+
+
+	#current-date {
+		font-size: 16px;
+		font-weight: bold;
+	}
+
+	#postit-container {
+		position: relative;
+		display: inline-block;
+		text-align: center;
+		width: 350px;
+		/* Aumenta el tamaño del post-it */
+		height: 350px;
+		/* Aumenta el tamaño del post-it */
+		margin: 20px auto;
+		/* Centra el post-it horizontalmente */
+	}
+
+	#postit-image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 10px;
+		/* Opcional: redondea las esquinas */
+	}
+
+	#postit-text {
+		position: absolute;
+		top: 50%;
+		/* Centra verticalmente */
+		left: 50%;
+		/* Centra horizontalmente */
+		transform: translate(-50%, -50%);
+		/* Ajusta el texto al centro */
+		font-size: 1.2em;
+		font-weight: bold;
+		color: #000000;
+		/* Cambia el color según el diseño del post-it */
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+		/* Agrega sombra para mejor visibilidad */
+		pointer-events: none;
+		/* Evita que el texto interfiera con clics */
+		word-wrap: break-word;
+		/* Permite que el texto se ajuste si es muy largo */
+		max-width: 80%;
+		/* Limita el ancho del texto dentro del post-it */
+		text-align: center;
+		/* Asegura que el texto esté centrado */
+		line-height: 1.5;
+		/* Mejora el espaciado entre líneas */
+	}
+
+	.card.destacada {
+		border: 4px solid #f39c12;
+		background-color: #fff8e1;
+		box-shadow: 0 0 20px rgba(243, 156, 18, 0.6);
+		transform: scale(1.03);
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+
+	.card.destacada:hover {
+		transform: scale(1.05);
+		box-shadow: 0 0 25px rgba(243, 156, 18, 0.8);
+	}
+
+	.card.destacada h4 {
+		color: #d35400;
+		font-size: 1.5em;
+		margin-bottom: 10px;
+	}
+
+	.card.destacada p {
+		font-weight: bold;
+	}

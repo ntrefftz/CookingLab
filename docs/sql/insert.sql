@@ -61,6 +61,20 @@ INSERT INTO "guardado" VALUES (1, 4, 1);  -- Pizza Margarita
 INSERT INTO "guardado" VALUES (1, 6, 1);  -- Pasta Alfredo
 
 
+INSERT INTO Diaria (dia, id_receta)
+VALUES
+    ('2025-05-03', 1),
+    ('2025-05-02', 2),
+    ('2025-05-01', 3),
+    ('2025-04-30', 4),
+    ('2025-04-29', 5),
+    ('2025-04-28', 6),
+    ('2025-04-27', 7),
+    ('2025-04-26', 8),
+    ('2025-04-25', 9),
+    ('2025-04-24', 10);
+
+
 UPDATE "Recetas" SET "imagen_url" = 'https://www.hola.com/horizon/landscape/2f4a35cad37e-sopa-tomate-t.jpg' WHERE "id" = 3;
 UPDATE "Recetas" SET "imagen_url" = 'https://media.istockphoto.com/id/1280329631/es/foto/pizza-margherita-italiana-con-tomates-y-queso-mozzarella-sobre-tabla-de-cortar-de-madera-de.jpg?s=612x612&w=0&k=20&c=3i8gzmaA2vbfIQRetPK1SLh0l6u_CC_HniYuBT884aU=' WHERE "id" = 4;
 UPDATE "Recetas" SET "imagen_url" = 'https://www.recetasderechupete.com/wp-content/uploads/2020/11/Arroz-con-pollo-cubano-3-1200x803.jpg' WHERE "id" = 5;

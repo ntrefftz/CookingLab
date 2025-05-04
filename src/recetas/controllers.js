@@ -4,7 +4,7 @@ import { Ingrediente } from './Ingredientes.js';
 import { Tiene } from './Tiene.js';
 import { logger } from '../logger.js';
 import { Cesta } from '../pedidos/Cesta.js';
-
+import {Diaria} from './Diaria.js';
 
 export function viewRecetasLista(req, res) {
     // Verificamos si la solicitud viene del calendario
@@ -623,10 +623,12 @@ export async function actualizarStock(req, res) {
 }
 
 export async function recetaPorFecha(req, res) {
-    const { fecha } = req.query;
+    const { fecha } = req.body; 
 
     try {
-        const receta = await Receta.getRecetaPorDia(fecha);
+        const idReceta = await Diaria.getRecetaPorDia(fecha);
+        const receta = await Receta.getRecetaById(idReceta.id);
+        
         res.json(receta || null);
     } catch (error) {
         console.error("Error al obtener la receta por fecha:", error);

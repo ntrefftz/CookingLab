@@ -22,7 +22,7 @@ export class Diaria {
 
     // Obtener la receta asignada a un día específico
     static getRecetaPorDia(dia) {
-        const receta = this.#getByDiaStmt.get({ dia });
+        const receta = this.#getByDiaStmt.get({dia});
         if (!receta) throw new DiariaNoEncontrada(dia);
         return receta;
     }
