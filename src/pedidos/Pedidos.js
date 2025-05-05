@@ -28,7 +28,7 @@ export class Pedido {
     static addPedido(fecha, hora, precio_total, enviado = 0, pagado = 0) {
         try {
             const result = this.#insertStmt.run({ fecha, hora, precio_total, enviado, pagado });
-            return { mensaje: "Pedido añadido correctamente", id: result.lastInsertRowid };
+            return { id: result.lastInsertRowid };
         } catch (e) {
             throw new ErrorDatos("No se pudo añadir el pedido", { cause: e });
         }
@@ -37,12 +37,12 @@ export class Pedido {
     static updatePedido(id, enviado, pagado) {
         const result = this.#updateStmt.run({ id, enviado, pagado });
         if (result.changes === 0) throw new PedidoNoEncontrado(id);
-        return { mensaje: "Pedido actualizado correctamente" };
+        return true;
     }
 
     static deletePedido(id) {
         const result = this.#deleteStmt.run({ id });
-        return { mensaje: "Pedido eliminado correctamente" };
+        return true;
     }
 }
 
