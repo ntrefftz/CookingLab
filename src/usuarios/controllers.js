@@ -6,6 +6,9 @@ import { logger } from '../logger.js';
 import { CalendarioSemanal } from './CalendarioSemanal.js';
 import { Guardado } from './Guardado.js';
 import { Receta } from '../recetas/Recetas.js';
+import { Pedido } from '../pedidos/Pedidos.js';
+import { Contiene } from '../pedidos/Contiene.js';
+import { Realiza } from '../pedidos/Realiza.js';
 
 
 
@@ -95,11 +98,43 @@ export function viewMisRecetas(req, res) {
 }
 
 export function viewHistorial(req, res) {
-    let contenido;
-    res.render('pagina', {
-        contenido,
-        session: req.session
-    });
+    let contenido = 'paginas/historial';
+    try {
+        const id_usuario = req.session.userId;
+        const relaciones = Realiza.getByUsuario(id_usuario);
+
+        // Si no hay relaciones, el historial está vacío
+        if (relaciones.length === 0) {
+            return res.render('pagina', {
+                contenido: 'paginas/historial',
+                session: req.session,
+                historial: []
+            });
+        }
+
+        // Construir el historial
+        const historial = relaciones.map(relacion => {
+            const pedido = Pedido.getPedidoById(relacion.id_pedido);
+            const ingredientes = Contiene.getByPedido(relacion.id_pedido) || []; // Asegurar que sea un array
+            const precioTotal = ingredientes.reduce((total, ing) => total + parseFloat(ing.precio), 0).toFixed(2);
+
+            return {
+                pedido,
+                ingredientes,
+                precioTotal
+            };
+        });
+
+        // Renderizar la página con el historial
+        res.render('pagina', {
+            contenido,
+            session: req.session,
+            historial
+        });
+    } catch (error) {
+        console.error('Error al obtener el historial de pedidos:', error);
+        res.status(500).send('Error al cargar el historial de pedidos');
+    }
 }
 
 export async function viewCalendario(req, res) {

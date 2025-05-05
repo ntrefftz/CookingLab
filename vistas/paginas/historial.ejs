@@ -1,1 +1,41 @@
 <h1>Mi historial</h1>
+<%if (historial.length === 0) { %>
+    <p>No tienes historial de pedidos.</p>
+<% } else { %>
+<table class="tabla-historial">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% historial.forEach(pedido => { %>
+            <tr class = "espacio">
+                <td colspan="5"></td>
+            </tr>
+            <% const ingredientes = pedido.ingredientes || []; %> <!-- Asegurar que ingredientes sea un array -->
+            <% const totalIngredientes = ingredientes.length; %>
+            <% ingredientes.forEach((ingrediente, index) => { %>
+                <tr class="pedido">
+                    <% if (index === 0) { %>
+                        <td rowspan="<%= totalIngredientes %>"><%= pedido.pedido.fecha %></td>
+                    <% } %>
+                    <td><%= ingrediente.nombre %></td>
+                    <td><%= ingrediente.precio %> €</td>
+                    <td><%= ingrediente.cantidad %></td>
+                    <% if (index === 0) { %>
+                        <td rowspan="<%= totalIngredientes %>"><%= pedido.precioTotal %> €</td>
+                    <% } %>
+                </tr>
+            <% }); %>
+                <tr class = "espacio">
+                    <td colspan="5"></td>
+                </tr>
+        <% }); %>
+    </tbody>
+</table>
+<% } %>

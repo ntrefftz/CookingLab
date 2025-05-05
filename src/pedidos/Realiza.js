@@ -16,9 +16,8 @@ export class Realiza {
     }
 
     static getByUsuario(id_usuario) {
-        const realiza = this.#getByUsuarioStmt.get({ id_usuario });
-        if (!realiza) throw new RelacionNoEncontrada(id_usuario);
-        return realiza;
+        const realiza = this.#getByUsuarioStmt.all({ id_usuario });
+        return realiza || [];
     }
 
     static getRelacion(id_usuario, id_pedido) {

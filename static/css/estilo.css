@@ -381,6 +381,57 @@ img {
 	font-weight: bold;
 }
 
+.tabla-historial {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 20px 0;
+	font-size: 16px;
+	text-align: left;
+}
+
+.tabla-historial thead tr {
+	background-color: #f4f4f4;
+	border-bottom: 2px solid #ddd;
+}
+
+.tabla-historial th,
+.tabla-historial td {
+	padding: 12px 15px;
+	border: 1px solid #ddd;
+}
+
+.tabla-historial thead th {
+	background-color: #F383A0;
+	color: white;
+}
+
+.tabla-historial tbody tr:nth-child(even) {
+	background-color: #f9f9f9;
+}
+
+.tabla-historial tbody tr:hover {
+	background-color: #f1f1f1;
+}
+
+.tabla-historial tbody tr.espacio {
+	height: 20px;
+	background-color: transparent;
+	border: none;
+}
+
+.tabla-historial tbody tr.espacio td {
+	border: none;
+	padding: 0;
+}
+
+.tabla-historial tbody tr.pedido{
+	border-bottom: 2px solid #ddd;
+}
+
+.tabla-historial tbody tr.pedido:hover {
+	background-color: #f1f1f1;
+}
+
 .tabla-usuarios {
 	width: 100%;
 	border-collapse: collapse;
