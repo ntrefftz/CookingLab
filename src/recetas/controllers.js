@@ -635,3 +635,14 @@ export async function recetaPorFecha(req, res) {
         res.status(500).json({ error: "Error al obtener la receta por fecha" });
     }
 }
+
+export function viewCalendarioRecetaDiaria(req, res) {
+    const contenido = 'paginas/calendarioRecetaDiaria';
+    const fecha = req.query.fecha || null; // Fecha seleccionada, si viene desde el calendario
+
+    res.render('pagina', {
+        contenido,
+        session: req.session,
+        fecha
+    });
+}
