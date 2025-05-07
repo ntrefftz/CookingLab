@@ -21,17 +21,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const div = document.createElement('div');
         div.className = 'ingrediente';
         div.innerHTML = `
-            <h3>${ingrediente.nombre}</h3>
-            <p>Cantidad: ${ingrediente.cantidad}</p>
-            <p>Precio: ${ingrediente.precio} €</p>
-            <form><button class="aumentar-cantidad" data-id="${ingrediente.id}">Añadir</button></form>
-            <form><button class="eliminar-ingrediente" data-id="${ingrediente.id}">Eliminar</button></form>
+            <div class="ingrediente-info">
+                <h3>${ingrediente.nombre}</h3>
+                <p>Cantidad: ${ingrediente.cantidad}</p>
+                <p>Precio: ${ingrediente.precio} €</p>
+            </div>
+            <div class="ingrediente-acciones">
+                <form><button class="aumentar-cantidad" data-id="${ingrediente.id}">Añadir</button></form>
+                <form><button class="eliminar-ingrediente" data-id="${ingrediente.id}">Eliminar</button></form>
+            </div>
         `;
         cestaContainer.appendChild(div);
 
-        // Agregar evento al botón "Añadir"
         const aumentarBtn = div.querySelector('.aumentar-cantidad');
-        aumentarBtn.addEventListener('click', function() {
+        aumentarBtn.addEventListener('click', function(e) {
+            e.preventDefault();
             const id = this.dataset.id;
 
             fetch('/pedidos/cesta/aumentar', {
@@ -51,9 +55,9 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => console.error('Error:', error));
         });
 
-        // Agregar evento al botón "Eliminar"
         const eliminarBtn = div.querySelector('.eliminar-ingrediente');
-        eliminarBtn.addEventListener('click', function() {
+        eliminarBtn.addEventListener('click', function(e) {
+            e.preventDefault();
             const id = this.dataset.id;
 
             fetch('/pedidos/cesta/eliminar', {
@@ -81,11 +85,11 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     const botonFinalizar = document.createElement('button');
     botonFinalizar.className = 'tramitar';
-    botonFinalizar.innerHTML = 'Tramitar pedido';
+    botonFinalizar.textContent = 'Tramitar pedido';
     total.appendChild(botonFinalizar);
 
-    // Agregar evento al botón "Tramitar pedido"
-    botonFinalizar.addEventListener('click', function() {
+    botonFinalizar.addEventListener('click', function(e) {
+        e.preventDefault();
         fetch('/pedidos/tramitarPedido', {
             method: 'POST',
             headers: {
