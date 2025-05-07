@@ -637,7 +637,7 @@ export async function recetaPorFecha(req, res) {
 }
 
 export function viewCalendarioRecetaDiaria(req, res) {
-    const contenido = 'paginas/calendarioRecetaDiaria';
+    const contenido = 'paginas/calendarioRecetaDelDia';
     const fecha = req.query.fecha || null; // Fecha seleccionada, si viene desde el calendario
 
     res.render('pagina', {
@@ -645,4 +645,14 @@ export function viewCalendarioRecetaDiaria(req, res) {
         session: req.session,
         fecha
     });
+}
+
+export async function jsonRecetas(req, res) {
+    try {
+        const recetas = await  Diaria.getTodasLasRecetas(); // Ajusta el nombre de tu tabla
+        res.json(recetas); // Devuelve las recetas como JSON
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al obtener las recetas.' });
+    }
 }
