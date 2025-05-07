@@ -152,8 +152,6 @@ form {
 	margin: 20px auto;
 	background-color: #fff;
 	padding: 20px;
-	border-radius: 8px;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 form label {
@@ -468,24 +466,6 @@ img {
 	font-size: 14px;
 }
 
-.boton-editar {
-	background-color: #4CAF50;
-	color: white;
-}
-
-.boton-borrar {
-	background-color: #f44336;
-	color: white;
-}
-
-.boton-borrar:hover {
-	background-color: #d32f2f;
-}
-
-.boton-editar:hover {
-	background-color: #45a049;
-}
-
 select {
 	padding: 5px;
 	font-size: 14px;
@@ -637,4 +617,224 @@ select {
 	width: 100px; /* Ajusta el ancho según tus necesidades */
 	height: auto; /* Mantiene la proporción de la imagen */
 	object-fit: cover; /* Opcional: ajusta cómo se recorta la imagen si es necesario */
+}
+
+
+/* ESTILOS COMPARTIDOS */
+.card-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    background-color: #F383A0;
+    color: white;
+    width: 100%;
+    font-size: 16px;
+}
+
+.card-btn:hover {
+    background-color: #e6728f;
+}
+
+.admin-buttons {
+    margin: 25px 0;
+    display: flex;
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 1px solid #FFE0EE;
+}
+
+/* INGREDIENTE IND */
+.ingrediente-container {
+    display: flex;
+    gap: 30px;
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.imagen-principal {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #F383A0;
+}
+
+.info-ingrediente {
+    flex: 1;
+}
+
+.info-ingrediente h1 {
+    color: #F383A0;
+    margin-top: 0;
+    border-bottom: 2px solid #FFE0EE;
+    padding-bottom: 10px;
+}
+
+.info-ingrediente p {
+    margin: 15px 0;
+    font-size: 16px;
+}
+
+.info-ingrediente strong {
+    color: #F383A0;
+}
+
+/* RECETA IND */
+.receta-container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.receta-superior {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.receta-imagen {
+    flex: 1;
+}
+
+.receta-imagen img {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #F383A0;
+}
+
+.receta-meta {
+    flex: 1;
+}
+
+.receta-meta h1 {
+    color: #F383A0;
+    margin-top: 0;
+    border-bottom: 2px solid #FFE0EE;
+    padding-bottom: 10px;
+}
+
+.receta-meta p {
+    margin: 10px 0;
+}
+
+.receta-inferior {
+    display: flex;
+    gap: 30px;
+}
+
+.receta-ingredientes {
+    flex: 1;
+    background-color: #FFE0EE;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.receta-descripcion {
+    flex: 2;
+    padding: 15px;
+    line-height: 1.6;
+}
+
+.ingredientes-con-accion {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+/* ESTILOS PARA LA CESTA */
+#cesta {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+}
+
+.cesta-vacia {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+}
+
+.ingrediente {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #FDEAF2;
+    border-radius: 8px;
+    border-left: 4px solid #F383A0;
+}
+
+.ingrediente-info {
+    flex: 1;
+}
+
+.ingrediente h3 {
+    margin: 0 0 5px 0;
+    color: #F383A0;
+}
+
+.ingrediente p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.ingrediente-acciones {
+    display: flex;
+    gap: 10px;
+}
+
+.ingrediente-acciones form {
+    margin: 0;
+}
+
+.ingrediente-acciones button {
+    padding: 8px 12px;
+    margin: 0;
+    font-size: 14px;
+    width: auto;
+}
+
+.aumentar-cantidad {
+    background-color: #4CAF50 !important;
+}
+
+.eliminar-ingrediente {
+    background-color: #f44336 !important;
+}
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #F383A0;
+    color: white;
+    border-radius: 8px;
+}
+
+.tramitar {
+    background-color: white ;
+    color: #F383A0 ;
+    font-weight: bold;
+    margin: 0 ;
 }
