@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler';
 import { viewRecetasDetalle, viewRecetasLista, viewModificarReceta, eliminarReceta, modificarReceta, viewAniadirReceta, 
     aniadirReceta, viewAniadirRecetaCarrito, aniadirRecetaCarrito, buscarReceta,
     viewIngredientesLista, viewIngredientesDetalle, viewModificarIngrediente, eliminarIngrediente, modificarIngrediente, 
-    viewAniadirIngrediente, aniadirIngrediente, viewAniadirIngredienteCarrito, aniadirIngredienteCarrito, jsonRecetas
+    viewAniadirIngrediente, aniadirIngrediente, viewAniadirIngredienteCarrito, aniadirIngredienteCarrito, jsonRecetas, viewCalendarioDiaria
      
 } from './controllers.js';
 
@@ -18,7 +18,7 @@ recetasRouter.get('/receta/aniadir', asyncHandler(viewAniadirReceta));
 recetasRouter.post('/receta/aniadir', asyncHandler(aniadirReceta));
 recetasRouter.get('/receta/aniadirCarrito', asyncHandler(viewAniadirRecetaCarrito));
 recetasRouter.post('/receta/aniadirCarrito', asyncHandler(aniadirRecetaCarrito));
-
+recetasRouter.get('/receta/calendarioDiaria', asyncHandler(viewCalendarioDiaria));
 
 recetasRouter.get('/ingrediente', asyncHandler(viewIngredientesLista));
 recetasRouter.get('/ingredienteInd', asyncHandler(viewIngredientesDetalle));

@@ -428,4 +428,10 @@ export function viewAniadirIngredienteCarrito(req, res) {
 
 export function aniadirIngredienteCarrito(req, res) {
 
+}export function viewCalendarioDiaria(req,res){
+    const contenido = 'paginas/calendarioDiaria';
+    res.render('pagina',{
+        contenido,
+        session: req.session
+    });
 }
