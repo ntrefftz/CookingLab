@@ -1,25 +1,47 @@
-<h1><%= recetas.nombre %></h1>
-
-<p>Tiempo de preparación: <%= Math.floor(recetas.tiempo_prep_segs/60)%> minutos</p>
-<p>Difilcultad: <% for(let i = 0; i < recetas.dificultad; i++){%>&#127775;<% } %></p>
-<p><%= recetas.descripcion %></p>
-<p></p>
-<p>Ingredientes:</p>
-<ul>
-    <% if (recetas.ingredientes) { %>
-        <% recetas.ingredientes.forEach(function(ingrediente) { %>
-            <li><%= ingrediente.nombre %> - <%= ingrediente.cantidad_esp %> gr.</li>
-        <% }); %>
-    <% } else { %>
-        <li>No se encontraron ingredientes.</li>
+<div class="receta-container">
+    <div class="receta-superior">
+        <div class="receta-imagen">
+            <img src="<%= recetas.imagen_url %>" alt="<%= recetas.nombre %>">
+        </div>
+        
+        <div class="receta-meta">
+            <h1><%= recetas.nombre %></h1>
+            <p>Tiempo: <%= Math.floor(recetas.tiempo_prep_segs/60)%> min</p>
+            <p>Dificultad: <% for(let i = 0; i < recetas.dificultad; i++){ %>⭐<% } %></p>
+        </div>
+    </div>
+    
+    <div class="receta-inferior">
+        <div class="ingredientes-con-accion">
+            <div class="receta-ingredientes">
+                <h2>Ingredientes:</h2>
+                <ul>
+                    <% if (recetas.ingredientes) { %>
+                        <% recetas.ingredientes.forEach(function(ingrediente) { %>
+                            <li><%= ingrediente.nombre %> - <%= ingrediente.cantidad_esp %> gr.</li>
+                        <% }); %>
+                    <% } else { %>
+                        <li>No se encontraron ingredientes.</li>
+                    <% } %>
+                </ul>
+            </div>
+            
+            <form action="/recetas/receta/aniadirCarritoReceta" method="POST">
+                <input type="hidden" name="id" value="<%= recetas.id %>">
+                <button type="submit" class="card-btn">Añadir al carrito</button>
+            </form>
+        </div>
+        
+        <div class="receta-descripcion">
+            <h2>Preparación:</h2>
+            <p><%= recetas.descripcion %></p>
+        </div>
+    </div>
+    
+    <% if (session.esAdmin) { %>
+        <div class="admin-buttons">
+            <a href="/recetas/receta/modificar?id=<%= recetas.id %>" class="btn btn-edit">Editar receta</a>
+            <a href="/recetas/receta/eliminar?id=<%= recetas.id %>" class="btn btn-delete">Eliminar receta</a>
+        </div>
     <% } %>
-</ul>
-<% if (session.esAdmin) { %>
-    <a href="/recetas/receta/modificar?id=<%= recetas.id %>"><button>Editar receta</button></a>
-    <a href="/recetas/receta/eliminar?id=<%= recetas.id %>"><button>Eliminar receta</button></a>
-<% } %>
-
-<form action="/recetas/receta/aniadirCarritoReceta" method="POST">
-    <input type="hidden" name="id" value="<%= recetas.id %>">
-    <button type="submit">Añadir al carrito</button>
-</form>
+</div>

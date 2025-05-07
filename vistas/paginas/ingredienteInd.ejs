@@ -1,16 +1,23 @@
-<h1><%= ingredientes.nombre %></h1>
-
-<p>Categoría: <%= ingredientes.categoria %></p>
-<p>Precio: <%= ingredientes.precio %></p>
-<p>Stock: <%= ingredientes.stock %></p>
-<p></p>
-<% if (session.esAdmin) { %>
-    <form><a href="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>"><button>Editar ingrediente</button></a></form>
-    <form><a href="/recetas/ingredienteInd/eliminar?id=<%= ingredientes.id %>"><button>Eliminar ingrediente</button></a></form>
-<% } %>
-
-
-<form action="/recetas/ingredienteInd/aniadirCarritoIng" method="POST">
-    <input type="hidden" name="id" value="<%= ingredientes.id %>">
-    <button type="submit">Añadir al carrito</button>
-</form>
+<div class="ingrediente-container">
+    <div class="imagen-ingrediente">
+        <img src="<%= ingredientes.imagen_url %>" alt="<%= ingredientes.nombre %>" class="imagen-principal">
+    </div>
+    <div class="info-ingrediente">
+        <h1><%= ingredientes.nombre %></h1>
+        <p><strong>Categoría:</strong> <%= ingredientes.categoria %></p>
+        <p><strong>Precio:</strong> <%= ingredientes.precio %> €</p>
+        
+        <% if (session.esAdmin) { %>
+            <p><strong>Stock:</strong> <%= ingredientes.stock %></p>
+            <div class="admin-buttons">
+                <a href="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>" class="btn btn-edit">Editar ingrediente</a>
+                <a href="/recetas/ingredienteInd/eliminar?id=<%= ingredientes.id %>" class="btn btn-delete">Eliminar ingrediente</a>
+            </div>
+        <% } %>
+        
+        <form action="/recetas/ingredienteInd/aniadirCarritoIng" method="POST">
+            <input type="hidden" name="id" value="<%= ingredientes.id %>">
+            <button type="submit" class="card-btn">Añadir al carrito</button>
+        </form>
+    </div>
+</div>
