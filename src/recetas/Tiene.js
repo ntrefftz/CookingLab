@@ -4,13 +4,14 @@ export class Tiene {
     static #getByRecetaStmt = null;  
     static #getByIngredienteStmt = null;  
     static #updateStmt = null;
+    static #deleteIngredienteStmt = null;
 
     static initStatements(db) {
         if (this.#insertStmt !== null) return;
 
         this.#insertStmt = db.prepare('INSERT INTO Tiene(id_ingrediente, id_receta, cantidad, cantidad_esp) VALUES (@id_ingrediente, @id_receta, @cantidad, @cantidad_esp)');
         this.#deleteStmt = db.prepare('DELETE FROM Tiene WHERE id_ingrediente = @id_ingrediente AND id_receta = @id_receta');
-        
+        this.#deleteIngredienteStmt = db.prepare('DELETE FROM Tiene WHERE id_ingrediente = @id_ingrediente');
         this.#getByRecetaStmt = db.prepare('SELECT * FROM Tiene WHERE id_receta = @id_receta');
         this.#getByIngredienteStmt = db.prepare('SELECT * FROM Tiene WHERE id_ingrediente = @id_ingrediente');
         
@@ -30,9 +31,8 @@ export class Tiene {
 
     // Eliminar un ingrediente de una receta
     static removeIngredienteFromReceta(idReceta, idIngrediente) {
-        const result = this.#deleteStmt.run({ id_ingrediente: idIngrediente, id_receta: idReceta });
-        if (result.changes === 0) throw new Error("Ingrediente no encontrado en la receta.");
-        return { mensaje: "Ingrediente eliminado de la receta correctamente." };
+        this.#deleteStmt.run({ id_ingrediente: idIngrediente, id_receta: idReceta });
+        return true;
     }
 
     // Obtener todos los ingredientes de una receta
@@ -43,6 +43,11 @@ export class Tiene {
         const ingredientes = this.#getByRecetaStmt.all({ id_receta: idReceta });
         if (ingredientes.length === 0) throw new Error("No se encontraron ingredientes para esta receta.");
         return ingredientes;
+    }
+
+    static deleteIngrediente(id_ingrediente){
+        this.#deleteIngredienteStmt.run({id_ingrediente});
+        return true;
     }
 
     // Obtener todas las recetas que contienen un ingrediente

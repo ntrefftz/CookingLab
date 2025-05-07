@@ -5,6 +5,7 @@ export class Cesta {
     static #deleteStmt = null;
     static #updateStmt = null;
     static #clearCestaStmt = null;
+    static #deleteIngredienteStmt = null;
 
     static initStatements(db) {
         if (this.#getByIdStmt !== null) return;
@@ -15,6 +16,7 @@ export class Cesta {
         this.#deleteStmt = db.prepare('DELETE FROM Cesta WHERE id_usuario = @id_usuario AND id_ingrediente = @id_ingrediente');
         this.#updateStmt = db.prepare('UPDATE Cesta SET cantidad = @cantidad WHERE id_usuario = @id_usuario AND id_ingrediente = @id_ingrediente');
         this.#clearCestaStmt = db.prepare('DELETE FROM Cesta WHERE id_usuario = @id_usuario');
+        this.#deleteIngredienteStmt = db.prepare('DELETE FROM Cesta WHERE id_ingrediente = @id_ingrediente');
     }
 
     static getById(id_usuario) {
@@ -42,6 +44,11 @@ export class Cesta {
         return { mensaje: "Cesta eliminada correctamente" };
     }
     
+    static borrarIngrediente(id_ingrediente){
+        const result = this.#deleteIngredienteStmt.run({ id_ingrediente });
+        return true;
+    }
+
     static updateCesta(id_usuario, id_ingrediente, cantidad) {
         if (cantidad <= 0) {
             throw new ErrorDatos("La cantidad debe ser mayor que cero");
@@ -55,7 +62,7 @@ export class Cesta {
     
     static clearCesta(id_usuario) {
         this.#clearCestaStmt.run({ id_usuario });
-        return { mensaje: "Cesta vaciada correctamente" };
+        return true;
     }
 }
 

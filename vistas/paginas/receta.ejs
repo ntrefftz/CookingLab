@@ -16,8 +16,11 @@
 </ul>
 <% if (session.esAdmin) { %>
     <a href="/recetas/receta/modificar?id=<%= recetas.id %>"><button>Editar receta</button></a>
-    <a href="/recetas/receta/eliminar?id=<%= recetas.id %>"><button>Eliminar receta</button></a>
-<% } %>
+    <form action="/recetas/receta/eliminar" method="POST">
+        <input type="hidden" name="id" value="<%= recetas.id %>">
+        <button type="submit" onclick="return confirm('¿Estás seguro de que deseas borrar esta receta?')">Eliminar receta</button>
+    </form>
+    <% } %>
 
 <form action="/recetas/receta/aniadirCarritoReceta" method="POST">
     <input type="hidden" name="id" value="<%= recetas.id %>">

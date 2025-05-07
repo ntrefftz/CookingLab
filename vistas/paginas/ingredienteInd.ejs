@@ -6,7 +6,10 @@
 <p></p>
 <% if (session.esAdmin) { %>
     <form><a href="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>"><button>Editar ingrediente</button></a></form>
-    <form><a href="/recetas/ingredienteInd/eliminar?id=<%= ingredientes.id %>"><button>Eliminar ingrediente</button></a></form>
+    <form action="/recetas/ingredienteInd/eliminar" method="post">
+        <input type="hidden" name="id" value="<%= ingredientes.id %>">
+        <button onclick="return confirm('¿Estás seguro de que deseas borrar este ingrediente?')">Eliminar ingrediente</button>
+    </form>
 <% } %>
 
 
