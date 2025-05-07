@@ -11,7 +11,10 @@
             <p><strong>Stock:</strong> <%= ingredientes.stock %></p>
             <div class="admin-buttons">
                 <a href="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>" class="btn btn-edit">Editar ingrediente</a>
-                <a href="/recetas/ingredienteInd/eliminar?id=<%= ingredientes.id %>" class="btn btn-delete">Eliminar ingrediente</a>
+                <form action="/recetas/ingredienteInd/eliminar" method="post">
+                    <input type="hidden" name="id" value="<%= ingredientes.id %>">
+                    <button onclick="return confirm('¿Estás seguro de que deseas borrar este ingrediente?')">Eliminar ingrediente</button>
+                </form>
             </div>
         <% } %>
         
