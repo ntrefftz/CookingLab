@@ -115,8 +115,20 @@ export function viewHistorial(req, res) {
         // Construir el historial
         const historial = relaciones.map(relacion => {
             const pedido = Pedido.getPedidoById(relacion.id_pedido);
-            const ingredientes = Contiene.getByPedido(relacion.id_pedido) || []; // Asegurar que sea un array
-            const precioTotal = ingredientes.reduce((total, ing) => total + parseFloat(ing.precio), 0).toFixed(2);
+            const ingredientes = Contiene.getByPedido(relacion.id_pedido) || []; 
+            const ingredientesAgrupados = Object.values(
+                ingredientes.reduce((acc, ing) => {
+                    if (!acc[ing.id_ingrediente]) {
+                        acc[ing.id_ingrediente] = { ...ing };
+                    } else {
+                        acc[ing.id_ingrediente].cantidad += ing.cantidad;
+                    }
+                    return acc;
+                }, {})
+            );
+
+            // Calcular el precio total
+            const precioTotal = ingredientesAgrupados.reduce((total, ing) => total + parseFloat(ing.precio) * ing.cantidad, 0).toFixed(2);
 
             return {
                 pedido,
