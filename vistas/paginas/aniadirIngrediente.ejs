@@ -10,6 +10,17 @@
         <div><label>Categoría:</label> <input type="text" name="categoria" required placeholder="Categoría" /></div>
         <div><label>Precio:</label><input type="text" name="precio" required placeholder="Precio" min="0" /></div>
         <div><label>Stock:</label> <input type="number" name="stock" required placeholder="Stock" min="0" /></div>
+
+        <div>
+            <label>Unidad de medida:</label>
+            <select name="unidad_medida" required>
+                <option value="">Selecciona una unidad</option>
+                <option value="gramos">Gramos</option>
+                <option value="mililitros">Mililitros</option>
+                <option value="unidades">Unidades</option>
+            </select>
+        </div>
+
         <div><label>URL de imagen (opcional):</label> <input type="url" name="imagen_url" placeholder="https://ejemplo.com/imagen.jpg" /></div>
         
         <button type="submit">Añadir ingrediente</button>
