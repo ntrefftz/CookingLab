@@ -471,7 +471,7 @@ export function aniadirIngrediente(req, res) {
     }
 
     try {
-        Ingrediente.addIngrediente(nombre, categoria, precio, stock, activo, unidad_medida, imagen_url);
+        Ingrediente.addIngrediente(nombre, categoria, precio, stock, unidad_medida, imagen_url);
         res.redirect('/recetas/ingrediente');
     } catch (error) {
         logger.error(error);
