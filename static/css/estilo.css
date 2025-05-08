@@ -712,6 +712,18 @@ select {
 	height: auto;
 }
 	
+.ingrediente-container form{
+	display: inline;
+	text-decoration: none;
+	font-weight: bold;
+	background: none;
+	border: none;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	width: auto;
+	height: auto;
+}
 
 .receta-superior {
     display: flex;

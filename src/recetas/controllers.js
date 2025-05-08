@@ -415,9 +415,12 @@ export function modificarIngrediente(req, res) {
     const precio = req.body.precio.trim();
     const stock = req.body.stock.trim();
     const id = req.query.id;
+    const unidad_medida = req.body.unidad_medida.trim() || 'unidad';
     const contenido = 'paginas/ingredienteInd';
 
-    Ingrediente.updateIngrediente(id, nombre, categoria, precio, stock);
+    console.log("Body completo recibido en update:", req.body);
+
+    Ingrediente.updateIngrediente(id, nombre, categoria, precio, stock, unidad_medida);
     const ingrediente = Ingrediente.getIngredienteById(id);
     res.render('pagina', {
         contenido,
@@ -456,8 +459,6 @@ export function aniadirIngrediente(req, res) {
 
 
     console.log("Body completo recibido:", req.body);
-    console.log("imagen", imagen_url);
-
 
     if (!imagen_url == null || !imagen_url == undefined) {
         // Si no se proporciona una URL de imagen, se asigna una por defecto
