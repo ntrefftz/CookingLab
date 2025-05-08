@@ -14,8 +14,8 @@ export class Receta {
 
         this.#getByIdStmt = db.prepare('SELECT * FROM Recetas WHERE id = @id');
         this.#getByUsuarioStmt = db.prepare('SELECT * FROM Recetas WHERE id_usuario = @id_usuario AND activo = 1'); // Obtener recetas activas por usuario
-        this.#insertStmt = db.prepare('INSERT INTO Recetas(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo) VALUES (@nombre, @descripcion, @tiempo_prep_segs, @dificultad, @id_usuario, @activo)');
-        this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, tiempo_prep_segs = @tiempo_prep_segs, dificultad = @dificultad, activo = @activo WHERE id = @id');
+        this.#insertStmt = db.prepare('INSERT INTO Recetas(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo, imagen_url) VALUES (@nombre, @descripcion, @tiempo_prep_segs, @dificultad, @id_usuario, @activo, @imagen_url)');
+        this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, tiempo_prep_segs = @tiempo_prep_segs, dificultad = @dificultad, activo = @activo, imagen_url = @imagen_url WHERE id = @id');
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas WHERE activo = 1'); // Obtener todas las recetas activas
         
@@ -44,17 +44,17 @@ export class Receta {
         return this.#getAllStmt.all();
     }
 
-    static addReceta(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo = 1) {
+    static addReceta(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo = 1, imagen_url) {
         try {
-            const result = this.#insertStmt.run({ nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo });
+            const result = this.#insertStmt.run({ nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo, imagen_url });
             return { mensaje: "Receta añadida correctamente", id: result.lastInsertRowid };
         } catch (e) {
             throw new ErrorDatos("No se pudo añadir la receta", { cause: e });
         }
     }
 
-    static updateReceta(id, nombre, descripcion, tiempo_prep_segs, dificultad, activo) {
-        const result = this.#updateStmt.run({ id, nombre, descripcion, tiempo_prep_segs, dificultad, activo });
+    static updateReceta(id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url) {
+        const result = this.#updateStmt.run({ id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url });
         if (result.changes === 0) throw new RecetaNoEncontrada(id);
         return { mensaje: "Receta actualizada correctamente" };
     }

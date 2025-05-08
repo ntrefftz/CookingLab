@@ -18,7 +18,7 @@
                 <ul>
                     <% if (recetas.ingredientes) { %>
                         <% recetas.ingredientes.forEach(function(ingrediente) { %>
-                            <li><%= ingrediente.nombre %> - <%= ingrediente.cantidad_esp %><%= ingrediente.unidad_medida %></li>
+                            <li><%= ingrediente.nombre %> - <%= ingrediente.cantidad_esp  %> <%= ingrediente.unidad_medida %></li>
                         <% }); %>
                     <% } else { %>
                         <li>No se encontraron ingredientes.</li>
