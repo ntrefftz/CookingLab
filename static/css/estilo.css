@@ -853,3 +853,46 @@ select {
     font-weight: bold;
     margin: 0 ;
 }
+
+
+/* Estilos para el formulario de edición de ingrediente */
+#editar-ingrediente {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-header h2 {
+    color: #F383A0;
+    font-size: 1.8em;
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #FFE0EE;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.form-section {
+    margin-bottom: 20px;
+}
+
+.form-section h3 {
+    color: #F383A0;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed #FFE0EE;
+}
+
