@@ -7,6 +7,8 @@ import { Cesta } from '../pedidos/Cesta.js';
 
 
 export function viewRecetasLista(req, res) {
+    //console.log(req.session);
+
     // Verificamos si la solicitud viene del calendario
     const esDesdeCalendario = req.query.origen === 'calendario';  // Se obtiene el parámetro 'origen'
     const esDesdeMisRecetas = req.query.origen === 'misRecetas';  
@@ -66,7 +68,30 @@ export function viewRecetasDetalle(req, res) {
     });
 }
 
+export function eliminarReceta(req, res) {
+    const id = req.body.id;
+    try {
+        const ingredientes = Tiene.getIngredientesByReceta(id);
+
+        //Eliminar las relaciones con ingredientes
+        ingredientes.forEach(ing => {
+            Tiene.removeIngredienteFromReceta(id, ing.id_ingrediente);
+        });
+     
+        //Eliminar la receta
+        Receta.deleteReceta(id);
+
+        res.redirect('/recetas/catalogo');
+    } catch (error) {
+        logger.error("Error al eliminar la receta:", error);
+        res.status(500).send("Error al eliminar la receta.");
+    }
+}
+
 export function viewModificarReceta(req, res) {
+
+    console.log(req.session);
+
     const contenido = 'paginas/editarReceta';
     const id = req.query.id;
     const receta = Receta.getRecetaById(id);
@@ -88,26 +113,6 @@ export function viewModificarReceta(req, res) {
         recetas: receta,
         listaIngredientes
     });
-}
-
-export function eliminarReceta(req, res) {
-    const id = req.body.id;
-    try {
-        const ingredientes = Tiene.getIngredientesByReceta(id);
-
-        //Eliminar las relaciones con ingredientes
-        ingredientes.forEach(ing => {
-            Tiene.removeIngredienteFromReceta(id, ing.id_ingrediente);
-        });
-     
-        //Eliminar la receta
-        Receta.deleteReceta(id);
-
-        res.redirect('/recetas/catalogo');
-    } catch (error) {
-        logger.error("Error al eliminar la receta:", error);
-        res.status(500).send("Error al eliminar la receta.");
-    }
 }
 
 export function modificarReceta(req, res) {
