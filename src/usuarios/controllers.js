@@ -69,6 +69,8 @@ export function viewPerfil(req, res) {
 }
 
 export function viewMisRecetas(req, res) {
+    //console.log("Sesion:", req.session);
+
     let contenido = 'paginas/misRecetas';
     if (!req.session.login) {
         return res.redirect('/usuarios/login');
@@ -607,9 +609,14 @@ export function eliminarRecetaDeFavoritos(req, res) {
     }
 }
 
+/////////////////////////////
+export function viewSugerencias(req, res) {
+    if (!req.session.login) {
+        return res.redirect('/usuarios/login');
+    }
 
-
-
-
-
-
+    res.render('pagina', {
+        contenido: 'paginas/sugerencias', // Asegúrate de tener esta plantilla
+        session: req.session,
+    });
+}        
