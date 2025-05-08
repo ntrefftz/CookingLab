@@ -1,5 +1,5 @@
 BEGIN TRANSACTION;
-INSERT INTO "Ingredientes" VALUES (1,'Harina','Granos',1.5,100,1, , 'g', NULL);
+INSERT INTO "Ingredientes" VALUES (1,'Harina','Granos',1.5,100,1, 'g', NULL);
 INSERT INTO "Ingredientes" VALUES (2,'Azúcar','Endulzantes',1.0,50,1, 'g', NULL);
 INSERT INTO "Ingredientes" VALUES (3,'Sal','Condimentos',0.5,200,1, 'g', NULL);
 INSERT INTO "Ingredientes" VALUES (4,'Leche','Lácteos',2.0,30,1, 'ml', NULL);
@@ -7,7 +7,7 @@ INSERT INTO "Ingredientes" VALUES (5,'Huevos','Proteínas',3.0,40,1, 'unidad', N
 INSERT INTO "Ingredientes" VALUES (6,'Tomate','Verduras',1.2,60,1, 'g', NULL);
 INSERT INTO "Ingredientes" VALUES (7,'Queso','Lácteos',4.0,20,1,  'g', NULL);
 INSERT INTO "Ingredientes" VALUES (8,'Aceite','Grasas',5.5,25,1, 'ml', NULL);
-INSERT INTO "Ingredientes" VALUES (9,'Pollo','Carnes',6.0,15,1,  'g', NULL);
+INSERT INTO "Ingredientes" VALUES (9,'Pollo','Carnes',6.0,15,1, 'g', NULL);
 INSERT INTO "Ingredientes" VALUES (10,'Pasta','Carbohidratos',2.5,80,1, 'g', NULL);
 
 INSERT INTO "Recetas" VALUES (3,'Sopa de Tomate','Sopa caliente con tomates frescos.',1800,2,3,1,NULL);
