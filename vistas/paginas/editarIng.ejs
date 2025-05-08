@@ -1,4 +1,3 @@
-            <div><label>Categoría:</label> <textarea name="categoria"><%= ingredientes.categoria %></textarea></div>
 <form id="editar-ingredinte" action="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>" method="POST">
     <% if (locals.error) { %>
         <p><strong><%= locals.error %></strong></p>
