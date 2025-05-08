@@ -54,6 +54,7 @@ export function viewRecetasDetalle(req, res) {
     ingredientes.forEach(ingrediente => {
         const ingredienteDetails = Ingrediente.getIngredienteById(ingrediente.id_ingrediente);
         ingrediente.nombre = ingredienteDetails.nombre;
+        ingrediente.unidad_medida = ingredienteDetails.unidad_medida; // Añadir unidad de medida
     });
 
     receta.ingredientes = ingredientes;
@@ -277,15 +278,52 @@ export function aniadirReceta(req, res) {
         
         const ingredientesSeleccionados = req.body['ingredientes[]'] || []; // array de ingredientes que vienen del form
         //console.log("Ingredientes seleccionados:", ingredientesSeleccionados);
-
+        
+        // Cantidades normales (primer valor del array)
         const cantidades = {};
         for (const key in req.body) {
-            if (key.startsWith('cantidades[')) {
-                const id = key.match(/\[(\d+)\]/)[1];
-                cantidades[id] = req.body[key] || 1; // Default a 1 si está vacío
+            const match = key.match(/^cantidades\[(\d+)\]$/);
+            if (match) {
+                const id = match[1];
+                const valor = req.body[key];
+
+                let cantidad = '1';
+
+                if (Array.isArray(valor)) {
+                    cantidad = valor[0] && valor[0].trim() !== '' ? valor[0] : '1';
+                } else {
+                    cantidad = valor && valor.trim() !== '' ? valor : '1';
+                }
+
+                const cantidadNum = parseInt(cantidad, 10);
+                cantidades[id] = isNaN(cantidadNum) || cantidadNum <= 0 ? 1 : cantidadNum;
             }
         }
+
         console.log("Cantidades extraídas:", cantidades);
+
+        // Cantidades específicas (segundo valor del array)
+        const cantidad_esp = {};
+        for (const key in req.body) {
+            const match = key.match(/^cantidades\[(\d+)\]$/);
+            if (match) {
+                const id = match[1];
+                const valor = req.body[key];
+
+                let cantidad = '1';
+
+                if (Array.isArray(valor)) {
+                    cantidad = valor[1] && valor[1].trim() !== '' ? valor[1] : '1';
+                }
+
+                const cantidadNum = parseInt(cantidad, 10);
+                if (!isNaN(cantidadNum) && cantidadNum > 0) {
+                    cantidad_esp[id] = cantidadNum;
+                }
+            }
+        }
+
+        console.log("Cantidades específicas:", cantidad_esp);
 
 
         // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
@@ -293,13 +331,19 @@ export function aniadirReceta(req, res) {
             ? ingredientesSeleccionados 
             : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
 
-
+        
+        console.log("Se van a insertar los siguientes ingredientes:", ingredientesArray);
+        
         // Añadir cada ingrediente con su cantidad
         for (const ingredienteId of ingredientesArray) {
             if (ingredienteId) {
                 const cantidad = cantidades[ingredienteId] || 1;
+                const cantidadEspecifica = cantidad_esp[ingredienteId] || 1; 
+
                 console.log(`Añadiendo ingrediente ${ingredienteId} con cantidad ${cantidad}`);
-                Tiene.addIngredienteToReceta(recetaId, ingredienteId, cantidad);
+                console.log(` Y Añadiendo ingrediente ${ingredienteId} con cantidad ${cantidadEspecifica}`);
+                Tiene.addIngredienteToReceta(recetaId, ingredienteId, cantidad, cantidadEspecifica);
+
             }
         }
 
