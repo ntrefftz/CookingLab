@@ -259,7 +259,8 @@ export function aniadirReceta(req, res) {
     const dificultad = req.body.dificultad.trim();
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
-    const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
+    const activo = req.session.isAdmin ? 1 : 0;  // Si es administrador, la receta está activa; si no, está pendiente (al user no le sale)
+
     const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
     
     //const imagen_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fes%2Ffotos%2Fno-encontrado-mensaje-de-error-fotos&psig=AOvVaw3yClaJKuZYliDgG5DHGhJC&ust=1745919601499000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLCLvr-3-owDFQAAAAAdAAAAABAE"; // Imagen por defecto
@@ -676,3 +677,45 @@ export function viewAniadirIngredienteCarrito(req, res) {
     });
 }
 */
+export function aceptarSugerenciaReceta(req, res) {
+    const id = req.body.id;
+    try {
+        Receta.aceptarSugerencia(id);
+        res.redirect('/recetas/catalogo');
+    } catch (error) {
+        logger.error("Error al aceptar la sugerencia de receta:", error);
+        res.status(500).send("Error al aceptar la sugerencia de receta.");
+    }
+}
+
+
+export function viewSugerencias(req, res) {
+    console.log(req.session);
+    console.log("Vamos a buscar las recetas no activas");
+    // Obtener las recetas no activas (sugerencias)
+    const rows = Receta.getAllRecetasNact();
+    console.log("Recetas no activas:", rows);
+
+    // Definir los parámetros a enviar a la vista
+    const contenido = 'paginas/sugerencias'; // Referencia a la vista 'sugerencias.ejs'
+    //const esDesdeCalendario = false; // Define si es desde el calendario
+    //const esDesdeMisRecetas = false; // Define si es desde mis recetas
+
+    // Renderizar la vista con los parámetros necesarios
+    res.render('pagina', {
+        contenido,
+        session: req.session,
+        recetas: rows
+    });
+}
+/*export function viewSugerencias(req, res) {
+    if (!req.session.login) {
+        return res.redirect('/usuarios/login');
+    }
+
+    res.render('pagina', {
+        contenido: 'paginas/sugerencias', // Asegúrate de tener esta plantilla
+        session: req.session,
+    });
+}*/
+

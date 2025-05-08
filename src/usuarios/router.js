@@ -3,7 +3,7 @@ import express from 'express';
 import {
     viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout,
     viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome, viewListaUsuario, cambiarPermisos,
-    eliminarPerfil, aniadirRecetaACalendario, eliminarRecetaDeCalendario, aniadirRecetaAFavoritos, eliminarRecetaDeFavoritos, viewSugerencias
+    eliminarPerfil, aniadirRecetaACalendario, eliminarRecetaDeCalendario, aniadirRecetaAFavoritos, eliminarRecetaDeFavoritos //, viewSugerencias
 } 
 from './controllers.js';
 import asyncHandler from 'express-async-handler';
@@ -27,7 +27,7 @@ usuariosRouter.post('/login',
 
 usuariosRouter.get('/logout', asyncHandler(doLogout));
 usuariosRouter.get('/register',asyncHandler(viewRegister));
-usuariosRouter.get('/sugerencias', asyncHandler(viewSugerencias));
+//usuariosRouter.get('/sugerencias', asyncHandler(viewSugerencias));
 
 usuariosRouter.post('/register',
     body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i),

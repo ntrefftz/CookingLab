@@ -8,6 +8,7 @@ export class Receta {
 
     static #searchByNameStmt = null;
     static #searchByIngredientStmt = null;
+    static #getAllNact = null;
 
     static initStatements(db) {
         if (this.#getByIdStmt !== null) return;
@@ -18,6 +19,8 @@ export class Receta {
         this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, tiempo_prep_segs = @tiempo_prep_segs, dificultad = @dificultad, activo = @activo WHERE id = @id');
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas WHERE activo = 1'); // Obtener todas las recetas activas
+        this.#getAllNact = db.prepare('SELECT * FROM Recetas WHERE activo = 0'); // Obtener todas las recetas NO activas
+
         
         this.#searchByNameStmt = db.prepare('SELECT * FROM Recetas WHERE nombre LIKE @nombre AND activo = 1');
         this.#searchByIngredientStmt = db.prepare(`
@@ -42,6 +45,10 @@ export class Receta {
 
     static getAllRecetas() {
         return this.#getAllStmt.all();
+    }
+
+    static getAllRecetasNact() {
+        return this.#getAllNact.all();  
     }
 
     static addReceta(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo = 1) {
@@ -78,6 +85,22 @@ export class Receta {
     static searchByIngredient(ingrediente) {
         return this.#searchByIngredientStmt.all({ ingrediente: ingrediente });
     }
+
+    // Función para aceptar una sugerencia de receta
+    static aceptarSugerencia(id) {
+        // Cambia el campo 'activo' a 1 para aprobar la receta
+        const result = this.#updateStmt.run({ id, activo: 1 });
+        if (result.changes === 0) throw new RecetaNoEncontrada(id);
+        return { mensaje: "Receta aceptada correctamente" };
+    }
+
+    // Función para rechazar una sugerencia de receta
+    /*static rechazarSugerencia(id) {
+        // Cambia el campo 'activo' a 0 para rechazar la receta
+        const result = this.#updateStmt.run({ id, activo: 0 });
+        if (result.changes === 0) throw new RecetaNoEncontrada(id);
+        return { mensaje: "Receta rechazada correctamente" };
+    }*/
 
 }
 
