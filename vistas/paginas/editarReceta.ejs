@@ -9,7 +9,8 @@
     <label>Tiempo de preparación (min):</label> <input type="number" name="tiempo_prep_segs" value="<%= Math.floor(recetas.tiempo_prep_segs/60) %>" />
     <label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" value="<%= recetas.dificultad %>" />
     <label>Descripción:</label> <textarea name="descripcion"><%= recetas.descripcion %></textarea>
-    
+    <label>URL de imagen (opcional):</label> <input type="url" name="imagen_url" placeholder="https://ejemplo.com/imagen.jpg" />
+
     <div class="ingredientes-section">
         <h3>Ingredientes actuales:</h3>
         <% if (recetas.ingredientes && recetas.ingredientes.length > 0) { %>
@@ -41,9 +42,9 @@
                                         value="<%= ingrediente.id %>">
                                 <label for="ing-<%= ingrediente.id %>"><%= ingrediente.nombre %></label>
                                 <input type="number" name="cantidades[<%= ingrediente.id %>]" 
-                                        placeholder="Cantidad" min="0">
+                                        placeholder="Unidad" min="0">
                                 <input type="number" name="cantidad_especifica[<%= ingrediente.id %>]" 
-                                        placeholder="Unidades/gramos" min="0">
+                                        placeholder="Gramos" min="0">
                             </li>
                         <% } %>
                     <% }) %>
