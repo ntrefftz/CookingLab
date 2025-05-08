@@ -69,6 +69,8 @@ export function viewPerfil(req, res) {
 }
 
 export function viewMisRecetas(req, res) {
+    //console.log("Sesion:", req.session);
+
     let contenido = 'paginas/misRecetas';
     if (!req.session.login) {
         return res.redirect('/usuarios/login');

@@ -39,7 +39,10 @@ function menu(session){
 			<li><a href="/usuarios/micalendario">Calendario</a></li>
 			<li><a href="/usuarios/misrecetas">Mis recetas</a></li>
 		<% } %>
-		<li><a href="/usuarios/sugerencias">Sugerencias</a></li>
+
+		<% if (session && session.login  && session.esAdmin) { %>
+			<li><a href="/usuarios/sugerencias">Sugerencias</a></li>
+		<% } %>
 
 		<li><%- mostrarSaludo(session) %></li>
 		<li><div class= "dropdown">
