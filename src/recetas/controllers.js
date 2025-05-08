@@ -452,7 +452,7 @@ export function modificarIngrediente(req, res) {
     body('nombre').escape();
     body('categoria').escape();
     body('precio').escape();
-    body('stock').escape();
+    body('stock').escape();    
 
     const nombre = req.body.nombre.trim();
     const categoria = req.body.categoria.trim();
@@ -460,11 +460,12 @@ export function modificarIngrediente(req, res) {
     const stock = req.body.stock.trim();
     const id = req.query.id;
     const unidad_medida = req.body.unidad_medida.trim() || 'unidad';
+    const imagen_url = req.body.imagen_url.trim(); 
     const contenido = 'paginas/ingredienteInd';
 
     console.log("Body completo recibido en update:", req.body);
 
-    Ingrediente.updateIngrediente(id, nombre, categoria, precio, stock, unidad_medida);
+    Ingrediente.updateIngrediente(id, nombre, categoria, precio, stock, unidad_medida, imagen_url);
     const ingrediente = Ingrediente.getIngredienteById(id);
     res.render('pagina', {
         contenido,
