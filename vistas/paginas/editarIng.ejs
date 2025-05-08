@@ -9,6 +9,17 @@
             <div><label>Categoría:</label> <textarea name="categoria"><%= ingredientes.categoria %></textarea></div>
             <div><label>Precio:</label> <textarea name="precio"><%= ingredientes.precio %></textarea></div>
             <div><label>Stock:</label> <textarea name="stock"><%= ingredientes.stock %></textarea></div>
+
+            <div>
+                <label>Unidad de medida:</label>
+                <select name="unidad_medida" required>
+                    <option value="">Selecciona una unidad</option>
+                    <option value="gramos">Gramos</option>
+                    <option value="mililitros">Mililitros</option>
+                    <option value="unidades">Unidades</option>
+                </select>
+            </div>
+            
             <button type="submit">Editar</button>
         </fieldset>
     </form>
