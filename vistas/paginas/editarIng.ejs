@@ -1,26 +1,32 @@
-<div id="catalogo" class="form">
-    <form action="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>" method="POST">
-        <fieldset>
-            <% if (locals.error) { %>
-                <p><strong><%= locals.error %></strong></p>
-            <% } %>
-            <legend>Editar receta</legend>
-            <div><label>Nombre:</label> <input type="text" name="nombre" value="<%= ingredientes.nombre %>" /></div>
-            <div><label>Categoría:</label> <textarea name="categoria"><%= ingredientes.categoria %></textarea></div>
-            <div><label>Precio:</label> <textarea name="precio"><%= ingredientes.precio %></textarea></div>
-            <div><label>Stock:</label> <textarea name="stock"><%= ingredientes.stock %></textarea></div>
 
-            <div>
-                <label>Unidad de medida:</label>
-                <select name="unidad_medida" required>
-                    <option value="">Selecciona una unidad</option>
-                    <option value="gramos">Gramos</option>
-                    <option value="mililitros">Mililitros</option>
-                    <option value="unidades">Unidades</option>
-                </select>
-            </div>
-            
-            <button type="submit">Editar</button>
-        </fieldset>
-    </form>
-</div>
+<form id="editar-ingredinte" action="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>" method="POST">
+    <% if (locals.error) { %>
+        <p><strong><%= locals.error %></strong></p>
+    <% } %>
+    
+    <div class="form-header">
+        <h2>Editar Ingrediente</h2>
+    </div>
+    <div class="form-grid">
+        <div class="form-section">
+            <h3>Información Básica</h3>
+                <div><label>Nombre:</label> <input type="text" name="nombre" value="<%= ingredientes.nombre %>" /></div>
+                <div><label>Categoría:</label> <textarea name="categoria"><%= ingredientes.categoria %></textarea></div>
+            <h3>Información Adicional</h3>     
+                <div><label>Precio:</label> <textarea name="precio"><%= ingredientes.precio %></textarea></div>
+                <div><label>Stock:</label> <textarea name="stock"><%= ingredientes.stock %></textarea></div>
+            <h3>Medida</h3>
+            <strong>Unidad de medida:</strong>
+            <select name="unidad_medida" required>
+                <option value="">Selecciona una unidad</option>
+                <option value="gramos">Gramos</option>
+                <option value="mililitros">Mililitros</option>
+                <option value="unidades">Unidades</option>
+            </select>
+        <div>
+    </div>
+    
+    <button type="submit">Editar</button>
+
+</form>
+
