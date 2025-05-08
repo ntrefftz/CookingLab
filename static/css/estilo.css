@@ -328,6 +328,7 @@ img {
 	text-decoration: none;
 	border-radius: 4px;
 	font-weight: bold;
+	font-family: 'Times New Roman';
 }
 
 .btn-edit {
@@ -697,6 +698,20 @@ select {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.receta-container form {
+	display: inline;
+	text-decoration: none;
+	font-weight: bold;
+	background: none;
+	border: none;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	width: auto;
+	height: auto;
+}
+	
 
 .receta-superior {
     display: flex;
