@@ -26,15 +26,26 @@
     <div class="acciones-ingredientes">
         <details class="ingredientes-section">
             <summary>Añadir ingrediente</summary>
+            <% 
+                // Crear un array con los IDs de los ingredientes actuales de la receta
+                const currentIngredientIds = recetas.ingredientes.map(ing => ing.id_ingrediente || ing.id);
+            %>
             <% if (listaIngredientes && listaIngredientes.length > 0) { %>
                 <ul>
                     <% listaIngredientes.forEach(ingrediente => { %>
-                        <li>
-                            <input type="checkbox" id="ing-<%= ingrediente.id %>" name="ingredientesSeleccionados[]" value="<%= ingrediente.id %>">
-                            <label for="ing-<%= ingrediente.id %>"><%= ingrediente.nombre %></label>
-                            <input type="number" name="cantidades[<%= ingrediente.id %>]" placeholder="Cantidad" min="0">
-                            <input type="number" name="cantidad_especifica[<%= ingrediente.id %>]" placeholder="Unidades/gramos" min="0">
-                        </li>
+                        <!-- Mostrar solo si NO está en la receta -->
+                        <% if (!currentIngredientIds.includes(ingrediente.id)) { %>
+                            <li>
+                                <input type="checkbox" id="ing-<%= ingrediente.id %>" 
+                                        name="ingredientesSeleccionados[]" 
+                                        value="<%= ingrediente.id %>">
+                                <label for="ing-<%= ingrediente.id %>"><%= ingrediente.nombre %></label>
+                                <input type="number" name="cantidades[<%= ingrediente.id %>]" 
+                                        placeholder="Cantidad" min="0">
+                                <input type="number" name="cantidad_especifica[<%= ingrediente.id %>]" 
+                                        placeholder="Unidades/gramos" min="0">
+                            </li>
+                        <% } %>
                     <% }) %>
                 </ul>
             <% } else { %>

@@ -13,8 +13,9 @@
                 <div><label>Nombre:</label> <input type="text" name="nombre" value="<%= ingredientes.nombre %>" /></div>
                 <div><label>Categoría:</label> <textarea name="categoria"><%= ingredientes.categoria %></textarea></div>
             <h3>Información Adicional</h3>     
-                <div><label>Precio:</label> <textarea name="precio"><%= ingredientes.precio %></textarea></div>
-                <div><label>Stock:</label> <textarea name="stock"><%= ingredientes.stock %></textarea></div>
+                <div><label>Precio:</label><input type="number" name="precio" required placeholder="Precio" min="0" /></div>
+                <div><label>Stock:</label> <input type="number" name="stock" required placeholder="Stock" min="0" /></div>
+
             <h3>Medida</h3>
             <strong>Unidad de medida:</strong>
             <select name="unidad_medida" required>
