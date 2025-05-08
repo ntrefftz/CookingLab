@@ -235,6 +235,7 @@ export async function doLogin(req, res) {
         req.session.correo = usuario.correo || '';
         req.session.direccion = usuario.direccion || '';
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
+        req.session.esCocinero = usuario.rol === RolesEnum.COCINERO;
 
         res.setFlash(`Encantado de verte de nuevo: ${usuario.nombre}`);
         logger.info(`Usuario ${username} ha iniciado sesión.`);
@@ -300,6 +301,8 @@ export async function doRegister(req, res) {
         req.session.direccion = usuario.direccion || '';
         req.session.rol = usuario.rol;
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
+        req.session.esCocinero = usuario.rol === RolesEnum.COCINERO;
+
 
         res.setFlash(`Bienvenido a CookingLab: ${usuario.nombre}`);
         logger.info(`Usuario ${username} se ha registrado correctamente.`);
@@ -333,6 +336,8 @@ export function doLogout(req, res, next) {
     req.session.login = null
     req.session.nombre = null;
     req.session.esAdmin = null;
+    req.session.esCocinero = null;
+    
     req.session.save((err) => {
         if (err) next(err);
 
