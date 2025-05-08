@@ -7,24 +7,28 @@
     <div class="form-header">
         <h2>Editar Ingrediente</h2>
     </div>
-    <div class="form-grid">
-        <div class="form-section">
-            <h3>Información Básica</h3>
-                <div><label>Nombre:</label> <input type="text" name="nombre" value="<%= ingredientes.nombre %>" /></div>
-                <div><label>Categoría:</label> <textarea name="categoria"><%= ingredientes.categoria %></textarea></div>
-            <h3>Información Adicional</h3>     
-                <div><label>Precio:</label> <textarea name="precio"><%= ingredientes.precio %></textarea></div>
-                <div><label>Stock:</label> <textarea name="stock"><%= ingredientes.stock %></textarea></div>
-            <h3>Medida</h3>
-            <strong>Unidad de medida:</strong>
-            <select name="unidad_medida" required>
-                <option value="">Selecciona una unidad</option>
-                <option value="gramos">Gramos</option>
-                <option value="mililitros">Mililitros</option>
-                <option value="unidades">Unidades</option>
-            </select>
-        <div>
-    </div>
+
+    <div class="form-section">
+        <h3>Información Básica</h3>
+            <div><label>Nombre:</label> <input type="text" name="nombre" value="<%= ingredientes.nombre %>" /></div>
+            <p></p>
+            <div><label>Categoría:</label> <textarea name="categoria"><%= ingredientes.categoria %></textarea></div>
+        <h3>Información Adicional</h3>     
+            <div><label>Precio:</label> <textarea name="precio"><%= ingredientes.precio %></textarea></div>
+            <p></p>
+            <div><label>Stock:</label> <textarea name="stock"><%= ingredientes.stock %></textarea></div>
+        <h3>Medida</h3>
+        <strong>Unidad de medida:</strong>
+        <select name="unidad_medida" required>
+            <option value="">Selecciona una unidad</option>
+            <option value="gramos">Gramos</option>
+            <option value="mililitros">Mililitros</option>
+            <option value="unidades">Unidades</option>
+        </select>
+        <p></p>
+        <div><label>URL de imagen (opcional):</label> <input type="url" name="imagen_url" placeholder="https://ejemplo.com/imagen.jpg" /></div>
+
+</div>
     
     <button type="submit">Editar</button>
 
