@@ -172,9 +172,6 @@ export async function viewCalendario(req, res) {
         domingoProximaSemana
     );
 
-    console.log("Recetas entre", lunesEstaSemana, "y", domingoProximaSemana);
-    console.log("Recetas de la semana:", recetasSemana);
-
     res.render('pagina', {
         contenido,
         session: req.session,

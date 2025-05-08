@@ -12,9 +12,9 @@
 
     // Modificaciones para tener en cuenta la semana siguiente
     let primerDiaSemanaSiguiente = new Date(lunesActual);
-    primerDiaSemanaSiguiente.setDate(primerDiaSemanaSiguiente.getDate() + 7); <!--Lunes de la semana siguiente-->
+    primerDiaSemanaSiguiente.setDate(primerDiaSemanaSiguiente.getDate() + 7); // <!--Lunes de la semana siguiente-->
     let ultimoDiaSemanaSiguiente = new Date(primerDiaSemanaSiguiente);
-    ultimoDiaSemanaSiguiente.setDate(primerDiaSemanaSiguiente.getDate() + 6); <!--Domingo de la semana siguiente-->
+    ultimoDiaSemanaSiguiente.setDate(primerDiaSemanaSiguiente.getDate() + 6); // <!--Domingo de la semana siguiente-->
     %>
     
     <!-- Semana actual -->
@@ -35,8 +35,8 @@
                             <% recetasDelDia.forEach(r => { %>
                                 <li>
                                     <strong><%= r.nombre %></strong>
-                                    <p>Tiempo: <%= r.tiempo_prep_segs || '---' %></p>
-                                    <p>Dificultad: <%= r.dificultad || '---' %></p>
+                                    <p>Tiempo: <%= r.tiempo_prep_segs ? Math.floor(r.tiempo_prep_segs / 60) + ' min ' + (r.tiempo_prep_segs % 60) + ' seg' : '---' %></p>
+                                    <p>Dificultad: <% for(let i = 0; i < r.dificultad; i++){ %>⭐<% } %></p>
                                 </li>
                             <% }) %>
                         </ul>
@@ -67,8 +67,8 @@
                             <% recetasDelDia.forEach(r => { %>
                                 <li>
                                     <strong><%= r.nombre %></strong>
-                                    <p>Tiempo: <%= r.tiempo_prep_segs || '---' %></p>
-                                    <p>Dificultad: <%= r.dificultad || '---' %></p>
+                                    <p>Tiempo: <%= r.tiempo_prep_segs ? Math.floor(r.tiempo_prep_segs / 60) + ' min ' + (r.tiempo_prep_segs % 60) + ' seg' : '---' %></p>
+                                    <p>Dificultad: <% for(let i = 0; i < r.dificultad; i++){ %>⭐<% } %></p>
                                 </li>
                             <% }) %>
                         </ul>
@@ -89,4 +89,15 @@
             <% } %>
         </div>
     </div>
+    <form>
+        <button 
+            type="button" 
+            id="btn-anadir-cesta" 
+            data-recetas='<%= JSON.stringify(recetasSemana) %>'
+        >
+            Añadir todas las recetas a la cesta
+        </button>
+    </form>
+
 </section>
+<script src="/js/cestaCalendario.js"></script>
