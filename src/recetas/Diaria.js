@@ -32,7 +32,7 @@ export class Diaria {
 
     static updateRecetaPorDia(dia, id_receta) {
         try {
-            this.#insertStmt.run({ dia, id_receta });
+            this.#updateStmt.run({ dia, id_receta });
             return { mensaje: "Receta actualizada correctamente" };
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') throw new DiariaYaExiste(dia);

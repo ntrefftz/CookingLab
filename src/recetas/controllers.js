@@ -660,7 +660,7 @@ export async function jsonRecetas(req, res) {
 export async function jsonRecetaDiaria(req, res) {
     try {
         const recetasDiarias = await Diaria.getTodasLasRecetas(); // [{ id_receta, dia }, ...]
-        console.log("Recetas diarias:", recetasDiarias);
+      
         if (!Array.isArray(recetasDiarias)) {
             return res.json([]); // Devuelve un array vacío si no hay recetas
         }
@@ -685,7 +685,7 @@ export async function jsonRecetaDiaria(req, res) {
 
 export async function aniadirRecetaDiaria(req, res) {
     const { fecha, recetaId } = req.body; // Asegúrate de que el cuerpo de la solicitud contenga estos datos
-    const recetaDiaria = null;
+    let recetaDiaria = null;
     try {
         try {
           recetaDiaria = Diaria.getRecetaPorDia(fecha);
