@@ -4,7 +4,7 @@ import { Ingrediente } from './Ingredientes.js';
 import { Tiene } from './Tiene.js';
 import { logger } from '../logger.js';
 import { Cesta } from '../pedidos/Cesta.js';
-import {Diaria} from './Diaria.js';
+import { Diaria } from './Diaria.js';
 
 export function viewRecetasLista(req, res) {
     // Verificamos si la solicitud viene del calendario
@@ -623,12 +623,12 @@ export async function actualizarStock(req, res) {
 }
 
 export async function recetaPorFecha(req, res) {
-    const { fecha } = req.body; 
+    const { fecha } = req.body;
 
     try {
-        const idReceta = await Diaria.getRecetaPorDia(fecha);
+        const idReceta = await Diaria.getTodasLasRecetas();
         const receta = await Receta.getRecetaById(idReceta.id);
-        
+
         res.json(receta || null);
     } catch (error) {
         console.error("Error al obtener la receta por fecha:", error);
@@ -649,10 +649,61 @@ export function viewCalendarioRecetaDiaria(req, res) {
 
 export async function jsonRecetas(req, res) {
     try {
-        const recetas = await  Diaria.getTodasLasRecetas(); // Ajusta el nombre de tu tabla
+        const recetas = await Receta.getAllRecetas(); // Ajusta el nombre de tu tabla
         res.json(recetas); // Devuelve las recetas como JSON
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error al obtener las recetas.' });
+    }
+}
+
+export async function jsonRecetaDiaria(req, res) {
+    try {
+        const recetasDiarias = await Diaria.getTodasLasRecetas(); // [{ id_receta, dia }, ...]
+        console.log("Recetas diarias:", recetasDiarias);
+        if (!Array.isArray(recetasDiarias)) {
+            return res.json([]); // Devuelve un array vacío si no hay recetas
+        }
+
+        const recetasCompletas = await Promise.all(
+            recetasDiarias.map(async (recetaDiaria) => {
+                const receta = await Receta.getRecetaById(recetaDiaria.id_receta);
+                return {
+                    title: receta.nombre,
+                    start: recetaDiaria.dia,
+                    id: receta.id,
+                };
+            })
+        );
+
+        res.json(recetasCompletas);
+    } catch (error) {
+        console.error('Error al obtener las recetas para el calendario:', error);
+        res.status(500).json({ message: 'Error al obtener las recetas para el calendario.' });
+    }
+}
+
+export async function aniadirRecetaDiaria(req, res) {
+    const { fecha, recetaId } = req.body; // Asegúrate de que el cuerpo de la solicitud contenga estos datos
+    const recetaDiaria = null;
+    try {
+        try {
+          recetaDiaria = Diaria.getRecetaPorDia(fecha);
+        }
+        catch (DiariaNoEncontrada) {
+           logger.debug("No hay receta asignada a este día, Insertando una nueva");
+        }
+        if (recetaDiaria) {
+            Diaria.updateRecetaPorDia(fecha, recetaId);
+            return res.json({ message: 'Receta actualizada en el calendario con éxito.' });
+        }
+        else {
+             Diaria.asignarRecetaADia(fecha, recetaId);
+            res.json({ message: 'Receta añadida al calendario con éxito.' });
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al añadir la receta al calendario.' });
     }
 }

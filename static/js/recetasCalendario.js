@@ -8,9 +8,13 @@ document.addEventListener('DOMContentLoaded', function () {
         dateClick: async function (info) {
             // Mostrar un selector de recetas al hacer clic en un día
             const fecha = info.dateStr;
-        
-            // Obtener recetas desde el servidor
-            const response = await fetch('/recetas/recetaPorFecha');
+                const response = await fetch('/recetas/recetaPorFecha', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({fecha: fecha}),
+                });
             const recetas = await response.json();
             console.log('Recetas obtenidas:', recetas);
             console.log(info.dateStr);
@@ -31,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const recetaId = recipeSelector.value;
                 console.log('Id receta: ', recipeSelector.value);
                 if (recetaId) {
-                    fetch('/usuarios/calendario/aniadir', {
+                    fetch('/recetas/aniadirRecetaDiaria', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -78,6 +82,40 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.removeEventListener('click', closePopup);
                 }
             });
+        },
+    });
+
+    calendar.render();
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendarWk');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth', // Vista mensual
+        editable: true, // Permitir edición de eventos
+        events: async function (fetchInfo, successCallback, failureCallback) {
+            try {
+
+                const response = await fetch('/recetas/obtenerRecetasCalendario', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const recetas = await response.json();
+                // Transformar los datos obtenidos en eventos para el calendario
+              
+
+                successCallback(recetas); // Pasar los eventos al calendario
+            } catch (error) {
+                console.error('Error al cargar los eventos:', error);
+                failureCallback(error); // Manejar errores
+            }
+        },
+        dateClick: async function (info) {
+            // Lógica existente para manejar el clic en una fecha
+            const fecha = info.dateStr;
+            /*...*/
         },
     });
 
