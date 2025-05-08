@@ -40,10 +40,13 @@
     
     <% if (session.esAdmin) { %>
         <div class="admin-buttons">
-            <a href="/recetas/receta/modificar?id=<%= recetas.id %>" class="btn btn-edit">Editar receta</a>
+            <form action="/recetas/receta/modificar" method="GET">
+                <input type="hidden" name="id" value="<%= recetas.id %>">
+                <button type="submit" class="btn btn-edit">Editar receta</button>
+            </form>
             <form action="/recetas/receta/eliminar" method="POST">
                 <input type="hidden" name="id" value="<%= recetas.id %>">
-                <button type="submit" onclick="return confirm('¿Estás seguro de que deseas borrar esta receta?')">Eliminar receta</button>
+                <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que deseas borrar esta receta?')">Eliminar receta</button>
             </form>
         </div>
     <% } %>
