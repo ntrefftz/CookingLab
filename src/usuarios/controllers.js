@@ -607,9 +607,14 @@ export function eliminarRecetaDeFavoritos(req, res) {
     }
 }
 
+/////////////////////////////
+export function viewSugerencias(req, res) {
+    if (!req.session.login) {
+        return res.redirect('/usuarios/login');
+    }
 
-
-
-
-
-
+    res.render('pagina', {
+        contenido: 'paginas/sugerencias', // Asegúrate de tener esta plantilla
+        session: req.session,
+    });
+}        
