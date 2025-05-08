@@ -90,7 +90,7 @@ export function viewModificarReceta(req, res) {
 }
 
 export function eliminarReceta(req, res) {
-    const id = req.query.id;
+    const id = req.body.id;
     try {
         const ingredientes = Tiene.getIngredientesByReceta(id);
 
