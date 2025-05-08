@@ -10,10 +10,13 @@
         <% if (session.esAdmin) { %>
             <p><strong>Stock:</strong> <%= ingredientes.stock %></p>
             <div class="admin-buttons">
-                <a href="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>" class="btn btn-edit">Editar ingrediente</a>
+                <form action="/recetas/ingredienteInd/modificar" method="GET">
+                    <input type="hidden" name="id" value="<%= ingredientes.id %>">
+                    <button type="submit" class="btn btn-edit">Editar ingrediente</button>
+                </form>
                 <form action="/recetas/ingredienteInd/eliminar" method="post">
                     <input type="hidden" name="id" value="<%= ingredientes.id %>">
-                    <button onclick="return confirm('¿Estás seguro de que deseas borrar este ingrediente?')">Eliminar ingrediente</button>
+                    <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que deseas borrar este ingrediente?')">Eliminar ingrediente</button>
                 </form>
             </div>
         <% } %>
