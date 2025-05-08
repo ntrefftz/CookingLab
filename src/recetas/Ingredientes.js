@@ -14,7 +14,7 @@ export class Ingrediente {
 
         this.#getByIdStmt = db.prepare('SELECT * FROM Ingredientes WHERE id = @id');
         this.#getByNombreStmt = db.prepare('SELECT * FROM Ingredientes WHERE nombre = @nombre');
-        this.#insertStmt = db.prepare('INSERT INTO Ingredientes(nombre, categoria, precio, stock) VALUES (@nombre, @categoria, @precio, @stock)');
+        this.#insertStmt = db.prepare('INSERT INTO Ingredientes(nombre, categoria, precio, stock, unidad_medida, imagen_url) VALUES (@nombre, @categoria, @precio, @stock, @unidad_medida, @imagen_url)');
         this.#deleteStmt = db.prepare('DELETE FROM Ingredientes WHERE id = @id');
         this.#getAllStmt = db.prepare('SELECT * FROM Ingredientes');
         this.#updateStmt = db.prepare('UPDATE Ingredientes SET nombre = @nombre, categoria = @categoria, precio = @precio, stock = @stock WHERE id = @id');
