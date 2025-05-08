@@ -1,28 +1,36 @@
-<h2>Añadir nuevo ingrediente</h2>
+<form id="editar-ingredinte" action="/recetas/ingredienteInd/aniadir" method="POST">
 
-<form action="/recetas/ingredienteInd/aniadir" method="POST">
-    <fieldset>
-        <% if (locals.error) { %>
-            <p><strong><%= locals.error %></strong></p>
-        <% } %>
-        <legend>Detalles del ingrediente</legend>
-        <div><label>Nombre:</label> <input type="text" name="nombre" required placeholder="Nombre" /></div>
-        <div><label>Categoría:</label> <input type="text" name="categoria" required placeholder="Categoría" /></div>
-        <div><label>Precio:</label><input type="number" name="precio" required placeholder="Precio" min="0" /></div>
-        <div><label>Stock:</label> <input type="number" name="stock" required placeholder="Stock" min="0" /></div>
+    <% if (locals.error) { %>
+        <p><strong><%= locals.error %></strong></p>
+    <% } %>
 
-        <div>
-            <label>Unidad de medida:</label>
-            <select name="unidad_medida" required>
-                <option value="">Selecciona una unidad</option>
-                <option value="gramos">Gramos</option>
-                <option value="mililitros">Mililitros</option>
-                <option value="unidades">Unidades</option>
-            </select>
+    <div class="form-header">
+        <h2>Añadir nuevo ingrediente</h2>
+    </div>
+
+        <div class="form-section">
+            <h3>Información Básica</h3>
+                <div><label>Nombre:</label> <input type="text" name="nombre" required placeholder="Nombre" /></div>
+                <p></p>
+                <div><label>Categoría:</label> <input type="text" name="categoria" required placeholder="Categoría" /></div>
+            <h3>Información Adicional</h3>
+                <div><label>Precio:</label><input type="number" name="precio" required placeholder="Precio" min="0" /></div>
+                <p></p>
+                <div><label>Stock:</label> <input type="number" name="stock" required placeholder="Stock" min="0" /></div>
+
+                <h3>Especificaciones</h3>
+                <strong>Unidad de medida:</strong>
+                <select name="unidad_medida" required>
+                    <option value="">Selecciona una unidad</option>
+                    <option value="gramos">Gramos</option>
+                    <option value="mililitros">Mililitros</option>
+                    <option value="unidades">Unidades</option>
+                </select>
+                <p></p>
+                <div><label>URL de imagen (opcional):</label> <input type="url" name="imagen_url" placeholder="https://ejemplo.com/imagen.jpg" /></div>
+  
         </div>
+    
+    <button type="submit">Añadir ingrediente</button>
 
-        <div><label>URL de imagen (opcional):</label> <input type="url" name="imagen_url" placeholder="https://ejemplo.com/imagen.jpg" /></div>
-        
-        <button type="submit">Añadir ingrediente</button>
-    </fieldset>
 </form>

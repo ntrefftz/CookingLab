@@ -17,7 +17,7 @@ export class Ingrediente {
         this.#insertStmt = db.prepare('INSERT INTO Ingredientes(nombre, categoria, precio, stock, unidad_medida, imagen_url) VALUES (@nombre, @categoria, @precio, @stock, @unidad_medida, @imagen_url)');
         this.#deleteStmt = db.prepare('DELETE FROM Ingredientes WHERE id = @id');
         this.#getAllStmt = db.prepare('SELECT * FROM Ingredientes');
-        this.#updateStmt = db.prepare('UPDATE Ingredientes SET nombre = @nombre, categoria = @categoria, precio = @precio, stock = @stock, unidad_medida =  @unidad_medida WHERE id = @id');
+        this.#updateStmt = db.prepare('UPDATE Ingredientes SET nombre = @nombre, categoria = @categoria, precio = @precio, stock = @stock, unidad_medida =  @unidad_medida, imagen_url = @imagen_url WHERE id = @id');
         this.#reduceStockStmt = db.prepare('UPDATE Ingredientes SET stock = stock - @cantidad WHERE id = @id AND stock >= @cantidad');
         this.#existsStmt = db.prepare('SELECT COUNT(*) as count FROM Ingredientes WHERE nombre = @nombre');
         this.#setStock = db.prepare('UPDATE Ingredientes SET stock = @stock WHERE id = @id');
@@ -55,8 +55,8 @@ export class Ingrediente {
         return { mensaje: "Ingrediente eliminada correctamente" };
     }
 
-    static updateIngrediente(id, nombre, categoria, precio, stock, unidad_medida) {
-        const result = this.#updateStmt.run({ id, nombre, categoria, precio, stock, unidad_medida });
+    static updateIngrediente(id, nombre, categoria, precio, stock, unidad_medida, imagen_url) {
+        const result = this.#updateStmt.run({ id, nombre, categoria, precio, stock, unidad_medida, imagen_url });
         if (result.changes === 0) throw new IngredienteNoEncontrado(id);
         return { mensaje: "Ingrediente actualizado correctamente" };
     }
