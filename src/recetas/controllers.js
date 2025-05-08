@@ -451,8 +451,10 @@ export function aniadirIngrediente(req, res) {
     const stock = req.body.stock.trim();
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
+    const unidad_medida = req.body.unidad_medida.trim() || 'unidad';
     const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
-    
+
+
     console.log("Body completo recibido:", req.body);
     console.log("imagen", imagen_url);
 
@@ -469,7 +471,7 @@ export function aniadirIngrediente(req, res) {
     }
 
     try {
-        Ingrediente.addIngrediente(nombre, categoria, precio, stock, activo, imagen_url);
+        Ingrediente.addIngrediente(nombre, categoria, precio, stock, activo, unidad_medida, imagen_url);
         res.redirect('/recetas/ingrediente');
     } catch (error) {
         logger.error(error);

@@ -14,7 +14,7 @@ export class Ingrediente {
 
         this.#getByIdStmt = db.prepare('SELECT * FROM Ingredientes WHERE id = @id');
         this.#getByNombreStmt = db.prepare('SELECT * FROM Ingredientes WHERE nombre = @nombre');
-        this.#insertStmt = db.prepare('INSERT INTO Ingredientes(nombre, categoria, precio, stock) VALUES (@nombre, @categoria, @precio, @stock)');
+        this.#insertStmt = db.prepare('INSERT INTO Ingredientes(nombre, categoria, precio, stock, unidad_medida, imagen_url) VALUES (@nombre, @categoria, @precio, @stock, @unidad_medida, @imagen_url)');
         this.#deleteStmt = db.prepare('DELETE FROM Ingredientes WHERE id = @id');
         this.#getAllStmt = db.prepare('SELECT * FROM Ingredientes');
         this.#updateStmt = db.prepare('UPDATE Ingredientes SET nombre = @nombre, categoria = @categoria, precio = @precio, stock = @stock WHERE id = @id');
@@ -39,9 +39,18 @@ export class Ingrediente {
         return this.#getAllStmt.all();
     }
 
-    static addIngrediente(nombre, categoria, precio, stock = 0, imagen_url) {
+    /*static addIngrediente(nombre, categoria, precio, stock = 0, imagen_url) {
         try {
             this.#insertStmt.run({ nombre, categoria, precio, stock, imagen_url });
+            return { mensaje: "Ingrediente añadido correctamente" };
+        } catch (e) {
+            if (e.code === 'SQLITE_CONSTRAINT') throw new IngredienteYaExiste(nombre);
+            throw new ErrorDatos("No se pudo añadir el ingrediente", { cause: e });
+        }
+    }*/
+    static addIngrediente(nombre, categoria, precio, stock = 0, unidad_medida, imagen_url) {
+        try {
+            this.#insertStmt.run({ nombre, categoria, precio, stock, unidad_medida, imagen_url});
             return { mensaje: "Ingrediente añadido correctamente" };
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') throw new IngredienteYaExiste(nombre);
