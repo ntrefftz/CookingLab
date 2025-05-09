@@ -225,12 +225,7 @@ export function modificarReceta(req, res) {
         }
     }
 
-    res.render('pagina', {
-        contenido,
-        session: req.session,
-        recetas: receta,
-        listaIngredientes
-    });
+    res.redirect('/recetas/receta?id=' + id);
 }
 
 export function viewAniadirReceta(req, res) {
@@ -697,6 +692,9 @@ export function viewSugerencias(req, res) {
     //console.log("Vamos a buscar las recetas no activas");
     
     // Obtener las recetas no activas (sugerencias)
+    if(!req.session.login) {
+        return res.redirect('/usuarios/login');
+    }
     const rows = Receta.getAllRecetasNact();
     console.log("Recetas no activas:", rows);
 
