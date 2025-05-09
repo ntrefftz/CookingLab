@@ -128,8 +128,10 @@ export function modificarReceta(req, res) {
     const id = req.query.id;
     const contenido = 'paginas/receta';
     
-    Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1);
     const receta = Receta.getRecetaById(id);
+    const imagen_url = receta.imagen_url;
+
+    Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1, imagen_url);
     const ingredientes = Tiene.getIngredientesByReceta(id);
 
     const listaIngredientes = Ingrediente.getAllIngredientes();
