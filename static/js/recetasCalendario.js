@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     body: JSON.stringify({ fecha: fecha }),
                 });
+                
                 const recetas = await response.json();
                 console.log('Recetas obtenidas:', recetas);
 

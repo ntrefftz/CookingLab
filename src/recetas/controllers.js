@@ -622,19 +622,6 @@ export async function actualizarStock(req, res) {
     }
 }
 
-export async function recetaPorFecha(req, res) {
-    const { fecha } = req.body;
-
-    try {
-        const idReceta = await Diaria.getTodasLasRecetas();
-        const receta = await Receta.getRecetaById(idReceta.id);
-
-        res.json(receta || null);
-    } catch (error) {
-        console.error("Error al obtener la receta por fecha:", error);
-        res.status(500).json({ error: "Error al obtener la receta por fecha" });
-    }
-}
 
 export function viewCalendarioRecetaDiaria(req, res) {
     const contenido = 'paginas/calendarioRecetaDelDia';
@@ -711,12 +698,14 @@ export async function getRecetaDiariaPorDia(req, res) {
 
     const { fecha } = req.body; // Asegúrate de que el cuerpo de la solicitud contenga estos datos
     try {
+        
         const receta = Diaria.getRecetaPorDia(fecha);
         return res.json(receta);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error al obtener la receta del día.' });
+    } 
+    catch (DiariaNoEncontrada){
+        return res.json({});
     }
+   
 }
 
 export async function getRecetaPorID(req, res) {
