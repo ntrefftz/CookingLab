@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const fecha = info.dateStr;
 
             try {
-                // Obtener las recetas disponibles para la fecha seleccionada
-                const response = await fetch('/recetas/recetaPorFecha', {
+               
+                const response = await fetch('/recetas/obtenerRecetas', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

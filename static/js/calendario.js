@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify({ fecha: formatDate(date) }),
             });
+
             const recetaID = await response.json();
             console.log("Receta ID:", recetaID);
             const recetaResponse = await fetch(`/recetas/getReceta/${recetaID.id_receta}`, {

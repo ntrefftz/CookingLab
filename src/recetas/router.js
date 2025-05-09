@@ -36,6 +36,7 @@ recetasRouter.get('/stock', asyncHandler(viewGestionStock));
 recetasRouter.post('/recetaPorFecha', asyncHandler(getRecetaDiariaPorDia));
 recetasRouter.post('/aniadirRecetaDiaria', asyncHandler(aniadirRecetaDiaria));
 recetasRouter.get('/obtenerRecetasCalendario', asyncHandler(jsonRecetaDiaria));
+recetasRouter.post('/obtenerRecetas', asyncHandler(jsonRecetas));
 recetasRouter.get('/getReceta/:id', asyncHandler(getRecetaPorID));
 
 

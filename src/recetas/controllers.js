@@ -116,30 +116,30 @@ export function viewModificarReceta(req, res) {
 }
 
 
-export function eliminarReceta(req, res) {
-    const contenido = 'paginas/eliminada';
-    const id = req.query.id;
-    try {
-        const ingredientes = Tiene.getIngredientesByReceta(id);
-        console.log("Ingredientes:", ingredientes);
+// export function eliminarReceta(req, res) {
+//     const contenido = 'paginas/eliminada';
+//     const id = req.query.id;
+//     try {
+//         const ingredientes = Tiene.getIngredientesByReceta(id);
+//         console.log("Ingredientes:", ingredientes);
 
-        //Eliminar las relaciones con ingredientes
-        ingredientes.forEach(ing => {
-            Tiene.removeIngredienteFromReceta(id, ing.id_ingrediente);
-        });
+//         //Eliminar las relaciones con ingredientes
+//         ingredientes.forEach(ing => {
+//             Tiene.removeIngredienteFromReceta(id, ing.id_ingrediente);
+//         });
 
-        //Eliminar la receta
-        Receta.deleteReceta(id);
+//         //Eliminar la receta
+//         Receta.deleteReceta(id);
 
-        res.render('pagina', {
-            contenido,
-            session: req.session
-        });
-    } catch (error) {
-        logger.error("Error al eliminar la receta:", error);
-        res.status(500).send("Error al eliminar la receta.");
-    }
-}
+//         res.render('pagina', {
+//             contenido,
+//             session: req.session
+//         });
+//     } catch (error) {
+//         logger.error("Error al eliminar la receta:", error);
+//         res.status(500).send("Error al eliminar la receta.");
+//     }
+// }
 
 export function modificarReceta(req, res) {
     body('nombre').escape();
