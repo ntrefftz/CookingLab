@@ -8,16 +8,24 @@ export class Receta {
 
     static #searchByNameStmt = null;
     static #searchByIngredientStmt = null;
+    static #getAllNact = null;
+    static #activarRecetaStmt = null;
+
+    //FUNCIONA?
 
     static initStatements(db) {
         if (this.#getByIdStmt !== null) return;
 
         this.#getByIdStmt = db.prepare('SELECT * FROM Recetas WHERE id = @id');
         this.#getByUsuarioStmt = db.prepare('SELECT * FROM Recetas WHERE id_usuario = @id_usuario AND activo = 1'); // Obtener recetas activas por usuario
-        this.#insertStmt = db.prepare('INSERT INTO Recetas(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo, imagen_url) VALUES (@nombre, @descripcion, @tiempo_prep_segs, @dificultad, @id_usuario, @activo, @imagen_url)');
-        this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, tiempo_prep_segs = @tiempo_prep_segs, dificultad = @dificultad, activo = @activo, imagen_url = @imagen_url WHERE id = @id');
+        this.#insertStmt = db.prepare('INSERT INTO Recetas(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo, imagen_url, imagen_url) VALUES (@nombre, @descripcion, @tiempo_prep_segs, @dificultad, @id_usuario, @activo, @imagen_url, @imagen_url)');
+        this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, tiempo_prep_segs = @tiempo_prep_segs, dificultad = @dificultad, activo = @activo, imagen_url = @imagen_url, imagen_url = @imagen_url WHERE id = @id');
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas WHERE activo = 1'); // Obtener todas las recetas activas
+        this.#getAllNact = db.prepare('SELECT * FROM Recetas WHERE activo = 0'); // Obtener todas las recetas NO activas
+        this.#activarRecetaStmt = db.prepare('UPDATE Recetas SET activo = 1 WHERE id = @id'); //Activa las recetas sugeridas
+
+
         
         this.#searchByNameStmt = db.prepare('SELECT * FROM Recetas WHERE nombre LIKE @nombre AND activo = 1');
         this.#searchByIngredientStmt = db.prepare(`
@@ -44,6 +52,14 @@ export class Receta {
         return this.#getAllStmt.all();
     }
 
+    static getAllRecetasNact() {
+        return this.#getAllNact.all();  
+    }
+
+    static getAllRecetasNact() {
+        return this.#getAllNact.all();  
+    }
+
     static addReceta(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo = 1, imagen_url) {
         try {
             const result = this.#insertStmt.run({ nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo, imagen_url });
@@ -53,8 +69,8 @@ export class Receta {
         }
     }
 
-    static updateReceta(id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url) {
-        const result = this.#updateStmt.run({ id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url });
+    static updateReceta(id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url, imagen_url) {
+        const result = this.#updateStmt.run({ id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url, imagen_url });
         if (result.changes === 0) throw new RecetaNoEncontrada(id);
         return { mensaje: "Receta actualizada correctamente" };
     }
@@ -66,18 +82,28 @@ export class Receta {
 
     static searchByName(nombre) {
         return this.#searchByNameStmt.all({ nombre: `%${nombre}%` });
-    
-        //Si queremos añadir paginacion entonces:
-        /*return this.#searchByNameStmt.all({ 
-        nombre: `%${nombre}%`,
-        limit,
-        offset 
-        });*/
+
     }
     
     static searchByIngredient(ingrediente) {
         return this.#searchByIngredientStmt.all({ ingrediente: ingrediente });
     }
+
+    // Función para aceptar una sugerencia de receta
+    static aceptarSugerencia(id) {
+        // Cambia el campo 'activo' a 1 para aprobar la receta
+        const result = this.#activarRecetaStmt.run({ id });
+        if (result.changes === 0) throw new RecetaNoEncontrada(id);
+        return { mensaje: "Receta aceptada correctamente" };
+    }
+
+    // Función para rechazar una sugerencia de receta
+    /*static rechazarSugerencia(id) {
+        // Cambia el campo 'activo' a 0 para rechazar la receta
+        const result = this.#updateStmt.run({ id, activo: 0 });
+        if (result.changes === 0) throw new RecetaNoEncontrada(id);
+        return { mensaje: "Receta rechazada correctamente" };
+    }*/
 
 }
 

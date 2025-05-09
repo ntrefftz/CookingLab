@@ -32,4 +32,7 @@ recetasRouter.post('/ingrediente/actualizarStock', asyncHandler(actualizarStock)
 recetasRouter.get('/buscarReceta', asyncHandler(buscarReceta));
 recetasRouter.get('/stock', asyncHandler(viewGestionStock));
 
+recetasRouter.post('/receta/aceptarSugerencia', asyncHandler(aceptarSugerenciaReceta));
+recetasRouter.get('/sugerencias', asyncHandler(viewSugerencias));
+
 export default recetasRouter;
