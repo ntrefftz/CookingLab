@@ -69,8 +69,8 @@ export class Receta {
         }
     }
 
-    static updateReceta(id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url, imagen_url) {
-        const result = this.#updateStmt.run({ id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url, imagen_url });
+    static updateReceta(id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url) {
+        const result = this.#updateStmt.run({ id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url});
         if (result.changes === 0) throw new RecetaNoEncontrada(id);
         return { mensaje: "Receta actualizada correctamente" };
     }
