@@ -1,5 +1,5 @@
 <h1>Catálogo</h1>
-<% if (session.esAdmin) { %>
+<% if (session.esAdmin|| session.esCocinero) { %>
     <a href="/recetas/receta/aniadir"><button>Añadir receta</button></a>
 <% } %>
 

@@ -2,13 +2,15 @@
     <% if (locals.error) { %>
         <p><strong><%= locals.error %></strong></p>
     <% } %>
-    <legend>Editar receta</legend>
+    <div class="form-header">
+        <h2>Editar Receta</h2>
+    </div>
     <label>Nombre:</label> <input type="text" name="nombre" value="<%= recetas.nombre %>" />
     <label>Tiempo de preparación (min):</label> <input type="number" name="tiempo_prep_segs" value="<%= Math.floor(recetas.tiempo_prep_segs/60) %>" />
     <label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" value="<%= recetas.dificultad %>" />
     <label>Descripción:</label> <textarea name="descripcion"><%= recetas.descripcion %></textarea>
-    <label>Ingredientes:</label>
-    
+    <label>URL de imagen (opcional):</label> <input type="url" name="imagen_url" placeholder="https://ejemplo.com/imagen.jpg" />
+
     <div class="ingredientes-section">
         <h3>Ingredientes actuales:</h3>
         <% if (recetas.ingredientes && recetas.ingredientes.length > 0) { %>
@@ -25,15 +27,26 @@
     <div class="acciones-ingredientes">
         <details class="ingredientes-section">
             <summary>Añadir ingrediente</summary>
+            <% 
+                // Crear un array con los IDs de los ingredientes actuales de la receta
+                const currentIngredientIds = recetas.ingredientes.map(ing => ing.id_ingrediente || ing.id);
+            %>
             <% if (listaIngredientes && listaIngredientes.length > 0) { %>
                 <ul>
                     <% listaIngredientes.forEach(ingrediente => { %>
-                        <li>
-                            <input type="checkbox" id="ing-<%= ingrediente.id %>" name="ingredientesSeleccionados[]" value="<%= ingrediente.id %>">
-                            <label for="ing-<%= ingrediente.id %>"><%= ingrediente.nombre %></label>
-                            <input type="number" name="cantidades[<%= ingrediente.id %>]" placeholder="Cantidad" min="0">
-                            <input type="number" name="cantidad_especifica[<%= ingrediente.id %>]" placeholder="Unidades/gramos" min="0">
-                        </li>
+                        <!-- Mostrar solo si NO está en la receta -->
+                        <% if (!currentIngredientIds.includes(ingrediente.id)) { %>
+                            <li>
+                                <input type="checkbox" id="ing-<%= ingrediente.id %>" 
+                                        name="ingredientesSeleccionados[]" 
+                                        value="<%= ingrediente.id %>">
+                                <label for="ing-<%= ingrediente.id %>"><%= ingrediente.nombre %></label>
+                                <input type="number" name="cantidades[<%= ingrediente.id %>]" 
+                                        placeholder="Unidad" min="0">
+                                <input type="number" name="cantidad_especifica[<%= ingrediente.id %>]" 
+                                        placeholder="Gramos" min="0">
+                            </li>
+                        <% } %>
                     <% }) %>
                 </ul>
             <% } else { %>

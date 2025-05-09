@@ -139,6 +139,7 @@ export class Usuario {
             username: usuario.username,
             nombre: usuario.nombre,
             esAdmin: usuario.rol === RolesEnum.ADMIN,
+            esCocinero: usuario.rol === RolesEnum.COCINERO,
             rol: usuario.rol
         };
 

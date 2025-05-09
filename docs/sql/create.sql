@@ -23,6 +23,7 @@ CREATE TABLE "Ingredientes" (
 	"precio"	REAL NOT NULL CHECK("precio" >= 0),
 	"stock"	INTEGER NOT NULL DEFAULT 0 CHECK("stock" >= 0),
 	"activo"	INTEGER NOT NULL DEFAULT 1 CHECK("activo" IN (0, 1)),
+	"unidad_medida"	TEXT NOT NULL,
 	"imagen_url"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );

@@ -6,6 +6,9 @@ import { logger } from '../logger.js';
 import { CalendarioSemanal } from './CalendarioSemanal.js';
 import { Guardado } from './Guardado.js';
 import { Receta } from '../recetas/Recetas.js';
+import { Pedido } from '../pedidos/Pedidos.js';
+import { Contiene } from '../pedidos/Contiene.js';
+import { Realiza } from '../pedidos/Realiza.js';
 
 
 
@@ -66,6 +69,8 @@ export function viewPerfil(req, res) {
 }
 
 export function viewMisRecetas(req, res) {
+    //console.log("Sesion:", req.session);
+
     let contenido = 'paginas/misRecetas';
     if (!req.session.login) {
         return res.redirect('/usuarios/login');
@@ -95,11 +100,55 @@ export function viewMisRecetas(req, res) {
 }
 
 export function viewHistorial(req, res) {
-    let contenido;
-    res.render('pagina', {
-        contenido,
-        session: req.session
-    });
+    let contenido = 'paginas/historial';
+    try {
+        const id_usuario = req.session.userId;
+        const relaciones = Realiza.getByUsuario(id_usuario);
+
+        // Si no hay relaciones, el historial está vacío
+        if (relaciones.length === 0) {
+            return res.render('pagina', {
+                contenido: 'paginas/historial',
+                session: req.session,
+                historial: []
+            });
+        }
+
+        // Construir el historial
+        const historial = relaciones.map(relacion => {
+            const pedido = Pedido.getPedidoById(relacion.id_pedido);
+            const ingredientes = Contiene.getByPedido(relacion.id_pedido) || []; 
+            const ingredientesAgrupados = Object.values(
+                ingredientes.reduce((acc, ing) => {
+                    if (!acc[ing.id_ingrediente]) {
+                        acc[ing.id_ingrediente] = { ...ing };
+                    } else {
+                        acc[ing.id_ingrediente].cantidad += ing.cantidad;
+                    }
+                    return acc;
+                }, {})
+            );
+
+            // Calcular el precio total
+            const precioTotal = ingredientesAgrupados.reduce((total, ing) => total + parseFloat(ing.precio) * ing.cantidad, 0).toFixed(2);
+
+            return {
+                pedido,
+                ingredientes,
+                precioTotal
+            };
+        });
+
+        // Renderizar la página con el historial
+        res.render('pagina', {
+            contenido,
+            session: req.session,
+            historial
+        });
+    } catch (error) {
+        console.error('Error al obtener el historial de pedidos:', error);
+        res.status(500).send('Error al cargar el historial de pedidos');
+    }
 }
 
 export async function viewCalendario(req, res) {
@@ -124,9 +173,6 @@ export async function viewCalendario(req, res) {
         lunesEstaSemana,
         domingoProximaSemana
     );
-
-    console.log("Recetas entre", lunesEstaSemana, "y", domingoProximaSemana);
-    console.log("Recetas de la semana:", recetasSemana);
 
     res.render('pagina', {
         contenido,
@@ -191,6 +237,7 @@ export async function doLogin(req, res) {
         req.session.correo = usuario.correo || '';
         req.session.direccion = usuario.direccion || '';
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
+        req.session.esCocinero = usuario.rol === RolesEnum.COCINERO;
 
         res.setFlash(`Encantado de verte de nuevo: ${usuario.nombre}`);
         logger.info(`Usuario ${username} ha iniciado sesión.`);
@@ -256,6 +303,8 @@ export async function doRegister(req, res) {
         req.session.direccion = usuario.direccion || '';
         req.session.rol = usuario.rol;
         req.session.esAdmin = usuario.rol === RolesEnum.ADMIN;
+        req.session.esCocinero = usuario.rol === RolesEnum.COCINERO;
+
 
         res.setFlash(`Bienvenido a CookingLab: ${usuario.nombre}`);
         logger.info(`Usuario ${username} se ha registrado correctamente.`);
@@ -289,6 +338,8 @@ export function doLogout(req, res, next) {
     req.session.login = null
     req.session.nombre = null;
     req.session.esAdmin = null;
+    req.session.esCocinero = null;
+    
     req.session.save((err) => {
         if (err) next(err);
 
@@ -558,9 +609,14 @@ export function eliminarRecetaDeFavoritos(req, res) {
     }
 }
 
+/////////////////////////////
+export function viewSugerencias(req, res) {
+    if (!req.session.login) {
+        return res.redirect('/usuarios/login');
+    }
 
-
-
-
-
-
+    res.render('pagina', {
+        contenido: 'paginas/sugerencias', // Asegúrate de tener esta plantilla
+        session: req.session,
+    });
+}        

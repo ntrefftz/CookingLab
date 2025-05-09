@@ -14,10 +14,10 @@ export class Ingrediente {
 
         this.#getByIdStmt = db.prepare('SELECT * FROM Ingredientes WHERE id = @id');
         this.#getByNombreStmt = db.prepare('SELECT * FROM Ingredientes WHERE nombre = @nombre');
-        this.#insertStmt = db.prepare('INSERT INTO Ingredientes(nombre, categoria, precio, stock) VALUES (@nombre, @categoria, @precio, @stock)');
+        this.#insertStmt = db.prepare('INSERT INTO Ingredientes(nombre, categoria, precio, stock, unidad_medida, imagen_url) VALUES (@nombre, @categoria, @precio, @stock, @unidad_medida, @imagen_url)');
         this.#deleteStmt = db.prepare('DELETE FROM Ingredientes WHERE id = @id');
         this.#getAllStmt = db.prepare('SELECT * FROM Ingredientes');
-        this.#updateStmt = db.prepare('UPDATE Ingredientes SET nombre = @nombre, categoria = @categoria, precio = @precio, stock = @stock WHERE id = @id');
+        this.#updateStmt = db.prepare('UPDATE Ingredientes SET nombre = @nombre, categoria = @categoria, precio = @precio, stock = @stock, unidad_medida =  @unidad_medida, imagen_url = @imagen_url WHERE id = @id');
         this.#reduceStockStmt = db.prepare('UPDATE Ingredientes SET stock = stock - @cantidad WHERE id = @id AND stock >= @cantidad');
         this.#existsStmt = db.prepare('SELECT COUNT(*) as count FROM Ingredientes WHERE nombre = @nombre');
         this.#setStock = db.prepare('UPDATE Ingredientes SET stock = @stock WHERE id = @id');
@@ -39,9 +39,9 @@ export class Ingrediente {
         return this.#getAllStmt.all();
     }
 
-    static addIngrediente(nombre, categoria, precio, stock = 0, imagen_url) {
+    static addIngrediente(nombre, categoria, precio, stock = 0, unidad_medida, imagen_url) {
         try {
-            this.#insertStmt.run({ nombre, categoria, precio, stock, imagen_url });
+            this.#insertStmt.run({ nombre, categoria, precio, stock, unidad_medida, imagen_url});
             return { mensaje: "Ingrediente añadido correctamente" };
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') throw new IngredienteYaExiste(nombre);
@@ -55,8 +55,8 @@ export class Ingrediente {
         return { mensaje: "Ingrediente eliminada correctamente" };
     }
 
-    static updateIngrediente(id, nombre, categoria, precio, stock) {
-        const result = this.#updateStmt.run({ id, nombre, categoria, precio, stock });
+    static updateIngrediente(id, nombre, categoria, precio, stock, unidad_medida, imagen_url) {
+        const result = this.#updateStmt.run({ id, nombre, categoria, precio, stock, unidad_medida, imagen_url });
         if (result.changes === 0) throw new IngredienteNoEncontrado(id);
         return { mensaje: "Ingrediente actualizado correctamente" };
     }

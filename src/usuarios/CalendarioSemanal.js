@@ -39,7 +39,7 @@ export class CalendarioSemanal {
 
         // NUEVA: porque siguen petando las malditas fechas
         this.#getRecetasRangoStmt = db.prepare(`
-            SELECT r.id AS id_receta, r.nombre, cs.fecha
+            SELECT r.id AS id_receta, r.nombre, cs.fecha, r.dificultad, r.tiempo_prep_segs
             FROM Calendario_Semanal cs
             JOIN Recetas r ON cs.id_receta = r.id
             WHERE cs.id_usuario = @id_usuario AND cs.fecha BETWEEN @inicio AND @fin
@@ -53,10 +53,6 @@ export class CalendarioSemanal {
 
     // Asignar una receta a un usuario en un día específico
     static asignarRecetaAUsuario(id_receta, id_usuario, fecha) {
-        console.log(" Intentando asignar receta al calendario:");
-        console.log("   id_receta:", id_receta);
-        console.log("   id_usuario:", id_usuario);
-        console.log("   fecha:", fecha);
     
         try {
             const result = this.#insertStmt.run({ id_receta, id_usuario, fecha });
@@ -80,7 +76,6 @@ export class CalendarioSemanal {
 
     // Eliminar una receta asignada a un usuario en un día específico
     static eliminarRecetaDeUsuario(id_usuario, fecha) {
-        console.log(`Eliminando receta para usuario ${id_usuario} en la fecha ${fecha}`);
         
         const result = this.#deleteStmt.run({ id_usuario, fecha });
     

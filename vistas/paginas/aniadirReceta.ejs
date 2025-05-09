@@ -1,34 +1,45 @@
-<h2>Añadir nueva receta</h2>
+<form id="editar-ingredinte" action="/recetas/receta/aniadir" method="POST">
 
-<form action="/recetas/receta/aniadir" method="POST">
-    <fieldset>
-        <% if (locals.error) { %>
-            <p><strong><%= locals.error %></strong></p>
-        <% } %>
-        <legend>Detalles de la receta</legend>
+    <% if (locals.error) { %>
+        <p><strong><%= locals.error %></strong></p>
+    <% } %>
+
+    <div class="form-header">
+        <h2>Añadir nueva receta</h2>
+    </div>
+
+    <div class="form-section">
+        <h3>Detalles de la receta</h3>
         <div><label>Nombre:</label> <input type="text" name="nombre" required placeholder="Introduce el nombre de la receta" /></div>
+        <p></p>
         <div><label>Tiempo de preparación (min):</label><input type="number" name="tiempo_prep_segs" required placeholder="Tiempo en minutos" min="1" /></div>
+        <p></p>
         <div><label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" required placeholder="Dificultad de la receta" min="1" max="5" /></div>
-        <div><label>URL de imagen (opcional):</label> <input type="url" name="imagen_url" placeholder="https://ejemplo.com/imagen.jpg" /></div>
-
+        <p></p>
         <div><label>Descripción:</label><textarea name="descripcion" required placeholder="Introduce una breve descripción de la receta"></textarea></div>
+        <p></p>
+        <div><label>URL de imagen (opcional):</label> <input type="url" name="imagen_url" placeholder="https://ejemplo.com/imagen.jpg" /></div>
           
-        <legend>Ingredientes disponibles</legend>
-        <% if (ingredientes && ingredientes.length > 0) { %>
-            <ul>
-                <% ingredientes.forEach(ingrediente => { %>
-                    <li> 
-                        <%= ingrediente.nombre %> 
-                        <input type="checkbox" name="ingredientes[]" value="<%= ingrediente.id %>" />
-                        <input type="number" name="cantidades[<%= ingrediente.id %>]" id="cantidad-<%= ingrediente.id %>" placeholder="Cantidad" min="0" />
-                    
-                    </li>
-                <% }) %>
-            </ul>
-        <% } else { %>
-            <p>No hay ingredientes disponibles.</p>
-        <% } %>
+        <h3>Ingredientes disponibles</h3>
+        <details class="ingredientes-section">
+            <summary>Añadir ingrediente</summary>
+            <% if (ingredientes && ingredientes.length > 0) { %>
+                <ul>
+                    <% ingredientes.forEach(ingrediente => { %>
+                        <li> 
+                            <%= ingrediente.nombre %> 
+                            <input type="checkbox" name="ingredientes[]" value="<%= ingrediente.id %>" />
+                            <input type="number" name="cantidades[<%= ingrediente.id %>]" id="cantidad-<%= ingrediente.id %>" placeholder="Unidad" min="0" />                        
+                            <input type="number" name="cantidades[<%= ingrediente.id %>]" placeholder="Gramos" min="1" />
+                        </li>
+                        <p></p>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <p>No hay ingredientes disponibles.</p>
+            <% } %>
+        </details>
 
         <button type="submit">Añadir receta</button>
-    </fieldset>
+
 </form>

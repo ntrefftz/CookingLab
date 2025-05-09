@@ -39,6 +39,7 @@ function menu(session){
 			<li><a href="/usuarios/misrecetas">Mis recetas</a></li>
 		<% } %>
 
+
 		<!-- Formulario de búsqueda en la barra de navegación -->
 		<li>
 			<form action="/recetas/buscarReceta" method="GET" class="navbar-search">
@@ -46,6 +47,7 @@ function menu(session){
 				<button type="submit">🔍</button>
 			</form>
 		</li>
+
 
 		<li><%- mostrarSaludo(session) %></li>
 		<li>

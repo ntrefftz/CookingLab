@@ -7,6 +7,8 @@ import { Cesta } from '../pedidos/Cesta.js';
 import { Diaria } from './Diaria.js';
 
 export function viewRecetasLista(req, res) {
+    //console.log(req.session);
+
     // Verificamos si la solicitud viene del calendario
     const esDesdeCalendario = req.query.origen === 'calendario';  // Se obtiene el parámetro 'origen'
     const esDesdeMisRecetas = req.query.origen === 'misRecetas';
@@ -54,6 +56,7 @@ export function viewRecetasDetalle(req, res) {
     ingredientes.forEach(ingrediente => {
         const ingredienteDetails = Ingrediente.getIngredienteById(ingrediente.id_ingrediente);
         ingrediente.nombre = ingredienteDetails.nombre;
+        ingrediente.unidad_medida = ingredienteDetails.unidad_medida; // Añadir unidad de medida
     });
 
     receta.ingredientes = ingredientes;
@@ -65,7 +68,30 @@ export function viewRecetasDetalle(req, res) {
     });
 }
 
+export function eliminarReceta(req, res) {
+    const id = req.body.id;
+    try {
+        const ingredientes = Tiene.getIngredientesByReceta(id);
+
+        //Eliminar las relaciones con ingredientes
+        ingredientes.forEach(ing => {
+            Tiene.removeIngredienteFromReceta(id, ing.id_ingrediente);
+        });
+     
+        //Eliminar la receta
+        Receta.deleteReceta(id);
+
+        res.redirect('/recetas/catalogo');
+    } catch (error) {
+        logger.error("Error al eliminar la receta:", error);
+        res.status(500).send("Error al eliminar la receta.");
+    }
+}
+
 export function viewModificarReceta(req, res) {
+
+    console.log(req.session);
+
     const contenido = 'paginas/editarReceta';
     const id = req.query.id;
     const receta = Receta.getRecetaById(id);
@@ -88,6 +114,7 @@ export function viewModificarReceta(req, res) {
         listaIngredientes
     });
 }
+
 
 export function eliminarReceta(req, res) {
     const contenido = 'paginas/eliminada';
@@ -126,9 +153,13 @@ export function modificarReceta(req, res) {
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id = req.query.id;
     const contenido = 'paginas/receta';
+    
+    let receta = Receta.getRecetaById(id);
+    const imagen_url = receta.imagen_url;
 
-    Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1);
-    const receta = Receta.getRecetaById(id);
+    Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1, imagen_url);
+    receta = Receta.getRecetaById(id);
+
     const ingredientes = Tiene.getIngredientesByReceta(id);
 
     const listaIngredientes = Ingrediente.getAllIngredientes();
@@ -223,12 +254,7 @@ export function modificarReceta(req, res) {
         }
     }
 
-    res.render('pagina', {
-        contenido,
-        session: req.session,
-        recetas: receta,
-        listaIngredientes
-    });
+    res.redirect('/recetas/receta?id=' + id);
 }
 
 export function viewAniadirReceta(req, res) {
@@ -282,15 +308,52 @@ export function aniadirReceta(req, res) {
 
         const ingredientesSeleccionados = req.body['ingredientes[]'] || []; // array de ingredientes que vienen del form
         //console.log("Ingredientes seleccionados:", ingredientesSeleccionados);
-
+        
+        // Cantidades normales (primer valor del array)
         const cantidades = {};
         for (const key in req.body) {
-            if (key.startsWith('cantidades[')) {
-                const id = key.match(/\[(\d+)\]/)[1];
-                cantidades[id] = req.body[key] || 1; // Default a 1 si está vacío
+            const match = key.match(/^cantidades\[(\d+)\]$/);
+            if (match) {
+                const id = match[1];
+                const valor = req.body[key];
+
+                let cantidad = '1';
+
+                if (Array.isArray(valor)) {
+                    cantidad = valor[0] && valor[0].trim() !== '' ? valor[0] : '1';
+                } else {
+                    cantidad = valor && valor.trim() !== '' ? valor : '1';
+                }
+
+                const cantidadNum = parseInt(cantidad, 10);
+                cantidades[id] = isNaN(cantidadNum) || cantidadNum <= 0 ? 1 : cantidadNum;
             }
         }
+
         console.log("Cantidades extraídas:", cantidades);
+
+        // Cantidades específicas (segundo valor del array)
+        const cantidad_esp = {};
+        for (const key in req.body) {
+            const match = key.match(/^cantidades\[(\d+)\]$/);
+            if (match) {
+                const id = match[1];
+                const valor = req.body[key];
+
+                let cantidad = '1';
+
+                if (Array.isArray(valor)) {
+                    cantidad = valor[1] && valor[1].trim() !== '' ? valor[1] : '1';
+                }
+
+                const cantidadNum = parseInt(cantidad, 10);
+                if (!isNaN(cantidadNum) && cantidadNum > 0) {
+                    cantidad_esp[id] = cantidadNum;
+                }
+            }
+        }
+
+        console.log("Cantidades específicas:", cantidad_esp);
 
 
         // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
@@ -298,13 +361,19 @@ export function aniadirReceta(req, res) {
             ? ingredientesSeleccionados
             : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
 
-
+        
+        console.log("Se van a insertar los siguientes ingredientes:", ingredientesArray);
+        
         // Añadir cada ingrediente con su cantidad
         for (const ingredienteId of ingredientesArray) {
             if (ingredienteId) {
                 const cantidad = cantidades[ingredienteId] || 1;
+                const cantidadEspecifica = cantidad_esp[ingredienteId] || 1; 
+
                 console.log(`Añadiendo ingrediente ${ingredienteId} con cantidad ${cantidad}`);
-                Tiene.addIngredienteToReceta(recetaId, ingredienteId, cantidad);
+                console.log(` Y Añadiendo ingrediente ${ingredienteId} con cantidad ${cantidadEspecifica}`);
+                Tiene.addIngredienteToReceta(recetaId, ingredienteId, cantidad, cantidadEspecifica);
+
             }
         }
 
@@ -401,13 +470,11 @@ export function viewModificarIngrediente(req, res) {
 
 export function eliminarIngrediente(req, res) {
 
-    const contenido = 'paginas/eliminadaIng';
-    const id = req.query.id;
+    const id = req.body.id;
+    Cesta.borrarIngrediente(id);
+    Tiene.deleteIngrediente(id);
     Ingrediente.deleteIngrediente(id);
-    res.render('pagina', {
-        contenido,
-        session: req.session
-    });
+    res.redirect('/recetas/ingrediente');
 }
 
 export function modificarIngrediente(req, res) {
@@ -415,16 +482,20 @@ export function modificarIngrediente(req, res) {
     body('nombre').escape();
     body('categoria').escape();
     body('precio').escape();
-    body('stock').escape();
+    body('stock').escape();    
 
     const nombre = req.body.nombre.trim();
     const categoria = req.body.categoria.trim();
     const precio = req.body.precio.trim();
     const stock = req.body.stock.trim();
     const id = req.query.id;
+    const unidad_medida = req.body.unidad_medida.trim() || 'unidad';
+    const imagen_url = req.body.imagen_url.trim(); 
     const contenido = 'paginas/ingredienteInd';
 
-    Ingrediente.updateIngrediente(id, nombre, categoria, precio, stock);
+    console.log("Body completo recibido en update:", req.body);
+
+    Ingrediente.updateIngrediente(id, nombre, categoria, precio, stock, unidad_medida, imagen_url);
     const ingrediente = Ingrediente.getIngredienteById(id);
     res.render('pagina', {
         contenido,
@@ -458,11 +529,16 @@ export function aniadirIngrediente(req, res) {
     const stock = req.body.stock.trim();
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
+    const unidad_medida = req.body.unidad_medida.trim() || 'unidad';
     const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
+
 
     console.log("Body completo recibido:", req.body);
     console.log("imagen", imagen_url);
 
+
+
+    console.log("Body completo recibido:", req.body);
 
     if (!imagen_url == null || !imagen_url == undefined) {
         // Si no se proporciona una URL de imagen, se asigna una por defecto
@@ -476,7 +552,7 @@ export function aniadirIngrediente(req, res) {
     }
 
     try {
-        Ingrediente.addIngrediente(nombre, categoria, precio, stock, activo, imagen_url);
+        Ingrediente.addIngrediente(nombre, categoria, precio, stock, unidad_medida, imagen_url);
         res.redirect('/recetas/ingrediente');
     } catch (error) {
         logger.error(error);
@@ -634,6 +710,7 @@ export function viewCalendarioRecetaDiaria(req, res) {
     });
 }
 
+
 export async function jsonRecetas(req, res) {
     try {
         const recetas = await Receta.getAllRecetas(); // Ajusta el nombre de tu tabla
@@ -719,3 +796,54 @@ export async function getRecetaPorID(req, res) {
         res.status(500).json({ message: 'Error al obtener la receta por ID.' });
     }
 }
+
+export function aceptarSugerenciaReceta(req, res) {
+    console.log("Vamos a aceptar la sugerencia de receta");
+    console.log("Body completo recibido:", req.body);
+    const id = req.body.id;
+    try {
+        console.log("ID de receta a aceptar:", id);
+        Receta.aceptarSugerencia(id);
+        res.redirect('/recetas/catalogo');
+    } catch (error) {
+        logger.error("Error al aceptar la sugerencia de receta:", error);
+        res.status(500).send("Error al aceptar la sugerencia de receta.");
+    }
+}
+
+
+export function viewSugerencias(req, res) {
+    //console.log(req.session);
+    //console.log("Vamos a buscar las recetas no activas");
+    
+    // Obtener las recetas no activas (sugerencias)
+    if(!req.session.login) {
+        return res.redirect('/usuarios/login');
+    }
+    const rows = Receta.getAllRecetasNact();
+    console.log("Recetas no activas:", rows);
+
+    // Definir los parámetros a enviar a la vista
+    const contenido = 'paginas/sugerencias'; // Referencia a la vista 'sugerencias.ejs'
+    //const esDesdeCalendario = false; // Define si es desde el calendario
+    //const esDesdeMisRecetas = false; // Define si es desde mis recetas
+
+    // Renderizar la vista con los parámetros necesarios
+    res.render('pagina', {
+        contenido,
+        session: req.session,
+        recetas: rows
+    });
+}
+/*export function viewSugerencias(req, res) {
+    if (!req.session.login) {
+        return res.redirect('/usuarios/login');
+    }
+
+    res.render('pagina', {
+        contenido: 'paginas/sugerencias', // Asegúrate de tener esta plantilla
+        session: req.session,
+    });
+}*/
+
+

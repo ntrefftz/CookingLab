@@ -166,7 +166,7 @@ export function tramitarPedido(req, res) {
     }
 }
 
-export function confirmarPedido(req, res) {
+export function viewConfirmarPedido(req, res) {
     let contenido = 'paginas/noPermisos';
     if (req.session != null && req.session.nombre != null && Realiza.getRelacion(req.session.userId, req.query.id)) {
         contenido = 'paginas/confirmarPedido';
@@ -196,11 +196,24 @@ export function comprarPedido(req, res) {
     try{
     const id_pedido = req.body.id;
     Pedido.updatePedido(id_pedido, 0, 1);
+    const ingredientes = Contiene.getByPedido(id_pedido);
+    ingredientes.forEach(ingrediente => {
+        const id_ingrediente = ingrediente.id_ingrediente;
+        const cantidad = ingrediente.cantidad;
+        Ingrediente.reducirStock(id_ingrediente, cantidad);
+    });
     res.redirect('/');
     }
     catch (error) {
+        Contiene.deletePedido(req.body.id);
+        Realiza.deletePedido(req.body.id);
+        Pedido.deletePedido(req.body.id);
         console.error('Error al comprar el pedido:', error);
-        res.status(500).send('Error al comprar el pedido');
+        res.render('pagina', {
+            contenido: 'paginas/errorStock',
+            session: req.session,
+            error: 'Error al comprar el pedido'
+        });
     }
 }
 
