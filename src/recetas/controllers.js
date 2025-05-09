@@ -697,6 +697,9 @@ export function viewSugerencias(req, res) {
     //console.log("Vamos a buscar las recetas no activas");
     
     // Obtener las recetas no activas (sugerencias)
+    if(!req.session.login) {
+        return res.redirect('/usuarios/login');
+    }
     const rows = Receta.getAllRecetasNact();
     console.log("Recetas no activas:", rows);
 
