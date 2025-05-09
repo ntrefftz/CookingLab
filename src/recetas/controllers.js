@@ -126,13 +126,14 @@ export function modificarReceta(req, res) {
     const dificultad = req.body.dificultad.trim();
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id = req.query.id;
-    const imagen_url = req.body.imagen_url.trim(); 
     const contenido = 'paginas/receta';
     
     const receta = Receta.getRecetaById(id);
     const imagen_url = receta.imagen_url;
 
     Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1, imagen_url);
+    receta = Receta.getRecetaById(id);
+
     const ingredientes = Tiene.getIngredientesByReceta(id);
 
     const listaIngredientes = Ingrediente.getAllIngredientes();
