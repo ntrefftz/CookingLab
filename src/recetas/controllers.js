@@ -660,7 +660,7 @@ export async function jsonRecetas(req, res) {
 export async function jsonRecetaDiaria(req, res) {
     try {
         const recetasDiarias = await Diaria.getTodasLasRecetas(); // [{ id_receta, dia }, ...]
-      
+
         if (!Array.isArray(recetasDiarias)) {
             return res.json([]); // Devuelve un array vacío si no hay recetas
         }
@@ -688,22 +688,45 @@ export async function aniadirRecetaDiaria(req, res) {
     let recetaDiaria = null;
     try {
         try {
-          recetaDiaria = Diaria.getRecetaPorDia(fecha);
+            recetaDiaria = Diaria.getRecetaPorDia(fecha);
         }
         catch (DiariaNoEncontrada) {
-           logger.debug("No hay receta asignada a este día, Insertando una nueva");
+            logger.debug("No hay receta asignada a este día, Insertando una nueva");
         }
         if (recetaDiaria) {
             Diaria.updateRecetaPorDia(fecha, recetaId);
             return res.json({ message: 'Receta actualizada en el calendario con éxito.' });
         }
         else {
-             Diaria.asignarRecetaADia(fecha, recetaId);
+            Diaria.asignarRecetaADia(fecha, recetaId);
             res.json({ message: 'Receta añadida al calendario con éxito.' });
         }
 
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error al añadir la receta al calendario.' });
+    }
+}
+export async function getRecetaDiariaPorDia(req, res) {
+
+    const { fecha } = req.body; // Asegúrate de que el cuerpo de la solicitud contenga estos datos
+    try {
+        const receta = Diaria.getRecetaPorDia(fecha);
+        return res.json(receta);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al obtener la receta del día.' });
+    }
+}
+
+export async function getRecetaPorID(req, res) {
+    const id = req.params.id; // Asegúrate de que el cuerpo de la solicitud contenga estos datos
+    try {
+        console.log("ID controller Receta", id);
+        const receta = Receta.getRecetaById(id);
+        return res.json(receta);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al obtener la receta por ID.' });
     }
 }

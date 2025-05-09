@@ -4,8 +4,7 @@ import { viewRecetasDetalle, viewRecetasLista, viewModificarReceta, eliminarRece
     aniadirReceta, aniadirRecetaCarrito, buscarReceta,
     viewIngredientesLista, viewIngredientesDetalle, viewModificarIngrediente, eliminarIngrediente, modificarIngrediente, 
     viewAniadirIngrediente, aniadirIngrediente, aniadirIngredienteCarrito, actualizarStock, viewGestionStock, jsonRecetas, viewCalendarioRecetaDiaria,
-    aniadirRecetaDiaria,
-    jsonRecetaDiaria
+    aniadirRecetaDiaria, getRecetaDiariaPorDia, jsonRecetaDiaria, getRecetaPorID
 } from './controllers.js';
 
 const recetasRouter = express.Router();
@@ -33,8 +32,10 @@ recetasRouter.post('/ingrediente/actualizarStock', asyncHandler(actualizarStock)
 recetasRouter.get('/calendarioRecetaDiaria', asyncHandler(viewCalendarioRecetaDiaria));
 recetasRouter.get('/buscarReceta', asyncHandler(buscarReceta));
 recetasRouter.get('/stock', asyncHandler(viewGestionStock));
-recetasRouter.post('/recetaPorFecha', asyncHandler(jsonRecetas));
+recetasRouter.post('/recetaPorFecha', asyncHandler(getRecetaDiariaPorDia));
 recetasRouter.post('/aniadirRecetaDiaria', asyncHandler(aniadirRecetaDiaria));
 recetasRouter.get('/obtenerRecetasCalendario', asyncHandler(jsonRecetaDiaria));
+recetasRouter.get('/getReceta/:id', asyncHandler(getRecetaPorID));
+
 
 export default recetasRouter;

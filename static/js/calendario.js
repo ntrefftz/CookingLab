@@ -30,8 +30,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify({ fecha: formatDate(date) }),
             });
-            const receta = await response.json();
-
+            const recetaID = await response.json();
+            console.log("Receta ID:", recetaID);
+            const recetaResponse = await fetch(`/recetas/getReceta/${recetaID.id_receta}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const receta = await recetaResponse.json();
+            console.log("Receta del día:", receta);
             if (receta) {
                 recetaSeleccionada.innerHTML = `
                     <img src="${receta.imagen_url}" alt="Imagen de la receta" />
