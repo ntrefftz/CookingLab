@@ -678,8 +678,11 @@ export function viewAniadirIngredienteCarrito(req, res) {
 }
 */
 export function aceptarSugerenciaReceta(req, res) {
+    console.log("Vamos a aceptar la sugerencia de receta");
+    console.log("Body completo recibido:", req.body);
     const id = req.body.id;
     try {
+        console.log("ID de receta a aceptar:", id);
         Receta.aceptarSugerencia(id);
         res.redirect('/recetas/catalogo');
     } catch (error) {
@@ -690,8 +693,9 @@ export function aceptarSugerenciaReceta(req, res) {
 
 
 export function viewSugerencias(req, res) {
-    console.log(req.session);
-    console.log("Vamos a buscar las recetas no activas");
+    //console.log(req.session);
+    //console.log("Vamos a buscar las recetas no activas");
+    
     // Obtener las recetas no activas (sugerencias)
     const rows = Receta.getAllRecetasNact();
     console.log("Recetas no activas:", rows);

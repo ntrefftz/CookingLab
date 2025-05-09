@@ -1,14 +1,22 @@
 <h1>Sugerencias</h1>
-<div id="catalogo" class="cards_container">
-    <% recetas.forEach(receta=> { %>
-        <article class="card">
-            <img src=<%= receta.imagen_url %> alt="Pronto habrá una foto" />
-            <p></p>
-            <a href="receta/?id=<%= receta.id %>">
-                <h4><%= receta.nombre %></h4>
-            </a>
-            <p>Tiempo preparación: <%= Math.floor(receta.tiempo_prep_segs / 60) %> minutos</p>
-            <p>Dificultad: <%= receta.dificultad %></p>
-        </article>
-        <% }) %>
-</div>
+<% if (recetas.length === 0) { %>
+    <p>No hay sugerencias disponibles.</p>
+<% } else { %>
+    <div id="catalogo" class="cards_container">
+        <% recetas.forEach(receta=> { %>
+            <article class="card">
+                <img src=<%= receta.imagen_url %> alt="Pronto habrá una foto" />
+                <p></p>
+                <a href="receta/?id=<%= receta.id %>">
+                    <h4><%= receta.nombre %></h4>
+                </a>
+                <p>Tiempo preparación: <%= Math.floor(receta.tiempo_prep_segs / 60) %> minutos</p>
+                <p>Dificultad: <%= receta.dificultad %></p>
+                <form action="/recetas/receta/aceptarSugerencia" method="POST">
+                    <input type="hidden" name="id" value="<%= receta.id %>">
+                    <button type="submit">Aceptar receta</button>
+                </form>
+            </article>
+            <% }) %>
+    </div>
+<% } %>
