@@ -224,12 +224,7 @@ export function modificarReceta(req, res) {
         }
     }
 
-    res.render('pagina', {
-        contenido,
-        session: req.session,
-        recetas: receta,
-        listaIngredientes
-    });
+    res.redirect('/recetas/receta?id=' + id);
 }
 
 export function viewAniadirReceta(req, res) {
