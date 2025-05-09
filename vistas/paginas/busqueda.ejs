@@ -1,44 +1,40 @@
-<h1>Buscar Recetas</h1>
+<h1>Resultados de la búsqueda</h1>
 
 <!-- Formulario de búsqueda -->
 <form action="/recetas/buscarReceta" method="GET">
-   
-    <!-- añadido (value="<%= termino || '' %>) para que recuerde la opcion seleccionada-->
     <input type="text" name="termino" placeholder="Buscar ..." value="<%= termino || '' %>" required>
-    
-    <!-- añadido (<%= (tipo === 'nombre' || !tipo) ? 'selected' : '' %>) para que recuerde la opcion seleccionada-->
     <select name="tipo">
-        <option value="nombre"  <%= (tipo === 'nombre' || !tipo) ? 'selected' : '' %>> Buscar por nombre o por letra</option>
+        <option value="nombre" <%= (tipo === 'nombre' || !tipo) ? 'selected' : '' %>>Buscar por nombre o letra</option>
         <option value="ingrediente" <%= tipo === 'ingrediente' ? 'selected' : '' %>>Buscar por ingrediente</option>
     </select>
-
-    <!-- Opciones de ordenamiento -->
     <select name="orden">
-
-        <!-- Cambios para que recuerde la opcion selecionada -->
         <option value="relevancia" <%= (orden === 'relevancia' || !orden) ? 'selected' : '' %>>Ordenar por relevancia</option>
         <option value="valoraciones" <%= orden === 'valoraciones' ? 'selected' : '' %>>Ordenar por valoraciones</option>
         <option value="dificultad" <%= orden === 'dificultad' ? 'selected' : '' %>>Ordenar por dificultad</option>
         <option value="tiempo" <%= orden === 'tiempo' ? 'selected' : '' %>>Ordenar por tiempo</option>
-        
     </select>
-
     <button type="submit">Buscar</button>
 </form>
-
 
 <!-- Mostrar mensaje de error si no hay resultados -->
 <% if (error) { %>
     <p style="color: red;"><%= error %></p>
 <% } %>
 
-<h2>Resultados para "<%= termino %>"</h2>
-<ul>
+<!-- Mostrar resultados como tarjetas -->
+<div class="cards_container">
     <% if (recetas.length > 0) { %>
         <% recetas.forEach(receta => { %>
-            <li><a href="/recetas/receta?id=<%= receta.id %>"><%= receta.nombre %></a></li>
+            <article class="card">
+                <img src="<%= receta.imagen_url %>" alt="Imagen de la receta" />
+                <a href="/recetas/receta?id=<%= receta.id %>">
+                    <h4><%= receta.nombre %></h4>
+                </a>
+                <p>Tiempo preparación: <%= Math.floor(receta.tiempo_prep_segs / 60) %> minutos</p>
+                <p>Dificultad: <%= receta.dificultad %></p>
+            </article>
         <% }); %>
     <% } else if (termino && !error) { %>
         <p>No se encontraron recetas para "<%= termino %>"</p>
     <% } %>
-</ul>
+</div>
