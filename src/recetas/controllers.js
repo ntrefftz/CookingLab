@@ -190,7 +190,7 @@ export function modificarReceta(req, res) {
     console.log("Ingredientes:", ingredientes);
     console.log("Receta con ingredientes:", receta.ingredientes);
 
-    console.log("Body completo recibido:", req.body);
+    //console.log("Body completo recibido:", req.body);
 
     const ingredientesSeleccionados = req.body['ingredientesSeleccionados[]'] || []; // array de ingredientes que vienen del form
     console.log("Ingredientes seleccionados:", ingredientesSeleccionados);
