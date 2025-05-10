@@ -1065,3 +1065,125 @@ select {
     border-bottom: 1px dashed #FFE0EE;
 }
 
+/* Estilos para el formulario de contacto */
+.contact-form-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(243, 131, 160, 0.1);
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-subtitle {
+    font-weight: bold;
+    color: #F383A0;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.form-input, .form-textarea {
+    padding: 12px;
+    border: 2px solid #FFE0EE;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-input:focus, .form-textarea:focus {
+    border-color: #F383A0;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(243, 131, 160, 0.2);
+}
+
+.form-textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.radio-option:hover {
+    background-color: #FFE0EE;
+}
+
+.radio-option input[type="radio"] {
+    accent-color: #F383A0;
+}
+
+.terms-group {
+    margin: 15px 0;
+}
+
+.terms-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.terms-checkbox {
+    accent-color: #F383A0;
+    width: 18px;
+    height: 18px;
+}
+
+.terms-link {
+    color: #F383A0;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+.submit-button {
+    background-color: #F383A0;
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    align-self: center;
+    width: auto;
+}
+
+.submit-button:hover {
+    background-color: #e6728f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(243, 131, 160, 0.3);
+}
+
