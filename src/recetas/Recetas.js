@@ -11,8 +11,6 @@ export class Receta {
     static #getAllNact = null;
     static #activarRecetaStmt = null;
 
-    //FUNCIONA?
-
     static initStatements(db) {
         if (this.#getByIdStmt !== null) return;
 
@@ -24,8 +22,6 @@ export class Receta {
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas WHERE activo = 1'); // Obtener todas las recetas activas
         this.#getAllNact = db.prepare('SELECT * FROM Recetas WHERE activo = 0'); // Obtener todas las recetas NO activas
         this.#activarRecetaStmt = db.prepare('UPDATE Recetas SET activo = 1 WHERE id = @id'); //Activa las recetas sugeridas
-
-
         
         this.#searchByNameStmt = db.prepare('SELECT * FROM Recetas WHERE nombre LIKE @nombre AND activo = 1');
         this.#searchByIngredientStmt = db.prepare(`
@@ -96,14 +92,6 @@ export class Receta {
         if (result.changes === 0) throw new RecetaNoEncontrada(id);
         return { mensaje: "Receta aceptada correctamente" };
     }
-
-    // Función para rechazar una sugerencia de receta
-    /*static rechazarSugerencia(id) {
-        // Cambia el campo 'activo' a 0 para rechazar la receta
-        const result = this.#updateStmt.run({ id, activo: 0 });
-        if (result.changes === 0) throw new RecetaNoEncontrada(id);
-        return { mensaje: "Receta rechazada correctamente" };
-    }*/
 
 }
 

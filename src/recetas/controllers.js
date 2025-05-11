@@ -238,7 +238,7 @@ export function aniadirReceta(req, res) {
     const dificultad = req.body.dificultad.trim();
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
-    const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
+    const activo = req.session.isAdmin ? 1 : 0;  // Si es administrador, la receta está activa; si no, está pendiente (al user no le sale)
     const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
 
     //const imagen_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fes%2Ffotos%2Fno-encontrado-mensaje-de-error-fotos&psig=AOvVaw3yClaJKuZYliDgG5DHGhJC&ust=1745919601499000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLCLvr-3-owDFQAAAAAdAAAAABAE"; // Imagen por defecto
@@ -253,11 +253,20 @@ export function aniadirReceta(req, res) {
     }
 
     try {
+        // Validación de ingredientes (NUEVA SECCIÓN AÑADIDA PARA QUE NO PETE)
+        const ingredientesSeleccionados = req.body['ingredientes[]'] || [];
+        const ingredientesArray = Array.isArray(ingredientesSeleccionados)
+            ? ingredientesSeleccionados
+            : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
+
+        if (ingredientesArray.length === 0) {
+            return res.status(400).send('Debes seleccionar al menos un ingrediente');
+        }
         const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, imagen_url);
 
         const recetaId = result.id;
 
-        const ingredientesSeleccionados = req.body['ingredientes[]'] || []; // array de ingredientes que vienen del form
+        //const ingredientesSeleccionados = req.body['ingredientes[]'] || []; // array de ingredientes que vienen del form
         
         // Cantidades normales (primer valor del array)
         const cantidades = {};
@@ -303,11 +312,11 @@ export function aniadirReceta(req, res) {
 
 
         // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
-        const ingredientesArray = Array.isArray(ingredientesSeleccionados)
+        /*const ingredientesArray = Array.isArray(ingredientesSeleccionados)
             ? ingredientesSeleccionados
             : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
+        */ 
 
-                
         // Añadir cada ingrediente con su cantidad
         for (const ingredienteId of ingredientesArray) {
             if (ingredienteId) {
@@ -729,9 +738,11 @@ export async function getRecetaPorID(req, res) {
 }
 
 export function aceptarSugerenciaReceta(req, res) {
-
+    console.log("Vamos a aceptar la sugerencia de receta");
+    console.log("Body completo recibido:", req.body);
     const id = req.body.id;
     try {
+        console.log("ID de receta a aceptar:", id);
         Receta.aceptarSugerencia(id);
         res.redirect('/recetas/catalogo');
     } catch (error) {
@@ -742,12 +753,15 @@ export function aceptarSugerenciaReceta(req, res) {
 
 
 export function viewSugerencias(req, res) {
+    //console.log(req.session);
+    //console.log("Vamos a buscar las recetas no activas");
     
     // Obtener las recetas no activas (sugerencias)
     if(!req.session.login) {
         return res.redirect('/usuarios/login');
     }
     const rows = Receta.getAllRecetasNact();
+    console.log("Recetas no activas:", rows);
 
     // Definir los parámetros a enviar a la vista
     const contenido = 'paginas/sugerencias'; // Referencia a la vista 'sugerencias.ejs'
