@@ -190,7 +190,7 @@ export function modificarReceta(req, res) {
     console.log("Ingredientes:", ingredientes);
     console.log("Receta con ingredientes:", receta.ingredientes);
 
-    console.log("Body completo recibido:", req.body);
+    //console.log("Body completo recibido:", req.body);
 
     const ingredientesSeleccionados = req.body['ingredientesSeleccionados[]'] || []; // array de ingredientes que vienen del form
     console.log("Ingredientes seleccionados:", ingredientesSeleccionados);
@@ -273,6 +273,7 @@ export function viewAniadirReceta(req, res) {
 export function aniadirReceta(req, res) {
     // Verifica si userId está definido
     logger.debug("Sesión actual:", req.session);
+    const imagen = req.file ? req.file.filename : "";
 
     body('nombre').escape();
     body('descripcion').escape();
@@ -285,7 +286,7 @@ export function aniadirReceta(req, res) {
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
-    const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
+  //  const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
 
     //const imagen_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fes%2Ffotos%2Fno-encontrado-mensaje-de-error-fotos&psig=AOvVaw3yClaJKuZYliDgG5DHGhJC&ust=1745919601499000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLCLvr-3-owDFQAAAAAdAAAAABAE"; // Imagen por defecto
 
@@ -301,7 +302,7 @@ export function aniadirReceta(req, res) {
     }
 
     try {
-        const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, imagen_url);
+        const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, `/uploads/${imagen}` );
 
         const recetaId = result.id;
         // console.log("Nuevo id de receta:", recetaId);
