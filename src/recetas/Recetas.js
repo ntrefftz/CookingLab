@@ -97,14 +97,6 @@ export class Receta {
         return { mensaje: "Receta aceptada correctamente" };
     }
 
-    // Función para rechazar una sugerencia de receta
-    /*static rechazarSugerencia(id) {
-        // Cambia el campo 'activo' a 0 para rechazar la receta
-        const result = this.#updateStmt.run({ id, activo: 0 });
-        if (result.changes === 0) throw new RecetaNoEncontrada(id);
-        return { mensaje: "Receta rechazada correctamente" };
-    }*/
-
 }
 
 // ERRORES
