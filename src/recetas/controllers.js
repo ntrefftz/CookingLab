@@ -253,11 +253,20 @@ export function aniadirReceta(req, res) {
     }
 
     try {
+        // Validación de ingredientes (NUEVA SECCIÓN AÑADIDA PARA QUE NO PETE)
+        const ingredientesSeleccionados = req.body['ingredientes[]'] || [];
+        const ingredientesArray = Array.isArray(ingredientesSeleccionados)
+            ? ingredientesSeleccionados
+            : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
+
+        if (ingredientesArray.length === 0) {
+            return res.status(400).send('Debes seleccionar al menos un ingrediente');
+        }
         const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, imagen_url);
 
         const recetaId = result.id;
 
-        const ingredientesSeleccionados = req.body['ingredientes[]'] || []; // array de ingredientes que vienen del form
+        //const ingredientesSeleccionados = req.body['ingredientes[]'] || []; // array de ingredientes que vienen del form
         
         // Cantidades normales (primer valor del array)
         const cantidades = {};
@@ -303,11 +312,11 @@ export function aniadirReceta(req, res) {
 
 
         // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
-        const ingredientesArray = Array.isArray(ingredientesSeleccionados)
+        /*const ingredientesArray = Array.isArray(ingredientesSeleccionados)
             ? ingredientesSeleccionados
             : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
+        */ 
 
-                
         // Añadir cada ingrediente con su cantidad
         for (const ingredienteId of ingredientesArray) {
             if (ingredienteId) {
