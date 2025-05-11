@@ -6,7 +6,7 @@ import { viewRecetasDetalle, viewRecetasLista, viewModificarReceta, eliminarRece
     aniadirReceta, aniadirRecetaCarrito, buscarReceta,
     viewIngredientesLista, viewIngredientesDetalle, viewModificarIngrediente, eliminarIngrediente, modificarIngrediente,
     viewAniadirIngrediente, aniadirIngrediente, aniadirIngredienteCarrito, actualizarStock, viewGestionStock, jsonRecetas, viewCalendarioRecetaDiaria,
-    aniadirRecetaDiaria, getRecetaDiariaPorDia, jsonRecetaDiaria, getRecetaPorID,     aceptarSugerenciaReceta, viewSugerencias
+    aniadirRecetaDiaria, getRecetaDiariaPorDia, jsonRecetaDiaria, getRecetaPorID,     aceptarSugerenciaReceta, viewSugerencias, viewImagen
 
 } from './controllers.js';
 
@@ -46,4 +46,5 @@ recetasRouter.get('/getReceta/:id', asyncHandler(getRecetaPorID));
 recetasRouter.post('/receta/aceptarSugerencia', asyncHandler(aceptarSugerenciaReceta));
 recetasRouter.get('/sugerencias', asyncHandler(viewSugerencias));
 
+recetasRouter.get("/imagen/:id", viewImagen);
 export default recetasRouter;

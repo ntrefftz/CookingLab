@@ -5,6 +5,8 @@ import { Tiene } from './Tiene.js';
 import { logger } from '../logger.js';
 import { Cesta } from '../pedidos/Cesta.js';
 import { Diaria } from './Diaria.js';
+import { join } from 'node:path';
+import { config } from '../config.js';
 
 export function viewRecetasLista(req, res) {
     //console.log(req.session);
@@ -302,7 +304,7 @@ export function aniadirReceta(req, res) {
     }
 
     try {
-        const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, `/uploads/${imagen}` );
+        const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, imagen);
 
         const recetaId = result.id;
         // console.log("Nuevo id de receta:", recetaId);
@@ -848,3 +850,6 @@ export function viewSugerencias(req, res) {
 }*/
 
 
+export function viewImagen(request, response) {
+    response.sendFile(join(config.uploads, request.params.id));
+}
