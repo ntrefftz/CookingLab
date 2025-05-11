@@ -1,4 +1,6 @@
 import express from 'express';
+import { config } from '../config.js';
+import multer from 'multer';
 import asyncHandler from 'express-async-handler';
 import { viewRecetasDetalle, viewRecetasLista, viewModificarReceta, eliminarReceta, modificarReceta, viewAniadirReceta, 
     aniadirReceta, aniadirRecetaCarrito, buscarReceta,
@@ -10,13 +12,14 @@ import { viewRecetasDetalle, viewRecetasLista, viewModificarReceta, eliminarRece
 
 const recetasRouter = express.Router();
 
+const upload = multer({ dest: config.uploads });
 recetasRouter.get('/catalogo', asyncHandler(viewRecetasLista));
 recetasRouter.get('/receta', asyncHandler(viewRecetasDetalle));
 recetasRouter.get('/receta/modificar', asyncHandler(viewModificarReceta));
 recetasRouter.post('/receta/eliminar', asyncHandler(eliminarReceta));
 recetasRouter.post('/receta/modificar', asyncHandler(modificarReceta));
 recetasRouter.get('/receta/aniadir', asyncHandler(viewAniadirReceta));
-recetasRouter.post('/receta/aniadir', asyncHandler(aniadirReceta));
+recetasRouter.post('/receta/aniadir',  upload.single('foto'), asyncHandler(aniadirReceta));
 recetasRouter.post('/receta/aniadirCarritoReceta', asyncHandler(aniadirRecetaCarrito));
 
 

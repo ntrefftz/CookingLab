@@ -17,13 +17,13 @@ import { errorHandler } from './middleware/error.js';
 import { logger } from './logger.js';
 import pinoHttp  from 'pino-http';
 
+
 const pinoMiddleware = pinoHttp(config.logger.http(logger));
 
 export const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', config.vistas);
-
 app.use(pinoMiddleware);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
