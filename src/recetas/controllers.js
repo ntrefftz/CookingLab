@@ -41,7 +41,10 @@ export function viewRecetasDetalle(req, res) {
     const contenido = 'paginas/receta';
     const id = req.query.id;
     const receta = Receta.getRecetaById(id);
+    const esDeSugerencias = req.query.origen === 'sugerencias'; // Verificamos si la receta proviene de sugerencias
 
+    console.log("esDeSugerencias", esDeSugerencias);
+    console.log("origen", req.query.origen);
     // Obtener los ingredientes de la receta
     const ingredientes = Tiene.getIngredientesByReceta(id);
     // Asociar los ingredientes a la receta
@@ -56,7 +59,8 @@ export function viewRecetasDetalle(req, res) {
     res.render('pagina', {
         contenido,
         session: req.session,
-        recetas: receta
+        recetas: receta,
+        esDeSugerencias
     });
 }
 
@@ -763,10 +767,7 @@ export function viewSugerencias(req, res) {
     const rows = Receta.getAllRecetasNact();
     console.log("Recetas no activas:", rows);
 
-    // Definir los parámetros a enviar a la vista
-    const contenido = 'paginas/sugerencias'; // Referencia a la vista 'sugerencias.ejs'
-    //const esDesdeCalendario = false; // Define si es desde el calendario
-    //const esDesdeMisRecetas = false; // Define si es desde mis recetas
+    const contenido = 'paginas/sugerencias'; 
 
     // Renderizar la vista con los parámetros necesarios
     res.render('pagina', {

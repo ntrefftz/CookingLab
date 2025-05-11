@@ -38,7 +38,7 @@ function menu(session){
 			<li><a href="/usuarios/micalendario">Calendario</a></li>
 			<li><a href="/usuarios/misrecetas">Mis recetas</a></li>
 		<% } %>
-		<% if (session && session.login  && session.esAdmin) { %>
+		<% if (session && session.login  && (session.esAdmin || session.esCocinero)) { %>
 			<li><a href="/recetas/sugerencias">Sugerencias</a></li>
 		<% } %>
 
