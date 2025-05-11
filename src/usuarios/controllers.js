@@ -59,8 +59,6 @@ export function viewPerfil(req, res) {
 
     const usuario = Usuario.getUsuarioById(req.session.userId);
 
-    console.log("Usuario desde session:", usuario);
-
     res.render('pagina', {
         contenido: 'paginas/perfil',
         usuario: usuario,
@@ -69,7 +67,6 @@ export function viewPerfil(req, res) {
 }
 
 export function viewMisRecetas(req, res) {
-    //console.log("Sesion:", req.session);
 
     let contenido = 'paginas/misRecetas';
     if (!req.session.login) {
@@ -77,7 +74,6 @@ export function viewMisRecetas(req, res) {
     }
 
     const recetasGuardadas = Guardado.getFavoritosByUsuario(req.session.userId);
-    console.log("Recetas favoritas:", recetasGuardadas);
 
     const recetas = [];
 
@@ -90,8 +86,6 @@ export function viewMisRecetas(req, res) {
         }
     }
     
-    console.log("Recetas encontradas:", recetas);
-
     res.render('pagina', {
         contenido: 'paginas/misRecetas',
         session: req.session,
@@ -562,9 +556,6 @@ export function aniadirRecetaAFavoritos(req, res) {
     const recetaId = req.body.recetaId;
     const usuarioId = req.session.userId;
 
-    console.log("Añadiendo receta a favoritos");
-    console.log("id_receta:", recetaId);
-    console.log("id_usuario:", usuarioId);
 
     if (!usuarioId || !recetaId) {
         return res.render('pagina', {
@@ -576,7 +567,6 @@ export function aniadirRecetaAFavoritos(req, res) {
 
     try {
         Guardado.addRecetaToFavoritos(usuarioId, recetaId);
-        console.log(`Receta ${recetaId} guardada correctamente para el usuario ${usuarioId}`);
         res.redirect('/usuarios/misrecetas');
     } catch (e) {
         console.error("Error al guardar receta en favoritos:", e);
@@ -592,9 +582,6 @@ export function eliminarRecetaDeFavoritos(req, res) {
     const recetaId = req.body.recetaId;
     const usuarioId = req.session.userId;
 
-    console.log("Intentando eliminar receta de favoritos:");
-    console.log("   id_receta:", recetaId);
-    console.log("   id_usuario:", usuarioId);
 
     try {
         Guardado.removeRecetaFromFavoritos(usuarioId, recetaId);
