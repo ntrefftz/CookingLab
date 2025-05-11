@@ -7,7 +7,6 @@ import { Cesta } from '../pedidos/Cesta.js';
 import { Diaria } from './Diaria.js';
 
 export function viewRecetasLista(req, res) {
-    //console.log(req.session);
 
     // Verificamos si la solicitud viene del calendario
     const esDesdeCalendario = req.query.origen === 'calendario';  // Se obtiene el parámetro 'origen'
@@ -15,13 +14,6 @@ export function viewRecetasLista(req, res) {
 
     const fecha = req.query.fecha || null; // Fecha seleccionada, si viene desde el calendario
 
-    //const diaSeleccionado = req.query.dia;  // El día seleccionado en el calendario, pasado como parámetro
-    console.log("¿Proviene del calendario?", esDesdeCalendario); // Aquí se verá si es true o false
-    console.log("¿Proviene de mis recetas?", esDesdeMisRecetas); // Aquí se verá si es true o false
-
-    if (fecha) {
-        console.log("Fecha seleccionada:", fecha);
-    }
 
     const rows = Receta.getAllRecetas();
     const contenido = 'paginas/catalogo';
@@ -90,8 +82,6 @@ export function eliminarReceta(req, res) {
 
 export function viewModificarReceta(req, res) {
 
-    console.log(req.session);
-
     const contenido = 'paginas/editarReceta';
     const id = req.query.id;
     const receta = Receta.getRecetaById(id);
@@ -115,32 +105,6 @@ export function viewModificarReceta(req, res) {
     });
 }
 
-
-// export function eliminarReceta(req, res) {
-//     const contenido = 'paginas/eliminada';
-//     const id = req.query.id;
-//     try {
-//         const ingredientes = Tiene.getIngredientesByReceta(id);
-//         console.log("Ingredientes:", ingredientes);
-
-//         //Eliminar las relaciones con ingredientes
-//         ingredientes.forEach(ing => {
-//             Tiene.removeIngredienteFromReceta(id, ing.id_ingrediente);
-//         });
-
-//         //Eliminar la receta
-//         Receta.deleteReceta(id);
-
-//         res.render('pagina', {
-//             contenido,
-//             session: req.session
-//         });
-//     } catch (error) {
-//         logger.error("Error al eliminar la receta:", error);
-//         res.status(500).send("Error al eliminar la receta.");
-//     }
-// }
-
 export function modificarReceta(req, res) {
     body('nombre').escape();
     body('descripcion').escape();
@@ -163,7 +127,6 @@ export function modificarReceta(req, res) {
     const ingredientes = Tiene.getIngredientesByReceta(id);
 
     const listaIngredientes = Ingrediente.getAllIngredientes();
-    console.log("Ingredientes disponibles:", listaIngredientes);
 
     if (!receta) {
         return res.status(404).send('Receta no encontrada');
@@ -186,14 +149,7 @@ export function modificarReceta(req, res) {
     // Asignamos los ingredientes modificados a la receta
     receta.ingredientes = ingredientes;
 
-    console.log("Receta:", receta);
-    console.log("Ingredientes:", ingredientes);
-    console.log("Receta con ingredientes:", receta.ingredientes);
-
-    //console.log("Body completo recibido:", req.body);
-
     const ingredientesSeleccionados = req.body['ingredientesSeleccionados[]'] || []; // array de ingredientes que vienen del form
-    console.log("Ingredientes seleccionados:", ingredientesSeleccionados);
 
     // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
     const ingredientesArray = Array.isArray(ingredientesSeleccionados)
@@ -231,7 +187,6 @@ export function modificarReceta(req, res) {
     }
 
     const ingredientesAEliminar = req.body['ingredientesAEliminar[]'] || [];
-    console.log("Ingredientes a eliminar:", ingredientesAEliminar);
 
     // Cantidad de ingredientes que se quieren eliminar
     //const cantidadAEliminar = ingredientesEliminarArray.length;
@@ -249,7 +204,6 @@ export function modificarReceta(req, res) {
     for (const ingredienteId of ingredientesEliminarArray) {
         if (ingredienteId) {
             const cantidad = cantidades[ingredienteId] || 1;
-            console.log(`Eliminando ingrediente ${ingredienteId} con cantidad ${cantidad}`);
             Tiene.removeIngredienteFromReceta(id, ingredienteId, cantidad);
         }
     }
@@ -290,9 +244,7 @@ export function aniadirReceta(req, res) {
     //const imagen_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fes%2Ffotos%2Fno-encontrado-mensaje-de-error-fotos&psig=AOvVaw3yClaJKuZYliDgG5DHGhJC&ust=1745919601499000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLCLvr-3-owDFQAAAAAdAAAAABAE"; // Imagen por defecto
 
     const ingredientes = Ingrediente.getAllIngredientes();
-    //console.log("Ingredientes disponibles:", ingredientes);
 
-    console.log("Body completo recibido:", req.body);
 
     if (!id_usuario) {
         logger.error("Error: No se ha proporcionado un ID de usuario válido");
@@ -304,10 +256,8 @@ export function aniadirReceta(req, res) {
         const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, imagen_url);
 
         const recetaId = result.id;
-        // console.log("Nuevo id de receta:", recetaId);
 
         const ingredientesSeleccionados = req.body['ingredientes[]'] || []; // array de ingredientes que vienen del form
-        //console.log("Ingredientes seleccionados:", ingredientesSeleccionados);
         
         // Cantidades normales (primer valor del array)
         const cantidades = {};
@@ -330,8 +280,6 @@ export function aniadirReceta(req, res) {
             }
         }
 
-        console.log("Cantidades extraídas:", cantidades);
-
         // Cantidades específicas (segundo valor del array)
         const cantidad_esp = {};
         for (const key in req.body) {
@@ -353,25 +301,19 @@ export function aniadirReceta(req, res) {
             }
         }
 
-        console.log("Cantidades específicas:", cantidad_esp);
-
 
         // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
         const ingredientesArray = Array.isArray(ingredientesSeleccionados)
             ? ingredientesSeleccionados
             : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
 
-        
-        console.log("Se van a insertar los siguientes ingredientes:", ingredientesArray);
-        
+                
         // Añadir cada ingrediente con su cantidad
         for (const ingredienteId of ingredientesArray) {
             if (ingredienteId) {
                 const cantidad = cantidades[ingredienteId] || 1;
                 const cantidadEspecifica = cantidad_esp[ingredienteId] || 1; 
 
-                console.log(`Añadiendo ingrediente ${ingredienteId} con cantidad ${cantidad}`);
-                console.log(` Y Añadiendo ingrediente ${ingredienteId} con cantidad ${cantidadEspecifica}`);
                 Tiene.addIngredienteToReceta(recetaId, ingredienteId, cantidad, cantidadEspecifica);
 
             }
@@ -490,13 +432,12 @@ export function modificarIngrediente(req, res) {
     const stock = req.body.stock.trim();
     const id = req.query.id;
     const unidad_medida = req.body.unidad_medida.trim() || 'unidad';
-    const imagen_url = req.body.imagen_url.trim(); 
     const contenido = 'paginas/ingredienteInd';
 
-    console.log("Body completo recibido en update:", req.body);
-
+    let ingrediente = Ingrediente.getIngredienteById(id);
+    const imagen_url = ingrediente.imagen_url;
     Ingrediente.updateIngrediente(id, nombre, categoria, precio, stock, unidad_medida, imagen_url);
-    const ingrediente = Ingrediente.getIngredienteById(id);
+    ingrediente = Ingrediente.getIngredienteById(id);
     res.render('pagina', {
         contenido,
         session: req.session,
@@ -532,13 +473,6 @@ export function aniadirIngrediente(req, res) {
     const unidad_medida = req.body.unidad_medida.trim() || 'unidad';
     const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
 
-
-    console.log("Body completo recibido:", req.body);
-    console.log("imagen", imagen_url);
-
-
-
-    console.log("Body completo recibido:", req.body);
 
     if (!imagen_url == null || !imagen_url == undefined) {
         // Si no se proporciona una URL de imagen, se asigna una por defecto
@@ -688,8 +622,6 @@ export async function actualizarStock(req, res) {
     const { id, stock } = req.body;
 
     try {
-        console.log("ID:", id);
-        console.log("Stock:", stock);
         Ingrediente.setStock(id, stock);
         res.json({ success: true });
     } catch (error) {
@@ -788,7 +720,6 @@ export async function getRecetaDiariaPorDia(req, res) {
 export async function getRecetaPorID(req, res) {
     const id = req.params.id; // Asegúrate de que el cuerpo de la solicitud contenga estos datos
     try {
-        console.log("ID controller Receta", id);
         const receta = Receta.getRecetaById(id);
         return res.json(receta);
     } catch (error) {
@@ -798,11 +729,9 @@ export async function getRecetaPorID(req, res) {
 }
 
 export function aceptarSugerenciaReceta(req, res) {
-    console.log("Vamos a aceptar la sugerencia de receta");
-    console.log("Body completo recibido:", req.body);
+
     const id = req.body.id;
     try {
-        console.log("ID de receta a aceptar:", id);
         Receta.aceptarSugerencia(id);
         res.redirect('/recetas/catalogo');
     } catch (error) {
@@ -813,15 +742,12 @@ export function aceptarSugerenciaReceta(req, res) {
 
 
 export function viewSugerencias(req, res) {
-    //console.log(req.session);
-    //console.log("Vamos a buscar las recetas no activas");
     
     // Obtener las recetas no activas (sugerencias)
     if(!req.session.login) {
         return res.redirect('/usuarios/login');
     }
     const rows = Receta.getAllRecetasNact();
-    console.log("Recetas no activas:", rows);
 
     // Definir los parámetros a enviar a la vista
     const contenido = 'paginas/sugerencias'; // Referencia a la vista 'sugerencias.ejs'
@@ -835,15 +761,4 @@ export function viewSugerencias(req, res) {
         recetas: rows
     });
 }
-/*export function viewSugerencias(req, res) {
-    if (!req.session.login) {
-        return res.redirect('/usuarios/login');
-    }
-
-    res.render('pagina', {
-        contenido: 'paginas/sugerencias', // Asegúrate de tener esta plantilla
-        session: req.session,
-    });
-}*/
-
 
