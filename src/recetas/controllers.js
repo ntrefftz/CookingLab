@@ -729,9 +729,11 @@ export async function getRecetaPorID(req, res) {
 }
 
 export function aceptarSugerenciaReceta(req, res) {
-
+    console.log("Vamos a aceptar la sugerencia de receta");
+    console.log("Body completo recibido:", req.body);
     const id = req.body.id;
     try {
+        console.log("ID de receta a aceptar:", id);
         Receta.aceptarSugerencia(id);
         res.redirect('/recetas/catalogo');
     } catch (error) {
@@ -742,12 +744,15 @@ export function aceptarSugerenciaReceta(req, res) {
 
 
 export function viewSugerencias(req, res) {
+    //console.log(req.session);
+    //console.log("Vamos a buscar las recetas no activas");
     
     // Obtener las recetas no activas (sugerencias)
     if(!req.session.login) {
         return res.redirect('/usuarios/login');
     }
     const rows = Receta.getAllRecetasNact();
+    console.log("Recetas no activas:", rows);
 
     // Definir los parámetros a enviar a la vista
     const contenido = 'paginas/sugerencias'; // Referencia a la vista 'sugerencias.ejs'
