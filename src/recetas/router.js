@@ -2,10 +2,10 @@ import express from 'express';
 import asyncHandler from 'express-async-handler';
 import { viewRecetasDetalle, viewRecetasLista, viewModificarReceta, eliminarReceta, modificarReceta, viewAniadirReceta, 
     aniadirReceta, aniadirRecetaCarrito, buscarReceta,
-    viewIngredientesLista, viewIngredientesDetalle, viewModificarIngrediente, eliminarIngrediente, modificarIngrediente, 
-    viewAniadirIngrediente, aniadirIngrediente, aniadirIngredienteCarrito, actualizarStock, viewGestionStock,
-    aceptarSugerenciaReceta, viewSugerencias
-     
+    viewIngredientesLista, viewIngredientesDetalle, viewModificarIngrediente, eliminarIngrediente, modificarIngrediente,
+    viewAniadirIngrediente, aniadirIngrediente, aniadirIngredienteCarrito, actualizarStock, viewGestionStock, jsonRecetas, viewCalendarioRecetaDiaria,
+    aniadirRecetaDiaria, getRecetaDiariaPorDia, jsonRecetaDiaria, getRecetaPorID,     aceptarSugerenciaReceta, viewSugerencias
+
 } from './controllers.js';
 
 const recetasRouter = express.Router();
@@ -30,8 +30,15 @@ recetasRouter.post('/ingredienteInd/aniadir', asyncHandler(aniadirIngrediente));
 recetasRouter.post('/ingredienteInd/aniadirCarritoIng', asyncHandler(aniadirIngredienteCarrito));
 recetasRouter.post('/ingrediente/actualizarStock', asyncHandler(actualizarStock));
 
+recetasRouter.get('/calendarioRecetaDiaria', asyncHandler(viewCalendarioRecetaDiaria));
 recetasRouter.get('/buscarReceta', asyncHandler(buscarReceta));
 recetasRouter.get('/stock', asyncHandler(viewGestionStock));
+recetasRouter.post('/recetaPorFecha', asyncHandler(getRecetaDiariaPorDia));
+recetasRouter.post('/aniadirRecetaDiaria', asyncHandler(aniadirRecetaDiaria));
+recetasRouter.get('/obtenerRecetasCalendario', asyncHandler(jsonRecetaDiaria));
+recetasRouter.post('/obtenerRecetas', asyncHandler(jsonRecetas));
+recetasRouter.get('/getReceta/:id', asyncHandler(getRecetaPorID));
+
 
 recetasRouter.post('/receta/aceptarSugerencia', asyncHandler(aceptarSugerenciaReceta));
 recetasRouter.get('/sugerencias', asyncHandler(viewSugerencias));

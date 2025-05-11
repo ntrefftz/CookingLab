@@ -3,6 +3,7 @@ export class Diaria {
     static #insertStmt = null;   // Para insertar la receta en un día
     static #deleteStmt = null;   // Para eliminar la receta de un día
     static #getAllStmt = null;   // Para obtener todas las recetas asignadas a los días
+    static #updateStmt = null;   // Para actualizar la receta de un día específico
     static #deleteRecetaStmt = null; // Para eliminar la receta de un día específico
 
     static initStatements(db) {
@@ -21,15 +22,28 @@ export class Diaria {
         this.#getAllStmt = db.prepare('SELECT * FROM Diaria');
     
         this.#deleteRecetaStmt = db.prepare('DELETE FROM Diaria WHERE id_receta = @id_receta');
+      
+       //Actualizar la receta asignada a un día específico
+        this.#updateStmt = db.prepare('UPDATE Diaria SET id_receta = @id_receta WHERE dia = @dia');
+
     }
 
     // Obtener la receta asignada a un día específico
     static getRecetaPorDia(dia) {
-        const receta = this.#getByDiaStmt.get({ dia });
+        const receta = this.#getByDiaStmt.get({dia});
         if (!receta) throw new DiariaNoEncontrada(dia);
         return receta;
     }
 
+    static updateRecetaPorDia(dia, id_receta) {
+        try {
+            this.#updateStmt.run({ dia, id_receta });
+            return { mensaje: "Receta actualizada correctamente" };
+        } catch (e) {
+            if (e.code === 'SQLITE_CONSTRAINT') throw new DiariaYaExiste(dia);
+            throw new ErrorDatos("No se pudo actualizar la receta", { cause: e });
+        }
+    }
     // Obtener todas las recetas asignadas a los días
     static getTodasLasRecetas() {
         return this.#getAllStmt.all();

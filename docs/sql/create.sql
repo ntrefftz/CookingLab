@@ -1,7 +1,16 @@
 BEGIN TRANSACTION;
+DROP TABLE IF EXISTS "Cesta";
+CREATE TABLE "Cesta" (
+	"id_usuario"	INTEGER NOT NULL,
+	"id_ingrediente"	INTEGER NOT NULL,
+	"cantidad"	INTEGER NOT NULL CHECK("cantidad" > 0),
+	PRIMARY KEY("id_usuario","id_ingrediente"),
+	FOREIGN KEY("id_ingrediente") REFERENCES "Ingredientes"("id"),
+	FOREIGN KEY("id_usuario") REFERENCES "Usuarios"("id")
+);
 DROP TABLE IF EXISTS "Diaria";
 CREATE TABLE "Diaria" (
-	"dia"	DATE NOT NULL,
+	"dia"	DATE NOT NULL UNIQUE,
 	"id_receta"	INTEGER NOT NULL,
 	PRIMARY KEY("dia","id_receta"),
 	FOREIGN KEY("id_receta") REFERENCES "Recetas"("id")
@@ -40,15 +49,6 @@ CREATE TABLE "Recetas" (
 	"imagen_url"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-DROP TABLE IF EXISTS "Cesta";
-CREATE TABLE "Cesta" (
-	"id_usuario"	INTEGER NOT NULL,
-	"id_ingrediente"	INTEGER NOT NULL,
-	"cantidad"	INTEGER NOT NULL CHECK("cantidad" > 0),
-	PRIMARY KEY("id_usuario", "id_ingrediente"),
-	FOREIGN KEY("id_ingrediente") REFERENCES "Ingredientes"("id"),
-	FOREIGN KEY("id_usuario") REFERENCES "Usuarios"("id")
-);
 DROP TABLE IF EXISTS "Usuarios";
 CREATE TABLE "Usuarios" (
 	"username"	TEXT NOT NULL UNIQUE,
@@ -77,8 +77,8 @@ CREATE TABLE "contiene" (
 	"id_pedidos"	INTEGER NOT NULL,
 	"cantidad"	INTEGER NOT NULL CHECK("cantidad" > 0),
 	PRIMARY KEY("id_ingrediente","id_pedidos"),
-	FOREIGN KEY("id_pedidos") REFERENCES "Pedidos"("id"),
-	FOREIGN KEY("id_ingrediente") REFERENCES "Ingredientes"("id")
+	FOREIGN KEY("id_ingrediente") REFERENCES "Ingredientes"("id"),
+	FOREIGN KEY("id_pedidos") REFERENCES "Pedidos"("id")
 );
 DROP TABLE IF EXISTS "guardado";
 CREATE TABLE "guardado" (

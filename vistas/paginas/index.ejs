@@ -1,3 +1,4 @@
+
 <h1>Descubre nuevas recetas</h1>
 <div id="catalogo" class="cards_container">
     <% if (ultimasRecetas && ultimasRecetas.length > 0) { %>
@@ -18,11 +19,14 @@
 </div>
 
 <h1>Receta del día</h1>
+
+
+
 <div class="receta-y-calendario">
     <div id="receta-del-dia">
         <% if (recetaDelDia) { %>
-            <article class="card">
-                <img src=<%= recetaDelDia.imagen_url %> alt="Pronto habrá una foto" />
+            <article class="card destacada" id="receta-seleccionada">
+                <img src="<%= recetaDelDia.imagen_url %>" alt="Pronto habrá una foto" />
                 <p></p>
                 <a href="/recetas/receta?id=<%= recetaDelDia.id %>">
                     <h4><%= recetaDelDia.nombre %></h4>
@@ -35,7 +39,22 @@
         <% } %>
     </div>
 
-    <div id="calendar"></div>
+    <div id="calendar-container">
+        <div id="postit-container">
+            <img src="/image/postit.jpg" alt="Post-it" id="postit-image" />
+            <div id="postit-text">
+                <h2>Día actual:</h2>
+                <span id="current-date"></span>
+            </div>
+        </div>
+        <div id="calendar-simple">
+            <div class="calendar-header">
+                <button id="prev-day-btn">← Día anterior</button>
+                <button id="today-btn">Hoy</button>
+                <button id="next-day-btn">Día siguiente →</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <h1>Realiza tu compra</h1>
@@ -55,3 +74,5 @@
         <p>No hay ingredientes disponibles</p>
     <% } %>
 </div>
+
+<script src="/js/calendario.js"></script>

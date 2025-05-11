@@ -1,3 +1,160 @@
+	/* Estilo para el formulario de búsqueda en la barra de navegación */
+	.navbar-search {
+		display: flex;
+		align-items: center;
+		margin: 0;
+		padding: 0;
+	}
+
+	form.navbar-search {
+		display: flex;
+		align-items: center;
+		margin: 0;
+		padding: 0;
+		background-color: transparent;
+		/* Sin fondo para que se integre mejor */
+		box-shadow: none;
+		/* Sin sombra */
+		border: none;
+		/* Sin bordes */
+	}
+
+	.navbar-search input[type="text"] {
+		padding: 5px;
+		font-size: 14px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		width: 150px;
+		/* Ajusta el ancho para que no ocupe demasiado espacio */
+		transition: width 0.3s ease;
+		/* Efecto de transición al enfocar */
+	}
+
+	.navbar-search input[type="text"]:focus {
+		width: 200px;
+		/* Expande el campo al enfocarlo */
+	}
+
+	.navbar-search button {
+		background: none;
+		border: none;
+		font-size: 16px;
+		cursor: pointer;
+		margin-left: 5px;
+		padding: 0;
+	}
+
+	#calendar-simple {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-top: 20px;
+	}
+
+	#calendar-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-top: 20px;
+	}
+
+	.calendar-header {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		background-color: #F383A0;
+		color: white;
+		padding: 10px 20px;
+		border-radius: 8px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	}
+	.calendar-header button {
+		background-color: F383A0;
+		color: white;
+		border: 1px solid #F383A0;
+		border-radius: 4px;
+		padding: 5px 10px;
+		cursor: pointer;
+		font-size: 14px;
+		transition: background-color 0.3s ease;
+	}
+
+
+	#current-date {
+		font-size: 16px;
+		font-weight: bold;
+	}
+
+	#postit-container {
+		position: relative;
+		display: inline-block;
+		text-align: center;
+		width: 350px;
+		/* Aumenta el tamaño del post-it */
+		height: 350px;
+		/* Aumenta el tamaño del post-it */
+		margin: 20px auto;
+		/* Centra el post-it horizontalmente */
+	}
+
+	#postit-image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 10px;
+		/* Opcional: redondea las esquinas */
+	}
+
+	#postit-text {
+		position: absolute;
+		top: 50%;
+		/* Centra verticalmente */
+		left: 50%;
+		/* Centra horizontalmente */
+		transform: translate(-50%, -50%);
+		/* Ajusta el texto al centro */
+		font-size: 1.2em;
+		font-weight: bold;
+		color: #000000;
+		/* Cambia el color según el diseño del post-it */
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+		/* Agrega sombra para mejor visibilidad */
+		pointer-events: none;
+		/* Evita que el texto interfiera con clics */
+		word-wrap: break-word;
+		/* Permite que el texto se ajuste si es muy largo */
+		max-width: 80%;
+		/* Limita el ancho del texto dentro del post-it */
+		text-align: center;
+		/* Asegura que el texto esté centrado */
+		line-height: 1.5;
+		/* Mejora el espaciado entre líneas */
+	}
+
+	.card.destacada {
+		border: 4px solid #f39c12;
+		background-color: #fff8e1;
+		box-shadow: 0 0 20px rgba(243, 156, 18, 0.6);
+		transform: scale(1.03);
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+
+	.card.destacada:hover {
+		transform: scale(1.05);
+		box-shadow: 0 0 25px rgba(243, 156, 18, 0.8);
+	}
+
+	.card.destacada h4 {
+		color: #d35400;
+		font-size: 1.5em;
+		margin-bottom: 10px;
+	}
+
+	.card.destacada p {
+		font-weight: bold;
+	}
+
 body {
 	background-color: #FFFFFF;
 	width: auto;
@@ -906,5 +1063,127 @@ select {
     margin-bottom: 15px;
     padding-bottom: 5px;
     border-bottom: 1px dashed #FFE0EE;
+}
+
+/* Estilos para el formulario de contacto */
+.contact-form-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(243, 131, 160, 0.1);
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-subtitle {
+    font-weight: bold;
+    color: #F383A0;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.form-input, .form-textarea {
+    padding: 12px;
+    border: 2px solid #FFE0EE;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-input:focus, .form-textarea:focus {
+    border-color: #F383A0;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(243, 131, 160, 0.2);
+}
+
+.form-textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.radio-option:hover {
+    background-color: #FFE0EE;
+}
+
+.radio-option input[type="radio"] {
+    accent-color: #F383A0;
+}
+
+.terms-group {
+    margin: 15px 0;
+}
+
+.terms-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.terms-checkbox {
+    accent-color: #F383A0;
+    width: 18px;
+    height: 18px;
+}
+
+.terms-link {
+    color: #F383A0;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+.submit-button {
+    background-color: #F383A0;
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    align-self: center;
+    width: auto;
+}
+
+.submit-button:hover {
+    background-color: #e6728f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(243, 131, 160, 0.3);
 }
 

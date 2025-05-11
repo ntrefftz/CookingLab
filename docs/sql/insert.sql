@@ -61,7 +61,6 @@ INSERT INTO "guardado" VALUES (1, 3, 1);  -- Sopa de Tomate
 INSERT INTO "guardado" VALUES (1, 4, 1);  -- Pizza Margarita
 INSERT INTO "guardado" VALUES (1, 6, 1);  -- Pasta Alfredo
 
-
 UPDATE "Recetas" SET "imagen_url" = 'https://www.hola.com/horizon/landscape/2f4a35cad37e-sopa-tomate-t.jpg' WHERE "id" = 3;
 UPDATE "Recetas" SET "imagen_url" = 'https://media.istockphoto.com/id/1280329631/es/foto/pizza-margherita-italiana-con-tomates-y-queso-mozzarella-sobre-tabla-de-cortar-de-madera-de.jpg?s=612x612&w=0&k=20&c=3i8gzmaA2vbfIQRetPK1SLh0l6u_CC_HniYuBT884aU=' WHERE "id" = 4;
 UPDATE "Recetas" SET "imagen_url" = 'https://www.recetasderechupete.com/wp-content/uploads/2020/11/Arroz-con-pollo-cubano-3-1200x803.jpg' WHERE "id" = 5;
@@ -81,5 +80,30 @@ UPDATE "Ingredientes" SET "imagen_url" = 'https://sgfm.elcorteingles.es/SGFM/dct
 UPDATE "Ingredientes" SET "imagen_url" = 'https://sgfm.elcorteingles.es/SGFM/dctm/MEDIA03/202310/10/00120902600079____17__600x600.jpg' WHERE "id" = 8;
 UPDATE "Ingredientes" SET "imagen_url" = 'https://sgfm.elcorteingles.es/SGFM/dctm/MEDIA03/202302/28/00118460511332____2__600x600.jpg' WHERE "id" = 9;
 UPDATE "Ingredientes" SET "imagen_url" = 'https://sgfm.elcorteingles.es/SGFM/dctm/MEDIA03/202104/14/00118003501204____7__600x600.jpg' WHERE "id" = 10;
+
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-01',3);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-04-30',4);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-04-29',5);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-04-28',6);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-04-27',7);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-04-26',8);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-04-25',9);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-04-24',10);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-08',6);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-07',9);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-06',3);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-05',4);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-04',5);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-02',9);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-03',8);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-09',10);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-10',4);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-11',10);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-12',7);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-13',5);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-14',7);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-15',8);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-16',5);
+INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-17',9);
 
 COMMIT;

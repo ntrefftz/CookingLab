@@ -30,30 +30,39 @@ function menu(session){
 	<h1>COOKINGLAB</h1>
 	<ul class="navbar">
 		<li><a href="/">Inicio</a></li>
-		<li><a href="/contenido/conocenos">Conócenos</a></li>
+		
 		<li><a href="/recetas/catalogo">Recetas</a></li>
 		<li><a href="/recetas/ingrediente">Ingredientes</a></li>
 		<li><a href="/pedidos/cesta">Cesta</a></li>
-		<li><a href="/recetas/buscarReceta">Buscar</a></li>
 		<% if (session && session.login) { %>
 			<li><a href="/usuarios/micalendario">Calendario</a></li>
 			<li><a href="/usuarios/misrecetas">Mis recetas</a></li>
 		<% } %>
 
-		<% if (session && session.login  && session.esAdmin) { %>
-			<li><a href="/usuarios/sugerencias">Sugerencias</a></li>
-		<% } %>
+
+		<!-- Formulario de búsqueda en la barra de navegación -->
+		<li>
+			<form action="/recetas/buscarReceta" method="GET" class="navbar-search">
+				<input type="text" name="termino" placeholder="Buscar recetas..." required>
+				<button type="submit">🔍</button>
+			</form>
+		</li>
+
 
 		<li><%- mostrarSaludo(session) %></li>
-		<li><div class= "dropdown">
-			<button class="dropdown-btn"><img src="/image/User.png" alt="User Icon"></button>
-			<div class="dropdown-content">
-				<ul class =>
-					<%- menu(session) %>
-				</ul>
+		<li>
+			<div class="dropdown">
+				<button class="dropdown-btn"><img src="/image/User.png" alt="User Icon"></button>
+				<div class="dropdown-content">
+					<ul>
+						<%- menu(session) %>
+					</ul>
+				</div>
 			</div>
-		</div></li>
-	  </ul> 
-
-		
+		</li>
+	</ul>
 </header>
+<!--
+		TODO: Cambiar la barra de navegación para que se muestre en una sola linea y muestre el logo
+		TODO:Añadir favicon
+-->
