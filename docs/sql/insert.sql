@@ -20,6 +20,8 @@ INSERT INTO "Recetas" VALUES (9,'Empanadas','Empanadas rellenas de carne.',4200,
 INSERT INTO "Recetas" VALUES (10,'Churros','Postre frito con azúcar y canela.',2400,3,10,1,NULL);
 INSERT INTO "Usuarios" VALUES ('user','$2b$10$JdCg8yL3rRkkr.hhx1rjqOe30F9lhBlqA1sjYJW6ymzYExvQFHyjy','Usuario','Default','user@cookinglabs.com','C/ Calle 14, Madrid','U',1,1);
 INSERT INTO "Usuarios" VALUES ('admin','$2b$10$Htah5iG9eKj8ItIItpzK6uvny3c5/QjdZaLwwmFy32RPrfVspNgYS','Administrador','Default','admin@cookinglab.com','C/ Avenida 106, Segovia','A',1,2);
+INSERT INTO "Usuarios" VALUES ('cocinero','$2b$10$zkJJkDUdGGnqLrJS8kAOmumd1E/ryFX7pxnjo8IXxf2dULc19fzSq','Cocinero','Default','cocinero@cookinglab.com','C/ Mi calle','C',1,3);
+
 
 
 -- Relaciones entre recetas e ingredientes
