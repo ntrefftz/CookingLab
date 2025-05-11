@@ -11,8 +11,6 @@ export class Receta {
     static #getAllNact = null;
     static #activarRecetaStmt = null;
 
-    //FUNCIONA?
-
     static initStatements(db) {
         if (this.#getByIdStmt !== null) return;
 
