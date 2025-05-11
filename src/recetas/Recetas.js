@@ -22,8 +22,6 @@ export class Receta {
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas WHERE activo = 1'); // Obtener todas las recetas activas
         this.#getAllNact = db.prepare('SELECT * FROM Recetas WHERE activo = 0'); // Obtener todas las recetas NO activas
         this.#activarRecetaStmt = db.prepare('UPDATE Recetas SET activo = 1 WHERE id = @id'); //Activa las recetas sugeridas
-
-
         
         this.#searchByNameStmt = db.prepare('SELECT * FROM Recetas WHERE nombre LIKE @nombre AND activo = 1');
         this.#searchByIngredientStmt = db.prepare(`
