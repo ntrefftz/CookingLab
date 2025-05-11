@@ -238,7 +238,7 @@ export function aniadirReceta(req, res) {
     const dificultad = req.body.dificultad.trim();
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
-    const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
+    const activo = req.session.isAdmin ? 1 : 0;  // Si es administrador, la receta está activa; si no, está pendiente (al user no le sale)
     const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
 
     //const imagen_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fes%2Ffotos%2Fno-encontrado-mensaje-de-error-fotos&psig=AOvVaw3yClaJKuZYliDgG5DHGhJC&ust=1745919601499000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLCLvr-3-owDFQAAAAAdAAAAABAE"; // Imagen por defecto
