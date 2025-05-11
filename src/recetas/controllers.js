@@ -121,9 +121,14 @@ export function modificarReceta(req, res) {
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id = req.query.id;
     const contenido = 'paginas/receta';
+    let imagen_url = req.body.imagen_url.trim() ; 
     
-    let receta = Receta.getRecetaById(id);
-    const imagen_url = receta.imagen_url;
+    let receta;
+    if(imagen_url == null || imagen_url == undefined || imagen_url == "") {
+        let receta = Receta.getRecetaById(id);
+
+        imagen_url = receta.imagen_url;
+    }
 
     Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1, imagen_url);
     receta = Receta.getRecetaById(id);
@@ -446,9 +451,12 @@ export function modificarIngrediente(req, res) {
     const id = req.query.id;
     const unidad_medida = req.body.unidad_medida.trim() || 'unidad';
     const contenido = 'paginas/ingredienteInd';
-
-    let ingrediente = Ingrediente.getIngredienteById(id);
-    const imagen_url = ingrediente.imagen_url;
+    let imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
+    let ingrediente;
+    if (imagen_url == null || imagen_url == undefined || imagen_url == "") {
+        ingrediente = Ingrediente.getIngredienteById(id);
+        imagen_url = ingrediente.imagen_url;
+    }
     Ingrediente.updateIngrediente(id, nombre, categoria, precio, stock, unidad_medida, imagen_url);
     ingrediente = Ingrediente.getIngredienteById(id);
     res.render('pagina', {
