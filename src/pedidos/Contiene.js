@@ -81,9 +81,11 @@ export class Contiene {
         const result = this.#deletePedidoStmt.run({ id_pedidos });
         return true; //TODO MENSAJE { mensaje: "Pedido eliminado correctamente" };
     }
+
     id_ingrediente;
     id_pedidos;
     cantidad;
+    
     constructor(id_ingrediente, id_pedidos, cantidad) {
         this.id_ingrediente = id_ingrediente;
         this.id_pedidos = id_pedidos;

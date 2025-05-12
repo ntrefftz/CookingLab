@@ -67,6 +67,16 @@ export class Cesta {
         this.#clearCestaStmt.run({ id_usuario });
         return true;
     }
+    id_ingrediente;
+    id_usuario;
+    cantidad;
+    
+    constructor(id_usuario, id_ingrediente, cantidad) {
+        this.id_usuario = id_usuario;
+        this.id_ingrediente = id_ingrediente;
+        this.cantidad = cantidad;
+    }
+
 }
 
 //ERRORES

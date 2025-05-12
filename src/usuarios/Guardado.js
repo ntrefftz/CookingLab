@@ -46,7 +46,7 @@ export class Guardado {
     // Obtener las recetas favoritas de un usuario
     static getFavoritosByUsuario(idUsuario) { 
         const favoritos = this.#getByUsuarioStmt.all({ id_usuario: idUsuario });
-        if (favoritos.length === 0) throw new Error("No hay recetas guardadas como favoritas.");
+        if (favoritos.length === 0) throw new Error("No hay recetas guardadas como favoritas.");//TODO; TIENE QUE DEVOLVER ESTO?
         console.log("Favoritos obtenidos:", favoritos);
         return favoritos.map(({ id_receta, guardado }) => new Guardado(id_receta, idUsuario, guardado));
 

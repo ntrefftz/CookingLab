@@ -103,8 +103,6 @@ export class CalendarioSemanal {
             new CalendarioSemanal(id_receta, nombre, fecha, dificultad, tiempo_prep_segs)
         );
     }
-  
-    
         
         id_receta;
         id_usuario;

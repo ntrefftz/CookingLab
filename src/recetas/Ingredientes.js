@@ -110,6 +110,7 @@ export class Ingrediente {
     stock;
     unidad_medida;
     imagen_url;
+    
     constructor(id, nombre, categoria, precio, stock, unidad_medida, imagen_url) {
         this.id = id;
         this.nombre = nombre;
