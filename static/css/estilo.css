@@ -302,6 +302,41 @@ label {
 	display: block;
 }
 
+/* NAVBAR GENERAL */
+.navbar {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+	list-style-type: none;
+	padding: 10px 0;
+	margin: 0;
+}
+
+/* ESTILO PARA BOTONES DE NAVEGACIÓN */
+.navbar a,
+.dropdown-btn {
+	background-color: white;
+	color: #F383A0;
+	border: 2px solid white;
+	border-radius: 8px;
+	padding: 4px 12px;
+	font-weight: bold;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	box-shadow: 0 6px 12px rgba(47, 5, 234, 0.15);
+}
+
+.navbar a:hover,
+.dropdown-btn:hover {
+	background-color: #F383A0;
+	color: white;
+	text-decoration: none;
+	transform: translateY(-2px); /* efecto lift */
+	box-shadow: 0 6px 12px rgba(47, 5, 234, 0.15); /* sombra más intensa al hacer hover */
+}
+
 /*formulario*/
 form {
 	width: 90%;
@@ -327,6 +362,10 @@ form select {
 	margin-top: 5px;
 	border: 1px solid #ccc;
 	border-radius: 5px;
+}
+.navbar-search {
+	position: relative;
+	top: -3px; /* Sube el formulario 2 píxeles */
 }
 
 /* Para los radio buttons */
@@ -434,15 +473,7 @@ img {
 	display: block;
 }
 
-.dropdown-content {
-	display: none;
-	position: absolute;
-	padding-right: auto;
-	background-color: #FFE0EE;
-	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 1;
-}
+/*CAJA DESPLEGABLE*/
 
 .dropdown:hover .dropdown-content {
 	display: block;
@@ -450,10 +481,49 @@ img {
 
 .dropdown-content ul {
 	display: block;
+
 }
 
+/*recuadro de la caja desplegable*/
 .dropdown-content li {
 	border: 1px solid palevioletred;
+	border-radius: 8px;         /* Bordes redondeados */
+    padding: 5px 10px;          /* Añade un poco de espacio interno */
+    margin: 5px auto;           /* Centra horizontalmente el li */
+    width: 80%;                 /* Opcional: controla el ancho del recuadro */
+	display: flex;
+    justify-content: center;  /* Centra el contenido horizontalmente */
+    align-items: center;      /* Centra verticalmente si hay altura definida */
+	background-color: rgb(250, 167, 189); 
+
+}
+
+/* Hacer más minimalista */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: transparent; /* Fondo del desplegable */
+    border: none;
+    box-shadow: none; /* Eliminar sombras */
+    z-index: 1;
+    margin-top: 9px; /* Ajustar la separación desde arriba*/
+}
+
+.dropdown-content ul li a {
+    color: #000000;
+    padding: 10px;
+    font-weight: normal; /* Fuente normal */
+    text-decoration: none;
+    display: block; /* Asegura que los enlaces ocupen todo el ancho */
+	justify-content: center; /* Centra horizontalmente si usas flex */
+    text-align: center;
+	width: 100%;               /* Ocupa todo el espacio del li para centrado */
+
+}
+
+.dropdown-content ul li a:hover {
+    background-color: #F383A0; /* Cambio de fondo al pasar el ratón */
+    color: white; /* Cambia el texto a blanco */
 }
 
 /*profile*/
