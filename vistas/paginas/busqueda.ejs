@@ -26,7 +26,7 @@
     <% if (recetas.length > 0) { %>
         <% recetas.forEach(receta => { %>
             <article class="card">
-                <img src="<%= receta.imagen_url %>" alt="Imagen de la receta" />
+                <img src="/recetas/imagen/<%=receta.imagen_url %>" alt="Imagen de la receta" />
                 <a href="/recetas/receta?id=<%= receta.id %>">
                     <h4><%= receta.nombre %></h4>
                 </a>
