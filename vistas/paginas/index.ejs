@@ -62,7 +62,7 @@
     <% if (ultimosIngredientes && ultimosIngredientes.length > 0) { %>
         <% ultimosIngredientes.forEach(ingrediente => { %>
             <article class="card">
-                <img src=<%= ingrediente.imagen_url %> alt="Pronto habrá una foto"  />
+                <img src="/recetas/imagen/<%=ingrediente.imagen_url %>" alt="Pronto habrá una foto"  />
                 <p></p>
                 <a href="/recetas/ingredienteInd/?id=<%= ingrediente.id %>">
                     <h4><%= ingrediente.nombre %></h4>

@@ -257,7 +257,6 @@ export function aniadirReceta(req, res) {
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
 
     const activo = req.session.isAdmin ? 1 : 0;  // Si es administrador, la receta está activa; si no, está pendiente (al user no le sale)
-    const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
 
     //const imagen_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fes%2Ffotos%2Fno-encontrado-mensaje-de-error-fotos&psig=AOvVaw3yClaJKuZYliDgG5DHGhJC&ust=1745919601499000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLCLvr-3-owDFQAAAAAdAAAAABAE"; // Imagen por defecto
 
@@ -478,7 +477,7 @@ export function modificarIngrediente(req, res) {
         imagen_url = imagen;
 
     Ingrediente.updateIngrediente(id, nombre, categoria, precio, stock, unidad_medida, imagen_url);
-    ingrediente = Ingrediente.getIngredienteById(id);
+    const ingrediente = Ingrediente.getIngredienteById(id);
     res.render('pagina', {
         contenido,
         session: req.session,
