@@ -107,12 +107,8 @@ export function eliminarIngredienteDeCesta(req, res) {
 }
 
 export function viewCompraReceta(req, res) {
-    let contenido = 'paginas/noPermisos';
-    if (req.session != null && req.session.nombre != null) {
-        contenido = 'paginas/compraReceta';
-    }
-    res.render('pagina', {
-        contenido,
+      res.render('pagina', {
+        contenido: 'paginas/compraReceta',
         session: req.session
     });
 }

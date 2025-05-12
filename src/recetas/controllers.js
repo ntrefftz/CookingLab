@@ -789,9 +789,7 @@ export function viewSugerencias(req, res) {
     //console.log("Vamos a buscar las recetas no activas");
 
     // Obtener las recetas no activas (sugerencias)
-    if (!req.session.login) {
-        return res.redirect('/usuarios/login');
-    }
+
     const rows = Receta.getAllRecetasNact();
     console.log("Recetas no activas:", rows);
 
@@ -804,16 +802,7 @@ export function viewSugerencias(req, res) {
         recetas: rows
     });
 }
-/*export function viewSugerencias(req, res) {
-    if (!req.session.login) {
-        return res.redirect('/usuarios/login');
-    }
 
-    res.render('pagina', {
-        contenido: 'paginas/sugerencias', // Asegúrate de tener esta plantilla
-        session: req.session,
-    });
-}*/
 
 export function viewImagen(request, response) {
     response.sendFile(join(config.uploads, request.params.id));

@@ -26,19 +26,8 @@ export function viewConfiguracion(req, res) {
 
 export async function viewListaUsuario(req, res) {
     try {
-        let contenido;
-        if (req.session != null && req.session.login && req.session.esAdmin) {
-            contenido = "paginas/gestionUsuarios";
-        }
-        else if (!req.session.login) {
-            logger.info(`No se ha iniciado sesión :|`);
-            return res.redirect('/usuarios/login');
-        }
-        else {
-            res.setFlash(`No dispone de permisos para ver esta página`);
-            logger.info(`Se ha intentado acceder a la lista de perfiles sin permisos de adminstrador :|`);
-            return res.redirect('/usuarios/home');
-        }
+        let contenido = "paginas/gestionUsuarios";
+
         const usuarios = await Usuario.getAllUsuarios();
 
         res.render('pagina', {
@@ -53,10 +42,6 @@ export async function viewListaUsuario(req, res) {
 }
 
 export function viewPerfil(req, res) {
-    if (!req.session.login) {
-        return res.redirect('/usuarios/login');
-    }
-
     const usuario = Usuario.getUsuarioById(req.session.userId);
 
     res.render('pagina', {
@@ -69,9 +54,6 @@ export function viewPerfil(req, res) {
 export function viewMisRecetas(req, res) {
 
     let contenido = 'paginas/misRecetas';
-    if (!req.session.login) {
-        return res.redirect('/usuarios/login');
-    }
 
     const recetasGuardadas = Guardado.getFavoritosByUsuario(req.session.userId);
 
@@ -85,7 +67,7 @@ export function viewMisRecetas(req, res) {
             console.error(`Error al obtener receta con ID ${fav.id_receta}:`, error.message);
         }
     }
-    
+
     res.render('pagina', {
         contenido: 'paginas/misRecetas',
         session: req.session,
@@ -111,7 +93,7 @@ export function viewHistorial(req, res) {
         // Construir el historial
         const historial = relaciones.map(relacion => {
             const pedido = Pedido.getPedidoById(relacion.id_pedido);
-            const ingredientes = Contiene.getByPedido(relacion.id_pedido) || []; 
+            const ingredientes = Contiene.getByPedido(relacion.id_pedido) || [];
             const ingredientesAgrupados = Object.values(
                 ingredientes.reduce((acc, ing) => {
                     if (!acc[ing.id_ingrediente]) {
@@ -180,9 +162,6 @@ export async function viewCalendario(req, res) {
 
 export function viewLogin(req, res) {
     let contenido = 'paginas/login';
-    if (req.session != null && req.session.login) {
-        contenido = 'paginas/home'
-    }
     render(req, res, contenido, {
         errores: {},
         datos: {}
@@ -191,9 +170,6 @@ export function viewLogin(req, res) {
 
 export function viewRegister(req, res) {
     let contenido = 'paginas/register';
-    if (req.session != null && req.session.login) {
-        contenido = 'paginas/home'
-    }
     render(req, res, contenido, {
         errores: {},
         datos: {},
@@ -333,7 +309,7 @@ export function doLogout(req, res, next) {
     req.session.nombre = null;
     req.session.esAdmin = null;
     req.session.esCocinero = null;
-    
+
     req.session.save((err) => {
         if (err) next(err);
 
@@ -347,22 +323,9 @@ export function doLogout(req, res, next) {
 }
 
 export function viewModificarPerfil(req, res) {
-    let contenido;
+    let contenido = 'paginas/editarPerfil';
     const id = parseInt(req.query.id);
     const perfil = Usuario.getUsuarioById(id);
-
-    if (req.session != null && req.session.login && (req.session.esAdmin || req.session.userId === id)) {
-        contenido = 'paginas/editarPerfil';
-    }
-    else if (!req.session.login) {
-        logger.info(`Se ha intentado editar un perfil sin inicar sesion :|`);
-        return res.redirect('/usuarios/login');
-    }
-    else {
-        res.setFlash(`No se puede editar el perfil de otro usuario`);
-        logger.info(`Se ha intentado acceder a un perfil ajeno :|`);
-        return res.redirect('/usuarios/home');
-    }
 
     res.render('pagina', {
         contenido,
@@ -475,10 +438,10 @@ export function eliminarPerfil(req, res) {
     const id = req.query.id;
     try {
         Usuario.borrarUsuario(id);
-        req.json = { mensaje: 'Usuario borrado con éxito'};
+        req.json = { mensaje: 'Usuario borrado con éxito' };
     } catch (error) {
         logger.error('Error al borrar usuario:', error);
-       res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
+        res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
     }
 
     return res.redirect('/usuarios/listaUsuarios');
@@ -590,10 +553,6 @@ export function eliminarRecetaDeFavoritos(req, res) {
 
 /////////////////////////////
 export function viewSugerencias(req, res) {
-    if (!req.session.login) {
-        return res.redirect('/usuarios/login');
-    }
-
     res.render('pagina', {
         contenido: 'paginas/sugerencias', // Asegúrate de tener esta plantilla
         session: req.session,
