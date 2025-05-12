@@ -26,23 +26,49 @@ export class Ingrediente {
     static getIngredienteById(id) {
         const ingrediente = this.#getByIdStmt.get({ id });
         if (!ingrediente) throw new IngredienteNoEncontrado(id);
-        return ingrediente;
+        return new Ingrediente(
+            ingrediente.id,
+            ingrediente.nombre,
+            ingrediente.categoria,
+            ingrediente.precio,
+            ingrediente.stock,
+            ingrediente.unidad_medida,
+            ingrediente.imagen_url
+        );
     }
 
     static getIngredienteByNombre(nombre) {
         const ingrediente = this.#getByNombreStmt.get({ nombre });
         if (!ingrediente) throw new IngredienteNoEncontrado(nombre);
-        return ingrediente;
+        return new Ingrediente(
+            ingrediente.id,
+            ingrediente.nombre,
+            ingrediente.categoria,
+            ingrediente.precio,
+            ingrediente.stock,
+            ingrediente.unidad_medida,
+            ingrediente.imagen_url
+        );
     }
 
     static getAllIngredientes() {
-        return this.#getAllStmt.all();
+        const ingredientes = this.#getAllStmt.all();
+
+        return ingredientes.map(ingrediente => new Ingrediente(
+            ingrediente.id,
+            ingrediente.nombre,
+            ingrediente.categoria,
+            ingrediente.precio,
+            ingrediente.stock,
+            ingrediente.unidad_medida,
+            ingrediente.imagen_url
+        ));
     }
 
     static addIngrediente(nombre, categoria, precio, stock = 0, unidad_medida, imagen_url) {
         try {
             this.#insertStmt.run({ nombre, categoria, precio, stock, unidad_medida, imagen_url});
-            return { mensaje: "Ingrediente añadido correctamente" };
+            return true; //TODO MENSAJE { mensaje: "Ingrediente añadido correctamente" };
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') throw new IngredienteYaExiste(nombre);
             throw new ErrorDatos("No se pudo añadir el ingrediente", { cause: e });
@@ -52,19 +78,19 @@ export class Ingrediente {
     static deleteIngrediente(id) {
         const result = this.#deleteStmt.run({ id });
         if (result.changes === 0) throw new IngredienteNoEncontrado(id);
-        return { mensaje: "Ingrediente eliminada correctamente" };
+        return true; //TODO MENSAJE{ mensaje: "Ingrediente eliminada correctamente" };
     }
 
     static updateIngrediente(id, nombre, categoria, precio, stock, unidad_medida, imagen_url) {
         const result = this.#updateStmt.run({ id, nombre, categoria, precio, stock, unidad_medida, imagen_url });
         if (result.changes === 0) throw new IngredienteNoEncontrado(id);
-        return { mensaje: "Ingrediente actualizado correctamente" };
+        return true; //TODO MENSAJE{ mensaje: "Ingrediente actualizado correctamente" };
     }
     
     static reducirStock(id, cantidad) {
         const result = this.#reduceStockStmt.run({ id, cantidad });
         if (result.changes === 0) throw new StockInsuficiente(id, cantidad);
-        return { mensaje: "Stock actualizado correctamente" };
+        return true; //TODO MENSAJE{ mensaje: "Stock actualizado correctamente" };
     }
 
     static existeIngrediente(nombre) {
@@ -74,7 +100,24 @@ export class Ingrediente {
     static setStock(id, stock) {
         const result = this.#setStock.run({ id, stock });
         if (result.changes === 0) throw new IngredienteNoEncontrado(id);
-        return { mensaje: "Stock actualizado correctamente" };
+        return true //TODO MENSAJE{ mensaje: "Stock actualizado correctamente" };
+    }
+
+    id;
+    nombre;
+    categoria;
+    precio;
+    stock;
+    unidad_medida;
+    imagen_url;
+    constructor(id, nombre, categoria, precio, stock, unidad_medida, imagen_url) {
+        this.id = id;
+        this.nombre = nombre;
+        this.categoria = categoria;
+        this.precio = precio;
+        this.stock = stock;
+        this.unidad_medida = unidad_medida;
+        this.imagen_url = imagen_url;
     }
 }
 

@@ -89,25 +89,31 @@ export class CalendarioSemanal {
         return new CalendarioSemanal(id_receta, id_usuario, fecha);
     }
 
-    static getRecetasRango(id_usuario, inicio, fin) {//TODO, REVISAR, debería devolver un array de CalendarioSemanal?
+    static getRecetasRango(id_usuario, inicio, fin) {
         const inicioStr = new Date(inicio).toISOString().split('T')[0];
         const finStr = new Date(fin).toISOString().split('T')[0];
         
-        return this.#getRecetasRangoStmt.all({
+        const recetas = this.#getRecetasRangoStmt.all({
             id_usuario,
             inicio: inicioStr,
             fin: finStr
         });
+        if (recetas.length === 0) throw new Error("No se encontraron recetas con este ingrediente.");
+        return recetas.map(({ id_receta, nombre, fecha, dificultad, tiempo_prep_segs }) =>
+            new CalendarioSemanal(id_receta, nombre, fecha, dificultad, tiempo_prep_segs)
+        );
     }
+  
     
-        #id_receta;
-        #id_usuario;
-        #fecha;
+        
+        id_receta;
+        id_usuario;
+        fecha;
     
         constructor(id_receta, id_usuario, fecha) {
-            this.#id_receta = id_receta;
-            this.#id_usuario = id_usuario;
-            this.#fecha = fecha;
+            this.id_receta = id_receta;
+            this.id_usuario = id_usuario;
+            this.fecha = fecha;
         }
 }
 

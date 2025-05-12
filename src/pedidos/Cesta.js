@@ -21,18 +21,21 @@ export class Cesta {
 
     static getById(id_usuario) {
         const cesta = this.#getByIdStmt.all({ id_usuario });
-        return cesta || [];
+        if (!cesta || cesta.length === 0) return [];
+        return cesta.map(({ id_usuario, id_ingrediente, cantidad }) =>
+            new Cesta(id_usuario, id_ingrediente, cantidad)
+        );
     }
-
+    
     static getByUserAndIngredient(id_usuario, id_ingrediente) {
         const cesta = this.#getByUserAndIngredientStmt.get({ id_usuario, id_ingrediente });
-        return cesta || null;
+        if (!cesta) return null;
+        return new Cesta(cesta.id_usuario, cesta.id_ingrediente, cesta.cantidad);
     }
-
     static addCesta(id_usuario, id_ingrediente, cantidad) {
         try {
             const result = this.#insertStmt.run({ id_usuario, id_ingrediente, cantidad });
-            return { mensaje: "Cesta añadida correctamente", id: result.lastInsertRowid };
+            return true; //TODO MENSAJE { mensaje: "Cesta añadida correctamente", id: result.lastInsertRowid };
         } catch (e) {
             throw new ErrorDatos("No se pudo añadir la cesta", { cause: e });
         }
@@ -41,7 +44,7 @@ export class Cesta {
     static deleteCesta(id_usuario, id_ingrediente) {
         const result = this.#deleteStmt.run({ id_usuario, id_ingrediente });
         if (result.changes === 0) throw new CestaNoEncontrada(id_usuario);
-        return { mensaje: "Cesta eliminada correctamente" };
+        return true; //TODO MENSAJE { mensaje: "Cesta eliminada correctamente" };
     }
     
     static borrarIngrediente(id_ingrediente){
@@ -57,7 +60,7 @@ export class Cesta {
         if (result.changes === 0) {
             throw new CestaNoEncontrada(id_usuario);
         }
-        return { mensaje: "Cesta actualizada correctamente" };
+        return true; //TODO MENSAJE { mensaje: "Cesta actualizada correctamente" };
     }
     
     static clearCesta(id_usuario) {

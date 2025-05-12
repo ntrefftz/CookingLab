@@ -17,7 +17,11 @@ export class Realiza {
 
     static getByUsuario(id_usuario) {
         const realiza = this.#getByUsuarioStmt.all({ id_usuario });
-        return realiza || [];
+        if (!realiza || realiza.length === 0) return [];
+    
+        return realiza.map(({ id_usuario, id_pedido }) =>
+            new Realiza(id_usuario , id_pedido)
+        );
     }
 
     static getRelacion(id_usuario, id_pedido) {
@@ -30,7 +34,7 @@ export class Realiza {
 
         try {
             this.#insertStmt.run({ id_usuario, id_pedido });
-            return { mensaje: "Relación entre usuario y pedido añadida correctamente" };
+            return true; //TODO MENSAJE { mensaje: "Relación entre usuario y pedido añadida correctamente" };
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') throw new RelacionYaExiste(id_usuario, id_pedido);
             throw new ErrorDatos("No se pudo añadir la relación", { cause: e });
@@ -40,13 +44,21 @@ export class Realiza {
     static deleteRelacion(id_usuario, id_pedido) {
         const result = this.#deleteStmt.run({ id_usuario, id_pedido });
         if (result.changes === 0) throw new RelacionNoEncontrada(id_usuario, id_pedido);
-        return { mensaje: "Relación eliminada correctamente" };
+        return true; //TODO MENSAJE { mensaje: "Relación eliminada correctamente" };
     }
 
     static deletePedido(id_pedido) {
         const result = this.#deletePedidoStmt.run({ id_pedido });
-        return { mensaje: "Relación eliminada correctamente" };
+        return true; //TODO MENSAJE { mensaje: "Relación eliminada correctamente" };
     }
+
+   id_usuario;
+    id_pedido;
+    
+     constructor(id_usuario, id_pedido) {
+          this.id_usuario = id_usuario;
+          this.id_pedido = id_pedido;
+     }
 }
 
 export class RelacionNoEncontrada extends Error {

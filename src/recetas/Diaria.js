@@ -30,30 +30,34 @@ export class Diaria {
 
     // Obtener la receta asignada a un día específico
     static getRecetaPorDia(dia) {
-        const receta = this.#getByDiaStmt.get({dia});
+        const receta = this.#getByDiaStmt.get({ dia });
         if (!receta) throw new DiariaNoEncontrada(dia);
-        return receta;
+        return new Diaria(receta.id_receta, receta.dia);
+    }
+
+     // Obtener todas las recetas asignadas a los días
+     static getTodasLasRecetas() {
+        const recetas = this.#getAllStmt.all();
+        return recetas.map(receta => new Diaria(receta.id_receta, receta.dia));
+        
     }
 
     static updateRecetaPorDia(dia, id_receta) {
         try {
             this.#updateStmt.run({ dia, id_receta });
-            return { mensaje: "Receta actualizada correctamente" };
+            return true; //TODO MENSAJE { mensaje: "Receta actualizada correctamente" };
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') throw new DiariaYaExiste(dia);
             throw new ErrorDatos("No se pudo actualizar la receta", { cause: e });
         }
     }
-    // Obtener todas las recetas asignadas a los días
-    static getTodasLasRecetas() {
-        return this.#getAllStmt.all();
-    }
+   
 
     // Asignar una receta a un día específico
     static asignarRecetaADia(dia, id_receta) {
         try {
             this.#insertStmt.run({ dia, id_receta });
-            return { mensaje: "Receta asignada al día correctamente" };
+            return true; //TODO MENSAJE { mensaje: "Receta asignada al día correctamente" };
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') throw new DiariaYaExiste(dia);
             throw new ErrorDatos("No se pudo asignar la receta al día", { cause: e });
@@ -64,12 +68,19 @@ export class Diaria {
     static eliminarRecetaDeDia(dia) {
         const result = this.#deleteStmt.run({ dia });
         if (result.changes === 0) throw new DiariaNoEncontrada(dia);
-        return { mensaje: "Receta eliminada del día correctamente" };
+        return true; //TODO MENSAJE { mensaje: "Receta eliminada del día correctamente" };
     }
 
     static eliminarReceta(id_receta){
         this.#deleteRecetaStmt.run({ id_receta });
         return true;
+    }
+
+    id_receta;
+    dia;
+    constructor(id_receta, dia) {
+        this.id_receta = id_receta;
+        this.dia = dia;
     }
 }
 

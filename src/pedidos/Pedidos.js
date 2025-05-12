@@ -44,6 +44,21 @@ export class Pedido {
         const result = this.#deleteStmt.run({ id });
         return true;
     }
+
+    id;
+    fecha;
+    hora;
+    precio_total;
+    enviado;
+    pagado;
+    constructor(id, fecha, hora, precio_total, enviado, pagado) {
+        this.id = id;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.precio_total = precio_total;
+        this.enviado = enviado;
+        this.pagado = pagado;
+    }
 }
 
 //ERRORES
