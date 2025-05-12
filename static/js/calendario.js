@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Receta del día:", receta);
             if (receta) {
                 recetaSeleccionada.innerHTML = `
-                    <img src="${receta.imagen_url}" alt="Imagen de la receta" />
+                    <img src="/recetas/imagen/${receta.imagen_url}" alt="Imagen de la receta" />
                     <p></p>
                     <a href="/recetas/receta?id=${receta.id}">
                         <h4>${receta.nombre}</h4>

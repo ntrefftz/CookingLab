@@ -4,7 +4,7 @@
     <% if (ultimasRecetas && ultimasRecetas.length > 0) { %>
         <% ultimasRecetas.forEach(receta => { %>
             <article class="card">
-                <img src=<%= receta.imagen_url %> alt="Pronto habrá una foto"  />
+                <img src= "/recetas/imagen/<%=receta.imagen_url %>" alt="Pronto habrá una foto"  />
                 <p></p>
                 <a href="/recetas/receta?id=<%= receta.id %>">
                     <h4><%= receta.nombre %></h4>
@@ -26,7 +26,7 @@
     <div id="receta-del-dia">
         <% if (recetaDelDia) { %>
             <article class="card destacada" id="receta-seleccionada">
-                <img src="<%= recetaDelDia.imagen_url %>" alt="Pronto habrá una foto" />
+                <img src="/recetas/imagen/<%=recetaDelDia.imagen_url %>" alt="Pronto habrá una foto" />
                 <p></p>
                 <a href="/recetas/receta?id=<%= recetaDelDia.id %>">
                     <h4><%= recetaDelDia.nombre %></h4>

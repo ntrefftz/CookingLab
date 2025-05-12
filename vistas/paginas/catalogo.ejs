@@ -6,7 +6,7 @@
 <div id="catalogo" class="cards_container">
     <% recetas.forEach(receta=> { %>
         <article class="card">
-            <img src=<%= receta.imagen_url %> alt="Pronto habrá una foto" />
+            <img src="/recetas/imagen/<%=receta.imagen_url %>" alt="Pronto habrá una foto" />
             <p></p>
             <a href="receta/?id=<%= receta.id %>">
                 <h4><%= receta.nombre %></h4>

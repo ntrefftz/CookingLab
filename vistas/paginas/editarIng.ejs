@@ -1,5 +1,5 @@
 
-<form id="editar-ingredinte" action="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>" method="POST">
+<form id="editar-ingredinte" action="/recetas/ingredienteInd/modificar?id=<%= ingredientes.id %>" method="POST" enctype="multipart/form-data">
     <% if (locals.error) { %>
         <p><strong><%= locals.error %></strong></p>
     <% } %>
@@ -17,7 +17,8 @@
             <div><label>Precio:</label><input type="number" name="precio" step="any" required placeholder="Precio" min="0" /></div>
             <p></p>
             <div><label>Stock:</label> <input type="number" name="stock" required placeholder="Stock" min="0" /></div>
-
+            <p></p>
+           
         <h3>Medida</h3>
         <strong>Unidad de medida:</strong>
         <select name="unidad_medida" required>
@@ -27,7 +28,9 @@
             <option value="unidades">Unidades</option>
         </select>
         <p></p>
-        <div><label>URL de imagen (opcional):</label> <input type="url" name="imagen_url" placeholder="https://ejemplo.com/imagen.jpg" /></div>
+        <div>
+            <label for="inputImagen">Foto (No subir nada para mantener la fotografía actual):</label><input type="file" name="foto" id="inputImagen">
+        </div>
 
 </div>
     
