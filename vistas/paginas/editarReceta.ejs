@@ -1,4 +1,4 @@
-<form id="editar-receta" action="/recetas/receta/modificar?id=<%= recetas.id %>" method="POST">
+<form id="editar-receta" action="/recetas/receta/modificar?id=<%= recetas.id %>" method="POST" enctype="multipart/form-data">
     <% if (locals.error) { %>
         <p><strong><%= locals.error %></strong></p>
     <% } %>
@@ -9,8 +9,9 @@
     <label>Tiempo de preparación (min):</label> <input type="number" name="tiempo_prep_segs" value="<%= Math.floor(recetas.tiempo_prep_segs/60) %>" />
     <label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" value="<%= recetas.dificultad %>" />
     <label>Descripción:</label> <textarea name="descripcion"><%= recetas.descripcion %></textarea>
-    <label>URL de imagen (opcional):</label> <input type="url" name="imagen_url" placeholder="https://ejemplo.com/imagen.jpg" />
-
+    <div>
+        <label for="inputImagen">Foto (No subir nada para mantener la fotografía actual):</label><input type="file" name="foto" id="inputImagen">
+    </div>
     <div class="ingredientes-section">
         <h3>Ingredientes actuales:</h3>
         <% if (recetas.ingredientes && recetas.ingredientes.length > 0) { %>

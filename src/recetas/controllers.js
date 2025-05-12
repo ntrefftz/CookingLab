@@ -79,7 +79,7 @@ export function eliminarReceta(req, res) {
         ingredientes.forEach(ing => {
             Tiene.removeIngredienteFromReceta(id, ing.id_ingrediente);
         });
-     
+
         //Eliminar la receta
         Receta.deleteReceta(id);
 
@@ -144,6 +144,9 @@ export function viewModificarReceta(req, res) {
 // }
 
 export function modificarReceta(req, res) {
+    const imagen = req.file ? req.file.filename : "";
+    let imagen_url = null;
+
     body('nombre').escape();
     body('descripcion').escape();
     body('difilcultad').escape();
@@ -155,9 +158,13 @@ export function modificarReceta(req, res) {
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id = req.query.id;
     const contenido = 'paginas/receta';
-    
-    let receta = Receta.getRecetaById(id);
-    const imagen_url = receta.imagen_url;
+
+    if (!imagen) {
+        let receta = Receta.getRecetaById(id);
+        imagen_url = receta.imagen_url;
+    }
+    else
+        imagen_url = imagen;
 
     Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1, imagen_url);
     receta = Receta.getRecetaById(id);
@@ -276,6 +283,7 @@ export function aniadirReceta(req, res) {
     // Verifica si userId está definido
     logger.debug("Sesión actual:", req.session);
     const imagen = req.file ? req.file.filename : "";
+    let imagen_url = null;
 
     body('nombre').escape();
     body('descripcion').escape();
@@ -288,7 +296,7 @@ export function aniadirReceta(req, res) {
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
-  //  const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
+    //  const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
 
     //const imagen_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fes%2Ffotos%2Fno-encontrado-mensaje-de-error-fotos&psig=AOvVaw3yClaJKuZYliDgG5DHGhJC&ust=1745919601499000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLCLvr-3-owDFQAAAAAdAAAAABAE"; // Imagen por defecto
 
@@ -302,16 +310,22 @@ export function aniadirReceta(req, res) {
 
         return res.status(400).send('No se ha proporcionado un ID de usuario válido');
     }
+    if (!imagen) {
+        imagen_url = "default"; // Imagen por defecto
+    }
+    else{
+        imagen_url = imagen;
+    }
 
     try {
-        const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, imagen);
+        const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, imagen_url);
 
         const recetaId = result.id;
         // console.log("Nuevo id de receta:", recetaId);
 
         const ingredientesSeleccionados = req.body['ingredientes[]'] || []; // array de ingredientes que vienen del form
         //console.log("Ingredientes seleccionados:", ingredientesSeleccionados);
-        
+
         // Cantidades normales (primer valor del array)
         const cantidades = {};
         for (const key in req.body) {
@@ -364,14 +378,14 @@ export function aniadirReceta(req, res) {
             ? ingredientesSeleccionados
             : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
 
-        
+
         console.log("Se van a insertar los siguientes ingredientes:", ingredientesArray);
-        
+
         // Añadir cada ingrediente con su cantidad
         for (const ingredienteId of ingredientesArray) {
             if (ingredienteId) {
                 const cantidad = cantidades[ingredienteId] || 1;
-                const cantidadEspecifica = cantidad_esp[ingredienteId] || 1; 
+                const cantidadEspecifica = cantidad_esp[ingredienteId] || 1;
 
                 console.log(`Añadiendo ingrediente ${ingredienteId} con cantidad ${cantidad}`);
                 console.log(` Y Añadiendo ingrediente ${ingredienteId} con cantidad ${cantidadEspecifica}`);
@@ -481,11 +495,13 @@ export function eliminarIngrediente(req, res) {
 }
 
 export function modificarIngrediente(req, res) {
+    const imagen = req.file ? req.file.filename : "";
+    let imagen_url = null;
 
     body('nombre').escape();
     body('categoria').escape();
     body('precio').escape();
-    body('stock').escape();    
+    body('stock').escape();
 
     const nombre = req.body.nombre.trim();
     const categoria = req.body.categoria.trim();
@@ -493,8 +509,15 @@ export function modificarIngrediente(req, res) {
     const stock = req.body.stock.trim();
     const id = req.query.id;
     const unidad_medida = req.body.unidad_medida.trim() || 'unidad';
-    const imagen_url = req.body.imagen_url.trim(); 
     const contenido = 'paginas/ingredienteInd';
+
+
+    if (!imagen){
+        const ing = Ingrediente.getIngredienteById(id);
+        imagen_url = ing.imagen_url;
+    }
+    else
+        imagen_url = imagen;
 
     console.log("Body completo recibido en update:", req.body);
 
@@ -520,6 +543,8 @@ export function viewAniadirIngrediente(req, res) {
 export function aniadirIngrediente(req, res) {
     // Verifica si userId está definido
     logger.debug("Sesión actual:", req.session);
+    const imagen = req.file ? req.file.filename : "";
+    let imagen_url = null;
 
     body('nombre').escape();
     body('precio').escape();
@@ -533,21 +558,18 @@ export function aniadirIngrediente(req, res) {
     const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
     const activo = 1;  //asumimos que las recetas añadidas son activas por defecto
     const unidad_medida = req.body.unidad_medida.trim() || 'unidad';
-    const imagen_url = req.body.imagen_url.trim(); // URL de la imagen, se obtiene del formulario
-
 
     console.log("Body completo recibido:", req.body);
     console.log("imagen", imagen_url);
 
-
-
     console.log("Body completo recibido:", req.body);
 
-    if (!imagen_url == null || !imagen_url == undefined) {
-        // Si no se proporciona una URL de imagen, se asigna una por defecto
-        imagen_url = "https://www.pastasgallo.es/wp-content/uploads/2020/11/pack_harina_trigo.png"; // Imagen por defecto
+    if (!imagen) {
+        imagen_url = "default"; // Imagen por defecto
     }
-
+    else{
+        imagen_url = imagen;
+    }
 
     if (!id_usuario) {
         logger.error("Error: No se ha proporcionado un ID de usuario válido");
@@ -701,7 +723,6 @@ export async function actualizarStock(req, res) {
     }
 }
 
-
 export function viewCalendarioRecetaDiaria(req, res) {
     const contenido = 'paginas/calendarioRecetaDelDia';
     const fecha = req.query.fecha || null; // Fecha seleccionada, si viene desde el calendario
@@ -712,7 +733,6 @@ export function viewCalendarioRecetaDiaria(req, res) {
         fecha
     });
 }
-
 
 export async function jsonRecetas(req, res) {
     try {
@@ -774,18 +794,19 @@ export async function aniadirRecetaDiaria(req, res) {
         res.status(500).json({ message: 'Error al añadir la receta al calendario.' });
     }
 }
+
 export async function getRecetaDiariaPorDia(req, res) {
 
     const { fecha } = req.body; // Asegúrate de que el cuerpo de la solicitud contenga estos datos
     try {
-        
+
         const receta = Diaria.getRecetaPorDia(fecha);
         return res.json(receta);
-    } 
-    catch (DiariaNoEncontrada){
+    }
+    catch (DiariaNoEncontrada) {
         return res.json({});
     }
-   
+
 }
 
 export async function getRecetaPorID(req, res) {
@@ -814,13 +835,12 @@ export function aceptarSugerenciaReceta(req, res) {
     }
 }
 
-
 export function viewSugerencias(req, res) {
     //console.log(req.session);
     //console.log("Vamos a buscar las recetas no activas");
-    
+
     // Obtener las recetas no activas (sugerencias)
-    if(!req.session.login) {
+    if (!req.session.login) {
         return res.redirect('/usuarios/login');
     }
     const rows = Receta.getAllRecetasNact();
@@ -848,7 +868,6 @@ export function viewSugerencias(req, res) {
         session: req.session,
     });
 }*/
-
 
 export function viewImagen(request, response) {
     response.sendFile(join(config.uploads, request.params.id));

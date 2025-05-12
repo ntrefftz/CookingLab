@@ -4,9 +4,9 @@
     <% if (ultimasRecetas && ultimasRecetas.length > 0) { %>
         <% ultimasRecetas.forEach(receta => { %>
             <article class="card">
-                <img src=<%= receta.imagen_url %> alt="Pronto habrá una foto"  />
+                <img src= "/recetas/imagen/<%=receta.imagen_url %>" alt="Pronto habrá una foto"  />
                 <p></p>
-                <a href="/recetas/imagen/ingrediente.imagen_url ">
+                <a href="/recetas/receta?id=<%= receta.id %>">
                     <h4><%= receta.nombre %></h4>
                 </a>
                 <p>Tiempo preparación: <%= Math.floor(receta.tiempo_prep_segs / 60) %> minutos</p>
@@ -26,7 +26,7 @@
     <div id="receta-del-dia">
         <% if (recetaDelDia) { %>
             <article class="card destacada" id="receta-seleccionada">
-                <img src="<%= recetaDelDia.imagen_url %>" alt="Pronto habrá una foto" />
+                <img src="/recetas/imagen/<%=recetaDelDia.imagen_url %>" alt="Pronto habrá una foto" />
                 <p></p>
                 <a href="/recetas/receta?id=<%= recetaDelDia.id %>">
                     <h4><%= recetaDelDia.nombre %></h4>
