@@ -5,10 +5,7 @@ import { Contiene } from './Contiene.js';
 import { Cesta } from './Cesta.js';
 
 export function viewCesta(req, res) {
-    let contenido = 'paginas/nocesta';
-    if (req.session != null && req.session.nombre != null) {
-        contenido = 'paginas/cesta';
-    }
+    let contenido = 'paginas/cesta';
     const id_usuario = req.session.userId;
     try {
         const cesta = Cesta.getById(id_usuario);
@@ -55,7 +52,7 @@ export function viewCesta(req, res) {
 }
 
 export function aumentarIngredienteDeCesta(req, res) {
-    try{
+    try {
         const id_usuario = req.session.userId; // ID del usuario desde la sesión
         const id_ingrediente = req.body.id; // ID del ingrediente desde el cuerpo de la solicitud
         // Validar que el usuario haya iniciado sesión
@@ -95,10 +92,10 @@ export function eliminarIngredienteDeCesta(req, res) {
 
         // Eliminar el ingrediente de la cesta
         const ingrediente = Cesta.getByUserAndIngredient(id_usuario, id_ingrediente);
-        if(ingrediente.cantidad <= 1){
+        if (ingrediente.cantidad <= 1) {
             Cesta.deleteCesta(id_usuario, id_ingrediente);
         }
-        else{
+        else {
             Cesta.updateCesta(id_usuario, id_ingrediente, ingrediente.cantidad - 1);
         }
 
@@ -167,42 +164,40 @@ export function tramitarPedido(req, res) {
 }
 
 export function viewConfirmarPedido(req, res) {
-    let contenido = 'paginas/noPermisos';
-    if (req.session != null && req.session.nombre != null && Realiza.getRelacion(req.session.userId, req.query.id)) {
-        contenido = 'paginas/confirmarPedido';
-    
-    try{
-    const id_pedido = req.query.id;
-    const pedido = Pedido.getPedidoById(id_pedido);
-    const ingredientes = Contiene.getByPedido(id_pedido);
-    const precioTotal = ingredientes.reduce((total, ing) => total + parseFloat(ing.precio), 0).toFixed(2);
+    let contenido = 'paginas/confirmarPedido';
 
-    res.render('pagina', {
-        contenido,
-        session: req.session,
-        pedido,
-        ingredientes,
-        precioTotal
-    });
+    try {
+        const id_pedido = req.query.id;
+        const pedido = Pedido.getPedidoById(id_pedido);
+        const ingredientes = Contiene.getByPedido(id_pedido);
+        const precioTotal = ingredientes.reduce((total, ing) => total + parseFloat(ing.precio), 0).toFixed(2);
+
+        res.render('pagina', {
+            contenido,
+            session: req.session,
+            pedido,
+            ingredientes,
+            precioTotal
+        });
     }
     catch (error) {
         console.error('Error al confirmar el pedido:', error);
         res.status(500).send('Error al confirmar el pedido');
     }
-    }
+
 }
 
 export function comprarPedido(req, res) {
-    try{
-    const id_pedido = req.body.id;
-    Pedido.updatePedido(id_pedido, 0, 1);
-    const ingredientes = Contiene.getByPedido(id_pedido);
-    ingredientes.forEach(ingrediente => {
-        const id_ingrediente = ingrediente.id_ingrediente;
-        const cantidad = ingrediente.cantidad;
-        Ingrediente.reducirStock(id_ingrediente, cantidad);
-    });
-    res.redirect('/');
+    try {
+        const id_pedido = req.body.id;
+        Pedido.updatePedido(id_pedido, 0, 1);
+        const ingredientes = Contiene.getByPedido(id_pedido);
+        ingredientes.forEach(ingrediente => {
+            const id_ingrediente = ingrediente.id_ingrediente;
+            const cantidad = ingrediente.cantidad;
+            Ingrediente.reducirStock(id_ingrediente, cantidad);
+        });
+        res.redirect('/');
     }
     catch (error) {
         Contiene.deletePedido(req.body.id);
@@ -218,12 +213,12 @@ export function comprarPedido(req, res) {
 }
 
 export function cancelarPedido(req, res) {
-    try{
-    const id_pedido = req.body.id;
-    Contiene.deletePedido(id_pedido);
-    Realiza.deletePedido(id_pedido);
-    Pedido.deletePedido(id_pedido);
-    res.redirect('/pedidos/cesta');
+    try {
+        const id_pedido = req.body.id;
+        Contiene.deletePedido(id_pedido);
+        Realiza.deletePedido(id_pedido);
+        Pedido.deletePedido(id_pedido);
+        res.redirect('/pedidos/cesta');
     }
     catch (error) {
         console.error('Error al cancelar el pedido:', error);
