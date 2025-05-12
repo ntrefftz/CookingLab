@@ -158,8 +158,6 @@ export async function viewCalendario(req, res) {
     });
 }
 
-////////////////////////////////////////////////////////////////
-
 export function viewLogin(req, res) {
     let contenido = 'paginas/login';
     render(req, res, contenido, {
@@ -356,13 +354,8 @@ export function modificarPerfil(req, res) {
         });
     }
 
-    body('username').escape();
-    body('nombre').escape();
-    body('apellido').escape();
-    body('correo').escape();
-    body('direccion').escape();
+    const datos = matchedData(req);
 
-    const id = req.query.id;
     if (!id) {
         return res.render('pagina', {
             contenido: 'paginas/editarPerfil',
@@ -372,12 +365,6 @@ export function modificarPerfil(req, res) {
     }
 
     try {
-        const username = req.body.username?.trim() || '';
-        const rawPassword = req.body.password?.trim() || '';
-        const nombre = req.body.nombre?.trim() || '';
-        const apellido = req.body.apellido?.trim() || '';
-        const correo = req.body.correo?.trim() || '';
-        const direccion = req.body.direccion?.trim() || '';
 
         const usuarioActual = Usuario.getUsuarioById(id);
 
@@ -407,12 +394,9 @@ export function modificarPerfil(req, res) {
             req.session.direccion = direccion;
         }
 
-        return res.render('pagina', {
-            contenido: 'paginas/perfil',
-            session: req.session,
-            usuario: usuarioActualizado,
-            success: 'Perfil actualizado correctamente'
-        });
+
+        req.session.flashMsg = 'Perfil actualizado correctamente';
+        return res.redirect('/usuarios/perfil');
 
     } catch (e) {
 
@@ -464,8 +448,6 @@ export async function cambiarPermisos(req, res) {
     }
 }
 
-////////////////////////////////////////
-
 export function aniadirRecetaACalendario(req, res) {
 
     const recetaId = req.body.recetaId;
@@ -474,6 +456,8 @@ export function aniadirRecetaACalendario(req, res) {
     try {
         CalendarioSemanal.asignarRecetaAUsuario(recetaId, usuarioId, fecha);
         res.redirect('/usuarios/micalendario');
+        //TODO Añadir mensaje en el controller    
+        //return { mensaje: "Receta asignada correctamente" }; (Mensaje Flash?)
     } catch (e) {
         console.error("Error al añadir receta al calendario:", e);
         res.render('pagina', {
@@ -497,8 +481,11 @@ export function eliminarRecetaDeCalendario(req, res) {
     }
 
     try {
-        CalendarioSemanal.eliminarRecetaDeUsuario(usuarioId, fecha);
-        res.redirect('/usuarios/micalendario');
+
+        if (CalendarioSemanal.eliminarRecetaDeUsuario(usuarioId, fecha)) {
+            res.redirect('/usuarios/micalendario');
+            //TODO Añadir mensaje en el controller {mensaje: "Receta eliminada correctamente" };
+        }
     } catch (e) {
         console.error("Error al eliminar receta del calendario:", e);
         res.render('pagina', {
@@ -541,6 +528,8 @@ export function eliminarRecetaDeFavoritos(req, res) {
     try {
         Guardado.removeRecetaFromFavoritos(usuarioId, recetaId);
         res.redirect('/usuarios/misrecetas');
+
+        //TODO Añadir mensaje en el controller {mensaje: "Receta eliminada de favoritos" };
     } catch (e) {
         console.error("Error al eliminar receta de favoritos:", e);
         res.render('pagina', {
@@ -551,7 +540,6 @@ export function eliminarRecetaDeFavoritos(req, res) {
     }
 }
 
-/////////////////////////////
 export function viewSugerencias(req, res) {
     res.render('pagina', {
         contenido: 'paginas/sugerencias', // Asegúrate de tener esta plantilla

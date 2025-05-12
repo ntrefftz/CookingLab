@@ -45,11 +45,6 @@ export class CalendarioSemanal {
             WHERE cs.id_usuario = @id_usuario AND cs.fecha BETWEEN @inicio AND @fin
         `);
     }
-     // YA NO HACE FALTA
-    // Obtener todas las recetas asignadas a un usuario en una semana (de lunes a domingo)
-    static getRecetasPorUsuarioYSemana(id_usuario, inicioSemana, finSemana) {
-        return this.#getByUsuarioYSemanaStmt.all({ id_usuario, inicioSemana, finSemana });
-    }
 
     // Asignar una receta a un usuario en un día específico
     static asignarRecetaAUsuario(id_receta, id_usuario, fecha) {
@@ -57,23 +52,13 @@ export class CalendarioSemanal {
         try {
             const result = this.#insertStmt.run({ id_receta, id_usuario, fecha });
             console.log("Inserción completada:", result);
-            return { mensaje: "Receta asignada correctamente" };
+            return true;   
         } catch (e) {
             console.error(" Error al insertar receta en calendario:", e);
             if (e.code === 'SQLITE_CONSTRAINT') throw new CalendarioSemanalYaExiste(id_receta, id_usuario, fecha);
             throw new ErrorDatos("No se pudo asignar la receta al usuario en la fecha", { cause: e });
         }
     }
-        
-    // YA NO HACE FALTA
-    // Actualizar la receta asignada a un usuario en un día específico
-    //Ej. si ya hay una receta asignada para ese dia se cambia por la nueva
-    static actualizarRecetaDeUsuario(id_receta, id_usuario, fecha) {
-        const result = this.#updateStmt.run({ id_receta, id_usuario, fecha });
-        if (result.changes === 0) throw new CalendarioSemanalNoEncontrado(id_usuario, fecha);
-        return { mensaje: "Receta actualizada correctamente" };
-    }
-
     // Eliminar una receta asignada a un usuario en un día específico
     static eliminarRecetaDeUsuario(id_usuario, fecha) {
         
@@ -84,18 +69,8 @@ export class CalendarioSemanal {
         }
     
         console.log("Receta eliminada correctamente");
-        return { mensaje: "Receta eliminada correctamente" };
+        return true;
     }
-
-    
-    // YA NO HACE FALTA
-    // Obtener receta asignada a un usuario en una fecha específica
-    static getRecetaPorUsuarioYFecha(id_usuario, fecha) {
-        const receta = this.#getByUsuarioYFechaStmt.get({ id_usuario, fecha });
-        if (!receta) throw new CalendarioSemanalNoEncontrado(id_usuario, fecha);
-        return receta;
-    }
-
     //NUEVA
     static getRecetasSemana(id_usuario, inicioSemana) {
         // Calculamos la fecha de fin (domingo)
@@ -105,18 +80,19 @@ export class CalendarioSemanal {
 
         const inicioStr = fechaInicio.toISOString().split('T')[0];
         const finStr = fechaFin.toISOString().split('T')[0];
-
-        return this.#getRecetasSemanaStmt.all({
+        const semana = this.#getRecetasSemanaStmt.all({
             id_usuario,
             inicioSemana: inicioStr,
             finSemana: finStr
         });
+        const {id_receta, fecha} = semana;
+        return new CalendarioSemanal(id_receta, id_usuario, fecha);
     }
 
-    static getRecetasRango(id_usuario, inicio, fin) {
+    static getRecetasRango(id_usuario, inicio, fin) {//TODO, REVISAR, debería devolver un array de CalendarioSemanal?
         const inicioStr = new Date(inicio).toISOString().split('T')[0];
         const finStr = new Date(fin).toISOString().split('T')[0];
-    
+        
         return this.#getRecetasRangoStmt.all({
             id_usuario,
             inicio: inicioStr,
@@ -124,7 +100,15 @@ export class CalendarioSemanal {
         });
     }
     
+        #id_receta;
+        #id_usuario;
+        #fecha;
     
+        constructor(id_receta, id_usuario, fecha) {
+            this.#id_receta = id_receta;
+            this.#id_usuario = id_usuario;
+            this.#fecha = fecha;
+        }
 }
 
 //ERRORES

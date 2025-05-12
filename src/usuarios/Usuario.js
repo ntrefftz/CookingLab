@@ -60,6 +60,7 @@ export class Usuario {
         return usuario;
 
     }
+
     static borrarUsuario(id) {
         const result = this.#deleteStmt.run({ id });
         if (result.changes === 0) throw new UsuarioNoEncontrado(id);
@@ -69,8 +70,8 @@ export class Usuario {
 
     static getUsuarioByUsername(username) {
         const usuario = this.#getByUsernameStmt.get({ username });
-
         logger.debug('GetUsuarioByUsername:', usuario);
+        
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
         const { password, nombre, apellido, correo, direccion, rol, activo, id } = usuario;
 
@@ -113,8 +114,7 @@ export class Usuario {
         const direccion = usuario.direccion;
         const rol = usuario.rol;
         const activo = usuario.activo;
-        const id = usuario.id; // Añadir esta línea
-
+        const id = usuario.id;
         const datos = { username, password, nombre, apellido, correo, direccion, rol, activo, id };
 
         const result = this.#updateStmt.run(datos);
@@ -228,7 +228,6 @@ export class UsuarioOPasswordNoValido extends Error {
         this.name = 'UsuarioOPasswordNoValido';
     }
 }
-
 
 export class UsuarioYaExiste extends Error {
     /**
