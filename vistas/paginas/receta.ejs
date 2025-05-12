@@ -25,11 +25,13 @@
                     <% } %>
                 </ul>
             </div>
-            
-            <form action="/recetas/receta/aniadirCarritoReceta" method="POST">
-                <input type="hidden" name="id" value="<%= recetas.id %>">
-                <button type="submit" class="card-btn">Añadir al carrito</button>
-            </form>
+            <% if (!esDeSugerencias) { %>
+                <form action="/recetas/receta/aniadirCarritoReceta" method="POST">
+                    <input type="hidden" name="id" value="<%= recetas.id %>">
+                    <button type="submit" class="card-btn">Añadir al carrito</button>
+                </form>
+            <% } %> 
+
         </div>
         
         <div class="receta-descripcion">

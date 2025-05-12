@@ -1,47 +1,59 @@
-<h1>Formulario de contacto</h1>
-
-<form action="mailto:ddallaco@ucm.es?subject=Consulta_CookingLab" method="POST" enctype="text/plain">
-
-<!-- Campo de texto para el nombre -->
-<label for="nombre">Nombre:</label>
-<input type="text" id="nombre" name="nombre" required>
-
-<p></p>
-
-<!-- Campo de texto para el correo electrónico -->
-<label for="correo">Correo electrónico:</label>
-<input type="email" id="correo" name="correo" required>
-
-<p></p>
-<!-- Campo para el motivo de la consulta -->
-<p>Motivo de la consulta:</p>
-
-<label for="evaluacion">Evaluación
-    <input type="radio" id="evaluacion" name="motivo" value="Evaluación" required>
-</label>
-
-<label for="sugerencias">Sugerencias
-    <input type="radio" id="sugerencias" name="motivo" value="Sugerencias">
-</label>
-
-<label for="criticas">Críticas
-    <input type="radio" id="criticas" name="motivo" value="Críticas">
-</label>
-
-
-<p></p>
-
-<!-- Casilla para los términos y condiciones -->
-<label for="terminos">Marque esta casilla para verificar que ha leído nuestros 
-    <a href="/contenido/condiciones">términos y condiciones del servicio</a></label>
-<input type="checkbox" id="terminos" name="terminos" required>
-<p></p>
-
-<!-- Campo de área de texto para el mensaje -->
-<p><label for="mensaje">Mensaje:</label></p>
-<textarea id="mensaje" name="mensaje" rows="4" cols="50" required></textarea>
-
-<p></p>
-<!-- Campo de botón de envío -->
-<button type="submit">Enviar</button>
-</form>
+<div class="contact-form-container">
+    <div class="form-header">
+        <h2>Formulario de contacto</h2>
+    </div>
+    
+    <form class="contact-form" action="mailto:ddallaco@ucm.es?subject=Consulta_CookingLab" method="POST" enctype="text/plain">
+        <!-- Campo de texto para el nombre -->
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required class="form-input">
+        </div>
+        
+        <!-- Campo de texto para el correo electrónico -->
+        <div class="form-group">
+            <label for="correo">Correo electrónico:</label>
+            <input type="email" id="correo" name="correo" required class="form-input">
+        </div>
+        
+        <!-- Campo para el motivo de la consulta -->
+        <div class="form-group">
+            <p class="form-subtitle">Motivo de la consulta:</p>
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" id="evaluacion" name="motivo" value="Evaluación" required>
+                    <span>Evaluación</span>
+                </label>
+                
+                <label class="radio-option">
+                    <input type="radio" id="sugerencias" name="motivo" value="Sugerencias">
+                    <span>Sugerencias</span>
+                </label>
+                
+                <label class="radio-option">
+                    <input type="radio" id="criticas" name="motivo" value="Críticas">
+                    <span>Críticas</span>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Casilla para los términos y condiciones -->
+        <div class="form-group terms-group">
+            <label class="terms-option">
+                <input type="checkbox" id="terminos" name="terminos" required class="terms-checkbox">
+                <span>Marque esta casilla para verificar que ha leído nuestros 
+                    <a href="/contenido/condiciones" class="terms-link">términos y condiciones del servicio</a>
+                </span>
+            </label>
+        </div>
+        
+        <!-- Campo de área de texto para el mensaje -->
+        <div class="form-group">
+            <label for="mensaje" class="message-label">Mensaje:</label>
+            <textarea id="mensaje" name="mensaje" rows="6" required class="form-textarea"></textarea>
+        </div>
+        
+        <!-- Campo de botón de envío -->
+        <button type="submit" class="submit-button">Enviar Mensaje</button>
+    </form>
+</div>
