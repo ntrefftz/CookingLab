@@ -12,11 +12,8 @@
 		margin: 0;
 		padding: 0;
 		background-color: transparent;
-		/* Sin fondo para que se integre mejor */
 		box-shadow: none;
-		/* Sin sombra */
 		border: none;
-		/* Sin bordes */
 	}
 
 	.navbar-search input[type="text"] {
@@ -25,14 +22,11 @@
 		border: 1px solid #ccc;
 		border-radius: 4px;
 		width: 150px;
-		/* Ajusta el ancho para que no ocupe demasiado espacio */
 		transition: width 0.3s ease;
-		/* Efecto de transición al enfocar */
 	}
 
 	.navbar-search input[type="text"]:focus {
 		width: 200px;
-		/* Expande el campo al enfocarlo */
 	}
 
 	.navbar-search button {
@@ -91,11 +85,8 @@
 		display: inline-block;
 		text-align: center;
 		width: 350px;
-		/* Aumenta el tamaño del post-it */
 		height: 350px;
-		/* Aumenta el tamaño del post-it */
 		margin: 20px auto;
-		/* Centra el post-it horizontalmente */
 	}
 
 	#postit-image {
@@ -103,33 +94,22 @@
 		height: 100%;
 		object-fit: cover;
 		border-radius: 10px;
-		/* Opcional: redondea las esquinas */
 	}
 
 	#postit-text {
 		position: absolute;
 		top: 50%;
-		/* Centra verticalmente */
 		left: 50%;
-		/* Centra horizontalmente */
 		transform: translate(-50%, -50%);
-		/* Ajusta el texto al centro */
 		font-size: 1.2em;
 		font-weight: bold;
 		color: #000000;
-		/* Cambia el color según el diseño del post-it */
 		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-		/* Agrega sombra para mejor visibilidad */
 		pointer-events: none;
-		/* Evita que el texto interfiera con clics */
 		word-wrap: break-word;
-		/* Permite que el texto se ajuste si es muy largo */
 		max-width: 80%;
-		/* Limita el ancho del texto dentro del post-it */
 		text-align: center;
-		/* Asegura que el texto esté centrado */
 		line-height: 1.5;
-		/* Mejora el espaciado entre líneas */
 	}
 
 	.card.destacada {
@@ -200,8 +180,12 @@ header a:hover {
 .navbar {
 	display: flex;
 	align-items: center;
-	justify-content: center;
 	background-color: #F383A0;
+	margin: 0;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 10px;
+	list-style-type: none;
 	padding: 0;
 	margin: 0;
 }
@@ -302,18 +286,6 @@ label {
 	display: block;
 }
 
-/* NAVBAR GENERAL */
-.navbar {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-	align-items: center;
-	gap: 10px;
-	list-style-type: none;
-	padding: 10px 0;
-	margin: 0;
-}
-
 /* ESTILO PARA BOTONES DE NAVEGACIÓN */
 .navbar a,
 .dropdown-btn {
@@ -365,24 +337,21 @@ form select {
 }
 .navbar-search {
 	position: relative;
-	top: -3px; /* Sube el formulario 2 píxeles */
+	top: -3px; 
 }
 
-/* Para los radio buttons */
 .radio-group {
 	display: flex;
 	gap: 10px;
 	align-items: center;
 }
 
-/* Alineación del checkbox */
 .terms {
 	display: flex;
 	align-items: center;
 	gap: 5px;
 }
 
-/* Botón bien alineado */
 button {
 	width: auto;
 	display: block;
@@ -396,7 +365,6 @@ button {
 	font-size: 16px;
 }
 
-/* Imagen */
 img {
 	max-width: 100%;
 }
@@ -409,20 +377,17 @@ img {
 	grid-template-columns: repeat(3, 1fr);
 	gap: 25px;
 	padding: 0 15px;
-	/* Espaciado lateral */
 }
 
 .card {
 	border: 1px solid #e0e0e0;
 	border-radius: 8px;
-	/* Bordes más redondeados */
 	background: white;
 	text-align: center;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
 	transition: transform 0.3s ease;
 	width: 100%;
-	/* Ocupa todo el ancho de la celda grid */
 	overflow: hidden;
 }
 
@@ -430,7 +395,6 @@ img {
 	display: block;
 	width: 100%;
 	height: 180px;
-	/* Altura fija para uniformidad */
 	object-fit: cover;
 }
 
@@ -455,19 +419,18 @@ img {
 
 .dropdown {
 	position: relative;
-	/*display: inline-block;*/
 }
 .dropdown-content {
-    display: none; /* Oculta el menú por defecto */
+    display: none;
     position: absolute;
     background-color: white;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
-	left: -37px;
+	left: -67px;
 }
 
 .dropdown-content.show {
-    display: block; /* Muestra el menú cuando se agrega la clase 'show' */
+    display: block; 
 }
 .dropdown-btn {
 	background-color: #F383A0;
@@ -487,49 +450,47 @@ img {
 
 .dropdown-content ul {
 	display: block;
-	;
 }
 
 /*recuadro de la caja desplegable*/
 .dropdown-content li {
 	border: 1px solid palevioletred;
-	border-radius: 8px;         /* Bordes redondeados */
-    padding: 5px 10px;          /* Añade un poco de espacio interno */
-    margin: 5px auto;           /* Centra horizontalmente el li */
-    width: 80%;                 /* Opcional: controla el ancho del recuadro */
+	border-radius: 8px;        
+    padding: 5px 10px;          
+    margin: 5px auto;           
+    width: 80%;                 
 	display: flex;
-    justify-content: center;  /* Centra el contenido horizontalmente */
-    align-items: center;      /* Centra verticalmente si hay altura definida */
+    justify-content: center;  
+    align-items: center;      
 	background-color: rgb(250, 167, 189); 
 
 }
 
-/* Hacer más minimalista */
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: transparent; /* Fondo del desplegable */
+    background-color: transparent; 
     border: none;
-    box-shadow: none; /* Eliminar sombras */
+    box-shadow: none; 
     z-index: 1;
-    margin-top: 9px; /* Ajustar la separación desde arriba*/
+    margin-top: 9px; 
 }
 
 .dropdown-content ul li a {
     color: #000000;
     padding: 10px;
-    font-weight: normal; /* Fuente normal */
+    font-weight: normal;
     text-decoration: none;
-    display: block; /* Asegura que los enlaces ocupen todo el ancho */
-	justify-content: center; /* Centra horizontalmente si usas flex */
+    display: block; 
+	justify-content: center; 
     text-align: center;
-	width: 100%;               /* Ocupa todo el espacio del li para centrado */
+	width: 100%;              
 
 }
 
 .dropdown-content ul li a:hover {
-    background-color: #F383A0; /* Cambio de fondo al pasar el ratón */
-    color: white; /* Cambia el texto a blanco */
+    background-color: #F383A0; 
+    color: white; 
 }
 
 /*profile*/
@@ -707,21 +668,14 @@ select {
 
 .form-permisos {
 	width: auto;
-	/* Ajusta el ancho al contenido */
 	margin: 0;
-	/* Elimina márgenes */
 	padding: 0;
-	/* Elimina el padding */
 	background-color: transparent;
-	/* Sin fondo */
 	box-shadow: none;
-	/* Sin sombra */
 	border: none;
-	/* Sin bordes */
 }
 
 /*CALENDARIO*/
-/* Estilos específicos para el calendario */
 #calendario {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
@@ -765,7 +719,6 @@ select {
 }
 
 /*EDICION*/
-/* Estilos específicos para el formulario de edición de recetas */
 #editar-receta fieldset {
 	width: 100%;
 	margin: 20px auto;
@@ -829,7 +782,6 @@ select {
 	display: grid;
 	gap: 25px;
 	padding: 0 15px;
-	/* Espaciado lateral */
 
 }
 
@@ -841,17 +793,14 @@ select {
 	padding: 15px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 	min-height: 300px;
-	/* Altura mínima para que coincida con la tarjeta */
-}.imagen-ingredientes {
-	width: 100px; /* Ajusta el ancho según tus necesidades */
-	height: auto; /* Mantiene la proporción de la imagen */
-	object-fit: cover; /* Opcional: ajusta cómo se recorta la imagen si es necesario */
 }
+
 .imagen-ingredientes {
-	width: 100px; /* Ajusta el ancho según tus necesidades */
-	height: auto; /* Mantiene la proporción de la imagen */
-	object-fit: cover; /* Opcional: ajusta cómo se recorta la imagen si es necesario */
+	width: 100px; 
+	height: auto; 
+	object-fit: cover; 
 }
+
 
 
 /* ESTILOS COMPARTIDOS */
@@ -1100,7 +1049,7 @@ select {
 }
 
 
-/* Estilos para el formulario de edición de ingrediente */
+/* Edición de ingrediente */
 #editar-ingrediente {
     max-width: 800px;
     margin: 30px auto;
@@ -1141,7 +1090,7 @@ select {
     border-bottom: 1px dashed #FFE0EE;
 }
 
-/* Estilos para el formulario de contacto */
+/* Formulario de contacto */
 .contact-form-container {
     max-width: 700px;
     margin: 40px auto;
@@ -1263,3 +1212,43 @@ select {
     box-shadow: 0 4px 8px rgba(243, 131, 160, 0.3);
 }
 
+/* FOOTER ESTILOS */
+footer {
+    background-color: #F383A0;
+    padding: 20px 0;
+    margin-top: 40px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+footer .navbar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+footer .navbar li {
+    margin: 1px 0;
+}
+
+footer .navbar a {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 8px 15px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+    border: 1px solid transparent;
+}
+
+footer .navbar a:hover {
+    background-color: white;
+    color: #F383A0;
+    transform: translateY(-2px);
+	box-shadow: 0 6px 12px rgba(47, 5, 234, 0.15);
+}
