@@ -107,7 +107,7 @@ export function eliminarIngredienteDeCesta(req, res) {
 }
 
 export function viewCompraReceta(req, res) {
-      res.render('pagina', {
+    res.render('pagina', {
         contenido: 'paginas/compraReceta',
         session: req.session
     });
@@ -166,6 +166,15 @@ export function viewConfirmarPedido(req, res) {
         const id_pedido = req.query.id;
         const pedido = Pedido.getPedidoById(id_pedido);
         const ingredientes = Contiene.getByPedido(id_pedido);
+        ingredientes.forEach(ing => {
+            const ingredienteInfo = Ingrediente.getIngredienteById(ing.id_ingrediente);
+            if (ingredienteInfo) {
+                ing.nombre = ingredienteInfo.nombre;
+                ing.precio = (parseFloat(ingredienteInfo.precio) * ing.cantidad).toFixed(2);
+            } else {
+                logger.error(`Ingrediente no encontrado para id: ${ing.id_ingrediente}`);
+            }
+        });
         const precioTotal = ingredientes.reduce((total, ing) => total + parseFloat(ing.precio), 0).toFixed(2);
 
         res.render('pagina', {

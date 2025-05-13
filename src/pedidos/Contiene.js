@@ -13,7 +13,7 @@ export class Contiene {
         this.#getByIngredienteYPedidosStmt = db.prepare('SELECT * FROM Contiene WHERE id_ingrediente = @id_ingrediente AND id_pedidos = @id_pedidos');
 
         this.#getByPedidosStmt = db.prepare(`
-            SELECT Contiene.cantidad, Ingredientes.nombre, Ingredientes.precio, Contiene.id_ingrediente
+            SELECT Contiene.cantidad, Contiene.id_ingrediente, Contiene.id_pedidos
             FROM Contiene
             JOIN Ingredientes ON Contiene.id_ingrediente = Ingredientes.id
             WHERE Contiene.id_pedidos = @id_pedidos

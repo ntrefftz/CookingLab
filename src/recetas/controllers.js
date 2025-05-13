@@ -358,6 +358,7 @@ export function aniadirRecetaCarrito(req, res) {
         const id_receta = req.body.id;
         const user = req.session.userId;
 
+
         if (!user) {
             logger.info('No autenticado');
             return res.redirect('/usuarios/login');
