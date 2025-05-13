@@ -58,12 +58,29 @@ export class Usuario {
 
     }
 
-    static borrarUsuario(id) {
-        const result = this.#deleteStmt.run({ id });
-        if (result.changes === 0) throw new UsuarioNoEncontrado(id);
-        return { mensaje: "Usuario eliminado correctamente" };
+static borrarUsuario(id) {
+    const usuario = this.#getByIdStmt.get({ id });
+    if (!usuario) throw new UsuarioNoEncontrado(id);
+    
+    // Crear un objeto con todos los campos necesarios
+    const datosActualizados = {
+        id: usuario.id,
+        username: usuario.username,
+        password: usuario.password,
+        nombre: usuario.nombre,
+        apellido: usuario.apellido,
+        correo: usuario.correo,
+        direccion: usuario.direccion,
+        rol: usuario.rol,
+        activo: 0  // Establecer activo a 0
+    };
 
-    }
+    const result = this.#updateStmt.run(datosActualizados);
+    
+    if (result.changes === 0) throw new UsuarioNoEncontrado(id);
+    return { mensaje: "Cuenta desactivada correctamente" };
+}
+
 
     static getUsuarioByUsername(username) {
         const usuario = this.#getByUsernameStmt.get({ username });
@@ -127,7 +144,11 @@ export class Usuario {
         } catch (e) {
             throw new UsuarioOPasswordNoValido(username, { cause: e });
         }
-        logger.debug("Rol del usuario en login:", usuario.rol);
+        
+        // Verificar si la cuenta está activa
+        if (usuario.activo === 0) {
+            throw new UsuarioOPasswordNoValido(username, { cause: 'Cuenta desactivada' });
+        }
 
         if (!bcrypt.compareSync(password, usuario.#password)) throw new UsuarioOPasswordNoValido(username);
 
@@ -139,7 +160,6 @@ export class Usuario {
             esCocinero: usuario.rol === RolesEnum.COCINERO,
             rol: usuario.rol
         };
-
     }
 
     static register(username, password, nombre, apellido, correo, direccion) {
@@ -155,11 +175,15 @@ export class Usuario {
         return usuario;
     }
 
-    static getAllUsuarios() {
-        const usuarios = this.#getAllStmt.all();
-        if (!usuarios) throw new UsuarioNoEncontrado(id);
-        return usuarios;
-    }
+static getAllUsuarios() {
+    // Si quieres solo usuarios activos:
+    // const usuarios = this.#getAllStmt.all().filter(u => u.activo === 1);
+    
+    // Si quieres todos los usuarios (incluyendo inactivos):
+    const usuarios = this.#getAllStmt.all();
+    if (!usuarios) throw new UsuarioNoEncontrado(id);
+    return usuarios;
+}
 
     #id;
     #username;

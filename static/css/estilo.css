@@ -513,22 +513,48 @@ img {
 
 /*botones perfil*/
 .btn {
-	padding: 8px 16px;
-	text-decoration: none;
-	border-radius: 4px;
-	font-weight: bold;
-	font-family: 'Times New Roman';
+    padding: 10px 20px; /* Padding idéntico */
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-family: 'Times New Roman';
+    display: inline-flex; /* Cambiado a flex para mejor alineación */
+    align-items: center; /* Centra verticalmente el contenido */
+    justify-content: center; /* Centra horizontalmente el contenido */
+    min-width: 150px;
+    box-sizing: border-box;
+    line-height: normal; /* Reset del line-height */
+    border: none;
+    transition: all 0.3s ease;
+    height: 40px; /* Altura fija explícita */
+    font-size: 16px; /* Tamaño de fuente explícito */
 }
 
 .btn-edit {
-	background-color: #4CAF50;
-	color: white;
+    background-color: #4CAF50;
+    color: white;
 }
 
 .btn-delete {
-	background-color: #f44336;
-	color: white;
+    background-color: #f44336;
+    color: white;
 }
+
+/* Normalización adicional para elementos específicos */
+.profile-actions a.btn, 
+.profile-actions button.btn {
+    margin: 0;
+    vertical-align: top; /* Alineación superior para consistencia */
+    appearance: none; /* Elimina estilos nativos */
+}
+
+/* Contenedor de botones - opcional para mejor espaciado */
+.profile-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 
 /*cartas altas para ingredientes */
 .cards_container_tall {
