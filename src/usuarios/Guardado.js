@@ -1,3 +1,5 @@
+import { logger } from "../logger.js"; // Asegúrate de que la ruta sea correcta
+
 export class Guardado {
     static #insertOrUpdateStmt = null;
     static #deleteStmt = null;
@@ -27,18 +29,12 @@ export class Guardado {
     static addRecetaToFavoritos(idUsuario, idReceta) {
         try {
             this.#insertOrUpdateStmt.run({ id_usuario: idUsuario, id_receta: idReceta });
-            return { mensaje: "Receta añadida a favoritos." };
+            return true; //{ mensaje: "Receta añadida a favoritos." };
         } catch (e) {
             throw new Error("No se pudo añadir la receta a favoritos.", { cause: e });
         }
     }
 
-    // Quitar una receta de favoritos
-    /*static removeRecetaFromFavoritos(idUsuario, idReceta) {
-        const result = this.#deleteStmt.run({ id_usuario: idUsuario, id_receta: idReceta });
-        if (result.changes === 0) throw new Error("La receta no estaba marcada como favorita.");
-        return { mensaje: "Receta eliminada de favoritos." };
-    }*/
     static removeRecetaFromFavoritos(idUsuario, idReceta) {
         const result = this.#deleteStmt.run({ id_usuario: idUsuario, id_receta: idReceta });
         console.log("Resultado de intento de borrado:", result);
@@ -46,21 +42,37 @@ export class Guardado {
             console.warn(`No se pudo eliminar la receta ${idReceta} de favoritos del usuario ${idUsuario}. Verifica si guardado = 1 existe.`);
             throw new Error("La receta no estaba marcada como favorita.");
         }
-        return { mensaje: "Receta eliminada de favoritos." };
+        return true; // { mensaje: "Receta eliminada de favoritos." };
     }
-        
 
     // Obtener las recetas favoritas de un usuario
     static getFavoritosByUsuario(idUsuario) {
         const favoritos = this.#getByUsuarioStmt.all({ id_usuario: idUsuario });
-        return favoritos; // Devuelve [] si no hay ninguno
+        if (favoritos.length === 0) {
+            logger.warn("No hay recetas guardadas como favoritas.");
+            return [];
+        }
+        return favoritos.map(({ id_receta, guardado }) => new Guardado(id_receta, idUsuario, guardado));
+
     }
 
     // Obtener los usuarios que guardaron una receta como favorita
     static getUsuariosByReceta(idReceta) {
         const usuarios = this.#getByRecetaStmt.all({ id_receta: idReceta });
         if (usuarios.length === 0) throw new Error("Ningún usuario ha guardado esta receta como favorita.");
-        return usuarios;
+        console.log("Favoritos obtenidos:", favoritos);
+        return usuarios.map(({ id_usuario, guardado }) => new Guardado(idReceta, id_usuario, guardado));
+    }
+
+
+    id_receta;
+    id_usuario;
+    guardado;
+
+    constructor(id_receta, id_usuario, guardado) {
+        this.id_receta = id_receta;
+        this.id_usuario = id_usuario;
+        this.guardado = guardado;
     }
 }
 

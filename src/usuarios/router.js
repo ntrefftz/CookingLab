@@ -1,5 +1,6 @@
 import { body } from 'express-validator';
 import express from 'express';
+import { autenticado, tieneRol} from '../middleware/auth.js';
 import {
     viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout,
     viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome, viewListaUsuario, cambiarPermisos,
@@ -8,17 +9,17 @@ import {
 from './controllers.js';
 import asyncHandler from 'express-async-handler';
 const usuariosRouter = express.Router();
+// XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
 
-
-usuariosRouter.get('/configuracion', asyncHandler(viewConfiguracion));
-usuariosRouter.get('/perfil', asyncHandler(viewPerfil));
-usuariosRouter.get('/historial', asyncHandler(viewHistorial));
-usuariosRouter.get('/misrecetas', asyncHandler(viewMisRecetas));
-usuariosRouter.get('/micalendario', asyncHandler(viewCalendario));
-usuariosRouter.get('/login', asyncHandler(viewLogin));
-usuariosRouter.get('/perfil/modificar', asyncHandler(viewModificarPerfil));
-usuariosRouter.get('/home', asyncHandler(viewHome));
-usuariosRouter.get('/listaUsuarios', asyncHandler(viewListaUsuario));
+usuariosRouter.get('/configuracion',  autenticado("/login", "configuracion"), asyncHandler(viewConfiguracion));
+usuariosRouter.get('/perfil', autenticado("/login", "/perfil"), asyncHandler(viewPerfil));
+usuariosRouter.get('/historial', autenticado("/login", "/historial"), asyncHandler(viewHistorial));
+usuariosRouter.get('/misrecetas',  autenticado("/login", "/misrecetas"),asyncHandler(viewMisRecetas));
+usuariosRouter.get('/micalendario', autenticado("/login", "/micalendario"), asyncHandler(viewCalendario));
+usuariosRouter.get('/login',autenticado(null), asyncHandler(viewLogin));
+usuariosRouter.get('/perfil/modificar', autenticado("/login", "/perfil/modificar") ,asyncHandler(viewModificarPerfil));
+usuariosRouter.get('/home',  autenticado('/usuarios/home'), asyncHandler(viewHome));
+usuariosRouter.get('/listaUsuarios', autenticado("/login", "configuracion"), tieneRol("A"), asyncHandler(viewListaUsuario));
 usuariosRouter.post('/login',
     body('username', 'El nombre no puede ser vacío').trim().notEmpty(),
     body('password', 'La contraseña no puede ser vacía').trim().notEmpty(),
@@ -26,8 +27,8 @@ usuariosRouter.post('/login',
 );
 
 usuariosRouter.get('/logout', asyncHandler(doLogout));
-usuariosRouter.get('/register',asyncHandler(viewRegister));
-usuariosRouter.get('/sugerencias', asyncHandler(viewSugerencias));
+usuariosRouter.get('/register',autenticado(null, '/usuarios/home'), asyncHandler(viewRegister));
+usuariosRouter.get('/sugerencias', autenticado("/login", "configuracion"), tieneRol("A", "C"), asyncHandler(viewSugerencias));
 
 usuariosRouter.post('/register',
     body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i),

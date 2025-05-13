@@ -6,7 +6,7 @@
     <% } else { %>
         <% recetas.forEach(receta => { %>
             <article class="card">
-                <img src="<%= receta.imagen_url %>" alt="<%= receta.nombre %>" loading="lazy" />
+                <img src="/recetas/imagen/<%=receta.imagen_url %>" alt="<%= receta.nombre %>" loading="lazy" />
                 <a href="/recetas/<%= receta.id %>">
                     <h4><%= receta.nombre %></h4>
                 </a>

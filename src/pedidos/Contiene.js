@@ -33,14 +33,19 @@ export class Contiene {
 
     static getByPedido(id_pedidos) {
         const contiene = this.#getByPedidosStmt.all({ id_pedidos });
-        return contiene || [];
+        if (!contiene || contiene.length === 0) return [];
+
+        return contiene.map(({ id_ingrediente, id_pedidos, cantidad }) =>
+            new Contiene(id_ingrediente, id_pedidos, cantidad)
+        );
     }
+    
 
     // Obtener la relación entre un ingrediente y una factura específica
     static getRelacion(id_ingrediente, id_pedidos) {
         const contiene = this.#getByIngredienteYPedidosStmt.get({ id_ingrediente, id_pedidos });
         if (!contiene) throw new RelacionNoEncontrada(id_ingrediente, id_pedidos);
-        return contiene;
+        return new Contiene(contiene.id_ingrediente, contiene.id_pedidos, contiene.cantidad);
     }
 
     // Añadir una nueva relación entre un ingrediente y una factura
@@ -49,7 +54,7 @@ export class Contiene {
 
         try {
             this.#insertStmt.run({ id_ingrediente, id_pedidos, cantidad });
-            return { mensaje: "Relación entre ingrediente y factura añadida correctamente" };
+            return true; //TODO MENSAJE { mensaje: "Relación entre ingrediente y factura añadida correctamente" };
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') throw new RelacionYaExiste(id_ingrediente, id_pedidos);
             throw new ErrorDatos("No se pudo añadir la relación", { cause: e });
@@ -62,19 +67,29 @@ export class Contiene {
 
         const result = this.#updateStmt.run({ id_ingrediente, id_pedidos, cantidad });
         if (result.changes === 0) throw new RelacionNoEncontrada(id_ingrediente, id_pedidos);
-        return { mensaje: "Relación actualizada correctamente" };
+        return true; //TODO MENSAJE{ mensaje: "Relación actualizada correctamente" };
     }
 
     // Eliminar una relación entre un ingrediente y una factura
     static deleteRelacion(id_ingrediente, id_pedidos) {
         const result = this.#deleteStmt.run({ id_ingrediente, id_pedidos });
         if (result.changes === 0) throw new RelacionNoEncontrada(id_ingrediente, id_pedidos);
-        return { mensaje: "Relación eliminada correctamente" };
+        return true; //TODO MENSAJE { mensaje: "Relación eliminada correctamente" };
     }
 
     static deletePedido(id_pedidos) {
         const result = this.#deletePedidoStmt.run({ id_pedidos });
-        return { mensaje: "Pedido eliminado correctamente" };
+        return true; //TODO MENSAJE { mensaje: "Pedido eliminado correctamente" };
+    }
+
+    id_ingrediente;
+    id_pedidos;
+    cantidad;
+    
+    constructor(id_ingrediente, id_pedidos, cantidad) {
+        this.id_ingrediente = id_ingrediente;
+        this.id_pedidos = id_pedidos;
+        this.cantidad = cantidad;
     }
 }
 

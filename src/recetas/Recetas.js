@@ -37,29 +37,72 @@ export class Receta {
     static getRecetaById(id) {
         const receta = this.#getByIdStmt.get({ id });
         if (!receta) throw new RecetaNoEncontrada(id);
-        return receta;
+    
+        // Crear y devolver una instancia de Receta
+        return new Receta(
+            receta.id,
+            receta.nombre,
+            receta.descripcion,
+            receta.tiempo_prep_segs,
+            receta.dificultad,
+            receta.id_usuario,
+            receta.activo,
+            receta.imagen_url
+        );
     }
-
+    
     static getRecetasByUsuario(id_usuario) {
-        return this.#getByUsuarioStmt.all({ id_usuario });
+        const recetas = this.#getByUsuarioStmt.all({ id_usuario });
+    
+        // Mapear los resultados a instancias de Receta
+        return recetas.map(receta => new Receta(
+            receta.id,
+            receta.nombre,
+            receta.descripcion,
+            receta.tiempo_prep_segs,
+            receta.dificultad,
+            receta.id_usuario,
+            receta.activo,
+            receta.imagen_url
+        ));
     }
-
+    
     static getAllRecetas() {
-        return this.#getAllStmt.all();
+        const recetas = this.#getAllStmt.all();
+    
+        // Mapear los resultados a instancias de Receta
+        return recetas.map(receta => new Receta(
+            receta.id,
+            receta.nombre,
+            receta.descripcion,
+            receta.tiempo_prep_segs,
+            receta.dificultad,
+            receta.id_usuario,
+            receta.activo,
+            receta.imagen_url
+        ));
     }
-
+    
     static getAllRecetasNact() {
-        return this.#getAllNact.all();  
-    }
-
-    static getAllRecetasNact() {
-        return this.#getAllNact.all();  
+        const recetas = this.#getAllNact.all();
+    
+        // Mapear los resultados a instancias de Receta
+        return recetas.map(receta => new Receta(
+            receta.id,
+            receta.nombre,
+            receta.descripcion,
+            receta.tiempo_prep_segs,
+            receta.dificultad,
+            receta.id_usuario,
+            receta.activo,
+            receta.imagen_url
+        ));
     }
 
     static addReceta(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo = 1, imagen_url) {
         try {
             const result = this.#insertStmt.run({ nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo, imagen_url });
-            return { mensaje: "Receta añadida correctamente", id: result.lastInsertRowid };
+            return true; //TODO MENSAJE{ mensaje: "Receta añadida correctamente", id: result.lastInsertRowid };
         } catch (e) {
             throw new ErrorDatos("No se pudo añadir la receta", { cause: e });
         }
@@ -68,21 +111,50 @@ export class Receta {
     static updateReceta(id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url) {
         const result = this.#updateStmt.run({ id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url});
         if (result.changes === 0) throw new RecetaNoEncontrada(id);
-        return { mensaje: "Receta actualizada correctamente" };
+        return true; //TODO MENSAJE{ mensaje: "Receta actualizada correctamente" };
     }
 
     static deleteReceta(id) {
-        const result = this.#deleteStmt.run({ id });
-        return true;
+        try {
+            const result = this.#deleteStmt.run({ id });
+            if (result.changes === 0) {
+                throw new RecetaNoEncontrada(id);
+            }
+    
+            return  true; //TODO MENSAJE{ mensaje: "Receta eliminada correctamente", id };
+        } catch (error) {
+            throw new ErrorDatos("No se pudo eliminar la receta", { cause: error });
+        }
     }
 
     static searchByName(nombre) {
-        return this.#searchByNameStmt.all({ nombre: `%${nombre}%` });
+        const recetas = this.#searchByNameStmt.all({ nombre: `%${nombre}%` });
+        return recetas.map(receta => new Receta(
+            receta.id,
+            receta.nombre,
+            receta.descripcion,
+            receta.tiempo_prep_segs,
+            receta.dificultad,
+            receta.id_usuario,
+            receta.activo,
+            receta.imagen_url
+        ));
 
     }
     
     static searchByIngredient(ingrediente) {
-        return this.#searchByIngredientStmt.all({ ingrediente: ingrediente });
+        
+        const recetas = this.#searchByIngredientStmt.all({ ingrediente: ingrediente });
+        return recetas.map(receta => new Receta(
+            receta.id,
+            receta.nombre,
+            receta.descripcion,
+            receta.tiempo_prep_segs,
+            receta.dificultad,
+            receta.id_usuario,
+            receta.activo,
+            receta.imagen_url
+        ));
     }
 
     // Función para aceptar una sugerencia de receta
@@ -90,7 +162,30 @@ export class Receta {
         // Cambia el campo 'activo' a 1 para aprobar la receta
         const result = this.#activarRecetaStmt.run({ id });
         if (result.changes === 0) throw new RecetaNoEncontrada(id);
-        return { mensaje: "Receta aceptada correctamente" };
+        return true; //{ mensaje: "Receta aceptada correctamente" };
+    }
+
+    id;
+    nombre;
+    descripcion;
+    tiempo_prep_segs;
+    dificultad;
+    id_usuario;
+    activo;
+    imagen_url; 
+
+
+
+    constructor(id, nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo, imagen_url) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.tiempo_prep_segs = tiempo_prep_segs;
+        this.dificultad = dificultad;
+        this.id_usuario = id_usuario;
+        this.activo = activo;
+        this.imagen_url = imagen_url;
+        
     }
 
 }
