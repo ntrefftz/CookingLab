@@ -9,6 +9,7 @@ import { Receta } from '../recetas/Recetas.js';
 import { Pedido } from '../pedidos/Pedidos.js';
 import { Contiene } from '../pedidos/Contiene.js';
 import { Realiza } from '../pedidos/Realiza.js';
+import { Ingrediente } from '../recetas/Ingredientes.js';
 
 
 
@@ -93,21 +94,45 @@ export function viewHistorial(req, res) {
         // Construir el historial
         const historial = relaciones.map(relacion => {
             const pedido = Pedido.getPedidoById(relacion.id_pedido);
-            const ingredientes = Contiene.getByPedido(relacion.id_pedido) || [];
+            const ingredientes = Contiene.getByPedido(pedido.id) || [];
+
+            ingredientes.forEach(ing => {
+                const ingredienteInfo = Ingrediente.getIngredienteById(ing.id_ingrediente);
+                if (ingredienteInfo) {
+                    ing.nombre = ingredienteInfo.nombre;
+                    ing.precio = ingredienteInfo.precio;
+                } else {
+                    logger.error(`Ingrediente no encontrado para id: ${ing.id_ingrediente}`);
+                }
+            });
+
             const ingredientesAgrupados = Object.values(
                 ingredientes.reduce((acc, ing) => {
-                    if (!acc[ing.id_ingrediente]) {
-                        acc[ing.id_ingrediente] = { ...ing };
+                    if (!acc[ing.id]) {
+                        acc[ing.id] = { ...ing };
                     } else {
-                        acc[ing.id_ingrediente].cantidad += ing.cantidad;
+                        acc[ing.id].cantidad += ing.cantidad;
+                        let ingre = Ingrediente.getIngredienteById(ing.id_ingrediente);
+                        acc[ing.id].nombre = ingre.nombre;
+                        acc[ing.id].precio = ingre.precio;
                     }
                     return acc;
                 }, {})
             );
 
-            // Calcular el precio total
-            const precioTotal = ingredientesAgrupados.reduce((total, ing) => total + parseFloat(ing.precio) * ing.cantidad, 0).toFixed(2);
-
+            const precioTotal = ingredientesAgrupados.reduce((total, ing) => {
+                try {
+                    const ingrediente = Ingrediente.getIngredienteById(ing.id_ingrediente);
+                    if (!ingrediente || isNaN(parseFloat(ingrediente.precio))) {
+                        logger.error(`Precio inválido o ingrediente no encontrado para id: ${ing.id_ingrediente}`);
+                        return total; // Ignorar este ingrediente si no es válido
+                    }
+                    return total + parseFloat(ingrediente.precio) * ing.cantidad;
+                } catch (error) {
+                    logger.error(`Error al obtener el ingrediente con id: ${ing.id_ingrediente}`, error.message);
+                    return total; // Ignorar este ingrediente si ocurre un error
+                }
+            }, 0).toFixed(2);
             return {
                 pedido,
                 ingredientes,

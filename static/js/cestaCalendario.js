@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ id: receta.id_receta })
+                    body: JSON.stringify({ id: receta.id })
                 });
 
                 if (response.ok) {
