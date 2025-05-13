@@ -259,7 +259,7 @@ export function aniadirReceta(req, res) {
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id_usuario = req.session.userId;
 
-    const activo = req.session.isAdmin ? 1 : 0;  // Si es administrador, la receta está activa; si no, está pendiente (al user no le sale)
+     const activo = req.session.esAdmin ? 1 : 0; // Si es administrador, la receta está activa; si no, está pendiente (al user no le sale)
 
 
     const ingredientes = Ingrediente.getAllIngredientes();
