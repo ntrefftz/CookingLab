@@ -1,4 +1,4 @@
-import { logger } from "../logger.js"; // Asegúrate de que la ruta sea correcta
+import { logger } from "../logger.js";
 
 export class CalendarioSemanal {
     static #getByUsuarioYSemanaStmt = null;  // Obtener todas las recetas asignadas a un usuario en una semana

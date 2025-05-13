@@ -1,3 +1,5 @@
+import { logger } from "../logger.js"; // Asegúrate de que la ruta sea correcta
+
 export class Guardado {
     static #insertOrUpdateStmt = null;
     static #deleteStmt = null;
@@ -44,10 +46,12 @@ export class Guardado {
     }
 
     // Obtener las recetas favoritas de un usuario
-    static getFavoritosByUsuario(idUsuario) { 
+    static getFavoritosByUsuario(idUsuario) {
         const favoritos = this.#getByUsuarioStmt.all({ id_usuario: idUsuario });
-        if (favoritos.length === 0) throw new Error("No hay recetas guardadas como favoritas.");//TODO; TIENE QUE DEVOLVER ESTO?
-        console.log("Favoritos obtenidos:", favoritos);
+        if (favoritos.length === 0) {
+            logger.warn("No hay recetas guardadas como favoritas.");
+            return [];
+        }
         return favoritos.map(({ id_receta, guardado }) => new Guardado(id_receta, idUsuario, guardado));
 
     }
