@@ -1,31 +1,4 @@
-<%
-/**
- * Muestra el saludo si el usuario esta registrado, en caso de que no lo este,
- * muestra que es un usuario desconocido.
- */
-function mostrarSaludo(session){
-	if (session == null || ! session.login){
-		return `<p>Usuario desconocido. &rarr;</p>`;
-	}
 
-	return `<p>Bienvenido ${session.nombre}.</a></p>`;
-}
-%>
-<%
-function menu(session){
-	/**
-	 * Muestra el menu de opciones del usuario, si no esta registrado
-	 * muestra las opciones de login y registro.
-	 */
-	if (session == null || ! session.login){
-		return `<li><a href="/usuarios/login">Login</a></li>
-				<li><a href="/usuarios/register">Registro</a></li>`;
-	}
-	
-	return `<li><a href="/usuarios/configuracion">Configuración</a></li>
-			<li><a href="/usuarios/logout">Cerrar sesión</a></li>`;
-}
-%>
 <header>
 	<h1>COOKINGLAB</h1>
 	<ul class="navbar">
@@ -52,20 +25,19 @@ function menu(session){
 		</li>
 
 
-		<li><%- mostrarSaludo(session) %></li>
+		<li id="saludo"></li>
 		<li>
 			<div class="dropdown">
-				<button class="dropdown-btn"><img src="/image/User.png" alt="User Icon"></button>
-				<div class="dropdown-content">
-					<ul>
-						<%- menu(session) %>
+				<button class="dropdown-btn" id="dropdownButton"><img src="/image/User.png" alt="User Icon"></button>
+				<div class="dropdown-content" id="dropdownMenu">
+					<ul id="menu">
 					</ul>
 				</div>
 			</div>
 		</li>
 	</ul>
 </header>
-<!--
-		TODO: Cambiar la barra de navegación para que se muestre en una sola linea y muestre el logo
-		TODO:Añadir favicon
--->
+<script id="sessionData" type="application/json">
+	<%- JSON.stringify(session) %>
+</script>	
+<script src="/js/menuCabecera.js"></script>

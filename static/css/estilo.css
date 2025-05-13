@@ -457,7 +457,18 @@ img {
 	position: relative;
 	/*display: inline-block;*/
 }
+.dropdown-content {
+    display: none; /* Oculta el menú por defecto */
+    position: absolute;
+    background-color: white;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+	left: -37px;
+}
 
+.dropdown-content.show {
+    display: block; /* Muestra el menú cuando se agrega la clase 'show' */
+}
 .dropdown-btn {
 	background-color: #F383A0;
 	color: black;
@@ -473,15 +484,10 @@ img {
 	display: block;
 }
 
-/*CAJA DESPLEGABLE*/
-
-.dropdown:hover .dropdown-content {
-	display: block;
-}
 
 .dropdown-content ul {
 	display: block;
-
+	;
 }
 
 /*recuadro de la caja desplegable*/
