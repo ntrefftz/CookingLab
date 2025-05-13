@@ -76,8 +76,19 @@
 
 
 	#current-date {
-		font-size: 16px;
+		font-size: 30px;
 		font-weight: bold;
+		position: absolute;
+		top: 60%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		font-weight: bold;
+		color: #000000;
+		pointer-events: none;
+		word-wrap: break-word;
+		max-width: 80%;
+		text-align: center;
+		line-height: 1.5;
 	}
 
 	#postit-container {
@@ -96,37 +107,21 @@
 		border-radius: 10px;
 	}
 
-	#postit-text {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		font-size: 1.2em;
-		font-weight: bold;
-		color: #000000;
-		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-		pointer-events: none;
-		word-wrap: break-word;
-		max-width: 80%;
-		text-align: center;
-		line-height: 1.5;
-	}
-
 	.card.destacada {
-		border: 4px solid #f39c12;
+		border: 4px solid #F383A0;
 		background-color: #fff8e1;
-		box-shadow: 0 0 20px rgba(243, 156, 18, 0.6);
+		box-shadow: 0 0 20px #f06c8f;
 		transform: scale(1.03);
 		transition: transform 0.3s ease, box-shadow 0.3s ease;
 	}
 
 	.card.destacada:hover {
 		transform: scale(1.05);
-		box-shadow: 0 0 25px rgba(243, 156, 18, 0.8);
+		box-shadow: 0 0 25px #f06c8f
 	}
 
 	.card.destacada h4 {
-		color: #d35400;
+		color: #F383A0;
 		font-size: 1.5em;
 		margin-bottom: 10px;
 	}
