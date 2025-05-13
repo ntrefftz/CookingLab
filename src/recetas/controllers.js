@@ -9,7 +9,7 @@ import { join } from 'node:path';
 import { config } from '../config.js';
 
 export function viewRecetasLista(req, res) {
-
+    // XXX Faltan valdator + lógicaidaciones con express-vali apropiada para verificar la existencia y/o tipos de los parámetros
     // Verificamos si la solicitud viene del calendario
     const esDesdeCalendario = req.query.origen === 'calendario';  // Se obtiene el parámetro 'origen'
     const esDesdeMisRecetas = req.query.origen === 'misRecetas';
@@ -39,7 +39,9 @@ export function viewGestionStock(req, res) {
         ingredientes: rows,
     });
 }
+
 export function viewRecetasDetalle(req, res) {
+      // XXX Faltan valdator + lógicaidaciones con express-vali apropiada para verificar la existencia y/o tipos de los parámetros
     const contenido = 'paginas/receta';
     const id = req.query.id;
     const receta = Receta.getRecetaById(id);
@@ -49,6 +51,7 @@ export function viewRecetasDetalle(req, res) {
     console.log("origen", req.query.origen);
     // Obtener los ingredientes de la receta
     const ingredientes = Tiene.getIngredientesByReceta(id);
+    // XXX Es recomendable que que o bien se la consulta haga el JOIN o al menos usar una consulta con IN para develver todos los ingredientes en base a sus ids
     // Asociar los ingredientes a la receta
     ingredientes.forEach(ingrediente => {
         const ingredienteDetails = Ingrediente.getIngredienteById(ingrediente.id_ingrediente);
@@ -68,6 +71,7 @@ export function viewRecetasDetalle(req, res) {
 
 export function eliminarReceta(req, res) {
     const id = req.body.id;
+    // XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
     try {
         const ingredientes = Tiene.getIngredientesByReceta(id);
 
@@ -87,7 +91,7 @@ export function eliminarReceta(req, res) {
 }
 
 export function viewModificarReceta(req, res) {
-
+    // XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
     const contenido = 'paginas/editarReceta';
     const id = req.query.id;
     const receta = Receta.getRecetaById(id);
@@ -112,6 +116,7 @@ export function viewModificarReceta(req, res) {
 }
 
 export function modificarReceta(req, res) {
+    // XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
     const imagen = req.file ? req.file.filename : "";
     let imagen_url = null;
 
@@ -119,13 +124,13 @@ export function modificarReceta(req, res) {
     body('descripcion').escape();
     body('difilcultad').escape();
     body('tiempo_prep_segs').escape();
-
+// XXX Usar matchedData
     const nombre = req.body.nombre.trim();
     const descripcion = req.body.descripcion.trim();
     const dificultad = req.body.dificultad.trim();
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id = req.query.id;
-    const contenido = 'paginas/receta';
+
 
 
     if (!imagen) {
@@ -240,7 +245,7 @@ export function viewAniadirReceta(req, res) {
 }
 
 export function aniadirReceta(req, res) {
-    // Verifica si userId está definido
+// XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
     logger.debug("Sesión actual:", req.session);
     const imagen = req.file ? req.file.filename : "";
     let imagen_url = null;
@@ -254,24 +259,23 @@ export function aniadirReceta(req, res) {
     const descripcion = req.body.descripcion.trim();
     const dificultad = req.body.dificultad.trim();
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
-    const id_usuario = req.session.userId;  //asusmimos que el ID de usuario está en la sesión
+    const id_usuario = req.session.userId;
 
     const activo = req.session.isAdmin ? 1 : 0;  // Si es administrador, la receta está activa; si no, está pendiente (al user no le sale)
 
-    //const imagen_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fes%2Ffotos%2Fno-encontrado-mensaje-de-error-fotos&psig=AOvVaw3yClaJKuZYliDgG5DHGhJC&ust=1745919601499000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLCLvr-3-owDFQAAAAAdAAAAABAE"; // Imagen por defecto
 
     const ingredientes = Ingrediente.getAllIngredientes();
 
 
     if (!id_usuario) {
         logger.error("Error: No se ha proporcionado un ID de usuario válido");
-
+// XXX Se debería de renderizar una página para humanos :)
         return res.status(400).send('No se ha proporcionado un ID de usuario válido');
     }
     if (!imagen) {
         imagen_url = "default"; // Imagen por defecto
     }
-    else{
+    else {
         imagen_url = imagen;
     }
 
@@ -289,8 +293,6 @@ export function aniadirReceta(req, res) {
 
         const recetaId = result.id;
 
-        //const ingredientesSeleccionados = req.body['ingredientes[]'] || []; // array de ingredientes que vienen del form
-        
         // Cantidades normales (primer valor del array)
         const cantidades = {};
         for (const key in req.body) {
@@ -332,13 +334,6 @@ export function aniadirReceta(req, res) {
                 }
             }
         }
-
-
-        // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
-        /*const ingredientesArray = Array.isArray(ingredientesSeleccionados)
-            ? ingredientesSeleccionados
-            : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
-        */ 
 
         // Añadir cada ingrediente con su cantidad
         for (const ingredienteId of ingredientesArray) {
@@ -443,7 +438,7 @@ export function viewModificarIngrediente(req, res) {
 }
 
 export function eliminarIngrediente(req, res) {
-
+// XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
     const id = req.body.id;
     Cesta.borrarIngrediente(id);
     Tiene.deleteIngrediente(id);
@@ -452,6 +447,7 @@ export function eliminarIngrediente(req, res) {
 }
 
 export function modificarIngrediente(req, res) {
+    // XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
     const imagen = req.file ? req.file.filename : "";
     let imagen_url = null;
 
@@ -466,10 +462,10 @@ export function modificarIngrediente(req, res) {
     const stock = req.body.stock.trim();
     const id = req.query.id;
     const unidad_medida = req.body.unidad_medida.trim() || 'unidad';
-    const contenido = 'paginas/ingredienteInd';
+    
 
 
-    if (!imagen){
+    if (!imagen) {
         const ing = Ingrediente.getIngredienteById(id);
         imagen_url = ing.imagen_url;
     }
@@ -478,11 +474,7 @@ export function modificarIngrediente(req, res) {
 
     Ingrediente.updateIngrediente(id, nombre, categoria, precio, stock, unidad_medida, imagen_url);
     const ingrediente = Ingrediente.getIngredienteById(id);
-    res.render('pagina', {
-        contenido,
-        session: req.session,
-        ingredientes: ingrediente
-    });
+    res.redirect('/recetas/ingrediente');
 }
 
 export function viewAniadirIngrediente(req, res) {
@@ -497,6 +489,7 @@ export function viewAniadirIngrediente(req, res) {
 
 export function aniadirIngrediente(req, res) {
     // Verifica si userId está definido
+    // XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
     logger.debug("Sesión actual:", req.session);
     const imagen = req.file ? req.file.filename : "";
     let imagen_url = null;
@@ -518,7 +511,7 @@ export function aniadirIngrediente(req, res) {
     if (!imagen) {
         imagen_url = "default"; // Imagen por defecto
     }
-    else{
+    else {
         imagen_url = imagen;
 
     }
@@ -567,9 +560,8 @@ export function aniadirIngredienteCarrito(req, res) {
     }
 }
 
-//--------------------------------------------------------------------
-
 export function buscarReceta(req, res) {
+    //XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
     //tipo (si es búsqueda por nombre o ingrediente) y termino (el texto)
     let { tipo = 'nombre', termino = '', orden = 'relevancia' } = req.query;
 
@@ -592,6 +584,7 @@ export function buscarReceta(req, res) {
     try {
 
         let recetas = [];
+                // XXX Potencial SQL injection
         const terminoBusqueda = `%${termino}%`; //Para no distinguir entre mayusculas y minusculas
 
         if (tipo === 'nombre') {
@@ -599,7 +592,7 @@ export function buscarReceta(req, res) {
         } else if (tipo === 'ingrediente') {
             recetas = Receta.searchByIngredient(termino);
         }
-
+        // XXX Mejor ordenar en BD que para eso está :D
         // Ordenar según lo que se haya seleccionado
         switch (orden) {
             case 'valoraciones':
@@ -627,6 +620,9 @@ export function buscarReceta(req, res) {
                 });
                 break;
         }
+
+         // XXX Aprender que hace ;) pista: object destructuring para copiar y añadir nuevas propiedades
+        // XXX Lo normal sería que la clase Receta ya tuviera estas dos propiedades :(
 
         //IMPORTANTE sin esto no funciona, no se muy bien que hace es de CHATgpt
         //Transforma las cosas para que se vean correctamente por pantalla
@@ -785,15 +781,12 @@ export function aceptarSugerenciaReceta(req, res) {
 }
 
 export function viewSugerencias(req, res) {
-    //console.log(req.session);
-    //console.log("Vamos a buscar las recetas no activas");
-
-    // Obtener las recetas no activas (sugerencias)
+   // Obtener las recetas no activas (sugerencias)
 
     const rows = Receta.getAllRecetasNact();
     console.log("Recetas no activas:", rows);
 
-    const contenido = 'paginas/sugerencias'; 
+    const contenido = 'paginas/sugerencias';
 
     // Renderizar la vista con los parámetros necesarios
     res.render('pagina', {

@@ -9,7 +9,7 @@ import {
 from './controllers.js';
 import asyncHandler from 'express-async-handler';
 const usuariosRouter = express.Router();
-
+// XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
 
 usuariosRouter.get('/configuracion',  autenticado("/login", "configuracion"), asyncHandler(viewConfiguracion));
 usuariosRouter.get('/perfil', autenticado("/login", "/perfil"), asyncHandler(viewPerfil));
