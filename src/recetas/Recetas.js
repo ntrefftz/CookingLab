@@ -102,7 +102,7 @@ export class Receta {
     static addReceta(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo = 1, imagen_url) {
         try {
             const result = this.#insertStmt.run({ nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo, imagen_url });
-            return true; //TODO MENSAJE{ mensaje: "Receta añadida correctamente", id: result.lastInsertRowid };
+            return result; 
         } catch (e) {
             throw new ErrorDatos("No se pudo añadir la receta", { cause: e });
         }

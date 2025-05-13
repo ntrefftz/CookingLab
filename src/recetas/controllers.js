@@ -281,7 +281,7 @@ export function aniadirReceta(req, res) {
 
     try {
         // Validación de ingredientes (NUEVA SECCIÓN AÑADIDA PARA QUE NO PETE)
-        const ingredientesSeleccionados = req.body['ingredientes[]'] || [];
+        const ingredientesSeleccionados = req.body.ingredientes || [];
         const ingredientesArray = Array.isArray(ingredientesSeleccionados)
             ? ingredientesSeleccionados
             : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
@@ -291,8 +291,7 @@ export function aniadirReceta(req, res) {
         }
         const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, imagen_url);
 
-        const recetaId = result.id;
-
+        const recetaId = result.lastInsertRowid;
         // Cantidades normales (primer valor del array)
         const cantidades = {};
         for (const key in req.body) {
