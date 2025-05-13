@@ -106,28 +106,10 @@ export function viewHistorial(req, res) {
                 }
             });
 
-            const ingredientesAgrupados = Object.values(
-                ingredientes.reduce((acc, ing) => {
-                    if (!acc[ing.id]) {
-                        acc[ing.id] = { ...ing };
-                    } else {
-                        acc[ing.id].cantidad += ing.cantidad;
-                        let ingre = Ingrediente.getIngredienteById(ing.id_ingrediente);
-                        acc[ing.id].nombre = ingre.nombre;
-                        acc[ing.id].precio = ingre.precio;
-                    }
-                    return acc;
-                }, {})
-            );
-
-            const precioTotal = ingredientesAgrupados.reduce((total, ing) => {
+            const precioTotal = ingredientes.reduce((total, ing) => {
                 try {
-                    const ingrediente = Ingrediente.getIngredienteById(ing.id_ingrediente);
-                    if (!ingrediente || isNaN(parseFloat(ingrediente.precio))) {
-                        logger.error(`Precio inválido o ingrediente no encontrado para id: ${ing.id_ingrediente}`);
-                        return total; // Ignorar este ingrediente si no es válido
-                    }
-                    return total + parseFloat(ingrediente.precio) * ing.cantidad;
+                    const precio = parseFloat(ing.precio);
+                    return total + precio * ing.cantidad;
                 } catch (error) {
                     logger.error(`Error al obtener el ingrediente con id: ${ing.id_ingrediente}`, error.message);
                     return total; // Ignorar este ingrediente si ocurre un error
