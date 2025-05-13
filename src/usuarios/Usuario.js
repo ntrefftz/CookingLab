@@ -48,11 +48,8 @@ export class Usuario {
         return usuario;
     }
 
-    static editarUsuario(id, username, password, nombre, apellido, correo, direccion, rol) {
-        let usuario = null;
+    static editarUsuario(usuario) {
         try {
-            usuario = new Usuario(username, password, nombre, apellido, correo, direccion, rol);
-            usuario.id = id;
             usuario = this.#update(usuario);
         } catch (e) {
             throw new UsuarioYaExiste(username, { cause: e });
@@ -107,14 +104,14 @@ export class Usuario {
 
     static #update(usuario) {
         const username = usuario.username;
-        const password = usuario.password;
         const nombre = usuario.nombre;
         const apellido = usuario.apellido;
         const correo = usuario.correo;
         const direccion = usuario.direccion;
-        const rol = usuario.rol;
         const activo = usuario.activo;
         const id = usuario.id;
+        const password = usuario.password;
+        const rol = usuario.rol;
         const datos = { username, password, nombre, apellido, correo, direccion, rol, activo, id };
 
         const result = this.#updateStmt.run(datos);
@@ -186,7 +183,9 @@ export class Usuario {
 
         this.#id = id;
     }
-
+    get password() {
+        return this.#password;
+    }
     get rol() {
         return this.#rol;
     }

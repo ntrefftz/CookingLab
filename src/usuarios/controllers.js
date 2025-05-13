@@ -10,6 +10,7 @@ import { Pedido } from '../pedidos/Pedidos.js';
 import { Contiene } from '../pedidos/Contiene.js';
 import { Realiza } from '../pedidos/Realiza.js';
 import { Ingrediente } from '../recetas/Ingredientes.js';
+import { UsuarioNoEncontrado } from './Usuario.js';
 
 
 
@@ -397,13 +398,13 @@ export function modificarPerfil(req, res) {
             contenido: 'paginas/editarPerfil',
             error: errors.array().map(err => err.msg).join(', '),
             session: req.session,
-            usuario: Usuario.getUsuarioById(req.query.id)
+            usuario: Usuario.getUsuarioById(req.session.userId) // Obtener el usuario desde la sesión
         });
     }
 
     const datos = matchedData(req);
 
-    if (!id) {
+    if (!req.session.userId) {
         return res.render('pagina', {
             contenido: 'paginas/editarPerfil',
             error: 'ID de usuario no proporcionado',
@@ -412,41 +413,39 @@ export function modificarPerfil(req, res) {
     }
 
     try {
+        const usuarioActual = Usuario.getUsuarioById(req.session.userId);
 
-        const usuarioActual = Usuario.getUsuarioById(id);
-
-        const password = rawPassword
-            ? bcrypt.hashSync(rawPassword)
+        const password = datos.password
+            ? bcrypt.hashSync(datos.password)
             : usuarioActual.password;
 
         const usuarioActualizado = new Usuario(
-            username,
+            datos.username || usuarioActual.username,
             password,
-            nombre,
-            apellido,
-            correo,
-            direccion,
+            datos.nombre || usuarioActual.nombre,
+            datos.apellido || usuarioActual.apellido,
+            datos.correo || usuarioActual.correo,
+            datos.direccion || usuarioActual.direccion,
             usuarioActual.rol,
             usuarioActual.activo,
-            id
+            req.session.userId
         );
 
-        usuarioActualizado.persist();
+        Usuario.editarUsuario(usuarioActualizado)
 
-        if (req.session.userId === id) {
-            req.session.username = username;
-            req.session.nombre = nombre;
-            req.session.apellido = apellido;
-            req.session.correo = correo;
-            req.session.direccion = direccion;
+
+        if (req.session.userId === usuarioActualizado.id) {
+            req.session.username = usuarioActualizado.username;
+            req.session.nombre = usuarioActualizado.nombre;
+            req.session.apellido = usuarioActualizado.apellido;
+            req.session.correo = usuarioActualizado.correo;
+            req.session.direccion = usuarioActualizado.direccion;
         }
-
 
         req.session.flashMsg = 'Perfil actualizado correctamente';
         return res.redirect('/usuarios/perfil');
 
     } catch (e) {
-
         logger.error('Error al modificar perfil:', e);
 
         let errorMessage = 'Error al actualizar el perfil';
@@ -459,7 +458,7 @@ export function modificarPerfil(req, res) {
         return res.render('pagina', {
             contenido: 'paginas/editarPerfil',
             session: req.session,
-            usuario: Usuario.getUsuarioById(id),
+            usuario: Usuario.getUsuarioById(req.session.userId),
             error: errorMessage
         });
     }
@@ -592,4 +591,4 @@ export function viewSugerencias(req, res) {
         contenido: 'paginas/sugerencias', // Asegúrate de tener esta plantilla
         session: req.session,
     });
-}        
+}
