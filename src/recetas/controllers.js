@@ -47,8 +47,6 @@ export function viewRecetasDetalle(req, res) {
     const receta = Receta.getRecetaById(id);
     const esDeSugerencias = req.query.origen === 'sugerencias'; // Verificamos si la receta proviene de sugerencias
 
-    console.log("esDeSugerencias", esDeSugerencias);
-    console.log("origen", req.query.origen);
     // Obtener los ingredientes de la receta
     const ingredientes = Tiene.getIngredientesByReceta(id);
     // XXX Es recomendable que que o bien se la consulta haga el JOIN o al menos usar una consulta con IN para develver todos los ingredientes en base a sus ids
@@ -664,7 +662,6 @@ export async function actualizarStock(req, res) {
         Ingrediente.setStock(id, stock);
         res.json({ success: true });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ success: false, error: 'Error al actualizar el stock' });
     }
 }
@@ -685,7 +682,6 @@ export async function jsonRecetas(req, res) {
         const recetas = await Receta.getAllRecetas(); // Ajusta el nombre de tu tabla
         res.json(recetas); // Devuelve las recetas como JSON
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Error al obtener las recetas.' });
     }
 }
@@ -711,7 +707,6 @@ export async function jsonRecetaDiaria(req, res) {
 
         res.json(recetasCompletas);
     } catch (error) {
-        console.error('Error al obtener las recetas para el calendario:', error);
         res.status(500).json({ message: 'Error al obtener las recetas para el calendario.' });
     }
 }
@@ -736,7 +731,6 @@ export async function aniadirRecetaDiaria(req, res) {
         }
 
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Error al añadir la receta al calendario.' });
     }
 }
@@ -761,17 +755,14 @@ export async function getRecetaPorID(req, res) {
         const receta = Receta.getRecetaById(id);
         return res.json(receta);
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Error al obtener la receta por ID.' });
     }
 }
 
 export function aceptarSugerenciaReceta(req, res) {
-    console.log("Vamos a aceptar la sugerencia de receta");
-    console.log("Body completo recibido:", req.body);
+
     const id = req.body.id;
     try {
-        console.log("ID de receta a aceptar:", id);
         Receta.aceptarSugerencia(id);
         res.redirect('/recetas/catalogo');
     } catch (error) {
@@ -784,7 +775,6 @@ export function viewSugerencias(req, res) {
    // Obtener las recetas no activas (sugerencias)
 
     const rows = Receta.getAllRecetasNact();
-    console.log("Recetas no activas:", rows);
 
     const contenido = 'paginas/sugerencias';
 
