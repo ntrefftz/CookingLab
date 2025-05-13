@@ -18,6 +18,9 @@
     </div>
     <div class="profile-actions">
         <a href="/usuarios/perfil/modificar?id=<%= usuario.id %>" class="btn btn-edit">Editar perfil</a>
-        <a href="/usuarios/perfil/eliminar?id=<%= usuario.id %>" class="btn btn-delete">Eliminar cuenta</a>
+        <form action="/usuarios/eliminarUsuario" method="POST" style="display: inline;">
+            <input type="hidden" name="id" value="<%= usuario.id %>">
+            <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que quieres eliminar tu cuenta?')">Eliminar cuenta</button>
+        </form>
     </div>
 </div>

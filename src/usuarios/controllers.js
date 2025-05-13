@@ -462,16 +462,25 @@ export function modificarPerfil(req, res) {
 }
 
 export function eliminarPerfil(req, res) {
-    const id = req.query.id;
+    const id = req.body.id;
     try {
-        Usuario.borrarUsuario(id);
-        req.json = { mensaje: 'Usuario borrado con éxito' };
-    } catch (error) {
-        logger.error('Error al borrar usuario:', error);
-        res.status(500).json({ mensaje: 'Error al cambiar permisos', error: error.message });
-    }
+        if (parseInt(id) !== req.session.userId) {
+            return res.redirect('/usuarios/listaUsuarios');
+        }
 
-    return res.redirect('/usuarios/listaUsuarios');
+        Usuario.borrarUsuario(id);
+        
+        req.session.login = null;
+        req.session.userId = null;
+        req.session.flashMsg = 'Tu cuenta ha sido desactivada correctamente';
+        req.session.save(() => {
+            res.redirect('/');
+        });
+        
+    } catch (error) {
+        logger.error('Error al desactivar usuario:', error);
+        res.status(500).json({ mensaje: 'Error al desactivar la cuenta', error: error.message });
+    }
 }
 
 export async function cambiarPermisos(req, res) {

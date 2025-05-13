@@ -90,3 +90,4 @@ INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-15',8);
 INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-16',5);
 INSERT INTO "Diaria" ("dia","id_receta") VALUES ('2025-05-17',9);
 
+COMMIT;

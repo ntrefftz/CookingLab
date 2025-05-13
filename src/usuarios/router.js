@@ -51,7 +51,6 @@ usuariosRouter.post('/perfil/modificar',
     asyncHandler(modificarPerfil)
 );
 usuariosRouter.post('/cambiarPermisos/:id', asyncHandler(cambiarPermisos));
-
 usuariosRouter.post('/eliminarUsuario', asyncHandler(eliminarPerfil));
 
 //Para el calendario semanal del usuario
@@ -60,6 +59,5 @@ usuariosRouter.post('/calendario/eliminar', asyncHandler(eliminarRecetaDeCalenda
 
 usuariosRouter.post('/favoritos/aniadir', asyncHandler(aniadirRecetaAFavoritos));
 usuariosRouter.post('/favoritos/eliminar', asyncHandler(eliminarRecetaDeFavoritos));
-
 
 export default usuariosRouter;
