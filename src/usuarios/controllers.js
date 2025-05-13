@@ -65,7 +65,6 @@ export function viewMisRecetas(req, res) {
             const receta = Receta.getRecetaById(fav.id_receta);
             recetas.push(receta);
         } catch (error) {
-            console.error(`Error al obtener receta con ID ${fav.id_receta}:`, error.message);
         }
     }
 
@@ -147,7 +146,6 @@ export function viewHistorial(req, res) {
             historial
         });
     } catch (error) {
-        console.error('Error al obtener el historial de pedidos:', error);
         res.status(500).send('Error al cargar el historial de pedidos');
     }
 }
@@ -193,7 +191,6 @@ export async function viewCalendario(req, res) {
             inicioSemana: lunesEstaSemana.toISOString(),
         });
     } catch (error) {
-        console.error('Error al obtener las recetas del calendario:', error);
         res.render('pagina', {
             contenido,
             session: req.session,
@@ -506,7 +503,6 @@ export function aniadirRecetaACalendario(req, res) {
         //TODO Añadir mensaje en el controller    
         //return { mensaje: "Receta asignada correctamente" }; (Mensaje Flash?)
     } catch (e) {
-        console.error("Error al añadir receta al calendario:", e);
         res.render('pagina', {
             contenido: 'paginas/error',
             session: req.session,
@@ -534,7 +530,6 @@ export function eliminarRecetaDeCalendario(req, res) {
             //TODO Añadir mensaje en el controller {mensaje: "Receta eliminada correctamente" };
         }
     } catch (e) {
-        console.error("Error al eliminar receta del calendario:", e);
         res.render('pagina', {
             contenido: 'paginas/error',
             session: req.session,
@@ -559,7 +554,6 @@ export function aniadirRecetaAFavoritos(req, res) {
         Guardado.addRecetaToFavoritos(usuarioId, recetaId);
         res.redirect('/usuarios/misrecetas');
     } catch (e) {
-        console.error("Error al guardar receta en favoritos:", e);
         res.render('pagina', {
             contenido: 'paginas/error',
             session: req.session,
@@ -578,7 +572,6 @@ export function eliminarRecetaDeFavoritos(req, res) {
 
         //TODO Añadir mensaje en el controller {mensaje: "Receta eliminada de favoritos" };
     } catch (e) {
-        console.error("Error al eliminar receta de favoritos:", e);
         res.render('pagina', {
             contenido: 'paginas/error',
             session: req.session,
