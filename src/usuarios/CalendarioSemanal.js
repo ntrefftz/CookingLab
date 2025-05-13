@@ -1,3 +1,5 @@
+import { logger } from "../logger.js"; // Asegúrate de que la ruta sea correcta
+
 export class CalendarioSemanal {
     static #getByUsuarioYSemanaStmt = null;  // Obtener todas las recetas asignadas a un usuario en una semana
     static #insertStmt = null;               // Asignar una receta a un usuario en un día específico de una semana
@@ -48,7 +50,6 @@ export class CalendarioSemanal {
 
     // Asignar una receta a un usuario en un día específico
     static asignarRecetaAUsuario(id_receta, id_usuario, fecha) {
-    
         try {
             const result = this.#insertStmt.run({ id_receta, id_usuario, fecha });
             console.log("Inserción completada:", result);
@@ -98,7 +99,10 @@ export class CalendarioSemanal {
             inicio: inicioStr,
             fin: finStr
         });
-        if (recetas.length === 0) throw new Error("No se encontraron recetas con este ingrediente.");
+        if (recetas.length === 0) {
+            logger.warn(`No se encontraron recetas para el usuario ${id_usuario} entre ${inicioStr} y ${finStr}.`);
+            return []; // Devuelve un array vacío en lugar de lanzar un error
+        }
         return recetas.map(({ id_receta, nombre, fecha, dificultad, tiempo_prep_segs }) =>
             new CalendarioSemanal(id_receta, nombre, fecha, dificultad, tiempo_prep_segs)
         );

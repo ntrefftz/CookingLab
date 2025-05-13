@@ -143,19 +143,41 @@ export async function viewCalendario(req, res) {
     domingoProximaSemana.setDate(lunesEstaSemana.getDate() + 13); // lunes + 13 = domingo siguiente
     domingoProximaSemana.setHours(23, 59, 59, 999);
 
-    // Obtener recetas en el rango de 14 días
-    const recetasSemana = await CalendarioSemanal.getRecetasRango(
-        req.session.userId,
-        lunesEstaSemana,
-        domingoProximaSemana
-    );
+    try {
+        // Obtener recetas en el rango de 14 días
+        const calendarioRecetas = await CalendarioSemanal.getRecetasRango(
+            req.session.userId,
+            lunesEstaSemana,
+            domingoProximaSemana
+        );
 
-    res.render('pagina', {
-        contenido,
-        session: req.session,
-        inicioSemana: lunesEstaSemana.toISOString(),
-        recetasSemana
-    });
+        const recetasSemana = await Promise.all(
+            calendarioRecetas.map(async (calReceta) => {
+                const receta = Receta.getRecetaById(calReceta.id_receta);
+                return {
+                    ...receta,
+                    fecha: calReceta.fecha,
+                };
+            })
+        );
+
+        res.render('pagina', {
+            contenido,
+            session: req.session,
+            recetasSemana,
+            inicioSemana: lunesEstaSemana.toISOString(),
+        });
+    } catch (error) {
+        console.error('Error al obtener las recetas del calendario:', error);
+        res.render('pagina', {
+            contenido,
+            session: req.session,
+            error: 'No se pudieron cargar las recetas del calendario',
+            recetasSemana: [],
+            inicioSemana: lunesEstaSemana.toISOString(),
+        });
+    }
+
 }
 
 export function viewLogin(req, res) {
