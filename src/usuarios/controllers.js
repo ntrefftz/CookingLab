@@ -11,6 +11,7 @@ import { Contiene } from '../pedidos/Contiene.js';
 import { Realiza } from '../pedidos/Realiza.js';
 import { Ingrediente } from '../recetas/Ingredientes.js';
 import { UsuarioNoEncontrado } from './Usuario.js';
+import bcrypt from 'bcrypt';
 
 
 
@@ -395,7 +396,7 @@ export function modificarPerfil(req, res) {
         const usuarioActual = Usuario.getUsuarioById(req.session.userId);
 
         const password = datos.password
-            ? bcrypt.hashSync(datos.password)
+            ? bcrypt.hashSync(datos.password, bcrypt.genSaltSync(10)) //genSaltSync(10) requerido tras error en la función
             : usuarioActual.password;
 
         const usuarioActualizado = new Usuario(
@@ -447,18 +448,18 @@ export function eliminarPerfil(req, res) {
     const id = req.body.id;
     try {
         if (parseInt(id) !== req.session.userId) {
-            return res.redirect('/usuarios/listaUsuarios');
+            Usuario.borrarUsuario(id); //TODO ERROR
         }
+        else {
+            Usuario.borrarUsuario(id);
 
-        Usuario.borrarUsuario(id);
-        
-        req.session.login = null;
-        req.session.userId = null;
-        req.session.flashMsg = 'Tu cuenta ha sido desactivada correctamente';
-        req.session.save(() => {
-            res.redirect('/');
-        });
-        
+            req.session.login = null;
+            req.session.userId = null;
+            req.session.flashMsg = 'Tu cuenta ha sido desactivada correctamente';
+            req.session.save(() => {
+                res.redirect('/');
+            });
+        }
     } catch (error) {
         logger.error('Error al desactivar usuario:', error);
         res.status(500).json({ mensaje: 'Error al desactivar la cuenta', error: error.message });
