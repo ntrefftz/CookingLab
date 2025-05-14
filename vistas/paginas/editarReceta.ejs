@@ -1,42 +1,77 @@
-<form id="editar-receta" action="/recetas/receta/modificar?id=<%= recetas.id %>" method="POST"
-    enctype="multipart/form-data">
+<form id="editar-receta" action="/recetas/receta/modificar?id=<%= recetas.id %>" method="POST" enctype="multipart/form-data">
+    <% if (locals.error) { %>
+        <p><strong><%= locals.error %></strong></p>
+    <% } %>
     <div class="form-header">
         <h2>Editar Receta</h2>
     </div>
     <label>Nombre:</label> <input type="text" name="nombre" value="<%= recetas.nombre %>" />
-    <label>Tiempo de preparación (min):</label> <input type="number" name="tiempo_prep_segs"
-        value="<%= Math.floor(recetas.tiempo_prep_segs / 60) %>" />
+    <label>Tiempo de preparación (min):</label> <input type="number" name="tiempo_prep_segs" value="<%= Math.floor(recetas.tiempo_prep_segs/60) %>" />
     <label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" value="<%= recetas.dificultad %>" />
     <label>Descripción:</label> <textarea name="descripcion"><%= recetas.descripcion %></textarea>
     <div>
-        <label for="inputImagen">Foto (No subir nada para mantener la fotografía actual):</label>
-        <input type="file" name="foto" id="inputImagen">
+        <label for="inputImagen">Foto (No subir nada para mantener la fotografía actual):</label><input type="file" name="foto" id="inputImagen">
+    </div>
+    <div class="ingredientes-section">
+        <h3>Ingredientes actuales:</h3>
+        <% if (recetas.ingredientes && recetas.ingredientes.length > 0) { %>
+            <ol>
+                <% recetas.ingredientes.forEach(function(ingrediente) { %>
+                    <li><%= ingrediente.nombre %></li>
+                <% }) %>
+            </ol>
+        <% } else { %>
+            <p>No hay ingredientes disponibles.</p>
+        <% } %>
     </div>
 
-    <div class="ingredientes-section">
-        <h3>Ingredientes:</h3>
-        <% if (listaIngredientes && listaIngredientes.length> 0) { %>
-            <ul>
-                <% listaIngredientes.forEach(ingrediente=> { %>
-                    <% const ingredienteEnReceta=recetas.ingredientes.find(ing=> ing.id_ingrediente === ingrediente.id);
-                        const cantidadActual = ingredienteEnReceta ? ingredienteEnReceta.cantidad : 0;
-                        %>
-                        <li>
-                            <label for="ing-<%= ingrediente.id %>">
-                                <%= ingrediente.nombre %>
-                            </label>
-                            <input type="number" id="ing-<%= ingrediente.id %>"
-                                name="ingredientes[<%= ingrediente.id %>]" value="<%= cantidadActual %>" min="0" />
-                            <label for="ing-<%= ingrediente.id %>">
-                                <%= ingrediente.unidad_medida %>
-                            </label>
-                        </li>
-                        <% }) %>
-            </ul>
+    <div class="acciones-ingredientes">
+        <details class="ingredientes-section">
+            <summary>Añadir ingrediente</summary>
+            <% 
+                // Crear un array con los IDs de los ingredientes actuales de la receta
+                const currentIngredientIds = recetas.ingredientes.map(ing => ing.id_ingrediente || ing.id);
+            %>
+            <% if (listaIngredientes && listaIngredientes.length > 0) { %>
+                <ul>
+                    <% listaIngredientes.forEach(ingrediente => { %>
+                        <!-- Mostrar solo si NO está en la receta -->
+                        <% if (!currentIngredientIds.includes(ingrediente.id)) { %>
+                            <li>
+                                <input type="checkbox" id="ing-<%= ingrediente.id %>" 
+                                        name="ingredientesSeleccionados[]" 
+                                        value="<%= ingrediente.id %>">
+                                <label for="ing-<%= ingrediente.id %>"><%= ingrediente.nombre %></label>
+                                <input type="number" name="cantidades[<%= ingrediente.id %>]" 
+                                        placeholder="Unidad" min="0">
+                                <input type="number" name="cantidad_especifica[<%= ingrediente.id %>]" 
+                                        placeholder="Gramos" min="0">
+                            </li>
+                        <% } %>
+                    <% }) %>
+                </ul>
             <% } else { %>
                 <p>No hay ingredientes disponibles.</p>
-                <% } %>
-    </div>
+            <% } %>
+        </details>
 
+        <details class="ingredientes-section">
+            <summary>Eliminar ingrediente</summary>
+            <% if (recetas.ingredientes && recetas.ingredientes.length > 0) { %>
+                <ul>
+                    <% recetas.ingredientes.forEach(ingrediente => { %>
+                        <li>
+                            <input type="checkbox" id="del-<%= ingrediente.id_ingrediente || ingrediente.id %>" name="ingredientesAEliminar[]" value="<%= ingrediente.id_ingrediente || ingrediente.id %>">
+                            <label for="del-<%= ingrediente.id_ingrediente || ingrediente.id %>"><%= ingrediente.nombre %></label>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <p>No hay ingredientes para eliminar.</p>
+            <% } %>
+        </details>
+    </div>
+    
     <button type="submit">Guardar cambios</button>
+
 </form>
