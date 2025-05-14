@@ -22,7 +22,7 @@ export class Receta {
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas WHERE activo = 1'); // Obtener todas las recetas activas
         this.#getAllNact = db.prepare('SELECT * FROM Recetas WHERE activo = 0'); // Obtener todas las recetas NO activas
         this.#activarRecetaStmt = db.prepare('UPDATE Recetas SET activo = 1 WHERE id = @id'); //Activa las recetas sugeridas
-        
+
         this.#searchByNameStmt = db.prepare('SELECT * FROM Recetas WHERE nombre LIKE @nombre AND activo = 1');
         this.#searchByIngredientStmt = db.prepare(`
             SELECT DISTINCT R.* 
@@ -37,7 +37,7 @@ export class Receta {
     static getRecetaById(id) {
         const receta = this.#getByIdStmt.get({ id });
         if (!receta) throw new RecetaNoEncontrada(id);
-    
+
         // Crear y devolver una instancia de Receta
         return new Receta(
             receta.id,
@@ -50,10 +50,10 @@ export class Receta {
             receta.imagen_url
         );
     }
-    
+
     static getRecetasByUsuario(id_usuario) {
         const recetas = this.#getByUsuarioStmt.all({ id_usuario });
-    
+
         // Mapear los resultados a instancias de Receta
         return recetas.map(receta => new Receta(
             receta.id,
@@ -66,10 +66,10 @@ export class Receta {
             receta.imagen_url
         ));
     }
-    
+
     static getAllRecetas() {
         const recetas = this.#getAllStmt.all();
-    
+
         // Mapear los resultados a instancias de Receta
         return recetas.map(receta => new Receta(
             receta.id,
@@ -82,10 +82,10 @@ export class Receta {
             receta.imagen_url
         ));
     }
-    
+
     static getAllRecetasNact() {
         const recetas = this.#getAllNact.all();
-    
+
         // Mapear los resultados a instancias de Receta
         return recetas.map(receta => new Receta(
             receta.id,
@@ -102,29 +102,22 @@ export class Receta {
     static addReceta(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo = 1, imagen_url) {
         try {
             const result = this.#insertStmt.run({ nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo, imagen_url });
-            return result; 
+            return result;
         } catch (e) {
             throw new ErrorDatos("No se pudo añadir la receta", { cause: e });
         }
     }
 
     static updateReceta(id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url) {
-        const result = this.#updateStmt.run({ id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url});
+        const result = this.#updateStmt.run({ id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url });
         if (result.changes === 0) throw new RecetaNoEncontrada(id);
         return true; //TODO MENSAJE{ mensaje: "Receta actualizada correctamente" };
     }
 
     static deleteReceta(id) {
-        try {
-            const result = this.#deleteStmt.run({ id });
-            if (result.changes === 0) {
-                throw new RecetaNoEncontrada(id);
-            }
-    
-            return  true; //TODO MENSAJE{ mensaje: "Receta eliminada correctamente", id };
-        } catch (error) {
-            throw new ErrorDatos("No se pudo eliminar la receta", { cause: error });
-        }
+        this.#deleteStmt.run({ id });
+
+        return true; //TODO MENSAJE{ mensaje: "Receta eliminada correctamente", id };
     }
 
     static searchByName(nombre) {
@@ -141,9 +134,9 @@ export class Receta {
         ));
 
     }
-    
+
     static searchByIngredient(ingrediente) {
-        
+
         const recetas = this.#searchByIngredientStmt.all({ ingrediente: ingrediente });
         return recetas.map(receta => new Receta(
             receta.id,
@@ -172,7 +165,7 @@ export class Receta {
     dificultad;
     id_usuario;
     activo;
-    imagen_url; 
+    imagen_url;
 
 
 
@@ -185,7 +178,7 @@ export class Receta {
         this.id_usuario = id_usuario;
         this.activo = activo;
         this.imagen_url = imagen_url;
-        
+
     }
 
 }

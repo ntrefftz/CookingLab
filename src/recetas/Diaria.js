@@ -4,7 +4,7 @@ export class Diaria {
     static #deleteStmt = null;   // Para eliminar la receta de un día
     static #getAllStmt = null;   // Para obtener todas las recetas asignadas a los días
     static #updateStmt = null;   // Para actualizar la receta de un día específico
-    static #deleteRecetaStmt = null; // Para eliminar la receta de un día específico
+    static #deleteRecetaStmt = null; // Para eliminar la receta 
 
     static initStatements(db) {
         if (this.#getByDiaStmt !== null) return;

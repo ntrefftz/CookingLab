@@ -7,6 +7,8 @@ import { Cesta } from '../pedidos/Cesta.js';
 import { Diaria } from './Diaria.js';
 import { join } from 'node:path';
 import { config } from '../config.js';
+import { CalendarioSemanal } from '../usuarios/CalendarioSemanal.js';
+import { Guardado } from '../usuarios/Guardado.js';
 
 export function viewRecetasLista(req, res) {
     // XXX Faltan valdator + lógicaidaciones con express-vali apropiada para verificar la existencia y/o tipos de los parámetros
@@ -41,7 +43,7 @@ export function viewGestionStock(req, res) {
 }
 
 export function viewRecetasDetalle(req, res) {
-      // XXX Faltan valdator + lógicaidaciones con express-vali apropiada para verificar la existencia y/o tipos de los parámetros
+    // XXX Faltan valdator + lógicaidaciones con express-vali apropiada para verificar la existencia y/o tipos de los parámetros
     const contenido = 'paginas/receta';
     const id = req.query.id;
     const receta = Receta.getRecetaById(id);
@@ -77,7 +79,10 @@ export function eliminarReceta(req, res) {
         ingredientes.forEach(ing => {
             Tiene.removeIngredienteFromReceta(id, ing.id_ingrediente);
         });
-
+        //eliminar la receta de otras tablas
+        CalendarioSemanal.eliminarRecetas(id);
+        Diaria.eliminarReceta(id);
+        Guardado.removeRecetas(id);
         //Eliminar la receta
         Receta.deleteReceta(id);
 
@@ -243,7 +248,7 @@ export function viewAniadirReceta(req, res) {
 }
 
 export function aniadirReceta(req, res) {
-// XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
+    // XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
     logger.debug("Sesión actual:", req.session);
     const imagen = req.file ? req.file.filename : "";
     let imagen_url = null;
@@ -259,7 +264,7 @@ export function aniadirReceta(req, res) {
     const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
     const id_usuario = req.session.userId;
 
-     const activo = req.session.esAdmin ? 1 : 0; // Si es administrador, la receta está activa; si no, está pendiente (al user no le sale)
+    const activo = req.session.esAdmin ? 1 : 0; // Si es administrador, la receta está activa; si no, está pendiente (al user no le sale)
 
 
     const ingredientes = Ingrediente.getAllIngredientes();
@@ -267,7 +272,7 @@ export function aniadirReceta(req, res) {
 
     if (!id_usuario) {
         logger.error("Error: No se ha proporcionado un ID de usuario válido");
-// XXX Se debería de renderizar una página para humanos :)
+        // XXX Se debería de renderizar una página para humanos :)
         return res.status(400).send('No se ha proporcionado un ID de usuario válido');
     }
     if (!imagen) {
@@ -436,7 +441,7 @@ export function viewModificarIngrediente(req, res) {
 }
 
 export function eliminarIngrediente(req, res) {
-// XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
+    // XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
     const id = req.body.id;
     Cesta.borrarIngrediente(id);
     Tiene.deleteIngrediente(id);
@@ -460,7 +465,7 @@ export function modificarIngrediente(req, res) {
     const stock = req.body.stock.trim();
     const id = req.query.id;
     const unidad_medida = req.body.unidad_medida.trim() || 'unidad';
-    
+
 
 
     if (!imagen) {
@@ -582,7 +587,7 @@ export function buscarReceta(req, res) {
     try {
 
         let recetas = [];
-                // XXX Potencial SQL injection
+        // XXX Potencial SQL injection
         const terminoBusqueda = `%${termino}%`; //Para no distinguir entre mayusculas y minusculas
 
         if (tipo === 'nombre') {
@@ -619,7 +624,7 @@ export function buscarReceta(req, res) {
                 break;
         }
 
-         // XXX Aprender que hace ;) pista: object destructuring para copiar y añadir nuevas propiedades
+        // XXX Aprender que hace ;) pista: object destructuring para copiar y añadir nuevas propiedades
         // XXX Lo normal sería que la clase Receta ya tuviera estas dos propiedades :(
 
         //IMPORTANTE sin esto no funciona, no se muy bien que hace es de CHATgpt
@@ -772,7 +777,7 @@ export function aceptarSugerenciaReceta(req, res) {
 }
 
 export function viewSugerencias(req, res) {
-   // Obtener las recetas no activas (sugerencias)
+    // Obtener las recetas no activas (sugerencias)
 
     const rows = Receta.getAllRecetasNact();
 
