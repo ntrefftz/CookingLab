@@ -213,7 +213,7 @@ export function modificarReceta(req, res) {
        }
    }
 
-   const ingredientesAEliminar = req.body['ingredientesAEliminar[]'] || [];
+   const ingredientesAEliminar = req.body['ingredientesAEliminar'] || [];
 
    // Cantidad de ingredientes que se quieren eliminar
    //const cantidadAEliminar = ingredientesEliminarArray.length;
