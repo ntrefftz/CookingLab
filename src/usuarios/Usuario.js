@@ -48,11 +48,8 @@ export class Usuario {
         return usuario;
     }
 
-    static editarUsuario(id, username, password, nombre, apellido, correo, direccion, rol) {
-        let usuario = null;
+    static editarUsuario(usuario) {
         try {
-            usuario = new Usuario(username, password, nombre, apellido, correo, direccion, rol);
-            usuario.id = id;
             usuario = this.#update(usuario);
         } catch (e) {
             throw new UsuarioYaExiste(username, { cause: e });
@@ -60,17 +57,56 @@ export class Usuario {
         return usuario;
 
     }
-    static borrarUsuario(id) {
-        const result = this.#deleteStmt.run({ id });
-        if (result.changes === 0) throw new UsuarioNoEncontrado(id);
-        return { mensaje: "Usuario eliminado correctamente" };
 
+    static borrarUsuario(id) {
+        const usuario = this.#getByIdStmt.get({ id });
+        if (!usuario) throw new UsuarioNoEncontrado(id);
+
+        // Crear un objeto con todos los campos necesarios
+        const datosActualizados = {
+            id: usuario.id,
+            username: usuario.username,
+            password: usuario.password,
+            nombre: usuario.nombre,
+            apellido: usuario.apellido,
+            correo: usuario.correo,
+            direccion: usuario.direccion,
+            rol: usuario.rol,
+            activo: 0  // Establecer activo a 0
+        };
+
+        const result = this.#updateStmt.run(datosActualizados);
+
+        if (result.changes === 0) throw new UsuarioNoEncontrado(id);
+        return { mensaje: "Cuenta desactivada correctamente" };
+    }
+    static activarUsuario(id) {
+        const usuario = this.#getByIdStmt.get({ id });
+        if (!usuario) throw new UsuarioNoEncontrado(id);
+
+        // Crear un objeto con todos los campos necesarios
+        const datosActualizados = {
+            id: usuario.id,
+            username: usuario.username,
+            password: usuario.password,
+            nombre: usuario.nombre,
+            apellido: usuario.apellido,
+            correo: usuario.correo,
+            direccion: usuario.direccion,
+            rol: usuario.rol,
+            activo: 1  // Establecer activo a 0
+        };
+
+        const result = this.#updateStmt.run(datosActualizados);
+
+        if (result.changes === 0) throw new UsuarioNoEncontrado(id);
+        return { mensaje: "Cuenta activada correctamente" };
     }
 
     static getUsuarioByUsername(username) {
         const usuario = this.#getByUsernameStmt.get({ username });
-
         logger.debug('GetUsuarioByUsername:', usuario);
+
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
         const { password, nombre, apellido, correo, direccion, rol, activo, id } = usuario;
 
@@ -106,15 +142,14 @@ export class Usuario {
 
     static #update(usuario) {
         const username = usuario.username;
-        const password = usuario.password;
         const nombre = usuario.nombre;
         const apellido = usuario.apellido;
         const correo = usuario.correo;
         const direccion = usuario.direccion;
-        const rol = usuario.rol;
         const activo = usuario.activo;
-        const id = usuario.id; // Añadir esta línea
-
+        const id = usuario.id;
+        const password = usuario.password;
+        const rol = usuario.rol;
         const datos = { username, password, nombre, apellido, correo, direccion, rol, activo, id };
 
         const result = this.#updateStmt.run(datos);
@@ -130,8 +165,11 @@ export class Usuario {
         } catch (e) {
             throw new UsuarioOPasswordNoValido(username, { cause: e });
         }
-        // XXX: En el ej3 / P3 lo cambiaremos para usar async / await o Promises
-        //logger.log("Rol del usuario en login:", usuario.rol);
+
+        // Verificar si la cuenta está activa
+        if (usuario.activo === 0) {
+            throw new UsuarioOPasswordNoValido(username, { cause: 'Cuenta desactivada' });
+        }
 
         if (!bcrypt.compareSync(password, usuario.#password)) throw new UsuarioOPasswordNoValido(username);
 
@@ -140,9 +178,9 @@ export class Usuario {
             username: usuario.username,
             nombre: usuario.nombre,
             esAdmin: usuario.rol === RolesEnum.ADMIN,
+            esCocinero: usuario.rol === RolesEnum.COCINERO,
             rol: usuario.rol
         };
-
     }
 
     static register(username, password, nombre, apellido, correo, direccion) {
@@ -159,6 +197,10 @@ export class Usuario {
     }
 
     static getAllUsuarios() {
+        // Si quieres solo usuarios activos:
+        // const usuarios = this.#getAllStmt.all().filter(u => u.activo === 1);
+
+        // Si quieres todos los usuarios (incluyendo inactivos):
         const usuarios = this.#getAllStmt.all();
         if (!usuarios) throw new UsuarioNoEncontrado(id);
         return usuarios;
@@ -186,7 +228,9 @@ export class Usuario {
 
         this.#id = id;
     }
-
+    get password() {
+        return this.#password;
+    }
     get rol() {
         return this.#rol;
     }
@@ -228,7 +272,6 @@ export class UsuarioOPasswordNoValido extends Error {
         this.name = 'UsuarioOPasswordNoValido';
     }
 }
-
 
 export class UsuarioYaExiste extends Error {
     /**

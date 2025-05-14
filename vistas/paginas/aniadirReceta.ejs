@@ -1,16 +1,73 @@
-<h2>Añadir nueva receta</h2>
+<form id="editar-ingredinte" action="/recetas/receta/aniadir" method="POST" enctype="multipart/form-data">
 
-<form action="/recetas/receta/aniadir" method="POST">
-    <fieldset>
-        <% if (locals.error) { %>
-            <p><strong><%= locals.error %></strong></p>
+    <% if (locals.error) { %>
+        <p><strong>
+                <%= locals.error %>
+            </strong></p>
         <% } %>
-        <legend>Detalles de la receta</legend>
-        <div><label>Nombre:</label> <input type="text" name="nombre" required placeholder="Introduce el nombre de la receta" /></div>
-        <div><label>Tiempo de preparación (min):</label><input type="number" name="tiempo_prep_segs" required placeholder="Tiempo en minutos" min="1" /></div>
-        <div><label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" required placeholder="Dificultad de la receta" min="1" max="5" /></div>
-        <div><label>Descripción:</label><textarea name="descripcion" required placeholder="Introduce una breve descripción de la receta"></textarea></div>
 
-        <button type="submit">Añadir receta</button>
-    </fieldset>
+            <div class="form-header">
+                <h2>Añadir nueva receta</h2>
+            </div>
+
+            <div class="form-section">
+                <h3>Detalles de la receta</h3>
+                <div><label>Nombre:</label> <input type="text" name="nombre" required
+                        placeholder="Introduce el nombre de la receta" /></div>
+                <p></p>
+                <div><label>Tiempo de preparación (min):</label><input type="number" name="tiempo_prep_segs" required
+                        placeholder="Tiempo en minutos" min="1" /></div>
+                <p></p>
+                <div><label>Dificultad (1 a 5):</label> <input type="number" name="dificultad" required
+                        placeholder="Dificultad de la receta" min="1" max="5" /></div>
+                <p></p>
+                <div><label>Descripción:</label><textarea name="descripcion" required
+                        placeholder="Introduce una breve descripción de la receta"></textarea></div>
+                <p></p>
+                <div>
+                    <label for="inputImagen">Foto:</label><input type="file" name="foto" id="inputImagen">
+                </div>
+                <!--<div><label>URL de imagen (opcional):</label> <input type="url" name="imagen_url" placeholder="https://ejemplo.com/imagen.jpg" /></div>-->
+
+                <h3>Ingredientes disponibles</h3>
+                <details class="ingredientes-section">
+                    <summary>Añadir ingrediente</summary>
+                    <% if (ingredientes && ingredientes.length> 0) { %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Incluir</th>
+                                    <th>Ingrediente</th>
+                                    <th>Unidades a comprar</th>
+                                    <th>Cantidad específica (g/ml)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% ingredientes.forEach(ingrediente=> { %>
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="ingredientes[]"
+                                                value="<%= ingrediente.id %>" />
+                                        </td>
+                                        <td>
+                                            <%= ingrediente.nombre %>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="cantidades_unidad[<%= ingrediente.id %>]" min="0"
+                                                step="any" />
+                                        </td>
+                                        <td>
+                                            <input type="number" name="cantidades_esp[<%= ingrediente.id %>]" min="0"
+                                                step="any" />
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                        <% } else { %>
+                            <p>No hay ingredientes disponibles.</p>
+                            <% } %>
+                </details>
+                <button type="submit">Añadir receta</button>
+
 </form>

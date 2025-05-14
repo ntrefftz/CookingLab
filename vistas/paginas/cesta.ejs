@@ -1,2 +1,8 @@
 <h1>Cesta</h1>
-<p>En esta página se mostrará el contenido de la cesta de la compra.</p>
+<div id="cesta">    
+    <div id="cesta-data" 
+         data-precio="<%= precioTotal %>" 
+         data-ingredientes="<%= JSON.stringify(ingredientes) %>">
+    </div>
+</div>
+<script src="/js/mostrarCesta.js"></script>

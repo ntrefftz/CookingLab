@@ -11,10 +11,12 @@ import { config } from './config.js';
 import usuariosRouter from './usuarios/router.js';
 import contenidoRouter from './contenido/router.js';
 import recetasRouter from './recetas/router.js';
+import pedidosRouter from './pedidos/router.js';
 import { flashMessages } from './middleware/flash.js';
 import { errorHandler } from './middleware/error.js';
 import { logger } from './logger.js';
 import pinoHttp  from 'pino-http';
+
 
 const pinoMiddleware = pinoHttp(config.logger.http(logger));
 
@@ -22,9 +24,8 @@ export const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', config.vistas);
-
 app.use(pinoMiddleware);
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session(config.session));
 
@@ -36,5 +37,6 @@ app.use('/', contenidoRouter);
 app.use('/usuarios', usuariosRouter);
 app.use('/contenido', contenidoRouter);
 app.use('/recetas', recetasRouter);
+app.use('/pedidos', pedidosRouter);
 
 app.use(errorHandler);

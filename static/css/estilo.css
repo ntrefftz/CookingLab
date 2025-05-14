@@ -1,3 +1,135 @@
+	/* Estilo para el formulario de búsqueda en la barra de navegación */
+	.navbar-search {
+		display: flex;
+		align-items: center;
+		margin: 0;
+		padding: 0;
+	}
+
+	form.navbar-search {
+		display: flex;
+		align-items: center;
+		margin: 0;
+		padding: 0;
+		background-color: transparent;
+		box-shadow: none;
+		border: none;
+	}
+
+	.navbar-search input[type="text"] {
+		padding: 5px;
+		font-size: 14px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		width: 150px;
+		transition: width 0.3s ease;
+	}
+
+	.navbar-search input[type="text"]:focus {
+		width: 200px;
+	}
+
+	.navbar-search button {
+		background: none;
+		border: none;
+		font-size: 16px;
+		cursor: pointer;
+		margin-left: 5px;
+		padding: 0;
+	}
+
+	#calendar-simple {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-top: 20px;
+	}
+
+	#calendar-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-top: 20px;
+	}
+
+	.calendar-header {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		background-color: #F383A0;
+		color: white;
+		padding: 10px 20px;
+		border-radius: 8px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	}
+	.calendar-header button {
+		background-color: F383A0;
+		color: white;
+		border: 1px solid #F383A0;
+		border-radius: 4px;
+		padding: 5px 10px;
+		cursor: pointer;
+		font-size: 14px;
+		transition: background-color 0.3s ease;
+	}
+
+
+	#current-date {
+		font-size: 30px;
+		font-weight: bold;
+		position: absolute;
+		top: 60%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		font-weight: bold;
+		color: #000000;
+		pointer-events: none;
+		word-wrap: break-word;
+		max-width: 80%;
+		text-align: center;
+		line-height: 1.5;
+	}
+
+	#postit-container {
+		position: relative;
+		display: inline-block;
+		text-align: center;
+		width: 350px;
+		height: 350px;
+		margin: 20px auto;
+	}
+
+	#postit-image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 10px;
+	}
+
+	.card.destacada {
+		border: 4px solid #F383A0;
+		background-color: #fff8e1;
+		box-shadow: 0 0 20px #f06c8f;
+		transform: scale(1.03);
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+
+	.card.destacada:hover {
+		transform: scale(1.05);
+		box-shadow: 0 0 25px #f06c8f
+	}
+
+	.card.destacada h4 {
+		color: #F383A0;
+		font-size: 1.5em;
+		margin-bottom: 10px;
+	}
+
+	.card.destacada p {
+		font-weight: bold;
+	}
+
 body {
 	background-color: #FFFFFF;
 	width: auto;
@@ -16,14 +148,14 @@ body {
 
 header {
 	display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 30px;
-    height: 100px;
-    background-color: #F383A0;
-    color: black;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 30px;
+	height: 100px;
+	background-color: #F383A0;
+	color: black;
 }
 
 header a,
@@ -43,8 +175,12 @@ header a:hover {
 .navbar {
 	display: flex;
 	align-items: center;
-	justify-content: center;
 	background-color: #F383A0;
+	margin: 0;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 10px;
+	list-style-type: none;
 	padding: 0;
 	margin: 0;
 }
@@ -74,8 +210,8 @@ header a:hover {
 }
 
 .login {
-    margin-left: 0;
-    text-align: center;
+	margin-left: 0;
+	text-align: center;
 }
 
 .login p {
@@ -145,6 +281,29 @@ label {
 	display: block;
 }
 
+/* ESTILO PARA BOTONES DE NAVEGACIÓN */
+.navbar a,
+.dropdown-btn {
+	background-color: white;
+	color: #F383A0;
+	border: 2px solid white;
+	border-radius: 8px;
+	padding: 4px 12px;
+	font-weight: bold;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	box-shadow: 0 6px 12px rgba(47, 5, 234, 0.15);
+}
+
+.navbar a:hover,
+.dropdown-btn:hover {
+	background-color: #F383A0;
+	color: white;
+	text-decoration: none;
+	transform: translateY(-2px); /* efecto lift */
+	box-shadow: 0 6px 12px rgba(47, 5, 234, 0.15); /* sombra más intensa al hacer hover */
+}
+
 /*formulario*/
 form {
 	width: 90%;
@@ -152,8 +311,6 @@ form {
 	margin: 20px auto;
 	background-color: #fff;
 	padding: 20px;
-	border-radius: 8px;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 form label {
@@ -173,22 +330,23 @@ form select {
 	border: 1px solid #ccc;
 	border-radius: 5px;
 }
+.navbar-search {
+	position: relative;
+	top: -3px; 
+}
 
-/* Para los radio buttons */
 .radio-group {
 	display: flex;
 	gap: 10px;
 	align-items: center;
 }
 
-/* Alineación del checkbox */
 .terms {
 	display: flex;
 	align-items: center;
 	gap: 5px;
 }
 
-/* Botón bien alineado */
 button {
 	width: auto;
 	display: block;
@@ -202,38 +360,37 @@ button {
 	font-size: 16px;
 }
 
-/* Imagen */
 img {
 	max-width: 100%;
 }
 
 /* CSS tarjetas */
 .cards_container {
-    max-width: 90%;
-    margin: 30px auto;  
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;  
-    padding: 0 15px;  /* Espaciado lateral */
+	max-width: 90%;
+	margin: 30px auto;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 25px;
+	padding: 0 15px;
 }
 
 .card {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;  /* Bordes más redondeados */
-    background: white;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    width: 100%;  /* Ocupa todo el ancho de la celda grid */
-	overflow:hidden;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	background: white;
+	text-align: center;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	transition: transform 0.3s ease;
+	width: 100%;
+	overflow: hidden;
 }
 
 .card img {
-	display:block;
-    width: 100%;
-    height: 180px;  /* Altura fija para uniformidad */
-    object-fit: cover;
+	display: block;
+	width: 100%;
+	height: 180px;
+	object-fit: cover;
 }
 
 .card h4 {
@@ -247,19 +404,29 @@ img {
 }
 
 .card header {
-    background-color: #F383A0;
-    color: black;
-    padding: 15px;
-    font-size: 1.1em;
-    font-weight: bold;
-    min-height: auto;  
+	background-color: #F383A0;
+	color: black;
+	padding: 15px;
+	font-size: 1.1em;
+	font-weight: bold;
+	min-height: auto;
 }
 
-.dropdown{
+.dropdown {
 	position: relative;
-	/*display: inline-block;*/
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+	left: -67px;
 }
 
+.dropdown-content.show {
+    display: block; 
+}
 .dropdown-btn {
 	background-color: #F383A0;
 	color: black;
@@ -275,26 +442,50 @@ img {
 	display: block;
 }
 
-.dropdown-content {
-	display: none;
-	position: absolute;
-	padding-right: auto;
-	background-color: #FFE0EE;
-	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-	z-index: 1;
-}
 
-.dropdown:hover .dropdown-content {
+.dropdown-content ul {
 	display: block;
 }
 
-.dropdown-content ul{
-	display:block;
+/*recuadro de la caja desplegable*/
+.dropdown-content li {
+	border: 1px solid palevioletred;
+	border-radius: 8px;        
+    padding: 5px 10px;          
+    margin: 5px auto;           
+    width: 80%;                 
+	display: flex;
+    justify-content: center;  
+    align-items: center;      
+	background-color: rgb(250, 167, 189); 
+
 }
 
-.dropdown-content li{
-	border: 1px solid palevioletred;
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: transparent; 
+    border: none;
+    box-shadow: none; 
+    z-index: 1;
+    margin-top: 9px; 
+}
+
+.dropdown-content ul li a {
+    color: #000000;
+    padding: 10px;
+    font-weight: normal;
+    text-decoration: none;
+    display: block; 
+	justify-content: center; 
+    text-align: center;
+	width: 100%;              
+
+}
+
+.dropdown-content ul li a:hover {
+    background-color: #F383A0; 
+    color: white; 
 }
 
 /*profile*/
@@ -304,7 +495,7 @@ img {
 	padding: 20px;
 	border: 1px solid #ddd;
 	border-radius: 8px;
-	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-info p {
@@ -322,59 +513,137 @@ img {
 
 /*botones perfil*/
 .btn {
-	padding: 8px 16px;
-	text-decoration: none;
-	border-radius: 4px;
-	font-weight: bold;
+    padding: 10px 20px; /* Padding idéntico */
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-family: 'Times New Roman';
+    display: inline-flex; /* Cambiado a flex para mejor alineación */
+    align-items: center; /* Centra verticalmente el contenido */
+    justify-content: center; /* Centra horizontalmente el contenido */
+    min-width: 150px;
+    box-sizing: border-box;
+    line-height: normal; /* Reset del line-height */
+    border: none;
+    transition: all 0.3s ease;
+    height: 40px; /* Altura fija explícita */
+    font-size: 16px; /* Tamaño de fuente explícito */
 }
 
 .btn-edit {
-	background-color: #4CAF50;
-	color: white;
+    background-color: #4CAF50;
+    color: white;
 }
 
 .btn-delete {
-	background-color: #f44336;
-	color: white;
+    background-color: #f44336;
+    color: white;
 }
+
+/* Normalización adicional para elementos específicos */
+.profile-actions a.btn, 
+.profile-actions button.btn {
+    margin: 0;
+    vertical-align: top; /* Alineación superior para consistencia */
+    appearance: none; /* Elimina estilos nativos */
+}
+
+/* Contenedor de botones - opcional para mejor espaciado */
+.profile-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 
 /*cartas altas para ingredientes */
 .cards_container_tall {
-    max-width: 90%;
-    margin: 30px auto;  
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 25px;  
-    padding: 0 15px;
+	max-width: 90%;
+	margin: 30px auto;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 25px;
+	padding: 0 15px;
 }
 
 /* Flashcards */
 #flashModal {
-    max-width: 400px;
-    margin: auto;
-    padding: 20px;
-    background-color: #FFE0EE;
-    border: 1px solid #F383A0; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    text-align: center;
-    color: black; 
+	max-width: 400px;
+	margin: auto;
+	padding: 20px;
+	background-color: #FFE0EE;
+	border: 1px solid #F383A0;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	color: black;
 }
 
 #flashModal p {
-    margin: 10px 0;
-    font-size: 16px;
-    font-weight: bold;
+	margin: 10px 0;
+	font-size: 16px;
+	font-weight: bold;
 }
 
 #flashModal a {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 8px 16px;
-    background-color: #F383A0;
-    color: white;
-    border-radius: 4px;
-    font-weight: bold;
+	display: inline-block;
+	margin-top: 10px;
+	padding: 8px 16px;
+	background-color: #F383A0;
+	color: white;
+	border-radius: 4px;
+	font-weight: bold;
+}
+
+.tabla-historial {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 20px 0;
+	font-size: 16px;
+	text-align: left;
+}
+
+.tabla-historial thead tr {
+	background-color: #f4f4f4;
+	border-bottom: 2px solid #ddd;
+}
+
+.tabla-historial th,
+.tabla-historial td {
+	padding: 12px 15px;
+	border: 1px solid #ddd;
+}
+
+.tabla-historial thead th {
+	background-color: #F383A0;
+	color: white;
+}
+
+.tabla-historial tbody tr:nth-child(even) {
+	background-color: #f9f9f9;
+}
+
+.tabla-historial tbody tr:hover {
+	background-color: #f1f1f1;
+}
+
+.tabla-historial tbody tr.espacio {
+	height: 20px;
+	background-color: transparent;
+	border: none;
+}
+
+.tabla-historial tbody tr.espacio td {
+	border: none;
+	padding: 0;
+}
+
+.tabla-historial tbody tr.pedido{
+	border-bottom: 2px solid #ddd;
+}
+
+.tabla-historial tbody tr.pedido:hover {
+	background-color: #f1f1f1;
 }
 
 .tabla-usuarios {
@@ -390,7 +659,8 @@ img {
 	border-bottom: 2px solid #ddd;
 }
 
-.tabla-usuarios th, .tabla-usuarios td {
+.tabla-usuarios th,
+.tabla-usuarios td {
 	padding: 12px 15px;
 	border: 1px solid #ddd;
 }
@@ -403,7 +673,8 @@ img {
 	background-color: #f1f1f1;
 }
 
-.boton-editar, .boton-borrar {
+.boton-editar,
+.boton-borrar {
 	padding: 8px 12px;
 	border: none;
 	border-radius: 4px;
@@ -411,34 +682,594 @@ img {
 	font-size: 14px;
 }
 
-.boton-editar {
-	background-color: #4CAF50;
-	color: white;
-}
-
-.boton-borrar {
-	background-color: #f44336;
-	color: white;
-}
-
-.boton-borrar:hover {
-	background-color: #d32f2f;
-}
-
-.boton-editar:hover {
-	background-color: #45a049;
-}
-
 select {
 	padding: 5px;
 	font-size: 14px;
 }
 
-.form-permisos{
-    width: auto; /* Ajusta el ancho al contenido */
-    margin: 0; /* Elimina márgenes */
-    padding: 0; /* Elimina el padding */
-    background-color: transparent; /* Sin fondo */
-    box-shadow: none; /* Sin sombra */
-    border: none; /* Sin bordes */
+.form-permisos {
+	width: auto;
+	margin: 0;
+	padding: 0;
+	background-color: transparent;
+	box-shadow: none;
+	border: none;
+}
+
+/*CALENDARIO*/
+#calendario {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 15px;
+	margin: 20px auto;
+	max-width: 1200px;
+}
+
+#calendario>div {
+	background-color: white;
+	border: 1px solid #F383A0;
+	border-radius: 8px;
+	padding: 15px;
+	min-height: 200px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#calendario h3 {
+	color: #F383A0;
+	border-bottom: 1px solid #F383A0;
+	padding-bottom: 10px;
+	margin-top: 0;
+	font-size: 1.2em;
+}
+
+#calendario p {
+	color: #666;
+	font-style: italic;
+}
+
+#calendario button {
+	background-color: #F383A0;
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 0.9em;
+	margin-top: 10px;
+	width: 100%;
+}
+
+/*EDICION*/
+#editar-receta fieldset {
+	width: 100%;
+	margin: 20px auto;
+	padding: 20px;
+	background-color: #fff;
+	border: 2px solid #F383A0;
+	border-radius: 10px;
+}
+
+#editar-receta legend {
+	font-size: 1.5em;
+	padding: 5px 15px;
+	background-color: #F383A0;
+	color: white;
+	border-radius: 5px;
+}
+
+#editar-receta label {
+	display: block;
+	margin: 15px 0 5px;
+	font-weight: bold;
+	color: #333;
+}
+
+/* Estilos para las secciones de ingredientes */
+.ingredientes-section {
+	margin: 15px 0;
+	padding: 14px;
+	background-color: #FFE0EE;
+	border-radius: 8px;
+}
+
+.ingredientes-section summary {
+	font-weight: bold;
+	padding: 5px;
+	margin: -5px -5px 5px;
+}
+
+.ingredientes-section li {
+	padding: 10px 0;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	align-items: center;
+	gap: 10px;
+}
+
+/* Contenedor para la receta del día y el calendario */
+.receta-y-calendario {
+	display: grid;
+	grid-template-columns: auto auto;
+	gap: 100px;
+	margin: 10px auto;
+	max-width: 90%;
+	align-items: center;
+}
+
+#recetas-del-dia {
+
+	max-width: auto;
+	margin: auto auto;
+	display: grid;
+	gap: 25px;
+	padding: 0 15px;
+
+}
+
+/* Ajusta el tamaño del calendario */
+#calendar {
+	background-color: white;
+	border: 1px solid #F383A0;
+	border-radius: 8px;
+	padding: 15px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	min-height: 300px;
+}
+
+.imagen-ingredientes {
+	width: 100px; 
+	height: auto; 
+	object-fit: cover; 
+}
+
+
+
+/* ESTILOS COMPARTIDOS */
+.card-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    background-color: #F383A0;
+    color: white;
+    width: 100%;
+    font-size: 16px;
+}
+
+.card-btn:hover {
+    background-color: #e6728f;
+}
+
+.admin-buttons {
+    margin: 25px 0;
+    display: flex;
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 1px solid #FFE0EE;
+}
+
+/* INGREDIENTE IND */
+.ingrediente-container {
+    display: flex;
+    gap: 30px;
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.imagen-principal {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #F383A0;
+}
+
+.info-ingrediente {
+    flex: 1;
+}
+
+.info-ingrediente h1 {
+    color: #F383A0;
+    margin-top: 0;
+    border-bottom: 2px solid #FFE0EE;
+    padding-bottom: 10px;
+}
+
+.info-ingrediente p {
+    margin: 15px 0;
+    font-size: 16px;
+}
+
+.info-ingrediente strong {
+    color: #F383A0;
+}
+
+/* RECETA IND */
+.receta-container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.receta-container form {
+	display: inline;
+	text-decoration: none;
+	font-weight: bold;
+	background: none;
+	border: none;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	width: auto;
+	height: auto;
+}
+	
+.ingrediente-container form{
+	display: inline;
+	text-decoration: none;
+	font-weight: bold;
+	background: none;
+	border: none;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	width: auto;
+	height: auto;
+}
+
+.receta-superior {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.receta-imagen {
+    flex: 1;
+}
+
+.receta-imagen img {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #F383A0;
+}
+
+.receta-meta {
+    flex: 1;
+}
+
+.receta-meta h1 {
+    color: #F383A0;
+    margin-top: 0;
+    border-bottom: 2px solid #FFE0EE;
+    padding-bottom: 10px;
+}
+
+.receta-meta p {
+    margin: 10px 0;
+}
+
+.receta-inferior {
+    display: flex;
+    gap: 30px;
+}
+
+.receta-ingredientes {
+    flex: 1;
+    background-color: #FFE0EE;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.receta-descripcion {
+    flex: 2;
+    padding: 15px;
+    line-height: 1.6;
+}
+
+.ingredientes-con-accion {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+/* ESTILOS PARA LA CESTA */
+#cesta {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: white;
+}
+
+.cesta-vacia {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+}
+
+.ingrediente {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #FDEAF2;
+    border-radius: 8px;
+    border-left: 4px solid #F383A0;
+}
+
+.ingrediente-info {
+    flex: 1;
+}
+
+.ingrediente h3 {
+    margin: 0 0 5px 0;
+    color: #F383A0;
+}
+
+.ingrediente p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.ingrediente-acciones {
+    display: flex;
+    gap: 10px;
+}
+
+.ingrediente-acciones form {
+    margin: 0;
+}
+
+.ingrediente-acciones button {
+    padding: 8px 12px;
+    margin: 0;
+    font-size: 14px;
+    width: auto;
+}
+
+.aumentar-cantidad {
+    background-color: #4CAF50 !important;
+}
+
+.eliminar-ingrediente {
+    background-color: #f44336 !important;
+}
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #F383A0;
+    color: white;
+    border-radius: 8px;
+}
+
+.tramitar {
+    background-color: white ;
+    color: #F383A0 ;
+    font-weight: bold;
+    margin: 0 ;
+}
+
+
+/* Edición de ingrediente */
+#editar-ingrediente {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-header h2 {
+    color: #F383A0;
+    font-size: 1.8em;
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #FFE0EE;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.form-section {
+    margin-bottom: 20px;
+}
+
+.form-section h3 {
+    color: #F383A0;
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed #FFE0EE;
+}
+
+/* Formulario de contacto */
+.contact-form-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(243, 131, 160, 0.1);
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-subtitle {
+    font-weight: bold;
+    color: #F383A0;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.form-input, .form-textarea {
+    padding: 12px;
+    border: 2px solid #FFE0EE;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-input:focus, .form-textarea:focus {
+    border-color: #F383A0;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(243, 131, 160, 0.2);
+}
+
+.form-textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.radio-option:hover {
+    background-color: #FFE0EE;
+}
+
+.radio-option input[type="radio"] {
+    accent-color: #F383A0;
+}
+
+.terms-group {
+    margin: 15px 0;
+}
+
+.terms-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.terms-checkbox {
+    accent-color: #F383A0;
+    width: 18px;
+    height: 18px;
+}
+
+.terms-link {
+    color: #F383A0;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+.submit-button {
+    background-color: #F383A0;
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    align-self: center;
+    width: auto;
+}
+
+.submit-button:hover {
+    background-color: #e6728f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(243, 131, 160, 0.3);
+}
+
+/* FOOTER ESTILOS */
+footer {
+    background-color: #F383A0;
+    padding: 20px 0;
+    margin-top: 40px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+footer .navbar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+footer .navbar li {
+    margin: 1px 0;
+}
+
+footer .navbar a {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 8px 15px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+    border: 1px solid transparent;
+}
+
+footer .navbar a:hover {
+    background-color: white;
+    color: #F383A0;
+    transform: translateY(-2px);
+	box-shadow: 0 6px 12px rgba(47, 5, 234, 0.15);
 }

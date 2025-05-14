@@ -1,14 +1,16 @@
 import express from 'express';
-import { viewIndex, viewContenidoAdmin, viewCesta, viewCestaCompra, viewContacto, viewCondiciones, viewConocenos } from './controllers.js';
+import asyncHandler from 'express-async-handler';
+import { autenticado } from '../middleware/auth.js';
+import { viewIndex, viewCesta, viewCompraReceta, viewContacto, viewCondiciones, viewConocenos } from './controllers.js';
 
 const contenidoRouter = express.Router();
 
 contenidoRouter.get('/', viewIndex);
-contenidoRouter.get('/admin', viewContenidoAdmin);
-contenidoRouter.get('/contacto', viewContacto);
-contenidoRouter.get('/condiciones', viewCondiciones);
-contenidoRouter.get('/conocenos', viewConocenos);
-contenidoRouter.get('/cesta', viewCesta);
-contenidoRouter.get('/cestaCompra', viewCestaCompra);
+
+contenidoRouter.get('/contacto',  asyncHandler(viewContacto));
+contenidoRouter.get('/condiciones',  asyncHandler(viewCondiciones));
+contenidoRouter.get('/conocenos',  asyncHandler(viewConocenos));
+//contenidoRouter.get('/cesta', autenticado('usuarios/login', '/cesta'), asyncHandler(viewCesta));
+contenidoRouter.get('/compraReceta', autenticado('usuarios/login', '/compraReceta'), asyncHandler(viewCompraReceta));
 
 export default contenidoRouter;

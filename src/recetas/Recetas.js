@@ -8,17 +8,21 @@ export class Receta {
 
     static #searchByNameStmt = null;
     static #searchByIngredientStmt = null;
+    static #getAllNact = null;
+    static #activarRecetaStmt = null;
 
     static initStatements(db) {
         if (this.#getByIdStmt !== null) return;
 
         this.#getByIdStmt = db.prepare('SELECT * FROM Recetas WHERE id = @id');
         this.#getByUsuarioStmt = db.prepare('SELECT * FROM Recetas WHERE id_usuario = @id_usuario AND activo = 1'); // Obtener recetas activas por usuario
-        this.#insertStmt = db.prepare('INSERT INTO Recetas(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo) VALUES (@nombre, @descripcion, @tiempo_prep_segs, @dificultad, @id_usuario, @activo)');
-        this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, tiempo_prep_segs = @tiempo_prep_segs, dificultad = @dificultad, activo = @activo WHERE id = @id');
+        this.#insertStmt = db.prepare('INSERT INTO Recetas(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo, imagen_url, imagen_url) VALUES (@nombre, @descripcion, @tiempo_prep_segs, @dificultad, @id_usuario, @activo, @imagen_url, @imagen_url)');
+        this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, tiempo_prep_segs = @tiempo_prep_segs, dificultad = @dificultad, activo = @activo, imagen_url = @imagen_url, imagen_url = @imagen_url WHERE id = @id');
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
         this.#getAllStmt = db.prepare('SELECT * FROM Recetas WHERE activo = 1'); // Obtener todas las recetas activas
-    
+        this.#getAllNact = db.prepare('SELECT * FROM Recetas WHERE activo = 0'); // Obtener todas las recetas NO activas
+        this.#activarRecetaStmt = db.prepare('UPDATE Recetas SET activo = 1 WHERE id = @id'); //Activa las recetas sugeridas
+
         this.#searchByNameStmt = db.prepare('SELECT * FROM Recetas WHERE nombre LIKE @nombre AND activo = 1');
         this.#searchByIngredientStmt = db.prepare(`
             SELECT DISTINCT R.* 
@@ -33,51 +37,148 @@ export class Receta {
     static getRecetaById(id) {
         const receta = this.#getByIdStmt.get({ id });
         if (!receta) throw new RecetaNoEncontrada(id);
-        return receta;
+
+        // Crear y devolver una instancia de Receta
+        return new Receta(
+            receta.id,
+            receta.nombre,
+            receta.descripcion,
+            receta.tiempo_prep_segs,
+            receta.dificultad,
+            receta.id_usuario,
+            receta.activo,
+            receta.imagen_url
+        );
     }
 
     static getRecetasByUsuario(id_usuario) {
-        return this.#getByUsuarioStmt.all({ id_usuario });
+        const recetas = this.#getByUsuarioStmt.all({ id_usuario });
+
+        // Mapear los resultados a instancias de Receta
+        return recetas.map(receta => new Receta(
+            receta.id,
+            receta.nombre,
+            receta.descripcion,
+            receta.tiempo_prep_segs,
+            receta.dificultad,
+            receta.id_usuario,
+            receta.activo,
+            receta.imagen_url
+        ));
     }
 
     static getAllRecetas() {
-        return this.#getAllStmt.all();
+        const recetas = this.#getAllStmt.all();
+
+        // Mapear los resultados a instancias de Receta
+        return recetas.map(receta => new Receta(
+            receta.id,
+            receta.nombre,
+            receta.descripcion,
+            receta.tiempo_prep_segs,
+            receta.dificultad,
+            receta.id_usuario,
+            receta.activo,
+            receta.imagen_url
+        ));
     }
 
-    static addReceta(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo = 1) {
+    static getAllRecetasNact() {
+        const recetas = this.#getAllNact.all();
+
+        // Mapear los resultados a instancias de Receta
+        return recetas.map(receta => new Receta(
+            receta.id,
+            receta.nombre,
+            receta.descripcion,
+            receta.tiempo_prep_segs,
+            receta.dificultad,
+            receta.id_usuario,
+            receta.activo,
+            receta.imagen_url
+        ));
+    }
+
+    static addReceta(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo = 1, imagen_url) {
         try {
-            const result = this.#insertStmt.run({ nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo });
-            return { mensaje: "Receta añadida correctamente", id: result.lastInsertRowid };
+            const result = this.#insertStmt.run({ nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo, imagen_url });
+            return result;
         } catch (e) {
             throw new ErrorDatos("No se pudo añadir la receta", { cause: e });
         }
     }
 
-    static updateReceta(id, nombre, descripcion, tiempo_prep_segs, dificultad, activo) {
-        const result = this.#updateStmt.run({ id, nombre, descripcion, tiempo_prep_segs, dificultad, activo });
+    static updateReceta(id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url) {
+        const result = this.#updateStmt.run({ id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url });
         if (result.changes === 0) throw new RecetaNoEncontrada(id);
-        return { mensaje: "Receta actualizada correctamente" };
+        return true; //TODO MENSAJE{ mensaje: "Receta actualizada correctamente" };
     }
 
     static deleteReceta(id) {
-        const result = this.#deleteStmt.run({ id });
-        if (result.changes === 0) throw new RecetaNoEncontrada(id);
-        return { mensaje: "Receta eliminada correctamente" };
+        this.#deleteStmt.run({ id });
+
+        return true; //TODO MENSAJE{ mensaje: "Receta eliminada correctamente", id };
     }
 
     static searchByName(nombre) {
-        return this.#searchByNameStmt.all({ nombre: `%${nombre}%` });
-    
-        //Si queremos añadir paginacion entonces:
-        /*return this.#searchByNameStmt.all({ 
-        nombre: `%${nombre}%`,
-        limit,
-        offset 
-        });*/
+        const recetas = this.#searchByNameStmt.all({ nombre: `%${nombre}%` });
+        return recetas.map(receta => new Receta(
+            receta.id,
+            receta.nombre,
+            receta.descripcion,
+            receta.tiempo_prep_segs,
+            receta.dificultad,
+            receta.id_usuario,
+            receta.activo,
+            receta.imagen_url
+        ));
+
     }
-    
+
     static searchByIngredient(ingrediente) {
-        return this.#searchByIngredientStmt.all({ ingrediente: ingrediente });
+
+        const recetas = this.#searchByIngredientStmt.all({ ingrediente: ingrediente });
+        return recetas.map(receta => new Receta(
+            receta.id,
+            receta.nombre,
+            receta.descripcion,
+            receta.tiempo_prep_segs,
+            receta.dificultad,
+            receta.id_usuario,
+            receta.activo,
+            receta.imagen_url
+        ));
+    }
+
+    // Función para aceptar una sugerencia de receta
+    static aceptarSugerencia(id) {
+        // Cambia el campo 'activo' a 1 para aprobar la receta
+        const result = this.#activarRecetaStmt.run({ id });
+        if (result.changes === 0) throw new RecetaNoEncontrada(id);
+        return true; //{ mensaje: "Receta aceptada correctamente" };
+    }
+
+    id;
+    nombre;
+    descripcion;
+    tiempo_prep_segs;
+    dificultad;
+    id_usuario;
+    activo;
+    imagen_url;
+
+
+
+    constructor(id, nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo, imagen_url) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.tiempo_prep_segs = tiempo_prep_segs;
+        this.dificultad = dificultad;
+        this.id_usuario = id_usuario;
+        this.activo = activo;
+        this.imagen_url = imagen_url;
+
     }
 
 }

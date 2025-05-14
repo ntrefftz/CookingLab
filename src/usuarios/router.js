@@ -1,23 +1,24 @@
 import { body } from 'express-validator';
 import express from 'express';
+import { autenticado, tieneRol} from '../middleware/auth.js';
 import {
     viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout,
     viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome, viewListaUsuario, cambiarPermisos,
-    eliminarPerfil
-} from './controllers.js';
+    eliminarPerfilUsuario, eliminarPerfilAdmin, aniadirRecetaACalendario,  activarUsuario, eliminarRecetaDeCalendario, aniadirRecetaAFavoritos, eliminarRecetaDeFavoritos, viewSugerencias
+} 
+from './controllers.js';
 import asyncHandler from 'express-async-handler';
 const usuariosRouter = express.Router();
 
-
-usuariosRouter.get('/configuracion', asyncHandler(viewConfiguracion));
-usuariosRouter.get('/perfil', asyncHandler(viewPerfil));
-usuariosRouter.get('/historial', asyncHandler(viewHistorial));
-usuariosRouter.get('/misrecetas', asyncHandler(viewMisRecetas));
-usuariosRouter.get('/micalendario', asyncHandler(viewCalendario));
-usuariosRouter.get('/login', asyncHandler(viewLogin));
-usuariosRouter.get('/perfil/modificar', asyncHandler(viewModificarPerfil));
-usuariosRouter.get('/home', asyncHandler(viewHome));
-usuariosRouter.get('/listaUsuarios', asyncHandler(viewListaUsuario));
+usuariosRouter.get('/configuracion',  autenticado("/usuarios/login", "configuracion"), asyncHandler(viewConfiguracion));
+usuariosRouter.get('/perfil', autenticado("/usuarios/login", "/perfil"), asyncHandler(viewPerfil));
+usuariosRouter.get('/historial', autenticado("/usuarios/login", "/historial"), asyncHandler(viewHistorial));
+usuariosRouter.get('/misrecetas',  autenticado("/usuarios/login", "/misrecetas"),asyncHandler(viewMisRecetas));
+usuariosRouter.get('/micalendario', autenticado("/usuarios/login", "/micalendario"), asyncHandler(viewCalendario));
+usuariosRouter.get('/login',autenticado(null), asyncHandler(viewLogin));
+usuariosRouter.get('/perfil/modificar', autenticado("/usuarios/login", "/perfil/modificar") ,asyncHandler(viewModificarPerfil));
+usuariosRouter.get('/home',  autenticado('/usuarios/home'), asyncHandler(viewHome));
+usuariosRouter.get('/listaUsuarios', autenticado("/usuarios/login", "configuracion"), tieneRol("A"), asyncHandler(viewListaUsuario));
 usuariosRouter.post('/login',
     body('username', 'El nombre no puede ser vacío').trim().notEmpty(),
     body('password', 'La contraseña no puede ser vacía').trim().notEmpty(),
@@ -25,7 +26,8 @@ usuariosRouter.post('/login',
 );
 
 usuariosRouter.get('/logout', asyncHandler(doLogout));
-usuariosRouter.get('/register',asyncHandler(viewRegister));
+usuariosRouter.get('/register',autenticado(null, '/usuarios/home'), asyncHandler(viewRegister));
+usuariosRouter.get('/sugerencias', autenticado("/usuarios/login", "configuracion"), tieneRol("A", "C"), asyncHandler(viewSugerencias));
 
 usuariosRouter.post('/register',
     body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i),
@@ -48,7 +50,14 @@ usuariosRouter.post('/perfil/modificar',
     asyncHandler(modificarPerfil)
 );
 usuariosRouter.post('/cambiarPermisos/:id', asyncHandler(cambiarPermisos));
+usuariosRouter.post('/eliminarUsuario', autenticado("/usuarios/login", "/eliminarUsuario"),asyncHandler(eliminarPerfilUsuario));
+usuariosRouter.post('/eliminarUsuarioAdmin', autenticado("/usuarios/login", "/eliminarUsuarioAdmin"), tieneRol("A"), asyncHandler(eliminarPerfilAdmin));
+usuariosRouter.post('/activarUsuario', autenticado("/usuarios/login", "/activarUsuario"), tieneRol("A"), asyncHandler(activarUsuario));
+//Para el calendario semanal del usuario
+usuariosRouter.post('/calendario/aniadir', asyncHandler(aniadirRecetaACalendario));
+usuariosRouter.post('/calendario/eliminar', asyncHandler(eliminarRecetaDeCalendario));
 
-usuariosRouter.post('/eliminarUsuario/:id', asyncHandler(eliminarPerfil));
+usuariosRouter.post('/favoritos/aniadir', asyncHandler(aniadirRecetaAFavoritos));
+usuariosRouter.post('/favoritos/eliminar', asyncHandler(eliminarRecetaDeFavoritos));
 
 export default usuariosRouter;

@@ -48,17 +48,6 @@ export function viewIndex(req, res) {
     }
 }
 
-export function viewContenidoAdmin(req, res) {
-    let contenido = 'paginas/noPermisos';
-    if (req.session != null && req.session.login && req.session.nombre === 'Administrador') {
-        contenido = 'paginas/admin';
-    }
-    res.render('pagina', {
-        contenido,
-        session: req.session
-    });
-}
-
 export function viewContacto(req, res) {
     let contenido = 'paginas/contacto';
 
@@ -88,20 +77,18 @@ export function viewConocenos(req, res) {
 
 export function viewCesta(req, res) {
     let contenido = 'paginas/cesta';
+    const listaCompra = generarlistaCompra(req);
 
     res.render('pagina', {
         contenido,
+        listaCompra,
         session: req.session
     });
 }
 
-export function viewCestaCompra(req, res) {
-    let contenido = 'paginas/noPermisos';
-    if (req.session != null && req.session.nombre != null) {
-        contenido = 'paginas/cestaCompra';
-    }
+export function viewCompraReceta(req, res) {
     res.render('pagina', {
-        contenido,
+        contenido: 'paginas/compraReceta',
         session: req.session
     });
 }

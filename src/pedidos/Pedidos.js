@@ -9,9 +9,9 @@ export class Pedido {
         if (this.#getByIdStmt !== null) return;
 
         this.#getByIdStmt = db.prepare('SELECT * FROM Pedidos WHERE id = @id');
-        this.#getAllStmt = db.prepare('SELECT * FROM Pedidos WHERE activo = 1');
-        this.#insertStmt = db.prepare('INSERT INTO Pedidos(precio_total, enviado, activo) VALUES (@precio_total, @enviado, @activo)');
-        this.#updateStmt = db.prepare('UPDATE Pedidos SET precio_total = @precio_total, enviado = @enviado, activo = @activo WHERE id = @id');
+        this.#getAllStmt = db.prepare('SELECT * FROM Pedidos WHERE pagado = 1');
+        this.#insertStmt = db.prepare('INSERT INTO Pedidos(fecha, hora, precio_total, enviado, pagado) VALUES (@fecha, @hora, @precio_total, @enviado, @pagado)');
+        this.#updateStmt = db.prepare('UPDATE Pedidos SET enviado = @enviado, pagado = @pagado WHERE id = @id');
         this.#deleteStmt = db.prepare('DELETE FROM Pedidos WHERE id = @id');
     }
 
@@ -25,25 +25,39 @@ export class Pedido {
         return this.#getAllStmt.all();
     }
 
-    static addPedido(precio_total, enviado = 0, activo = 1) {
+    static addPedido(fecha, hora, precio_total, enviado = 0, pagado = 0) {
         try {
-            const result = this.#insertStmt.run({ precio_total, enviado, activo });
-            return { mensaje: "Pedido añadido correctamente", id: result.lastInsertRowid };
+            const result = this.#insertStmt.run({ fecha, hora, precio_total, enviado, pagado });
+            return { id: result.lastInsertRowid };
         } catch (e) {
             throw new ErrorDatos("No se pudo añadir el pedido", { cause: e });
         }
     }
 
-    static updatePedido(id, precio_total, enviado, activo) {
-        const result = this.#updateStmt.run({ id, precio_total, enviado, activo });
+    static updatePedido(id, enviado, pagado) {
+        const result = this.#updateStmt.run({ id, enviado, pagado });
         if (result.changes === 0) throw new PedidoNoEncontrado(id);
-        return { mensaje: "Pedido actualizado correctamente" };
+        return true;
     }
 
     static deletePedido(id) {
         const result = this.#deleteStmt.run({ id });
-        if (result.changes === 0) throw new PedidoNoEncontrado(id);
-        return { mensaje: "Pedido eliminado correctamente" };
+        return true;
+    }
+
+    id;
+    fecha;
+    hora;
+    precio_total;
+    enviado;
+    pagado;
+    constructor(id, fecha, hora, precio_total, enviado, pagado) {
+        this.id = id;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.precio_total = precio_total;
+        this.enviado = enviado;
+        this.pagado = pagado;
     }
 }
 

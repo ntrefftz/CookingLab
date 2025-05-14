@@ -1,0 +1,26 @@
+<h1>Sugerencias</h1>
+<% if (recetas.length === 0) { %>
+    <p>No hay sugerencias disponibles.</p>
+<% } else { %>
+    <div id="catalogo" class="cards_container">
+        <% recetas.forEach(receta=> { %>
+            <article class="card">
+                <img src="/recetas/imagen/<%= receta.imagen_url %>" alt="Pronto habrá una foto" />
+                <p></p>
+                <a href="receta/?id=<%= receta.id %>&origen=sugerencias">
+                    <h4><%= receta.nombre %></h4>
+                </a>
+                <p>Tiempo preparación: <%= Math.floor(receta.tiempo_prep_segs / 60) %> minutos</p>
+                <p>Dificultad: <%= receta.dificultad %></p>
+
+                <% if (session.esAdmin) { %>
+                    <form action="/recetas/receta/aceptarSugerencia" method="POST">
+                        <input type="hidden" name="id" value="<%= receta.id %>">
+                        <input type="hidden" name="origen" value="sugerencias" />
+                        <button type="submit">Aceptar receta</button>
+                    </form>
+                <% } %>
+            </article>
+            <% }) %>
+    </div>
+<% } %>

@@ -1,9 +1,10 @@
+
 <h1>Descubre nuevas recetas</h1>
 <div id="catalogo" class="cards_container">
     <% if (ultimasRecetas && ultimasRecetas.length > 0) { %>
         <% ultimasRecetas.forEach(receta => { %>
             <article class="card">
-                <img src=<%= receta.imagen_url %> alt="Pronto habrá una foto"  />
+                <img src= "/recetas/imagen/<%=receta.imagen_url %>" alt="Pronto habrá una foto"  />
                 <p></p>
                 <a href="/recetas/receta?id=<%= receta.id %>">
                     <h4><%= receta.nombre %></h4>
@@ -18,20 +19,40 @@
 </div>
 
 <h1>Receta del día</h1>
-<div id="catalogo" class="cards_container">
-    <% if (recetaDelDia) { %>
-        <article class="card">
-            <img src=<%= recetaDelDia.imagen_url %> alt="Pronto habrá una foto"  />
-            <p></p>
-            <a href="/recetas/receta?id=<%= recetaDelDia.id %>">
-                <h4><%= recetaDelDia.nombre %></h4>
-            </a>
-            <p>Tiempo preparación: <%= Math.floor(recetaDelDia.tiempo_prep_segs / 60) %> minutos</p>
-            <p>Dificultad: <%= recetaDelDia.dificultad %></p>
-        </article>
-    <% } else { %>
-        <p>No hay receta del día disponible</p>
-    <% } %>
+
+
+
+<div class="receta-y-calendario">
+    <div id="receta-del-dia">
+        <% if (recetaDelDia) { %>
+            <article class="card destacada" id="receta-seleccionada">
+                <img src="/recetas/imagen/<%=recetaDelDia.imagen_url %>" alt="Pronto habrá una foto" />
+                <p></p>
+                <a href="/recetas/receta?id=<%= recetaDelDia.id %>">
+                    <h4><%= recetaDelDia.nombre %></h4>
+                </a>
+                <p>Tiempo preparación: <%= Math.floor(recetaDelDia.tiempo_prep_segs / 60) %> minutos</p>
+                <p>Dificultad: <%= recetaDelDia.dificultad %></p>
+            </article>
+        <% } else { %>
+            <p>No hay receta del día disponible</p>
+        <% } %>
+    </div>
+
+    <div id="calendar-container">
+        <div id="postit-container">
+            <img src="/image/postit.jpg" alt="Post-it" id="postit-image" />
+                <span id="current-date"></span>
+    
+        </div>
+        <div id="calendar-simple">
+            <div class="calendar-header">
+                <button id="prev-day-btn">← Día anterior</button>
+                <button id="today-btn">Hoy</button>
+                <button id="next-day-btn">Día siguiente →</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <h1>Realiza tu compra</h1>
@@ -39,9 +60,9 @@
     <% if (ultimosIngredientes && ultimosIngredientes.length > 0) { %>
         <% ultimosIngredientes.forEach(ingrediente => { %>
             <article class="card">
-                <img src=<%= ingrediente.imagen_url %> alt="Pronto habrá una foto"  />
+                <img src="/recetas/imagen/<%=ingrediente.imagen_url %>" alt="Pronto habrá una foto"  />
                 <p></p>
-                <a href="/ingredientes/ingrediente?id=<%= ingrediente.id %>">
+                <a href="/recetas/ingredienteInd/?id=<%= ingrediente.id %>">
                     <h4><%= ingrediente.nombre %></h4>
                 </a>  
                 <p>Precio: <%= ingrediente.precio %> €</p>  
@@ -51,3 +72,5 @@
         <p>No hay ingredientes disponibles</p>
     <% } %>
 </div>
+
+<script src="/js/calendario.js"></script>

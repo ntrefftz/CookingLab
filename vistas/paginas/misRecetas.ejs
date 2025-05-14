@@ -1,1 +1,32 @@
-<h1>Mis recetas</h1>
+<h1>Mis Recetas Favoritas</h1>
+
+<div class="cards_container">
+    <% if (recetas.length === 0) { %>
+        <p>No has guardado ninguna receta aún.</p>
+    <% } else { %>
+        <% recetas.forEach(receta => { %>
+            <article class="card">
+                <img src="/recetas/imagen/<%=receta.imagen_url %>" alt="<%= receta.nombre %>" loading="lazy" />
+                <a href="/recetas/<%= receta.id %>">
+                    <h4><%= receta.nombre %></h4>
+                </a>
+                <p>Tiempo preparación: <%= Math.floor(receta.tiempo_prep_segs / 60) %> minutos</p>
+                <p>Dificultad: <%= receta.dificultad %></p>
+
+                <form action="/usuarios/favoritos/eliminar" method="POST">
+                    <input type="hidden" name="recetaId" value="<%= receta.id %>" />
+                    <button class="eliminar-favorito">Eliminar de favoritos</button>
+                </form>
+                
+                
+            </article>
+        <% }) %>
+    <% } %>
+</div>
+<div>
+    <form action="/recetas/catalogo" method="GET">
+        <input type="hidden" name="origen" value="misRecetas" />
+        <button type="submit">Añadir receta</button>
+    </form>
+</div>
+

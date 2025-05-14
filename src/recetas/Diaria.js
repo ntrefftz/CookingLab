@@ -3,6 +3,8 @@ export class Diaria {
     static #insertStmt = null;   // Para insertar la receta en un día
     static #deleteStmt = null;   // Para eliminar la receta de un día
     static #getAllStmt = null;   // Para obtener todas las recetas asignadas a los días
+    static #updateStmt = null;   // Para actualizar la receta de un día específico
+    static #deleteRecetaStmt = null; // Para eliminar la receta 
 
     static initStatements(db) {
         if (this.#getByDiaStmt !== null) return;
@@ -18,25 +20,44 @@ export class Diaria {
         
         // Obtener todas las recetas asignadas a los días
         this.#getAllStmt = db.prepare('SELECT * FROM Diaria');
+    
+        this.#deleteRecetaStmt = db.prepare('DELETE FROM Diaria WHERE id_receta = @id_receta');
+      
+       //Actualizar la receta asignada a un día específico
+        this.#updateStmt = db.prepare('UPDATE Diaria SET id_receta = @id_receta WHERE dia = @dia');
+
     }
 
     // Obtener la receta asignada a un día específico
     static getRecetaPorDia(dia) {
         const receta = this.#getByDiaStmt.get({ dia });
         if (!receta) throw new DiariaNoEncontrada(dia);
-        return receta;
+        return new Diaria(receta.id_receta, receta.dia);
     }
 
-    // Obtener todas las recetas asignadas a los días
-    static getTodasLasRecetas() {
-        return this.#getAllStmt.all();
+     // Obtener todas las recetas asignadas a los días
+     static getTodasLasRecetas() {
+        const recetas = this.#getAllStmt.all();
+        return recetas.map(receta => new Diaria(receta.id_receta, receta.dia));
+        
     }
+
+    static updateRecetaPorDia(dia, id_receta) {
+        try {
+            this.#updateStmt.run({ dia, id_receta });
+            return true; //TODO MENSAJE { mensaje: "Receta actualizada correctamente" };
+        } catch (e) {
+            if (e.code === 'SQLITE_CONSTRAINT') throw new DiariaYaExiste(dia);
+            throw new ErrorDatos("No se pudo actualizar la receta", { cause: e });
+        }
+    }
+   
 
     // Asignar una receta a un día específico
     static asignarRecetaADia(dia, id_receta) {
         try {
             this.#insertStmt.run({ dia, id_receta });
-            return { mensaje: "Receta asignada al día correctamente" };
+            return true; //TODO MENSAJE { mensaje: "Receta asignada al día correctamente" };
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') throw new DiariaYaExiste(dia);
             throw new ErrorDatos("No se pudo asignar la receta al día", { cause: e });
@@ -47,7 +68,19 @@ export class Diaria {
     static eliminarRecetaDeDia(dia) {
         const result = this.#deleteStmt.run({ dia });
         if (result.changes === 0) throw new DiariaNoEncontrada(dia);
-        return { mensaje: "Receta eliminada del día correctamente" };
+        return true; //TODO MENSAJE { mensaje: "Receta eliminada del día correctamente" };
+    }
+
+    static eliminarReceta(id_receta){
+        this.#deleteRecetaStmt.run({ id_receta });
+        return true;
+    }
+
+    id_receta;
+    dia;
+    constructor(id_receta, dia) {
+        this.id_receta = id_receta;
+        this.dia = dia;
     }
 }
 
