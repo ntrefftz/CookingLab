@@ -5,6 +5,7 @@ export class Guardado {
     static #deleteStmt = null;
     static #getByUsuarioStmt = null;
     static #getByRecetaStmt = null;
+    static #deleteRecetasStmt = null;
 
     static initStatements(db) {
         if (this.#insertOrUpdateStmt !== null) return;
@@ -23,6 +24,9 @@ export class Guardado {
         this.#getByRecetaStmt = db.prepare(`
             SELECT * FROM guardado WHERE id_receta = @id_receta AND guardado = 1
         `);
+
+        this.deleteRecetasStmt = db.prepare(`
+            DELETE FROM guardado WHERE id_receta = @id_receta`);
     }
 
     // Marcar una receta como favorita
@@ -54,6 +58,11 @@ export class Guardado {
         }
         return favoritos.map(({ id_receta, guardado }) => new Guardado(id_receta, idUsuario, guardado));
 
+    }
+
+    static removeRecetas(idReceta){
+        this.deleteRecetasStmt.run({ id_receta: idReceta});
+        return true;
     }
 
     // Obtener los usuarios que guardaron una receta como favorita
