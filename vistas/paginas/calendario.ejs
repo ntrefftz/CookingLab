@@ -12,12 +12,11 @@
 
     // Modificaciones para tener en cuenta la semana siguiente
     let primerDiaSemanaSiguiente = new Date(lunesActual);
-    primerDiaSemanaSiguiente.setDate(primerDiaSemanaSiguiente.getDate() + 7); // <!--Lunes de la semana siguiente-->
+    primerDiaSemanaSiguiente.setDate(primerDiaSemanaSiguiente.getDate() + 7); 
     let ultimoDiaSemanaSiguiente = new Date(primerDiaSemanaSiguiente);
-    ultimoDiaSemanaSiguiente.setDate(primerDiaSemanaSiguiente.getDate() + 6); // <!--Domingo de la semana siguiente-->
+    ultimoDiaSemanaSiguiente.setDate(primerDiaSemanaSiguiente.getDate() + 6); 
     %>
     
-    <!-- Semana actual -->
     <div class="semana">
         <h2>Semana Actual</h2>
         <div class="dias-semana">
@@ -48,7 +47,6 @@
         </div>
     </div>
 
-    <!-- Semana siguiente -->
     <div class="semana">
         <h2>Próxima Semana</h2>
         <div class="dias-semana">

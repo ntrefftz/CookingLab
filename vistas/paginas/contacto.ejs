@@ -4,19 +4,17 @@
     </div>
     
     <form class="contact-form" action="mailto:ddallaco@ucm.es?subject=Consulta_CookingLab" method="POST" enctype="text/plain">
-        <!-- Campo de texto para el nombre -->
         <div class="form-group">
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" required class="form-input">
         </div>
-        
-        <!-- Campo de texto para el correo electrónico -->
+    
+
         <div class="form-group">
             <label for="correo">Correo electrónico:</label>
             <input type="email" id="correo" name="correo" required class="form-input">
         </div>
         
-        <!-- Campo para el motivo de la consulta -->
         <div class="form-group">
             <p class="form-subtitle">Motivo de la consulta:</p>
             <div class="radio-group">
@@ -37,7 +35,6 @@
             </div>
         </div>
         
-        <!-- Casilla para los términos y condiciones -->
         <div class="form-group terms-group">
             <label class="terms-option">
                 <input type="checkbox" id="terminos" name="terminos" required class="terms-checkbox">
@@ -47,13 +44,11 @@
             </label>
         </div>
         
-        <!-- Campo de área de texto para el mensaje -->
         <div class="form-group">
             <label for="mensaje" class="message-label">Mensaje:</label>
             <textarea id="mensaje" name="mensaje" rows="6" required class="form-textarea"></textarea>
         </div>
         
-        <!-- Campo de botón de envío -->
         <button type="submit" class="submit-button">Enviar Mensaje</button>
     </form>
 </div>

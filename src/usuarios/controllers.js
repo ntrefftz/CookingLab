@@ -83,7 +83,6 @@ export function viewHistorial(req, res) {
         const id_usuario = req.session.userId;
         const relaciones = Realiza.getByUsuario(id_usuario);
 
-        // Si no hay relaciones, el historial está vacío
         if (relaciones.length === 0) {
             return res.render('pagina', {
                 contenido: 'paginas/historial',
@@ -92,7 +91,6 @@ export function viewHistorial(req, res) {
             });
         }
 
-        // Construir el historial
         const historial = relaciones.map(relacion => {
             const pedido = Pedido.getPedidoById(relacion.id_pedido);
             const ingredientes = Contiene.getByPedido(pedido.id) || [];
@@ -113,7 +111,7 @@ export function viewHistorial(req, res) {
                     return total + precio * ing.cantidad;
                 } catch (error) {
                     logger.error(`Error al obtener el ingrediente con id: ${ing.id_ingrediente}`, error.message);
-                    return total; // Ignorar este ingrediente si ocurre un error
+                    return total;
                 }
             }, 0).toFixed(2);
             return {
@@ -123,7 +121,6 @@ export function viewHistorial(req, res) {
             };
         });
 
-        // Renderizar la página con el historial
         res.render('pagina', {
             contenido,
             session: req.session,
@@ -140,18 +137,17 @@ export async function viewCalendario(req, res) {
 
     // Lunes de esta semana (semana que contiene "hoy")
     const lunesEstaSemana = new Date(hoy);
-    const diaSemana = hoy.getDay(); // 0 = domingo, 1 = lunes, ...
-    const offsetLunes = diaSemana === 0 ? -6 : 1 - diaSemana; // para que domingo cuente como fin de semana anterior
+    const diaSemana = hoy.getDay();
+    const offsetLunes = diaSemana === 0 ? -6 : 1 - diaSemana;
     lunesEstaSemana.setDate(hoy.getDate() + offsetLunes);
     lunesEstaSemana.setHours(0, 0, 0, 0);
 
     // Domingo de la semana siguiente (14 días desde lunes incluido)
     const domingoProximaSemana = new Date(lunesEstaSemana);
-    domingoProximaSemana.setDate(lunesEstaSemana.getDate() + 13); // lunes + 13 = domingo siguiente
+    domingoProximaSemana.setDate(lunesEstaSemana.getDate() + 13);
     domingoProximaSemana.setHours(23, 59, 59, 999);
 
     try {
-        // Obtener recetas en el rango de 14 días
         const calendarioRecetas = await CalendarioSemanal.getRecetasRango(
             req.session.userId,
             lunesEstaSemana,
@@ -259,7 +255,6 @@ export async function doLogin(req, res) {
 
 export async function doRegister(req, res) {
 
-    // Verifica si hay errores en las validaciones
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -268,7 +263,7 @@ export async function doRegister(req, res) {
         return render(req, res, 'paginas/register', {
             errores,
             datos,
-            error: errors.array().map(err => err.msg).join(', ') // Muestra los errores en un solo mensaje
+            error: errors.array().map(err => err.msg).join(', ')
         });
 
     }
@@ -278,7 +273,7 @@ export async function doRegister(req, res) {
     body('apellido').escape();
     body('correo').escape();
     body('direccion').escape();
-    // Capturo las variables
+
     const username = req.body.username.trim();
     const password = req.body.password.trim();
     const nombre = req.body.nombre.trim();
@@ -371,78 +366,6 @@ export function viewHome(req, res) {
     });
 }
 
-// export function modificarPerfil(req, res) {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//         return res.render('pagina', {
-//             contenido: 'paginas/editarPerfil',
-//             error: errors.array().map(err => err.msg).join(', '),
-//             session: req.session,
-//             usuario: Usuario.getUsuarioById(req.session.userId) // Obtener el usuario desde la sesión
-//         });
-//     }
-
-//     const datos = matchedData(req);
-
-//     if (!req.session.userId) {
-//         return res.render('pagina', {
-//             contenido: 'paginas/editarPerfil',
-//             error: 'ID de usuario no proporcionado',
-//             session: req.session
-//         });
-//     }
-
-//     try {
-//         const usuarioActual = Usuario.getUsuarioById(req.session.userId);
-
-//         const password = datos.password
-//             ? bcrypt.hashSync(datos.password, bcrypt.genSaltSync(10)) //genSaltSync(10) requerido tras error en la función
-//             : usuarioActual.password;
-
-//         const usuarioActualizado = new Usuario(
-//             datos.username || usuarioActual.username,
-//             password,
-//             datos.nombre || usuarioActual.nombre,
-//             datos.apellido || usuarioActual.apellido,
-//             datos.correo || usuarioActual.correo,
-//             datos.direccion || usuarioActual.direccion,
-//             usuarioActual.rol,
-//             usuarioActual.activo,
-//             req.session.userId
-//         );
-
-//         Usuario.editarUsuario(usuarioActualizado)
-
-
-//         if (req.session.userId === usuarioActualizado.id) {
-//             req.session.username = usuarioActualizado.username;
-//             req.session.nombre = usuarioActualizado.nombre;
-//             req.session.apellido = usuarioActualizado.apellido;
-//             req.session.correo = usuarioActualizado.correo;
-//             req.session.direccion = usuarioActualizado.direccion;
-//         }
-
-//         req.session.flashMsg = 'Perfil actualizado correctamente';
-//         return res.redirect('/usuarios/perfil');
-
-//     } catch (e) {
-//         logger.error('Error al modificar perfil:', e);
-
-//         let errorMessage = 'Error al actualizar el perfil';
-//         if (e instanceof UsuarioNoEncontrado) {
-//             errorMessage = 'Usuario no encontrado';
-//         } else if (e instanceof UsuarioYaExiste) {
-//             errorMessage = 'El nombre de usuario ya está en uso';
-//         }
-
-//         return res.render('pagina', {
-//             contenido: 'paginas/editarPerfil',
-//             session: req.session,
-//             usuario: Usuario.getUsuarioById(req.session.userId),
-//             error: errorMessage
-//         });
-//     }
-// }
 export function modificarPerfil(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -477,7 +400,7 @@ export function modificarPerfil(req, res) {
         const usuarioActual = Usuario.getUsuarioById(id);
 
         const password = datos.password
-            ? bcrypt.hashSync(datos.password, bcrypt.genSaltSync(10)) //genSaltSync(10) requerido tras error en la función
+            ? bcrypt.hashSync(datos.password, bcrypt.genSaltSync(10))
             : usuarioActual.password;
 
         const usuarioActualizado = new Usuario(
@@ -601,8 +524,6 @@ export function aniadirRecetaACalendario(req, res) {
     try {
         CalendarioSemanal.asignarRecetaAUsuario(recetaId, usuarioId, fecha);
         res.redirect('/usuarios/micalendario');
-        //TODO Añadir mensaje en el controller    
-        //return { mensaje: "Receta asignada correctamente" }; (Mensaje Flash?)
     } catch (e) {
         res.render('pagina', {
             contenido: 'paginas/error',
@@ -628,7 +549,6 @@ export function eliminarRecetaDeCalendario(req, res) {
 
         if (CalendarioSemanal.eliminarRecetaDeUsuario(usuarioId, fecha)) {
             res.redirect('/usuarios/micalendario');
-            //TODO Añadir mensaje en el controller {mensaje: "Receta eliminada correctamente" };
         }
     } catch (e) {
         res.render('pagina', {
@@ -670,8 +590,6 @@ export function eliminarRecetaDeFavoritos(req, res) {
     try {
         Guardado.removeRecetaFromFavoritos(usuarioId, recetaId);
         res.redirect('/usuarios/misrecetas');
-
-        //TODO Añadir mensaje en el controller {mensaje: "Receta eliminada de favoritos" };
     } catch (e) {
         res.render('pagina', {
             contenido: 'paginas/error',
@@ -683,7 +601,7 @@ export function eliminarRecetaDeFavoritos(req, res) {
 
 export function viewSugerencias(req, res) {
     res.render('pagina', {
-        contenido: 'paginas/sugerencias', // Asegúrate de tener esta plantilla
+        contenido: 'paginas/sugerencias', 
         session: req.session,
     });
 }

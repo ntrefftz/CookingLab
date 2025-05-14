@@ -2,7 +2,6 @@ import { RolesEnum } from '../usuarios/Usuario.js';
 export function autenticado(urlNoAutenticado = '/usuarios/login', urlAutenticado) {
     return (req, res, next) => {
         if (req.session != null && req.session.login) {
-            // if (urlAutenticado != undefined) return res.redirect(urlAutenticado);
             return next();
         }
         else if (urlNoAutenticado != undefined) {

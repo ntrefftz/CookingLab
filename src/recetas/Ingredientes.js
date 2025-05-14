@@ -68,7 +68,7 @@ export class Ingrediente {
     static addIngrediente(nombre, categoria, precio, stock = 0, unidad_medida, imagen_url) {
         try {
             this.#insertStmt.run({ nombre, categoria, precio, stock, unidad_medida, imagen_url});
-            return true; //TODO MENSAJE { mensaje: "Ingrediente añadido correctamente" };
+            return true; 
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') throw new IngredienteYaExiste(nombre);
             throw new ErrorDatos("No se pudo añadir el ingrediente", { cause: e });
@@ -78,19 +78,19 @@ export class Ingrediente {
     static deleteIngrediente(id) {
         const result = this.#deleteStmt.run({ id });
         if (result.changes === 0) throw new IngredienteNoEncontrado(id);
-        return true; //TODO MENSAJE{ mensaje: "Ingrediente eliminada correctamente" };
+        return true; 
     }
 
     static updateIngrediente(id, nombre, categoria, precio, stock, unidad_medida, imagen_url) {
         const result = this.#updateStmt.run({ id, nombre, categoria, precio, stock, unidad_medida, imagen_url });
         if (result.changes === 0) throw new IngredienteNoEncontrado(id);
-        return true; //TODO MENSAJE{ mensaje: "Ingrediente actualizado correctamente" };
+        return true; 
     }
     
     static reducirStock(id, cantidad) {
         const result = this.#reduceStockStmt.run({ id, cantidad });
         if (result.changes === 0) throw new StockInsuficiente(id, cantidad);
-        return true; //TODO MENSAJE{ mensaje: "Stock actualizado correctamente" };
+        return true; 
     }
 
     static existeIngrediente(nombre) {
@@ -100,7 +100,7 @@ export class Ingrediente {
     static setStock(id, stock) {
         const result = this.#setStock.run({ id, stock });
         if (result.changes === 0) throw new IngredienteNoEncontrado(id);
-        return true //TODO MENSAJE{ mensaje: "Stock actualizado correctamente" };
+        return true
     }
 
     id;

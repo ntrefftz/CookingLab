@@ -1,5 +1,5 @@
 import { Ingrediente } from '../recetas/Ingredientes.js';
-import { Receta } from '../recetas/Recetas.js'; // Ruta relativa correcta
+import { Receta } from '../recetas/Recetas.js'; 
 import { logger } from '../logger.js';
 
 
@@ -18,14 +18,13 @@ export function viewIndex(req, res) {
             ? todosIngredientes.slice(-5).reverse()
          : [];
 
-        // Receta del día (cacheada por 24 horas)
         let recetaDelDia = req.session.recetaDelDia;
         const hoy = new Date();
         const ultimaActualizacion = new Date(req.session.recetaDelDiaFecha || 0);
         
         if (!recetaDelDia || (hoy - ultimaActualizacion) > 24*60*60*1000) {
             recetaDelDia = todasRecetas[Math.floor(Math.random() * todasRecetas.length)];
-            req.session.recetaDelDia = recetaDelDia; // Corregí el nombre de la variable aquí
+            req.session.recetaDelDia = recetaDelDia; 
             req.session.recetaDelDiaFecha = hoy;
         }
         

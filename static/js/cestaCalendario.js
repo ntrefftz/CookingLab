@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Obtener las recetas de la semana desde el atributo data
     const recetasSemana = JSON.parse(btnAnadirCesta.dataset.recetas || '[]');
     console.log('Recetas de la semana:', recetasSemana);
 

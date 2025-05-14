@@ -1,34 +1,37 @@
 <h1>Catálogo</h1>
 <% if (session.esAdmin|| session.esCocinero) { %>
     <a href="/recetas/receta/aniadir"><button>Añadir receta</button></a>
-<% } %>
+    <% } %>
 
-<div id="catalogo" class="cards_container">
-    <% recetas.forEach(receta=> { %>
-        <article class="card">
-            <img src="/recetas/imagen/<%=receta.imagen_url %>" alt="Pronto habrá una foto" />
-            <p></p>
-            <a href="receta/?id=<%= receta.id %>">
-                <h4><%= receta.nombre %></h4>
-            </a>
-            <p>Tiempo preparación: <%= Math.floor(receta.tiempo_prep_segs / 60) %> minutos</p>
-            <p>Dificultad: <%= receta.dificultad %></p>
-            
-            <% if (esDesdeCalendario) { %>
-                <form action="/usuarios/calendario/aniadir" method="POST">
-                    <input type="hidden" name="recetaId" value="<%= receta.id %>" />
-                    <input type="hidden" name="fecha" value="<%= fecha %>" />
-                    <button class="anadir-receta-calendario">Añadir receta al calendario</button>
-                </form>
+        <div id="catalogo" class="cards_container">
+            <% recetas.forEach(receta=> { %>
+                <article class="card">
+                    <img src="/recetas/imagen/<%=receta.imagen_url %>" alt="Pronto habrá una foto" />
+                    <p></p>
+                    <a href="receta/?id=<%= receta.id %>">
+                        <h4>
+                            <%= receta.nombre %>
+                        </h4>
+                    </a>
+                    <p>Tiempo preparación: <%= Math.floor(receta.tiempo_prep_segs / 60) %> minutos</p>
+                    <p>Dificultad: <%= receta.dificultad %>
+                    </p>
 
-            <% } %>
-            <% if (esDesdeMisRecetas) { %>
-                <form action="/usuarios/favoritos/aniadir" method="POST">
-                    <input type="hidden" name="recetaId" value="<%= receta.id %>" />
-                    <button class="anadir-receta-favoritos">Añadir receta a favoritos</button>
-                </form>
-            <% } %>
-            
-        </article>
-        <% }) %>
-</div>
+                    <% if (esDesdeCalendario) { %>
+                        <form action="/usuarios/calendario/aniadir" method="POST">
+                            <input type="hidden" name="recetaId" value="<%= receta.id %>" />
+                            <input type="hidden" name="fecha" value="<%= fecha %>" />
+                            <button class="anadir-receta-calendario">Añadir receta al calendario</button>
+                        </form>
+
+                        <% } %>
+                            <% if (esDesdeMisRecetas) { %>
+                                <form action="/usuarios/favoritos/aniadir" method="POST">
+                                    <input type="hidden" name="recetaId" value="<%= receta.id %>" />
+                                    <button class="anadir-receta-favoritos">Añadir receta a favoritos</button>
+                                </form>
+                                <% } %>
+
+                </article>
+                <% }) %>
+        </div>
