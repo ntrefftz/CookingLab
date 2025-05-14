@@ -194,9 +194,7 @@ export function modificarReceta(req, res) {
            }
        }
    }
-   console.log('Ingredientes seleccionados:', ingredientesArray);
-console.log('Cantidades:', cantidades);
-console.log('Cantidades específicas:', cantidadesEsp);
+
    // Añadir cada ingrediente con su cantidad
    for (const ingredienteId of ingredientesArray) {
        if (ingredienteId) {
