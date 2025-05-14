@@ -129,12 +129,10 @@ export function modificarReceta(req, res) {
    body('tiempo_prep_segs').escape();
 // XXX Usar matchedData
    const nombre = req.body.nombre.trim();
-   const descripcion = req.body.descripcion.trim();
+   const descripcion = req.body.descripcion.trim(); 
    const dificultad = req.body.dificultad.trim();
-   const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
+   const tiempo_prep_segs = req.body.tiempo_prep_segs.trim(); 
    const id = req.query.id;
-
-
 
    if (!imagen) {
        let receta = Receta.getRecetaById(id);
@@ -145,11 +143,10 @@ export function modificarReceta(req, res) {
 
 
    Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1, imagen_url);
+   
    const receta = Receta.getRecetaById(id);
-
    const ingredientes = Tiene.getIngredientesByReceta(id);
-
-   const listaIngredientes = Ingrediente.getAllIngredientes();
+   //const listaIngredientes = Ingrediente.getAllIngredientes();
 
    if (!receta) {
        return res.status(404).send('Receta no encontrada');
@@ -167,38 +164,47 @@ export function modificarReceta(req, res) {
        } else {
            ingrediente.nombre = 'Desconocido'; // Si no se encuentra el ingrediente
        }
-   });
-
+   });   
    // Asignamos los ingredientes modificados a la receta
    receta.ingredientes = ingredientes;
 
    const ingredientesSeleccionados = req.body['ingredientesSeleccionados'] || []; // array de ingredientes que vienen del form
-
    // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
    const ingredientesArray = Array.isArray(ingredientesSeleccionados)
        ? ingredientesSeleccionados
        : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
 
+   
+   
+    const cantidadesArray = req.body.cantidades || [];
+    const cantidadesEspArray = req.body.cantidad_especifica || [];
 
-   const cantidades = {};
-   const cantidadesEsp = {};
+    const cantidades = {};
+    const cantidadesEsp = {};
 
-   for (const key in req.body) {
-       if (key.startsWith('cantidades[')) {
-           const match = key.match(/\[(\d+)\]/);
-           if (match) {
-               const id = match[1];
-               cantidades[id] = req.body[key] || 1; // Por defecto a 1 si está vacío
-           }
-       }
-       if (key.startsWith('cantidad_especifica[')) {
-           const match = key.match(/\[(\d+)\]/);
-           if (match) {
-               const id = match[1];
-               cantidadesEsp[id] = req.body[key] || 1; // Por defecto a 1 si está vacío
-           }
-       }
-   }
+    // Creamos punteros separados para recorrer los arrays de cantidades
+    let cantIndex = 0;
+    let cantEspIndex = 0;
+
+    ingredientesArray.forEach((id) => {
+        // Saltar hasta encontrar un valor válido en cantidades
+        let cantidad;
+        while (cantIndex < cantidadesArray.length) {
+            cantidad = parseFloat(cantidadesArray[cantIndex]);
+            cantIndex++;
+            if (!isNaN(cantidad)) break;
+        }
+        cantidades[id] = !isNaN(cantidad) ? cantidad : 1;
+
+        // Lo mismo para cantidad específica
+        let cantidadEsp;
+        while (cantEspIndex < cantidadesEspArray.length) {
+            cantidadEsp = parseFloat(cantidadesEspArray[cantEspIndex]);
+            cantEspIndex++;
+            if (!isNaN(cantidadEsp)) break;
+        }
+        cantidadesEsp[id] = !isNaN(cantidadEsp) ? cantidadEsp : 1;
+    });
 
    // Añadir cada ingrediente con su cantidad
    for (const ingredienteId of ingredientesArray) {
@@ -210,9 +216,6 @@ export function modificarReceta(req, res) {
    }
 
    const ingredientesAEliminar = req.body['ingredientesAEliminar'] || [];
-
-   // Cantidad de ingredientes que se quieren eliminar
-   //const cantidadAEliminar = ingredientesEliminarArray.length;
 
    // Verificamos si eliminar esos ingredientes dejaría la receta vacía
    if (ingredientes.length - ingredientesAEliminar.length < 1) {
@@ -296,7 +299,7 @@ export function aniadirReceta(req, res) {
 
         const recetaId = result.lastInsertRowid;
         // Cantidades normales (primer valor del array)
-        const cantidades = {};
+        /*const cantidades = {};
         for (const key in req.body) {
             const match = key.match(/^cantidades\[(\d+)\]$/);
             if (match) {
@@ -335,7 +338,21 @@ export function aniadirReceta(req, res) {
                     cantidad_esp[id] = cantidadNum;
                 }
             }
-        }
+        }*/
+        const cantidadesArray = req.body.cantidades || [];
+        const cantidadesEspArray = req.body.cantidad_especifica || [];
+
+        const cantidades = {};
+        const cantidadesEsp = {};
+
+        ingredientesArray.forEach((id, index) => {
+                const cantidad = cantidadesArray[index];
+                const cantidadEsp = cantidadesEspArray[index];
+
+                // fallback a 1 si está vacío o inválido
+                cantidades[id] = parseFloat(cantidad) || 1;
+                cantidadesEsp[id] = parseFloat(cantidadEsp) || 1;
+         });
 
         // Añadir cada ingrediente con su cantidad
         for (const ingredienteId of ingredientesArray) {
