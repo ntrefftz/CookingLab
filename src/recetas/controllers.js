@@ -118,8 +118,6 @@ export function modificarReceta(req, res) {
    const imagen = req.file ? req.file.filename : "";
    let imagen_url = null;
 
-   console.log("Body", req.body);
-
    body('nombre').escape();
    body('descripcion').escape();
    body('difilcultad').escape();
@@ -130,13 +128,6 @@ export function modificarReceta(req, res) {
    const dificultad = req.body.dificultad.trim();
    const tiempo_prep_segs = req.body.tiempo_prep_segs.trim(); 
    const id = req.query.id;
-
-   console.log("ID de receta a modificar:", id);
-   console.log ("Nombre de receta a modificar:", nombre);
-   console.log ("Descripción de receta a modificar:", descripcion);
-   console.log ("Dificultad de receta a modificar:", dificultad);
-   console.log ("Tiempo de receta a modificar:", tiempo_prep_segs);
-
 
    if (!imagen) {
        let receta = Receta.getRecetaById(id);
@@ -173,50 +164,53 @@ export function modificarReceta(req, res) {
    receta.ingredientes = ingredientes;
 
    const ingredientesSeleccionados = req.body['ingredientesSeleccionados'] || []; // array de ingredientes que vienen del form
-
-    console.log("Ingredientes seleccionados:", ingredientesSeleccionados);
-
    // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
    const ingredientesArray = Array.isArray(ingredientesSeleccionados)
        ? ingredientesSeleccionados
        : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
 
    
-   const cantidades = {};
-   const cantidadesEsp = {};
+   
+    const cantidadesArray = req.body.cantidades || [];
+    const cantidadesEspArray = req.body.cantidad_especifica || [];
 
-   for (const key in req.body) {
-       if (key.startsWith('cantidades[')) {
-           const match = key.match(/\[(\d+)\]/);
-           if (match) {
-               const id = match[1];
-               cantidades[id] = req.body[key] || 1; // Por defecto a 1 si está vacío
-           }
-       }
-       if (key.startsWith('cantidad_especifica[')) {
-           const match = key.match(/\[(\d+)\]/);
-           if (match) {
-               const id = match[1];
-               cantidadesEsp[id] = req.body[key] || 1; // Por defecto a 1 si está vacío
-           }
-       }
-   }
+    const cantidades = {};
+    const cantidadesEsp = {};
+
+    // Creamos punteros separados para recorrer los arrays de cantidades
+    let cantIndex = 0;
+    let cantEspIndex = 0;
+
+    ingredientesArray.forEach((id) => {
+        // Saltar hasta encontrar un valor válido en cantidades
+        let cantidad;
+        while (cantIndex < cantidadesArray.length) {
+            cantidad = parseFloat(cantidadesArray[cantIndex]);
+            cantIndex++;
+            if (!isNaN(cantidad)) break;
+        }
+        cantidades[id] = !isNaN(cantidad) ? cantidad : 1;
+
+        // Lo mismo para cantidad específica
+        let cantidadEsp;
+        while (cantEspIndex < cantidadesEspArray.length) {
+            cantidadEsp = parseFloat(cantidadesEspArray[cantEspIndex]);
+            cantEspIndex++;
+            if (!isNaN(cantidadEsp)) break;
+        }
+        cantidadesEsp[id] = !isNaN(cantidadEsp) ? cantidadEsp : 1;
+    });
 
    // Añadir cada ingrediente con su cantidad
-   console.log("Añadir nuevos ingredientes");
    for (const ingredienteId of ingredientesArray) {
        if (ingredienteId) {
            const cantidad = cantidades[ingredienteId] || 1;
            const cantidad_esp = cantidadesEsp[ingredienteId] || 1;
-           console.log("Añadiendo ingrediente a Tiene, id, cant, cantesp:", ingredienteId, cantidad, cantidad_esp);
            Tiene.addIngredienteToReceta(id, ingredienteId, cantidad, cantidad_esp);
        }
    }
 
    const ingredientesAEliminar = req.body['ingredientesAEliminar'] || [];
-
-   // Cantidad de ingredientes que se quieren eliminar
-   //const cantidadAEliminar = ingredientesEliminarArray.length;
 
    // Verificamos si eliminar esos ingredientes dejaría la receta vacía
    if (ingredientes.length - ingredientesAEliminar.length < 1) {
@@ -228,11 +222,9 @@ export function modificarReceta(req, res) {
        : ingredientesAEliminar ? [ingredientesAEliminar] : [];
 
    // Eliminar cada ingrediente
-    console.log("Eliminar ingredientes");
    for (const ingredienteId of ingredientesEliminarArray) {
        if (ingredienteId) {
            const cantidad = cantidades[ingredienteId] || 1;
-           console.log("Eliminando ingrediente de Tiene, id, cant:", ingredienteId, cantidad);
            Tiene.removeIngredienteFromReceta(id, ingredienteId, cantidad);
        }
    }
@@ -302,7 +294,7 @@ export function aniadirReceta(req, res) {
 
         const recetaId = result.lastInsertRowid;
         // Cantidades normales (primer valor del array)
-        const cantidades = {};
+        /*const cantidades = {};
         for (const key in req.body) {
             const match = key.match(/^cantidades\[(\d+)\]$/);
             if (match) {
@@ -341,7 +333,21 @@ export function aniadirReceta(req, res) {
                     cantidad_esp[id] = cantidadNum;
                 }
             }
-        }
+        }*/
+        const cantidadesArray = req.body.cantidades || [];
+        const cantidadesEspArray = req.body.cantidad_especifica || [];
+
+        const cantidades = {};
+        const cantidadesEsp = {};
+
+        ingredientesArray.forEach((id, index) => {
+                const cantidad = cantidadesArray[index];
+                const cantidadEsp = cantidadesEspArray[index];
+
+                // fallback a 1 si está vacío o inválido
+                cantidades[id] = parseFloat(cantidad) || 1;
+                cantidadesEsp[id] = parseFloat(cantidadEsp) || 1;
+         });
 
         // Añadir cada ingrediente con su cantidad
         for (const ingredienteId of ingredientesArray) {
