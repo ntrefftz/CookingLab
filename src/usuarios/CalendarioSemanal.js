@@ -8,6 +8,7 @@ export class CalendarioSemanal {
     static #getByUsuarioYFechaStmt = null;   // Obtener receta asignada a un usuario en una fecha específica
     static #getRecetasSemanaStmt = null; //  NUEVA 
     static #getRecetasRangoStmt = null; // NUEVA: porque siguen petando las malditas fechas
+    static #deleteRecetasStmt = null; // Eliminar recetas
 
     static initStatements(db) {
         if (this.#getByUsuarioYSemanaStmt !== null) return;
@@ -23,7 +24,10 @@ export class CalendarioSemanal {
         
         // Eliminar una receta asignada a un usuario en un día de la semana
         this.#deleteStmt = db.prepare('DELETE FROM Calendario_Semanal WHERE id_usuario = @id_usuario AND fecha = @fecha');
-        
+
+        // Eliminar recetas
+        this.#deleteRecetasStmt = db.prepare('DELETE FROM Calendario_Semanal WHERE id_receta = @id_receta');
+
         // Actualizar la receta asignada a un usuario en un día específico
         this.#updateStmt = db.prepare('UPDATE Calendario_Semanal SET id_receta = @id_receta WHERE id_usuario = @id_usuario AND fecha = @fecha');
 
@@ -70,6 +74,10 @@ export class CalendarioSemanal {
         }
     
         console.log("Receta eliminada correctamente");
+        return true;
+    }
+    static eliminarRecetas(id_receta) {
+        this.#deleteRecetasStmt.run({ id_receta });
         return true;
     }
     //NUEVA
