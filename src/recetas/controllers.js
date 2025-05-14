@@ -298,47 +298,7 @@ export function aniadirReceta(req, res) {
         const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, imagen_url);
 
         const recetaId = result.lastInsertRowid;
-        // Cantidades normales (primer valor del array)
-        /*const cantidades = {};
-        for (const key in req.body) {
-            const match = key.match(/^cantidades\[(\d+)\]$/);
-            if (match) {
-                const id = match[1];
-                const valor = req.body[key];
-
-                let cantidad = '1';
-
-                if (Array.isArray(valor)) {
-                    cantidad = valor[0] && valor[0].trim() !== '' ? valor[0] : '1';
-                } else {
-                    cantidad = valor && valor.trim() !== '' ? valor : '1';
-                }
-
-                const cantidadNum = parseInt(cantidad, 10);
-                cantidades[id] = isNaN(cantidadNum) || cantidadNum <= 0 ? 1 : cantidadNum;
-            }
-        }
-
-        // Cantidades específicas (segundo valor del array)
-        const cantidad_esp = {};
-        for (const key in req.body) {
-            const match = key.match(/^cantidades\[(\d+)\]$/);
-            if (match) {
-                const id = match[1];
-                const valor = req.body[key];
-
-                let cantidad = '1';
-
-                if (Array.isArray(valor)) {
-                    cantidad = valor[1] && valor[1].trim() !== '' ? valor[1] : '1';
-                }
-
-                const cantidadNum = parseInt(cantidad, 10);
-                if (!isNaN(cantidadNum) && cantidadNum > 0) {
-                    cantidad_esp[id] = cantidadNum;
-                }
-            }
-        }*/
+   
         const cantidadesArray = req.body.cantidades || [];
         const cantidadesEspArray = req.body.cantidad_especifica || [];
 
@@ -358,7 +318,7 @@ export function aniadirReceta(req, res) {
         for (const ingredienteId of ingredientesArray) {
             if (ingredienteId) {
                 const cantidad = cantidades[ingredienteId] || 1;
-                const cantidadEspecifica = cantidad_esp[ingredienteId] || 1;
+                const cantidadEspecifica = cantidadesEsp[ingredienteId] || 1;
 
                 Tiene.addIngredienteToReceta(recetaId, ingredienteId, cantidad, cantidadEspecifica);
 
@@ -475,6 +435,7 @@ export function modificarIngrediente(req, res) {
     body('categoria').escape();
     body('precio').escape();
     body('stock').escape();
+    body('unidad_medida').escape();
 
     const nombre = req.body.nombre.trim();
     const categoria = req.body.categoria.trim();
@@ -515,10 +476,11 @@ export function aniadirIngrediente(req, res) {
     let imagen_url = null;
 
     body('nombre').escape();
-    body('precio').escape();
     body('categoria').escape();
+    body('precio').escape();
     body('stock').escape();
-
+    body('unidad_medida').escape();
+    
     const nombre = req.body.nombre.trim();
     const precio = req.body.precio.trim();
     const categoria = req.body.categoria.trim();
