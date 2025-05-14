@@ -72,6 +72,12 @@ export class Tiene {
         if (result.changes === 0) throw new Error("No se pudo actualizar la cantidad del ingrediente en la receta.");
         return true; //TODO MENSAJE{ mensaje: "Cantidad de ingrediente actualizada correctamente." };
     }
+    
+    static updateIngrediente(idReceta, idIngrediente, cantidad, cantidad_esp) { 
+        const result = this.#updateStmt.run({ id_ingrediente: idIngrediente, id_receta: idReceta, cantidad, cantidad_esp });
+        if (result.changes === 0) throw new Error("No se pudo actualizar la cantidad del ingrediente en la receta.");
+        return true; //TODO MENSAJE{ mensaje: "Cantidad de ingrediente actualizada correctamente." };
+    }
 
     id_ingrediente;
     id_receta;
