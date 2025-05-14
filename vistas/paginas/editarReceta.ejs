@@ -35,7 +35,6 @@
             <% if (listaIngredientes && listaIngredientes.length > 0) { %>
                 <ul>
                     <% listaIngredientes.forEach(ingrediente => { %>
-                        <!-- Mostrar solo si NO está en la receta -->
                         <% if (!currentIngredientIds.includes(ingrediente.id)) { %>
                             <li>
                                 <input type="checkbox" id="ing-<%= ingrediente.id %>" 

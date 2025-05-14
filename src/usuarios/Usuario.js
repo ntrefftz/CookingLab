@@ -62,7 +62,6 @@ export class Usuario {
         const usuario = this.#getByIdStmt.get({ id });
         if (!usuario) throw new UsuarioNoEncontrado(id);
 
-        // Crear un objeto con todos los campos necesarios
         const datosActualizados = {
             id: usuario.id,
             username: usuario.username,
@@ -72,7 +71,7 @@ export class Usuario {
             correo: usuario.correo,
             direccion: usuario.direccion,
             rol: usuario.rol,
-            activo: 0  // Establecer activo a 0
+            activo: 0
         };
 
         const result = this.#updateStmt.run(datosActualizados);
@@ -84,7 +83,6 @@ export class Usuario {
         const usuario = this.#getByIdStmt.get({ id });
         if (!usuario) throw new UsuarioNoEncontrado(id);
 
-        // Crear un objeto con todos los campos necesarios
         const datosActualizados = {
             id: usuario.id,
             username: usuario.username,
@@ -94,7 +92,7 @@ export class Usuario {
             correo: usuario.correo,
             direccion: usuario.direccion,
             rol: usuario.rol,
-            activo: 1  // Establecer activo a 0
+            activo: 1  
         };
 
         const result = this.#updateStmt.run(datosActualizados);
@@ -125,7 +123,6 @@ export class Usuario {
             const direccion = usuario.direccion;
             const rol = usuario.rol;
             const activo = usuario.activo;
-            //const id = usuario.id;
             const datos = { username, password, nombre, apellido, correo, direccion, rol, activo };
 
             result = this.#insertStmt.run(datos);
@@ -166,7 +163,6 @@ export class Usuario {
             throw new UsuarioOPasswordNoValido(username, { cause: e });
         }
 
-        // Verificar si la cuenta está activa
         if (usuario.activo === 0) {
             throw new UsuarioOPasswordNoValido(username, { cause: 'Cuenta desactivada' });
         }
@@ -197,10 +193,6 @@ export class Usuario {
     }
 
     static getAllUsuarios() {
-        // Si quieres solo usuarios activos:
-        // const usuarios = this.#getAllStmt.all().filter(u => u.activo === 1);
-
-        // Si quieres todos los usuarios (incluyendo inactivos):
         const usuarios = this.#getAllStmt.all();
         if (!usuarios) throw new UsuarioNoEncontrado(id);
         return usuarios;
@@ -224,7 +216,7 @@ export class Usuario {
         this.correo = correo;
         this.direccion = direccion;
         this.activo = activo;
-        this.#rol = rol.toString(); // Asegurarse que es string
+        this.#rol = rol.toString(); 
 
         this.#id = id;
     }

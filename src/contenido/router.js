@@ -10,7 +10,6 @@ contenidoRouter.get('/', viewIndex);
 contenidoRouter.get('/contacto',  asyncHandler(viewContacto));
 contenidoRouter.get('/condiciones',  asyncHandler(viewCondiciones));
 contenidoRouter.get('/conocenos',  asyncHandler(viewConocenos));
-//contenidoRouter.get('/cesta', autenticado('usuarios/login', '/cesta'), asyncHandler(viewCesta));
 contenidoRouter.get('/compraReceta', autenticado('usuarios/login', '/compraReceta'), asyncHandler(viewCompraReceta));
 
 export default contenidoRouter;

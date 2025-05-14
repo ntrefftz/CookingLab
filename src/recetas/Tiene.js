@@ -18,24 +18,21 @@ export class Tiene {
         this.#updateStmt = db.prepare('UPDATE Tiene SET cantidad = @cantidad WHERE id_ingrediente = @id_ingrediente AND id_receta = @id_receta');
     }
 
-    // Añadir un ingrediente a una receta
     static addIngredienteToReceta(idReceta, idIngrediente, cantidad, cantidad_esp) {
         try {
             this.#insertStmt.run({ id_ingrediente: idIngrediente, id_receta: idReceta, cantidad, cantidad_esp });
-            return true;//TODO MENSAJE A CONTROLLER{ mensaje: "Ingrediente añadido a la receta correctamente." };
+            return true;
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') throw new Error("El ingrediente ya está en la receta.");
             throw new Error("No se pudo añadir el ingrediente a la receta.", { cause: e });
         }
     }
 
-    // Eliminar un ingrediente de una receta
     static removeIngredienteFromReceta(idReceta, idIngrediente) {
         this.#deleteStmt.run({ id_ingrediente: idIngrediente, id_receta: idReceta });
         return true;
     }
 
-    // Obtener todos los ingredientes de una receta
     static getIngredientesByReceta(idReceta) {
         if (!this.#getByRecetaStmt) {
             throw new Error("La consulta 'getByRecetaStmt' no está inicializada.");
@@ -43,7 +40,6 @@ export class Tiene {
         const ingredientes = this.#getByRecetaStmt.all({ id_receta: idReceta });
         if (ingredientes.length === 0) throw new Error("No se encontraron ingredientes para esta receta.");
 
-        // Mapear los resultados a instancias de la clase Tiene
         return ingredientes.map(({ id_ingrediente, id_receta, cantidad, cantidad_esp }) =>
             new Tiene(id_receta, id_ingrediente, cantidad, cantidad_esp)
         );
@@ -54,7 +50,6 @@ export class Tiene {
         return true;
     }
 
-    // Obtener todas las recetas que contienen un ingrediente
     static getRecetasByIngrediente(idIngrediente) {
         if (!this.#getByIngredienteStmt) {
             throw new Error("La consulta 'getByIngredienteStmt' no está inicializada.");
@@ -66,17 +61,16 @@ export class Tiene {
         );
     }
 
-    // Actualizar la cantidad de un ingrediente en una receta
     static updateCantidadIngrediente(idReceta, idIngrediente, cantidad) {
         const result = this.#updateStmt.run({ id_ingrediente: idIngrediente, id_receta: idReceta, cantidad });
         if (result.changes === 0) throw new Error("No se pudo actualizar la cantidad del ingrediente en la receta.");
-        return true; //TODO MENSAJE{ mensaje: "Cantidad de ingrediente actualizada correctamente." };
+        return true;
     }
-    
-    static updateIngrediente(idReceta, idIngrediente, cantidad, cantidad_esp) { 
+
+    static updateIngrediente(idReceta, idIngrediente, cantidad, cantidad_esp) {
         const result = this.#updateStmt.run({ id_ingrediente: idIngrediente, id_receta: idReceta, cantidad, cantidad_esp });
         if (result.changes === 0) throw new Error("No se pudo actualizar la cantidad del ingrediente en la receta.");
-        return true; //TODO MENSAJE{ mensaje: "Cantidad de ingrediente actualizada correctamente." };
+        return true;
     }
 
     id_ingrediente;

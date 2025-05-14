@@ -3,11 +3,10 @@ import { Toast } from "../toasts/toasts.js";
 document.addEventListener('DOMContentLoaded', function () {
     const calendarEl = document.getElementById('calendarWk');
     const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth', // Vista mensual
-        editable: true, // Permitir edición de eventos
+        initialView: 'dayGridMonth',
+        editable: true,
         events: async function (fetchInfo, successCallback, failureCallback) {
             try {
-                // Cargar los eventos desde el backend
                 const response = await fetch('/recetas/obtenerRecetasCalendario', {
                     method: 'GET',
                     headers: {
@@ -19,8 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!Array.isArray(recetas)) {
                     throw new Error('La respuesta no es un array válido.');
                 }
-
-                // Pasar los eventos al calendario
                 successCallback(recetas);
             } catch (error) {
                 console.error('Error al cargar los eventos:', error);
@@ -30,11 +27,9 @@ document.addEventListener('DOMContentLoaded', function () {
         dateClick: async function (info) {
             const fecha = info.dateStr;
 
-            // Verificar si ya hay una receta en el calendario para la fecha seleccionada
             const existingEvent = calendar.getEvents().find(event => event.startStr === fecha);
 
             if (existingEvent) {
-                // Mostrar información de la receta existente
                 const content = document.createElement('div');
                 const recipeInfo = document.createElement('p');
                 recipeInfo.textContent = `Receta actual: ${existingEvent.title}`;
@@ -44,9 +39,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const changeButton = document.createElement('button');
                 changeButton.textContent = 'Cambiar receta';
                 changeButton.addEventListener('click', async (event) => {
-                    event.stopPropagation(); // Detener la propagación del evento para evitar que cierre el popup
+                    event.stopPropagation();
                     console.log('Botón "Cambiar receta" clickeado');
-                    content.innerHTML = ''; // Limpiar el contenido del popup
+                    content.innerHTML = '';
 
                     // Crear un selector de recetas
                     const recipeSelector = document.createElement('select');

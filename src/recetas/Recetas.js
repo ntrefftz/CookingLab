@@ -15,13 +15,13 @@ export class Receta {
         if (this.#getByIdStmt !== null) return;
 
         this.#getByIdStmt = db.prepare('SELECT * FROM Recetas WHERE id = @id');
-        this.#getByUsuarioStmt = db.prepare('SELECT * FROM Recetas WHERE id_usuario = @id_usuario AND activo = 1'); // Obtener recetas activas por usuario
+        this.#getByUsuarioStmt = db.prepare('SELECT * FROM Recetas WHERE id_usuario = @id_usuario AND activo = 1');
         this.#insertStmt = db.prepare('INSERT INTO Recetas(nombre, descripcion, tiempo_prep_segs, dificultad, id_usuario, activo, imagen_url, imagen_url) VALUES (@nombre, @descripcion, @tiempo_prep_segs, @dificultad, @id_usuario, @activo, @imagen_url, @imagen_url)');
         this.#updateStmt = db.prepare('UPDATE Recetas SET nombre = @nombre, descripcion = @descripcion, tiempo_prep_segs = @tiempo_prep_segs, dificultad = @dificultad, activo = @activo, imagen_url = @imagen_url, imagen_url = @imagen_url WHERE id = @id');
         this.#deleteStmt = db.prepare('DELETE FROM Recetas WHERE id = @id');
-        this.#getAllStmt = db.prepare('SELECT * FROM Recetas WHERE activo = 1'); // Obtener todas las recetas activas
-        this.#getAllNact = db.prepare('SELECT * FROM Recetas WHERE activo = 0'); // Obtener todas las recetas NO activas
-        this.#activarRecetaStmt = db.prepare('UPDATE Recetas SET activo = 1 WHERE id = @id'); //Activa las recetas sugeridas
+        this.#getAllStmt = db.prepare('SELECT * FROM Recetas WHERE activo = 1');
+        this.#getAllNact = db.prepare('SELECT * FROM Recetas WHERE activo = 0');
+        this.#activarRecetaStmt = db.prepare('UPDATE Recetas SET activo = 1 WHERE id = @id');
 
         this.#searchByNameStmt = db.prepare('SELECT * FROM Recetas WHERE nombre LIKE @nombre AND activo = 1');
         this.#searchByIngredientStmt = db.prepare(`
@@ -38,7 +38,6 @@ export class Receta {
         const receta = this.#getByIdStmt.get({ id });
         if (!receta) throw new RecetaNoEncontrada(id);
 
-        // Crear y devolver una instancia de Receta
         return new Receta(
             receta.id,
             receta.nombre,
@@ -54,7 +53,6 @@ export class Receta {
     static getRecetasByUsuario(id_usuario) {
         const recetas = this.#getByUsuarioStmt.all({ id_usuario });
 
-        // Mapear los resultados a instancias de Receta
         return recetas.map(receta => new Receta(
             receta.id,
             receta.nombre,
@@ -70,7 +68,6 @@ export class Receta {
     static getAllRecetas() {
         const recetas = this.#getAllStmt.all();
 
-        // Mapear los resultados a instancias de Receta
         return recetas.map(receta => new Receta(
             receta.id,
             receta.nombre,
@@ -86,7 +83,6 @@ export class Receta {
     static getAllRecetasNact() {
         const recetas = this.#getAllNact.all();
 
-        // Mapear los resultados a instancias de Receta
         return recetas.map(receta => new Receta(
             receta.id,
             receta.nombre,
@@ -111,13 +107,13 @@ export class Receta {
     static updateReceta(id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url) {
         const result = this.#updateStmt.run({ id, nombre, descripcion, tiempo_prep_segs, dificultad, activo, imagen_url });
         if (result.changes === 0) throw new RecetaNoEncontrada(id);
-        return true; //TODO MENSAJE{ mensaje: "Receta actualizada correctamente" };
+        return true;
     }
 
     static deleteReceta(id) {
         this.#deleteStmt.run({ id });
 
-        return true; //TODO MENSAJE{ mensaje: "Receta eliminada correctamente", id };
+        return true;
     }
 
     static searchByName(nombre) {
@@ -150,12 +146,10 @@ export class Receta {
         ));
     }
 
-    // Función para aceptar una sugerencia de receta
     static aceptarSugerencia(id) {
-        // Cambia el campo 'activo' a 1 para aprobar la receta
         const result = this.#activarRecetaStmt.run({ id });
         if (result.changes === 0) throw new RecetaNoEncontrada(id);
-        return true; //{ mensaje: "Receta aceptada correctamente" };
+        return true;
     }
 
     id;

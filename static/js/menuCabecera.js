@@ -28,11 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
     menuList.innerHTML = menu(session);
 
     dropdownButton.addEventListener('click', (event) => {
-        event.stopPropagation(); // Evita que el clic se propague al documento
-        dropdownMenu.classList.toggle('show'); // Alterna la clase 'show'
+        event.stopPropagation(); 
+        dropdownMenu.classList.toggle('show'); 
     });
 
-    // Cierra el menú si se hace clic fuera de él
     document.addEventListener('click', () => {
         dropdownMenu.classList.remove('show');
     });

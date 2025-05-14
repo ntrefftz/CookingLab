@@ -1,4 +1,4 @@
-import { logger } from "../logger.js"; // Asegúrate de que la ruta sea correcta
+import { logger } from "../logger.js"; 
 
 export class Guardado {
     static #insertOrUpdateStmt = null;
@@ -33,7 +33,7 @@ export class Guardado {
     static addRecetaToFavoritos(idUsuario, idReceta) {
         try {
             this.#insertOrUpdateStmt.run({ id_usuario: idUsuario, id_receta: idReceta });
-            return true; //{ mensaje: "Receta añadida a favoritos." };
+            return true; 
         } catch (e) {
             throw new Error("No se pudo añadir la receta a favoritos.", { cause: e });
         }
@@ -46,7 +46,7 @@ export class Guardado {
             console.warn(`No se pudo eliminar la receta ${idReceta} de favoritos del usuario ${idUsuario}. Verifica si guardado = 1 existe.`);
             throw new Error("La receta no estaba marcada como favorita.");
         }
-        return true; // { mensaje: "Receta eliminada de favoritos." };
+        return true; 
     }
 
     // Obtener las recetas favoritas de un usuario

@@ -34,7 +34,7 @@ export class Realiza {
 
         try {
             this.#insertStmt.run({ id_usuario, id_pedido });
-            return true; //TODO MENSAJE { mensaje: "Relación entre usuario y pedido añadida correctamente" };
+            return true; 
         } catch (e) {
             if (e.code === 'SQLITE_CONSTRAINT') throw new RelacionYaExiste(id_usuario, id_pedido);
             throw new ErrorDatos("No se pudo añadir la relación", { cause: e });
@@ -44,12 +44,12 @@ export class Realiza {
     static deleteRelacion(id_usuario, id_pedido) {
         const result = this.#deleteStmt.run({ id_usuario, id_pedido });
         if (result.changes === 0) throw new RelacionNoEncontrada(id_usuario, id_pedido);
-        return true; //TODO MENSAJE { mensaje: "Relación eliminada correctamente" };
+        return true; 
     }
 
     static deletePedido(id_pedido) {
         const result = this.#deletePedidoStmt.run({ id_pedido });
-        return true; //TODO MENSAJE { mensaje: "Relación eliminada correctamente" };
+        return true; 
     }
 
    id_usuario;

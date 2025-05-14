@@ -1,6 +1,5 @@
 <h1>Resultados de la búsqueda</h1>
 
-<!-- Formulario de búsqueda -->
 <form action="/recetas/buscarReceta" method="GET">
     <input type="text" name="termino" placeholder="Buscar ..." value="<%= termino || '' %>" required>
     <select name="tipo">
@@ -16,12 +15,10 @@
     <button type="submit">Buscar</button>
 </form>
 
-<!-- Mostrar mensaje de error si no hay resultados -->
 <% if (error) { %>
     <p style="color: red;"><%= error %></p>
 <% } %>
 
-<!-- Mostrar resultados como tarjetas -->
 <div class="cards_container">
     <% if (recetas.length > 0) { %>
         <% recetas.forEach(receta => { %>

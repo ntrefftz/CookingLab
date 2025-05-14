@@ -35,7 +35,7 @@ export class Cesta {
     static addCesta(id_usuario, id_ingrediente, cantidad) {
         try {
             const result = this.#insertStmt.run({ id_usuario, id_ingrediente, cantidad });
-            return true; //TODO MENSAJE { mensaje: "Cesta añadida correctamente", id: result.lastInsertRowid };
+            return true; 
         } catch (e) {
             throw new ErrorDatos("No se pudo añadir la cesta", { cause: e });
         }
@@ -44,7 +44,7 @@ export class Cesta {
     static deleteCesta(id_usuario, id_ingrediente) {
         const result = this.#deleteStmt.run({ id_usuario, id_ingrediente });
         if (result.changes === 0) throw new CestaNoEncontrada(id_usuario);
-        return true; //TODO MENSAJE { mensaje: "Cesta eliminada correctamente" };
+        return true; 
     }
     
     static borrarIngrediente(id_ingrediente){
@@ -60,7 +60,7 @@ export class Cesta {
         if (result.changes === 0) {
             throw new CestaNoEncontrada(id_usuario);
         }
-        return true; //TODO MENSAJE { mensaje: "Cesta actualizada correctamente" };
+        return true; 
     }
     
     static clearCesta(id_usuario) {

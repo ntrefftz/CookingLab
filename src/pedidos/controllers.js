@@ -11,18 +11,17 @@ export function viewCesta(req, res) {
         const cesta = Cesta.getById(id_usuario);
 
         if (cesta.length === 0) {
-            // Si la cesta está vacía, renderiza con un precio total de 0
             return res.render('pagina', {
                 contenido,
                 session: req.session,
                 ingredientes: [],
-                precioTotal: "0.00" // Asegúrate de pasar precioTotal
+                precioTotal: "0.00"
             });
         }
 
         const ingredientes = cesta.map(item => {
             const ingrediente = Ingrediente.getIngredienteById(item.id_ingrediente);
-            const precio = parseFloat(ingrediente.precio) || 0; // Asegúrate de que el precio sea válido
+            const precio = parseFloat(ingrediente.precio) || 0;
             return {
                 id: ingrediente.id,
                 nombre: ingrediente.nombre,
@@ -37,7 +36,7 @@ export function viewCesta(req, res) {
             contenido,
             session: req.session,
             ingredientes,
-            precioTotal // Pasa precioTotal al renderizador
+            precioTotal
         });
     } catch (error) {
         console.error("Error al obtener la cesta:", error);
@@ -45,7 +44,7 @@ export function viewCesta(req, res) {
             contenido,
             session: req.session,
             ingredientes: [],
-            precioTotal: "0.00", // Asegúrate de pasar precioTotal en caso de error
+            precioTotal: "0.00",
             error: "No se pudo obtener la cesta"
         });
     }
@@ -53,17 +52,17 @@ export function viewCesta(req, res) {
 
 export function aumentarIngredienteDeCesta(req, res) {
     try {
-        const id_usuario = req.session.userId; // ID del usuario desde la sesión
-        const id_ingrediente = req.body.id; // ID del ingrediente desde el cuerpo de la solicitud
-        // Validar que el usuario haya iniciado sesión
+        const id_usuario = req.session.userId;
+        const id_ingrediente = req.body.id;
+
         if (!id_usuario) {
             return res.status(401).send('Usuario no autenticado');
         }
-        // Validar que el ID del ingrediente sea válido
+
         if (!id_ingrediente || isNaN(parseInt(id_ingrediente))) {
             return res.status(400).send('ID de ingrediente inválido');
         }
-        // Obtener el ingrediente de la cesta
+
         const ingrediente = Cesta.getByUserAndIngredient(id_usuario, id_ingrediente);
 
         Cesta.updateCesta(id_usuario, id_ingrediente, ingrediente.cantidad + 1);
@@ -77,20 +76,17 @@ export function aumentarIngredienteDeCesta(req, res) {
 
 export function eliminarIngredienteDeCesta(req, res) {
     try {
-        const id_usuario = req.session.userId; // ID del usuario desde la sesión
-        const id_ingrediente = req.body.id; // ID del ingrediente desde el cuerpo de la solicitud
+        const id_usuario = req.session.userId;
+        const id_ingrediente = req.body.id;
 
-        // Validar que el usuario haya iniciado sesión
         if (!id_usuario) {
             return res.status(401).send('Usuario no autenticado');
         }
 
-        // Validar que el ID del ingrediente sea válido
         if (!id_ingrediente || isNaN(parseInt(id_ingrediente))) {
             return res.status(400).send('ID de ingrediente inválido');
         }
 
-        // Eliminar el ingrediente de la cesta
         const ingrediente = Cesta.getByUserAndIngredient(id_usuario, id_ingrediente);
         if (ingrediente.cantidad <= 1) {
             Cesta.deleteCesta(id_usuario, id_ingrediente);
@@ -117,7 +113,6 @@ export function tramitarPedido(req, res) {
     try {
         const id_usuario = req.session.userId;
 
-        // Obtener la cesta del usuario
         const cesta = Cesta.getById(id_usuario);
         if (cesta.length === 0) {
             return res.status(400).json({ error: 'La cesta está vacía' });
@@ -145,10 +140,7 @@ export function tramitarPedido(req, res) {
             Contiene.addRelacion(ingrediente.id, pedido.id, ingrediente.cantidad);
         });
 
-        // Vaciar la cesta
         Cesta.clearCesta(id_usuario);
-
-        // Relacionar el pedido con el usuario
         Realiza.addRelacion(id_usuario, pedido.id);
 
         // Responder con JSON

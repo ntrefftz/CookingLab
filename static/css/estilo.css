@@ -300,8 +300,8 @@ label {
 	background-color: #F383A0;
 	color: white;
 	text-decoration: none;
-	transform: translateY(-2px); /* efecto lift */
-	box-shadow: 0 6px 12px rgba(47, 5, 234, 0.15); /* sombra más intensa al hacer hover */
+	transform: translateY(-2px); 
+	box-shadow: 0 6px 12px rgba(47, 5, 234, 0.15); 
 }
 
 /*formulario*/
@@ -513,21 +513,21 @@ img {
 
 /*botones perfil*/
 .btn {
-    padding: 10px 20px; /* Padding idéntico */
+    padding: 10px 20px; 
     text-decoration: none;
     border-radius: 4px;
     font-weight: bold;
     font-family: 'Times New Roman';
-    display: inline-flex; /* Cambiado a flex para mejor alineación */
-    align-items: center; /* Centra verticalmente el contenido */
-    justify-content: center; /* Centra horizontalmente el contenido */
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
     min-width: 150px;
     box-sizing: border-box;
-    line-height: normal; /* Reset del line-height */
+    line-height: normal; 
     border: none;
     transition: all 0.3s ease;
-    height: 40px; /* Altura fija explícita */
-    font-size: 16px; /* Tamaño de fuente explícito */
+    height: 40px; 
+    font-size: 16px; 
 }
 
 .btn-edit {
@@ -540,15 +540,13 @@ img {
     color: white;
 }
 
-/* Normalización adicional para elementos específicos */
 .profile-actions a.btn, 
 .profile-actions button.btn {
     margin: 0;
-    vertical-align: top; /* Alineación superior para consistencia */
-    appearance: none; /* Elimina estilos nativos */
+    vertical-align: top; 
+    appearance: none; 
 }
 
-/* Contenedor de botones - opcional para mejor espaciado */
 .profile-actions {
     display: flex;
     gap: 10px;

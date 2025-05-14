@@ -24,14 +24,14 @@ recetasRouter.post('/receta/eliminar', asyncHandler(eliminarReceta));
 recetasRouter.post('/receta/modificar', upload.single('foto'),
     body('nombre', 'Sólo puede contener letras').trim().matches(/^[A-Z]*$/i),
     body('tiempo_prep_segs', 'Solo puede ser un numero').trim().notEmpty().matches(/^[0-9]*$/i),
-    body('dificultad', 'Debe de ser un valor entre 1 y 5 ').trim().notEmpty().matches(/^[0-5]*$/i),  //Asegura que el nombre no esté vacío
+    body('dificultad', 'Debe de ser un valor entre 1 y 5 ').trim().notEmpty().matches(/^[0-5]*$/i),
     body('descripción', 'No puede ser un texto vacío').trim().notEmpty(),
     asyncHandler(modificarReceta));
 recetasRouter.get('/receta/aniadir', autenticado('/usuarios/login', '/aniadir'), tieneRol("A", "C"), asyncHandler(viewAniadirReceta));
 recetasRouter.post('/receta/aniadir', upload.single('foto'),
     body('nombre', 'Sólo puede contener números y letras').trim().matches(/^[A-Z]*$/i),
     body('tiempo_prep_segs', 'Solo puede ser un numero').trim().notEmpty().matches(/^[0-9]*$/i),
-    body('dificultad', 'Debe de ser un valor entre 1 y 5 ').trim().notEmpty().matches(/^[1-5]*$/i),  //Asegura que el nombre no esté vacío
+    body('dificultad', 'Debe de ser un valor entre 1 y 5 ').trim().notEmpty().matches(/^[1-5]*$/i),
     body('descripción', 'No puede ser un texto vacío').trim().notEmpty(),
     asyncHandler(aniadirReceta));
 recetasRouter.post('/receta/aniadirCarritoReceta', asyncHandler(aniadirRecetaCarrito));
@@ -45,20 +45,9 @@ recetasRouter.get('/ingredienteInd/modificar', autenticado('/usuarios/login', '/
 
 recetasRouter.post('/ingredienteInd/eliminar', asyncHandler(eliminarIngrediente));
 recetasRouter.post('/ingredienteInd/modificar', upload.single('foto'),
-    // body('nombre', 'Sólo puede contener letras').trim().matches(/^[A-Z]*$/i), intentada validación con express, redirige automáticamente a aniadirReceta()
-    // body('categoria', 'Solo puede ser un numero').trim().notEmpty().matches(/^[0-9]*$/i),
-    // body('precio', 'Solo puede ser un numero').trim().notEmpty().matches(/^[0-9]*$/i),
-    // body('stock', 'Solo puede ser un numero').trim().notEmpty().matches(/^[0-9]*$/i), asyncHandler(aniadirReceta),
-    // body('unidad_medida', 'No puede ser blanco').trim().notEmpty().matches(/^[A-Z0-9]*$/i), asyncHandler(aniadirReceta),
     asyncHandler(modificarIngrediente));
 recetasRouter.get('/ingredienteInd/aniadir', autenticado('/usuarios/login', '/ingredienteInd/aniadir'), tieneRol("A", "C"), asyncHandler(viewAniadirIngrediente));
 recetasRouter.post('/ingredienteInd/aniadir', upload.single('foto'),
-    // body('nombre', 'Sólo puede contener letras').trim().matches(/^[A-Z]*$/i),
-    // body('categoria', 'Solo puede ser un numero').trim().notEmpty().matches(/^[0-9]*$/i),
-    // body('precio', 'Solo puede ser un numero').trim().notEmpty().matches(/^[0-9]*$/i),
-    // body('stock', 'Solo puede ser un numero').trim().notEmpty().matches(/^[0-9]*$/i), asyncHandler(aniadirReceta),
-    // body('unidad_medida', 'No puede ser blanco').trim().notEmpty().matches(/^[A-Z0-9]*$/i), asyncHandler(aniadirReceta),
-    // body('stock', 'Solo puede ser un numero').trim().notEmpty().matches(/^[0-9]*$/i), asyncHandler(aniadirReceta),
     asyncHandler(aniadirIngrediente));
 recetasRouter.post('/ingredienteInd/aniadirCarritoIng', asyncHandler(aniadirIngredienteCarrito));
 recetasRouter.post('/ingrediente/actualizarStock', asyncHandler(actualizarStock));
