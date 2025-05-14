@@ -4,7 +4,7 @@ import { autenticado, tieneRol} from '../middleware/auth.js';
 import {
     viewConfiguracion, viewHistorial, viewPerfil, viewMisRecetas, viewCalendario, viewLogin, doLogin, doLogout,
     viewRegister, doRegister, viewModificarPerfil, modificarPerfil, viewHome, viewListaUsuario, cambiarPermisos,
-    eliminarPerfil, aniadirRecetaACalendario, eliminarRecetaDeCalendario, aniadirRecetaAFavoritos, eliminarRecetaDeFavoritos, viewSugerencias
+    eliminarPerfilUsuario, eliminarPerfilAdmin, aniadirRecetaACalendario,  activarUsuario, eliminarRecetaDeCalendario, aniadirRecetaAFavoritos, eliminarRecetaDeFavoritos, viewSugerencias
 } 
 from './controllers.js';
 import asyncHandler from 'express-async-handler';
@@ -51,8 +51,9 @@ usuariosRouter.post('/perfil/modificar',
     asyncHandler(modificarPerfil)
 );
 usuariosRouter.post('/cambiarPermisos/:id', asyncHandler(cambiarPermisos));
-usuariosRouter.post('/eliminarUsuario', asyncHandler(eliminarPerfil));
-
+usuariosRouter.post('/eliminarUsuario', autenticado("/login", "/eliminarUsuario"),asyncHandler(eliminarPerfilUsuario));
+usuariosRouter.post('/eliminarUsuarioAdmin', autenticado("/login", "/eliminarUsuarioAdmin"), tieneRol("A"), asyncHandler(eliminarPerfilAdmin));
+usuariosRouter.post('/activarUsuario', autenticado("/login", "/activarUsuario"), tieneRol("A"), asyncHandler(activarUsuario));
 //Para el calendario semanal del usuario
 usuariosRouter.post('/calendario/aniadir', asyncHandler(aniadirRecetaACalendario));
 usuariosRouter.post('/calendario/eliminar', asyncHandler(eliminarRecetaDeCalendario));

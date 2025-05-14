@@ -25,7 +25,7 @@ export const app = express();
 app.set('view engine', 'ejs');
 app.set('views', config.vistas);
 app.use(pinoMiddleware);
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session(config.session));
 

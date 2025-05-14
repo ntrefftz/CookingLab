@@ -444,15 +444,14 @@ export function modificarPerfil(req, res) {
     }
 }
 
-export function eliminarPerfil(req, res) {
+export function eliminarPerfilUsuario(req, res) {
     const id = req.body.id;
     try {
         if (parseInt(id) !== req.session.userId) {
-            Usuario.borrarUsuario(id); //TODO ERROR
+            throw new Error('No puedes eliminar a otro usuario');
         }
         else {
             Usuario.borrarUsuario(id);
-
             req.session.login = null;
             req.session.userId = null;
             req.session.flashMsg = 'Tu cuenta ha sido desactivada correctamente';
@@ -463,6 +462,33 @@ export function eliminarPerfil(req, res) {
     } catch (error) {
         logger.error('Error al desactivar usuario:', error);
         res.status(500).json({ mensaje: 'Error al desactivar la cuenta', error: error.message });
+    }
+}
+
+export function eliminarPerfilAdmin(req, res) {
+    const id = req.query.id;
+    try {
+
+        Usuario.borrarUsuario(id);
+        req.session.flashMsg = 'Cuenta ha sido desactivada correctamente';
+        res.redirect('/usuarios/listaUsuarios');
+
+    } catch (error) {
+        logger.error('Error al desactivar usuario:', error);
+        res.status(500).json({ mensaje: 'Error al desactivar la cuenta', error: error.message });
+    }
+}
+export function activarUsuario(req, res) {
+    const id = req.query.id;
+    try {
+
+        Usuario.activarUsuario(id);
+        req.session.flashMsg = 'Cuenta ha sido desactivada correctamente';
+        res.redirect('/usuarios/listaUsuarios');
+
+    } catch (error) {
+        logger.error('Error al activar usuario:', error);
+        res.status(500).json({ mensaje: 'Error al activar la cuenta', error: error.message });
     }
 }
 
