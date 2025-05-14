@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function loadRecetaDelDia(date) {
         try {
+            let receta;
             console.log("Cargando receta del día para la fecha:", formatDate(date));
             const response = await fetch('/recetas/recetaPorFecha', {
                 method: 'POST',
@@ -33,16 +34,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const recetaID = await response.json();
             console.log("Receta ID:", recetaID);
-            const recetaResponse = await fetch(`/recetas/getReceta/${recetaID.id_receta}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            const receta = await recetaResponse.json();
-            console.log("Receta del día:", receta);
-            if (receta) {
-                recetaSeleccionada.innerHTML = `
+
+            if (!isNaN(recetaID.id_receta)) {
+                receta = null;
+                const recetaResponse = await fetch(`/recetas/getReceta/${recetaID.id_receta}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                receta = await recetaResponse.json();
+                console.log("Receta del día:", receta);
+
+                if (!isNaN(receta.id)) {
+                    recetaSeleccionada.innerHTML = `
                     <img src="/recetas/imagen/${receta.imagen_url}" alt="Imagen de la receta" />
                     <p></p>
                     <a href="/recetas/receta?id=${receta.id}">
@@ -51,7 +56,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p>Tiempo preparación: ${Math.floor(receta.tiempo_prep_segs / 60)} minutos</p>
                     <p>Dificultad: ${receta.dificultad}</p>
                 `;
-            } else {
+                } else {
+                    recetaSeleccionada.innerHTML = "<p>No hay receta disponible para esta fecha.</p>";
+                }
+            }else {
                 recetaSeleccionada.innerHTML = "<p>No hay receta disponible para esta fecha.</p>";
             }
         } catch (error) {
