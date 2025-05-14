@@ -11,15 +11,15 @@ import asyncHandler from 'express-async-handler';
 const usuariosRouter = express.Router();
 // XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
 
-usuariosRouter.get('/configuracion',  autenticado("/login", "configuracion"), asyncHandler(viewConfiguracion));
-usuariosRouter.get('/perfil', autenticado("/login", "/perfil"), asyncHandler(viewPerfil));
-usuariosRouter.get('/historial', autenticado("/login", "/historial"), asyncHandler(viewHistorial));
-usuariosRouter.get('/misrecetas',  autenticado("/login", "/misrecetas"),asyncHandler(viewMisRecetas));
-usuariosRouter.get('/micalendario', autenticado("/login", "/micalendario"), asyncHandler(viewCalendario));
+usuariosRouter.get('/configuracion',  autenticado("/usuarios/login", "configuracion"), asyncHandler(viewConfiguracion));
+usuariosRouter.get('/perfil', autenticado("/usuarios/login", "/perfil"), asyncHandler(viewPerfil));
+usuariosRouter.get('/historial', autenticado("/usuarios/login", "/historial"), asyncHandler(viewHistorial));
+usuariosRouter.get('/misrecetas',  autenticado("/usuarios/login", "/misrecetas"),asyncHandler(viewMisRecetas));
+usuariosRouter.get('/micalendario', autenticado("/usuarios/login", "/micalendario"), asyncHandler(viewCalendario));
 usuariosRouter.get('/login',autenticado(null), asyncHandler(viewLogin));
-usuariosRouter.get('/perfil/modificar', autenticado("/login", "/perfil/modificar") ,asyncHandler(viewModificarPerfil));
+usuariosRouter.get('/perfil/modificar', autenticado("/usuarios/login", "/perfil/modificar") ,asyncHandler(viewModificarPerfil));
 usuariosRouter.get('/home',  autenticado('/usuarios/home'), asyncHandler(viewHome));
-usuariosRouter.get('/listaUsuarios', autenticado("/login", "configuracion"), tieneRol("A"), asyncHandler(viewListaUsuario));
+usuariosRouter.get('/listaUsuarios', autenticado("/usuarios/login", "configuracion"), tieneRol("A"), asyncHandler(viewListaUsuario));
 usuariosRouter.post('/login',
     body('username', 'El nombre no puede ser vacío').trim().notEmpty(),
     body('password', 'La contraseña no puede ser vacía').trim().notEmpty(),
@@ -28,7 +28,7 @@ usuariosRouter.post('/login',
 
 usuariosRouter.get('/logout', asyncHandler(doLogout));
 usuariosRouter.get('/register',autenticado(null, '/usuarios/home'), asyncHandler(viewRegister));
-usuariosRouter.get('/sugerencias', autenticado("/login", "configuracion"), tieneRol("A", "C"), asyncHandler(viewSugerencias));
+usuariosRouter.get('/sugerencias', autenticado("/usuarios/login", "configuracion"), tieneRol("A", "C"), asyncHandler(viewSugerencias));
 
 usuariosRouter.post('/register',
     body('username', 'Sólo puede contener números y letras').trim().matches(/^[A-Z0-9]*$/i),
@@ -51,9 +51,9 @@ usuariosRouter.post('/perfil/modificar',
     asyncHandler(modificarPerfil)
 );
 usuariosRouter.post('/cambiarPermisos/:id', asyncHandler(cambiarPermisos));
-usuariosRouter.post('/eliminarUsuario', autenticado("/login", "/eliminarUsuario"),asyncHandler(eliminarPerfilUsuario));
-usuariosRouter.post('/eliminarUsuarioAdmin', autenticado("/login", "/eliminarUsuarioAdmin"), tieneRol("A"), asyncHandler(eliminarPerfilAdmin));
-usuariosRouter.post('/activarUsuario', autenticado("/login", "/activarUsuario"), tieneRol("A"), asyncHandler(activarUsuario));
+usuariosRouter.post('/eliminarUsuario', autenticado("/usuarios/login", "/eliminarUsuario"),asyncHandler(eliminarPerfilUsuario));
+usuariosRouter.post('/eliminarUsuarioAdmin', autenticado("/usuarios/login", "/eliminarUsuarioAdmin"), tieneRol("A"), asyncHandler(eliminarPerfilAdmin));
+usuariosRouter.post('/activarUsuario', autenticado("/usuarios/login", "/activarUsuario"), tieneRol("A"), asyncHandler(activarUsuario));
 //Para el calendario semanal del usuario
 usuariosRouter.post('/calendario/aniadir', asyncHandler(aniadirRecetaACalendario));
 usuariosRouter.post('/calendario/eliminar', asyncHandler(eliminarRecetaDeCalendario));
