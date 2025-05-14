@@ -11,6 +11,7 @@ import { Contiene } from '../pedidos/Contiene.js';
 import { Realiza } from '../pedidos/Realiza.js';
 import { Ingrediente } from '../recetas/Ingredientes.js';
 import { UsuarioNoEncontrado } from './Usuario.js';
+import bcrypt from 'bcrypt';
 
 
 
@@ -370,6 +371,78 @@ export function viewHome(req, res) {
     });
 }
 
+// export function modificarPerfil(req, res) {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//         return res.render('pagina', {
+//             contenido: 'paginas/editarPerfil',
+//             error: errors.array().map(err => err.msg).join(', '),
+//             session: req.session,
+//             usuario: Usuario.getUsuarioById(req.session.userId) // Obtener el usuario desde la sesión
+//         });
+//     }
+
+//     const datos = matchedData(req);
+
+//     if (!req.session.userId) {
+//         return res.render('pagina', {
+//             contenido: 'paginas/editarPerfil',
+//             error: 'ID de usuario no proporcionado',
+//             session: req.session
+//         });
+//     }
+
+//     try {
+//         const usuarioActual = Usuario.getUsuarioById(req.session.userId);
+
+//         const password = datos.password
+//             ? bcrypt.hashSync(datos.password, bcrypt.genSaltSync(10)) //genSaltSync(10) requerido tras error en la función
+//             : usuarioActual.password;
+
+//         const usuarioActualizado = new Usuario(
+//             datos.username || usuarioActual.username,
+//             password,
+//             datos.nombre || usuarioActual.nombre,
+//             datos.apellido || usuarioActual.apellido,
+//             datos.correo || usuarioActual.correo,
+//             datos.direccion || usuarioActual.direccion,
+//             usuarioActual.rol,
+//             usuarioActual.activo,
+//             req.session.userId
+//         );
+
+//         Usuario.editarUsuario(usuarioActualizado)
+
+
+//         if (req.session.userId === usuarioActualizado.id) {
+//             req.session.username = usuarioActualizado.username;
+//             req.session.nombre = usuarioActualizado.nombre;
+//             req.session.apellido = usuarioActualizado.apellido;
+//             req.session.correo = usuarioActualizado.correo;
+//             req.session.direccion = usuarioActualizado.direccion;
+//         }
+
+//         req.session.flashMsg = 'Perfil actualizado correctamente';
+//         return res.redirect('/usuarios/perfil');
+
+//     } catch (e) {
+//         logger.error('Error al modificar perfil:', e);
+
+//         let errorMessage = 'Error al actualizar el perfil';
+//         if (e instanceof UsuarioNoEncontrado) {
+//             errorMessage = 'Usuario no encontrado';
+//         } else if (e instanceof UsuarioYaExiste) {
+//             errorMessage = 'El nombre de usuario ya está en uso';
+//         }
+
+//         return res.render('pagina', {
+//             contenido: 'paginas/editarPerfil',
+//             session: req.session,
+//             usuario: Usuario.getUsuarioById(req.session.userId),
+//             error: errorMessage
+//         });
+//     }
+// }
 export function modificarPerfil(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -377,13 +450,15 @@ export function modificarPerfil(req, res) {
             contenido: 'paginas/editarPerfil',
             error: errors.array().map(err => err.msg).join(', '),
             session: req.session,
-            usuario: Usuario.getUsuarioById(req.session.userId) // Obtener el usuario desde la sesión
+            usuario: Usuario.getUsuarioById(req.query.id)
         });
     }
 
     const datos = matchedData(req);
 
-    if (!req.session.userId) {
+    const id = req.query.id;
+
+    if (!id) {
         return res.render('pagina', {
             contenido: 'paginas/editarPerfil',
             error: 'ID de usuario no proporcionado',
@@ -392,39 +467,50 @@ export function modificarPerfil(req, res) {
     }
 
     try {
-        const usuarioActual = Usuario.getUsuarioById(req.session.userId);
+        const username = req.body.username?.trim() || '';
+        const rawPassword = req.body.password?.trim() || '';
+        const nombre = req.body.nombre?.trim() || '';
+        const apellido = req.body.apellido?.trim() || '';
+        const correo = req.body.correo?.trim() || '';
+        const direccion = req.body.direccion?.trim() || '';
+
+        const usuarioActual = Usuario.getUsuarioById(id);
 
         const password = datos.password
-            ? bcrypt.hashSync(datos.password)
+            ? bcrypt.hashSync(datos.password, bcrypt.genSaltSync(10)) //genSaltSync(10) requerido tras error en la función
             : usuarioActual.password;
 
         const usuarioActualizado = new Usuario(
-            datos.username || usuarioActual.username,
+            username,
             password,
-            datos.nombre || usuarioActual.nombre,
-            datos.apellido || usuarioActual.apellido,
-            datos.correo || usuarioActual.correo,
-            datos.direccion || usuarioActual.direccion,
+            nombre,
+            apellido,
+            correo,
+            direccion,
             usuarioActual.rol,
             usuarioActual.activo,
-            req.session.userId
+            id
         );
 
-        Usuario.editarUsuario(usuarioActualizado)
+        usuarioActualizado.persist();
 
-
-        if (req.session.userId === usuarioActualizado.id) {
-            req.session.username = usuarioActualizado.username;
-            req.session.nombre = usuarioActualizado.nombre;
-            req.session.apellido = usuarioActualizado.apellido;
-            req.session.correo = usuarioActualizado.correo;
-            req.session.direccion = usuarioActualizado.direccion;
+        if (req.session.userId === id) {
+            req.session.username = username;
+            req.session.nombre = nombre;
+            req.session.apellido = apellido;
+            req.session.correo = correo;
+            req.session.direccion = direccion;
         }
 
-        req.session.flashMsg = 'Perfil actualizado correctamente';
-        return res.redirect('/usuarios/perfil');
+        return res.render('pagina', {
+            contenido: 'paginas/perfil',
+            session: req.session,
+            usuario: usuarioActualizado,
+            success: 'Perfil actualizado correctamente'
+        });
 
     } catch (e) {
+
         logger.error('Error al modificar perfil:', e);
 
         let errorMessage = 'Error al actualizar el perfil';
@@ -437,31 +523,56 @@ export function modificarPerfil(req, res) {
         return res.render('pagina', {
             contenido: 'paginas/editarPerfil',
             session: req.session,
-            usuario: Usuario.getUsuarioById(req.session.userId),
+            usuario: Usuario.getUsuarioById(id),
             error: errorMessage
         });
     }
 }
-
-export function eliminarPerfil(req, res) {
+export function eliminarPerfilUsuario(req, res) {
     const id = req.body.id;
     try {
         if (parseInt(id) !== req.session.userId) {
-            return res.redirect('/usuarios/listaUsuarios');
+            throw new Error('No puedes eliminar a otro usuario');
         }
-
-        Usuario.borrarUsuario(id);
-        
-        req.session.login = null;
-        req.session.userId = null;
-        req.session.flashMsg = 'Tu cuenta ha sido desactivada correctamente';
-        req.session.save(() => {
-            res.redirect('/');
-        });
-        
+        else {
+            Usuario.borrarUsuario(id);
+            req.session.login = null;
+            req.session.userId = null;
+            req.session.flashMsg = 'Tu cuenta ha sido desactivada correctamente';
+            req.session.save(() => {
+                res.redirect('/');
+            });
+        }
     } catch (error) {
         logger.error('Error al desactivar usuario:', error);
         res.status(500).json({ mensaje: 'Error al desactivar la cuenta', error: error.message });
+    }
+}
+
+export function eliminarPerfilAdmin(req, res) {
+    const id = req.query.id;
+    try {
+
+        Usuario.borrarUsuario(id);
+        req.session.flashMsg = 'Cuenta ha sido desactivada correctamente';
+        res.redirect('/usuarios/listaUsuarios');
+
+    } catch (error) {
+        logger.error('Error al desactivar usuario:', error);
+        res.status(500).json({ mensaje: 'Error al desactivar la cuenta', error: error.message });
+    }
+}
+export function activarUsuario(req, res) {
+    const id = req.query.id;
+    try {
+
+        Usuario.activarUsuario(id);
+        req.session.flashMsg = 'Cuenta ha sido desactivada correctamente';
+        res.redirect('/usuarios/listaUsuarios');
+
+    } catch (error) {
+        logger.error('Error al activar usuario:', error);
+        res.status(500).json({ mensaje: 'Error al activar la cuenta', error: error.message });
     }
 }
 

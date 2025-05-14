@@ -119,119 +119,119 @@ export function viewModificarReceta(req, res) {
 }
 
 export function modificarReceta(req, res) {
-    // XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
-    const imagen = req.file ? req.file.filename : "";
-    let imagen_url = null;
+   // XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
+   const imagen = req.file ? req.file.filename : "";
+   let imagen_url = null;
 
-    body('nombre').escape();
-    body('descripcion').escape();
-    body('difilcultad').escape();
-    body('tiempo_prep_segs').escape();
-    // XXX Usar matchedData
-    const nombre = req.body.nombre.trim();
-    const descripcion = req.body.descripcion.trim();
-    const dificultad = req.body.dificultad.trim();
-    const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
-    const id = req.query.id;
-
-
-
-    if (!imagen) {
-        let receta = Receta.getRecetaById(id);
-        imagen_url = receta.imagen_url;
-    }
-    else
-        imagen_url = imagen;
+   body('nombre').escape();
+   body('descripcion').escape();
+   body('difilcultad').escape();
+   body('tiempo_prep_segs').escape();
+// XXX Usar matchedData
+   const nombre = req.body.nombre.trim();
+   const descripcion = req.body.descripcion.trim();
+   const dificultad = req.body.dificultad.trim();
+   const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
+   const id = req.query.id;
 
 
-    Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1, imagen_url);
-    receta = Receta.getRecetaById(id);
 
-    const ingredientes = Tiene.getIngredientesByReceta(id);
-
-    const listaIngredientes = Ingrediente.getAllIngredientes();
-
-    if (!receta) {
-        return res.status(404).send('Receta no encontrada');
-    }
-
-    if (!Array.isArray(ingredientes)) {
-        return res.status(500).send('Los ingredientes no son un Array');
-    }
-
-    // nos aseguramos de que cada ingrediente tenga un nombre
-    ingredientes.forEach(ingrediente => {
-        const ingredienteDetails = Ingrediente.getIngredienteById(ingrediente.id_ingrediente);
-        if (ingredienteDetails && ingredienteDetails.nombre) {
-            ingrediente.nombre = ingredienteDetails.nombre;
-        } else {
-            ingrediente.nombre = 'Desconocido'; // Si no se encuentra el ingrediente
-        }
-    });
-
-    // Asignamos los ingredientes modificados a la receta
-    receta.ingredientes = ingredientes;
-
-    const ingredientesSeleccionados = req.body['ingredientesSeleccionados[]'] || []; // array de ingredientes que vienen del form
-
-    // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
-    const ingredientesArray = Array.isArray(ingredientesSeleccionados)
-        ? ingredientesSeleccionados
-        : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
+   if (!imagen) {
+       let receta = Receta.getRecetaById(id);
+       imagen_url = receta.imagen_url;
+   }
+   else
+       imagen_url = imagen;
 
 
-    const cantidades = {};
-    const cantidadesEsp = {};
+   Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1, imagen_url);
+   const receta = Receta.getRecetaById(id);
 
-    for (const key in req.body) {
-        if (key.startsWith('cantidades[')) {
-            const match = key.match(/\[(\d+)\]/);
-            if (match) {
-                const id = match[1];
-                cantidades[id] = req.body[key] || 1; // Por defecto a 1 si está vacío
-            }
-        }
-        if (key.startsWith('cantidad_especifica[')) {
-            const match = key.match(/\[(\d+)\]/);
-            if (match) {
-                const id = match[1];
-                cantidadesEsp[id] = req.body[key] || 1; // Por defecto a 1 si está vacío
-            }
-        }
-    }
+   const ingredientes = Tiene.getIngredientesByReceta(id);
 
-    // Añadir cada ingrediente con su cantidad
-    for (const ingredienteId of ingredientesArray) {
-        if (ingredienteId) {
-            const cantidad = cantidades[ingredienteId] || 1;
-            const cantidad_esp = cantidadesEsp[ingredienteId] || 1;
-            Tiene.addIngredienteToReceta(id, ingredienteId, cantidad, cantidad_esp);
-        }
-    }
+   const listaIngredientes = Ingrediente.getAllIngredientes();
 
-    const ingredientesAEliminar = req.body['ingredientesAEliminar[]'] || [];
+   if (!receta) {
+       return res.status(404).send('Receta no encontrada');
+   }
 
-    // Cantidad de ingredientes que se quieren eliminar
-    //const cantidadAEliminar = ingredientesEliminarArray.length;
+   if (!Array.isArray(ingredientes)) {
+       return res.status(500).send('Los ingredientes no son un Array');
+   }
 
-    // Verificamos si eliminar esos ingredientes dejaría la receta vacía
-    if (ingredientes.length - ingredientesAEliminar.length < 1) {
-        return res.status(400).send('No puedes eliminar todos los ingredientes. La receta debe tener al menos uno.');
-    }
+   // nos aseguramos de que cada ingrediente tenga un nombre
+   ingredientes.forEach(ingrediente => {
+       const ingredienteDetails = Ingrediente.getIngredienteById(ingrediente.id_ingrediente);
+       if (ingredienteDetails && ingredienteDetails.nombre) {
+           ingrediente.nombre = ingredienteDetails.nombre;
+       } else {
+           ingrediente.nombre = 'Desconocido'; // Si no se encuentra el ingrediente
+       }
+   });
 
-    const ingredientesEliminarArray = Array.isArray(ingredientesAEliminar)
-        ? ingredientesAEliminar
-        : ingredientesAEliminar ? [ingredientesAEliminar] : [];
+   // Asignamos los ingredientes modificados a la receta
+   receta.ingredientes = ingredientes;
 
-    // Eliminar cada ingrediente
-    for (const ingredienteId of ingredientesEliminarArray) {
-        if (ingredienteId) {
-            const cantidad = cantidades[ingredienteId] || 1;
-            Tiene.removeIngredienteFromReceta(id, ingredienteId, cantidad);
-        }
-    }
+   const ingredientesSeleccionados = req.body['ingredientesSeleccionados[]'] || []; // array de ingredientes que vienen del form
 
-    res.redirect('/recetas/receta?id=' + id);
+   // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
+   const ingredientesArray = Array.isArray(ingredientesSeleccionados)
+       ? ingredientesSeleccionados
+       : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
+
+
+   const cantidades = {};
+   const cantidadesEsp = {};
+
+   for (const key in req.body) {
+       if (key.startsWith('cantidades[')) {
+           const match = key.match(/\[(\d+)\]/);
+           if (match) {
+               const id = match[1];
+               cantidades[id] = req.body[key] || 1; // Por defecto a 1 si está vacío
+           }
+       }
+       if (key.startsWith('cantidad_especifica[')) {
+           const match = key.match(/\[(\d+)\]/);
+           if (match) {
+               const id = match[1];
+               cantidadesEsp[id] = req.body[key] || 1; // Por defecto a 1 si está vacío
+           }
+       }
+   }
+
+   // Añadir cada ingrediente con su cantidad
+   for (const ingredienteId of ingredientesArray) {
+       if (ingredienteId) {
+           const cantidad = cantidades[ingredienteId] || 1;
+           const cantidad_esp = cantidadesEsp[ingredienteId] || 1;
+           Tiene.addIngredienteToReceta(id, ingredienteId, cantidad, cantidad_esp);
+       }
+   }
+
+   const ingredientesAEliminar = req.body['ingredientesAEliminar[]'] || [];
+
+   // Cantidad de ingredientes que se quieren eliminar
+   //const cantidadAEliminar = ingredientesEliminarArray.length;
+
+   // Verificamos si eliminar esos ingredientes dejaría la receta vacía
+   if (ingredientes.length - ingredientesAEliminar.length < 1) {
+       return res.status(400).send('No puedes eliminar todos los ingredientes. La receta debe tener al menos uno.');
+   }
+
+   const ingredientesEliminarArray = Array.isArray(ingredientesAEliminar)
+       ? ingredientesAEliminar
+       : ingredientesAEliminar ? [ingredientesAEliminar] : [];
+
+   // Eliminar cada ingrediente
+   for (const ingredienteId of ingredientesEliminarArray) {
+       if (ingredienteId) {
+           const cantidad = cantidades[ingredienteId] || 1;
+           Tiene.removeIngredienteFromReceta(id, ingredienteId, cantidad);
+       }
+   }
+
+   res.redirect('/recetas/receta?id=' + id);
 }
 
 export function viewAniadirReceta(req, res) {

@@ -4,32 +4,55 @@
             <th>ID</th>
             <th>Nombre</th>
             <th>Email</th>
-            <th>Permisos</th>
+            <th>Activo</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        <% usuarios.forEach(usuario => { %>
-            <tr>
-                <td><%= usuario.id %></td>
-                <td><%= usuario.nombre %></td>
-                <td><%= usuario.correo %></td>
+        <% usuarios.forEach(usuario=> { %>
+
+            <tr class="admin">
+
+                <td>
+                    <%= usuario.id %>
+                </td>
+                <td>
+                    <%= usuario.nombre %>
+                </td>
+                <td>
+                    <%= usuario.correo %>
+                </td>
+                <td>
+                    <%= usuario.activo %>
+                </td>
                 <td>
                     <select class="permiso" data-id="<%= usuario.id %>" onchange="cambiarPermisos(this)">
-                        <option value="A" <%= usuario.rol === 'A' ? 'selected' : '' %>>Administrador</option>
-                        <option value="C" <%= usuario.rol ===  'C' ? 'selected' : '' %>>Cocinero</option>
-                        <option value="U" <%= usuario.rol === 'U' ? 'selected' : '' %>>Usuario</option>
+                        <option value="A" <%=usuario.rol==='A' ? 'selected' : '' %>>Administrador</option>
+                        <option value="C" <%=usuario.rol==='C' ? 'selected' : '' %>>Cocinero</option>
+                        <option value="U" <%=usuario.rol==='U' ? 'selected' : '' %>>Usuario</option>
                     </select>
                 </td>
                 <td>
                     <a href="/usuarios/perfil/modificar?id=<%= usuario.id %>">
                         <button class="boton-editar">Editar</button>
                     </a>
-                    <form class="form-permisos" action="/usuarios/eliminarUsuario?id=<%= usuario.id %>" method="POST">
-                        <button class="boton-borrar" onclick="return confirm('¿Estás seguro de que deseas borrar este usuario?')">Borrar</button>
-                    </form>
+                    <% if (usuario.activo) { %>
+                        <form class="form-permisos" action="/usuarios/eliminarUsuarioAdmin?id=<%= usuario.id %>"
+                            method="POST">
+                            <button class="boton-borrar"
+                                onclick="return confirm('¿Estás seguro de que deseas borrar este usuario?')">Borrar</button>
+                        </form>
+                        <% } else   {%>
+    
+                                <form class="form-permisos" action="/usuarios/activarUsuario?id=<%= usuario.id %>"
+                                    method="POST">
+                                    <button class="boton-borrar"
+                                        onclick="return confirm('¿Estás seguro de que deseas activar al usuario?')">Reactivar</button>
+                                </form>
+                                <% } %>
                 </td>
             </tr>
-        <% }) %>
+
+            <% }) %>
     </tbody>
 </table>

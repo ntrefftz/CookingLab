@@ -58,34 +58,55 @@ export class Usuario {
 
     }
 
-static borrarUsuario(id) {
-    const usuario = this.#getByIdStmt.get({ id });
-    if (!usuario) throw new UsuarioNoEncontrado(id);
-    
-    // Crear un objeto con todos los campos necesarios
-    const datosActualizados = {
-        id: usuario.id,
-        username: usuario.username,
-        password: usuario.password,
-        nombre: usuario.nombre,
-        apellido: usuario.apellido,
-        correo: usuario.correo,
-        direccion: usuario.direccion,
-        rol: usuario.rol,
-        activo: 0  // Establecer activo a 0
-    };
+    static borrarUsuario(id) {
+        const usuario = this.#getByIdStmt.get({ id });
+        if (!usuario) throw new UsuarioNoEncontrado(id);
 
-    const result = this.#updateStmt.run(datosActualizados);
-    
-    if (result.changes === 0) throw new UsuarioNoEncontrado(id);
-    return { mensaje: "Cuenta desactivada correctamente" };
-}
+        // Crear un objeto con todos los campos necesarios
+        const datosActualizados = {
+            id: usuario.id,
+            username: usuario.username,
+            password: usuario.password,
+            nombre: usuario.nombre,
+            apellido: usuario.apellido,
+            correo: usuario.correo,
+            direccion: usuario.direccion,
+            rol: usuario.rol,
+            activo: 0  // Establecer activo a 0
+        };
 
+        const result = this.#updateStmt.run(datosActualizados);
+
+        if (result.changes === 0) throw new UsuarioNoEncontrado(id);
+        return { mensaje: "Cuenta desactivada correctamente" };
+    }
+    static activarUsuario(id) {
+        const usuario = this.#getByIdStmt.get({ id });
+        if (!usuario) throw new UsuarioNoEncontrado(id);
+
+        // Crear un objeto con todos los campos necesarios
+        const datosActualizados = {
+            id: usuario.id,
+            username: usuario.username,
+            password: usuario.password,
+            nombre: usuario.nombre,
+            apellido: usuario.apellido,
+            correo: usuario.correo,
+            direccion: usuario.direccion,
+            rol: usuario.rol,
+            activo: 1  // Establecer activo a 0
+        };
+
+        const result = this.#updateStmt.run(datosActualizados);
+
+        if (result.changes === 0) throw new UsuarioNoEncontrado(id);
+        return { mensaje: "Cuenta activada correctamente" };
+    }
 
     static getUsuarioByUsername(username) {
         const usuario = this.#getByUsernameStmt.get({ username });
         logger.debug('GetUsuarioByUsername:', usuario);
-        
+
         if (usuario === undefined) throw new UsuarioNoEncontrado(username);
         const { password, nombre, apellido, correo, direccion, rol, activo, id } = usuario;
 
@@ -144,7 +165,7 @@ static borrarUsuario(id) {
         } catch (e) {
             throw new UsuarioOPasswordNoValido(username, { cause: e });
         }
-        
+
         // Verificar si la cuenta está activa
         if (usuario.activo === 0) {
             throw new UsuarioOPasswordNoValido(username, { cause: 'Cuenta desactivada' });
@@ -175,15 +196,15 @@ static borrarUsuario(id) {
         return usuario;
     }
 
-static getAllUsuarios() {
-    // Si quieres solo usuarios activos:
-    // const usuarios = this.#getAllStmt.all().filter(u => u.activo === 1);
-    
-    // Si quieres todos los usuarios (incluyendo inactivos):
-    const usuarios = this.#getAllStmt.all();
-    if (!usuarios) throw new UsuarioNoEncontrado(id);
-    return usuarios;
-}
+    static getAllUsuarios() {
+        // Si quieres solo usuarios activos:
+        // const usuarios = this.#getAllStmt.all().filter(u => u.activo === 1);
+
+        // Si quieres todos los usuarios (incluyendo inactivos):
+        const usuarios = this.#getAllStmt.all();
+        if (!usuarios) throw new UsuarioNoEncontrado(id);
+        return usuarios;
+    }
 
     #id;
     #username;
