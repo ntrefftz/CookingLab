@@ -118,17 +118,24 @@ export function modificarReceta(req, res) {
    const imagen = req.file ? req.file.filename : "";
    let imagen_url = null;
 
+   console.log("Body", req.body);
+
    body('nombre').escape();
    body('descripcion').escape();
    body('difilcultad').escape();
    body('tiempo_prep_segs').escape();
 // XXX Usar matchedData
    const nombre = req.body.nombre.trim();
-   const descripcion = req.body.descripcion.trim();
+   const descripcion = req.body.descripcion.trim(); 
    const dificultad = req.body.dificultad.trim();
-   const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
+   const tiempo_prep_segs = req.body.tiempo_prep_segs.trim(); 
    const id = req.query.id;
 
+   console.log("ID de receta a modificar:", id);
+   console.log ("Nombre de receta a modificar:", nombre);
+   console.log ("Descripción de receta a modificar:", descripcion);
+   console.log ("Dificultad de receta a modificar:", dificultad);
+   console.log ("Tiempo de receta a modificar:", tiempo_prep_segs);
 
 
    if (!imagen) {
@@ -140,11 +147,10 @@ export function modificarReceta(req, res) {
 
 
    Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1, imagen_url);
+   
    const receta = Receta.getRecetaById(id);
-
    const ingredientes = Tiene.getIngredientesByReceta(id);
-
-   const listaIngredientes = Ingrediente.getAllIngredientes();
+   //const listaIngredientes = Ingrediente.getAllIngredientes();
 
    if (!receta) {
        return res.status(404).send('Receta no encontrada');
@@ -162,19 +168,20 @@ export function modificarReceta(req, res) {
        } else {
            ingrediente.nombre = 'Desconocido'; // Si no se encuentra el ingrediente
        }
-   });
-
+   });   
    // Asignamos los ingredientes modificados a la receta
    receta.ingredientes = ingredientes;
 
-   const ingredientesSeleccionados = req.body['ingredientesSeleccionados[]'] || []; // array de ingredientes que vienen del form
+   const ingredientesSeleccionados = req.body['ingredientesSeleccionados'] || []; // array de ingredientes que vienen del form
+
+    console.log("Ingredientes seleccionados:", ingredientesSeleccionados);
 
    // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
    const ingredientesArray = Array.isArray(ingredientesSeleccionados)
        ? ingredientesSeleccionados
        : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
 
-
+   
    const cantidades = {};
    const cantidadesEsp = {};
 
@@ -196,10 +203,12 @@ export function modificarReceta(req, res) {
    }
 
    // Añadir cada ingrediente con su cantidad
+   console.log("Añadir nuevos ingredientes");
    for (const ingredienteId of ingredientesArray) {
        if (ingredienteId) {
            const cantidad = cantidades[ingredienteId] || 1;
            const cantidad_esp = cantidadesEsp[ingredienteId] || 1;
+           console.log("Añadiendo ingrediente a Tiene, id, cant, cantesp:", ingredienteId, cantidad, cantidad_esp);
            Tiene.addIngredienteToReceta(id, ingredienteId, cantidad, cantidad_esp);
        }
    }
@@ -219,9 +228,11 @@ export function modificarReceta(req, res) {
        : ingredientesAEliminar ? [ingredientesAEliminar] : [];
 
    // Eliminar cada ingrediente
+    console.log("Eliminar ingredientes");
    for (const ingredienteId of ingredientesEliminarArray) {
        if (ingredienteId) {
            const cantidad = cantidades[ingredienteId] || 1;
+           console.log("Eliminando ingrediente de Tiene, id, cant:", ingredienteId, cantidad);
            Tiene.removeIngredienteFromReceta(id, ingredienteId, cantidad);
        }
    }
