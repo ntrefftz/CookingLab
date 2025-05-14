@@ -167,7 +167,7 @@ export function modificarReceta(req, res) {
    // Asignamos los ingredientes modificados a la receta
    receta.ingredientes = ingredientes;
 
-   const ingredientesSeleccionados = req.body['ingredientesSeleccionados[]'] || []; // array de ingredientes que vienen del form
+   const ingredientesSeleccionados = req.body['ingredientesSeleccionados'] || []; // array de ingredientes que vienen del form
 
    // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
    const ingredientesArray = Array.isArray(ingredientesSeleccionados)
@@ -204,7 +204,7 @@ export function modificarReceta(req, res) {
        }
    }
 
-   const ingredientesAEliminar = req.body['ingredientesAEliminar[]'] || [];
+   const ingredientesAEliminar = req.body['ingredientesAEliminar'] || [];
 
    // Cantidad de ingredientes que se quieren eliminar
    //const cantidadAEliminar = ingredientesEliminarArray.length;
