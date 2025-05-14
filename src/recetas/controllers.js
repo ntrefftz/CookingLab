@@ -119,63 +119,63 @@ export function viewModificarReceta(req, res) {
 }
 
 export function modificarReceta(req, res) {
-   // XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
-   const imagen = req.file ? req.file.filename : "";
-   let imagen_url = null;
+    // XXX Faltan validaciones con express-validator + lógica apropiada para verificar la existencia y/o tipos de los parámetros
+    const imagen = req.file ? req.file.filename : "";
+    let imagen_url = null;
 
-   body('nombre').escape();
-   body('descripcion').escape();
-   body('difilcultad').escape();
-   body('tiempo_prep_segs').escape();
-// XXX Usar matchedData
-   const nombre = req.body.nombre.trim();
-   const descripcion = req.body.descripcion.trim(); 
-   const dificultad = req.body.dificultad.trim();
-   const tiempo_prep_segs = req.body.tiempo_prep_segs.trim(); 
-   const id = req.query.id;
+    body('nombre').escape();
+    body('descripcion').escape();
+    body('difilcultad').escape();
+    body('tiempo_prep_segs').escape();
+    // XXX Usar matchedData
+    const nombre = req.body.nombre.trim();
+    const descripcion = req.body.descripcion.trim();
+    const dificultad = req.body.dificultad.trim();
+    const tiempo_prep_segs = req.body.tiempo_prep_segs.trim();
+    const id = req.query.id;
 
-   if (!imagen) {
-       let receta = Receta.getRecetaById(id);
-       imagen_url = receta.imagen_url;
-   }
-   else
-       imagen_url = imagen;
+    if (!imagen) {
+        let receta = Receta.getRecetaById(id);
+        imagen_url = receta.imagen_url;
+    }
+    else
+        imagen_url = imagen;
 
 
-   Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1, imagen_url);
-   
-   const receta = Receta.getRecetaById(id);
-   const ingredientes = Tiene.getIngredientesByReceta(id);
-   //const listaIngredientes = Ingrediente.getAllIngredientes();
+    Receta.updateReceta(id, nombre, descripcion, tiempo_prep_segs * 60, dificultad, 1, imagen_url);
 
-   if (!receta) {
-       return res.status(404).send('Receta no encontrada');
-   }
+    const receta = Receta.getRecetaById(id);
+    const ingredientes = Tiene.getIngredientesByReceta(id);
+    //const listaIngredientes = Ingrediente.getAllIngredientes();
 
-   if (!Array.isArray(ingredientes)) {
-       return res.status(500).send('Los ingredientes no son un Array');
-   }
+    if (!receta) {
+        return res.status(404).send('Receta no encontrada');
+    }
 
-   // nos aseguramos de que cada ingrediente tenga un nombre
-   ingredientes.forEach(ingrediente => {
-       const ingredienteDetails = Ingrediente.getIngredienteById(ingrediente.id_ingrediente);
-       if (ingredienteDetails && ingredienteDetails.nombre) {
-           ingrediente.nombre = ingredienteDetails.nombre;
-       } else {
-           ingrediente.nombre = 'Desconocido'; // Si no se encuentra el ingrediente
-       }
-   });   
-   // Asignamos los ingredientes modificados a la receta
-   receta.ingredientes = ingredientes;
+    if (!Array.isArray(ingredientes)) {
+        return res.status(500).send('Los ingredientes no son un Array');
+    }
 
-   const ingredientesSeleccionados = req.body['ingredientesSeleccionados'] || []; // array de ingredientes que vienen del form
-   // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
-   const ingredientesArray = Array.isArray(ingredientesSeleccionados)
-       ? ingredientesSeleccionados
-       : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
+    // nos aseguramos de que cada ingrediente tenga un nombre
+    ingredientes.forEach(ingrediente => {
+        const ingredienteDetails = Ingrediente.getIngredienteById(ingrediente.id_ingrediente);
+        if (ingredienteDetails && ingredienteDetails.nombre) {
+            ingrediente.nombre = ingredienteDetails.nombre;
+        } else {
+            ingrediente.nombre = 'Desconocido'; // Si no se encuentra el ingrediente
+        }
+    });
+    // Asignamos los ingredientes modificados a la receta
+    receta.ingredientes = ingredientes;
 
-   
-   
+    const ingredientesSeleccionados = req.body['ingredientesSeleccionados'] || []; // array de ingredientes que vienen del form
+    // Convertir a array si no lo es (puede ser string si solo se selecciona uno)
+    const ingredientesArray = Array.isArray(ingredientesSeleccionados)
+        ? ingredientesSeleccionados
+        : ingredientesSeleccionados ? [ingredientesSeleccionados] : [];
+
+
+
     const cantidadesArray = req.body.cantidades || [];
     const cantidadesEspArray = req.body.cantidad_especifica || [];
 
@@ -206,35 +206,35 @@ export function modificarReceta(req, res) {
         cantidadesEsp[id] = !isNaN(cantidadEsp) ? cantidadEsp : 1;
     });
 
-   // Añadir cada ingrediente con su cantidad
-   for (const ingredienteId of ingredientesArray) {
-       if (ingredienteId) {
-           const cantidad = cantidades[ingredienteId] || 1;
-           const cantidad_esp = cantidadesEsp[ingredienteId] || 1;
-           Tiene.addIngredienteToReceta(id, ingredienteId, cantidad, cantidad_esp);
-       }
-   }
+    // Añadir cada ingrediente con su cantidad
+    for (const ingredienteId of ingredientesArray) {
+        if (ingredienteId) {
+            const cantidad = cantidades[ingredienteId] || 1;
+            const cantidad_esp = cantidadesEsp[ingredienteId] || 1;
+            Tiene.addIngredienteToReceta(id, ingredienteId, cantidad, cantidad_esp);
+        }
+    }
 
-   const ingredientesAEliminar = req.body['ingredientesAEliminar'] || [];
+    const ingredientesAEliminar = req.body['ingredientesAEliminar'] || [];
 
-   // Verificamos si eliminar esos ingredientes dejaría la receta vacía
-   if (ingredientes.length - ingredientesAEliminar.length < 1) {
-       return res.status(400).send('No puedes eliminar todos los ingredientes. La receta debe tener al menos uno.');
-   }
+    // Verificamos si eliminar esos ingredientes dejaría la receta vacía
+    if (ingredientes.length - ingredientesAEliminar.length < 1) {
+        return res.status(400).send('No puedes eliminar todos los ingredientes. La receta debe tener al menos uno.');
+    }
 
-   const ingredientesEliminarArray = Array.isArray(ingredientesAEliminar)
-       ? ingredientesAEliminar
-       : ingredientesAEliminar ? [ingredientesAEliminar] : [];
+    const ingredientesEliminarArray = Array.isArray(ingredientesAEliminar)
+        ? ingredientesAEliminar
+        : ingredientesAEliminar ? [ingredientesAEliminar] : [];
 
-   // Eliminar cada ingrediente
-   for (const ingredienteId of ingredientesEliminarArray) {
-       if (ingredienteId) {
-           const cantidad = cantidades[ingredienteId] || 1;
-           Tiene.removeIngredienteFromReceta(id, ingredienteId, cantidad);
-       }
-   }
+    // Eliminar cada ingrediente
+    for (const ingredienteId of ingredientesEliminarArray) {
+        if (ingredienteId) {
+            const cantidad = cantidades[ingredienteId] || 1;
+            Tiene.removeIngredienteFromReceta(id, ingredienteId, cantidad);
+        }
+    }
 
-   res.redirect('/recetas/receta?id=' + id);
+    res.redirect('/recetas/receta?id=' + id);
 }
 
 export function viewAniadirReceta(req, res) {
@@ -298,32 +298,15 @@ export function aniadirReceta(req, res) {
         const result = Receta.addReceta(nombre, descripcion, tiempo_prep_segs * 60, dificultad, id_usuario, activo, imagen_url);
 
         const recetaId = result.lastInsertRowid;
-   
-        const cantidadesArray = req.body.cantidades || [];
-        const cantidadesEspArray = req.body.cantidad_especifica || [];
 
-        const cantidades = {};
-        const cantidadesEsp = {};
-
-        ingredientesArray.forEach((id, index) => {
-                const cantidad = cantidadesArray[index];
-                const cantidadEsp = cantidadesEspArray[index];
-
-                // fallback a 1 si está vacío o inválido
-                cantidades[id] = parseFloat(cantidad) || 1;
-                cantidadesEsp[id] = parseFloat(cantidadEsp) || 1;
-         });
-
-        // Añadir cada ingrediente con su cantidad
-        for (const ingredienteId of ingredientesArray) {
-            if (ingredienteId) {
-                const cantidad = cantidades[ingredienteId] || 1;
-                const cantidadEspecifica = cantidadesEsp[ingredienteId] || 1;
-
-                Tiene.addIngredienteToReceta(recetaId, ingredienteId, cantidad, cantidadEspecifica);
-
-            }
-        }
+    
+        
+        ingredientesArray.forEach((id) => {
+            const cantidad = parseFloat(req.body.cantidades_unidad[id]) || 1;
+            const cantidadEsp = parseFloat(req.body.cantidades_esp[id]) || 1;
+        
+            Tiene.addIngredienteToReceta(recetaId, id, cantidad, cantidadEsp);
+        });
 
         res.redirect('/recetas/catalogo');
     } catch (error) {
@@ -480,7 +463,7 @@ export function aniadirIngrediente(req, res) {
     body('precio').escape();
     body('stock').escape();
     body('unidad_medida').escape();
-    
+
     const nombre = req.body.nombre.trim();
     const precio = req.body.precio.trim();
     const categoria = req.body.categoria.trim();
