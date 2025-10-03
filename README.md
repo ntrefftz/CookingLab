@@ -1,2 +1,3 @@
 ## CookingLab
-![logo](./static/image/logo.png)
+
+<img src="./static/image/logo.png" alt="logo" width="300">
