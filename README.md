@@ -1,1 +1,2 @@
-Repositorio para el proyecto: CookingLab
+## CookingLab
+![logo](./static/image/logo.png)
